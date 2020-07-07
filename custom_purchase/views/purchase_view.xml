@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.inherit.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
+            	<field name="manufacturer_id"/>
+            </xpath> 
+            <!-- <xpath expr="//field[@name='order_line']//tree//field[@name='company_id']" position="replace">
+            </xpath> -->
+            <xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="after">
+                <field name="notes"/>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="old_po_no" attrs="{'readonly': [('state', 'not in', ['draft','sent'])]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="purchase_order_tree_inherit_custom_purchase" model="ir.ui.view">
+        <field name="name">purchase.order.tree.inherit.custom.purchase</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_tree" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="old_po_no"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
