@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="external_layout_so_report">
+
+		<t t-if="not o and doc">
+			<t t-set="o" t-value="doc" />
+		</t>
+		<t t-if="o and 'company_id' in o">
+			<t t-set="company" t-value="o.company_id.sudo()" />
+		</t>
+		<t t-if="not o or not 'company_id' in o">
+			<t t-set="company" t-value="res_company" />
+		</t>
+		<div class="header o_background_header">
+			<div class="row">
+				<div class="col-8">
+					<img t-if="company.logo"
+						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
+					<div class="company_address"
+						style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;">
+						<div>
+							<strong>
+								<span style="font-size: 25px;"
+									t-field="company.partner_id.name" />
+							</strong>
+							<br />
+							<span t-field="o.company_id.street" />
+							<t t-if="o.company_id.street1">
+								<span t-field="o.company_id.street1" />
+								,
+								<br />
+								<span t-field="o.company_id.street2" />
+							</t>
+							<t t-else="">
+								<span t-field="o.company_id.street2" />
+							</t>
+							<br />
+							<span t-field="o.company_id.city" />
+							,
+							<span t-field="o.company_id.state_id" />
+							,
+							<span t-field="o.company_id.country_id" />
+							-
+							<span t-field="o.company_id.zip" />
+							<br />
+							<span>TEL :</span>
+							<span t-field="o.company_id.phone" />
+							<t t-if="o.company_id.fax">
+								|
+								<span>FAX :</span>
+								<span t-field="o.company_id.fax" />
+							</t>
+							<br />
+							<span>E-mail:</span>
+							<span t-field="o.company_id.email" />
+							,
+							<span>URL:</span>
+							<span t-field="o.company_id.website" />
+							<br />
+							<span>Company Reg No:</span>
+							<span t-field="o.company_id.company_registry" />
+						</div>
+					</div>
+				</div>
+				<div class="col-4">
+					<div class="text-muted text-right"
+						style="font-family: Calibri;text-color:black;">
+						Page:
+						<span class="page" />
+						of
+						<span class="topage" />
+					</div>
+					<div class="clearfix mb8" />
+				</div>
+			</div>
+		</div>
+		<div class="article o_report_layout_background">
+			<t t-raw="0" />
+		</div>
+
+		
+
+	</template>
+
+	<template id="external_layout_po_report">
+
+		<t t-if="not o and doc">
+			<t t-set="o" t-value="doc" />
+		</t>
+		<t t-if="o and 'company_id' in o">
+			<t t-set="company" t-value="o.company_id.sudo()" />
+		</t>
+		<t t-if="not o or not 'company_id' in o">
+			<t t-set="company" t-value="res_company" />
+		</t>
+		<div class="header o_background_header">
+			<div class="row">
+				<div class="col-8">
+					<img t-if="company.logo"
+						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
+					<div class="company_address"
+						style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;">
+						<div>
+							<strong>
+								<span style="font-size: 25px;"
+									t-field="company.partner_id.name" />
+							</strong>
+							<br />
+							<span t-field="o.company_id.street" />
+							<t t-if="o.company_id.street1">
+								<span t-field="o.company_id.street1" />
+								,
+								<br />
+								<span t-field="o.company_id.street2" />
+							</t>
+							<t t-else="">
+								<span t-field="o.company_id.street2" />
+							</t>
+							<br />
+							<span t-field="o.company_id.city" />
+							,
+							<span t-field="o.company_id.state_id" />
+							,
+							<span t-field="o.company_id.country_id" />
+							-
+							<span t-field="o.company_id.zip" />
+							<br />
+							<span>TEL :</span>
+							<span t-field="o.company_id.phone" />
+							<t t-if="o.company_id.fax">
+								|
+								<span>FAX :</span>
+								<span t-field="o.company_id.fax" />
+							</t>
+							<br />
+							<span>E-mail:</span>
+							<span t-field="o.company_id.email" />
+							,
+							<span>URL:</span>
+							<span t-field="o.company_id.website" />
+							<br />
+							<span>Company Reg No:</span>
+							<span t-field="o.company_id.company_registry" />
+						</div>
+					</div>
+				</div>
+				<div class="col-4">
+					<div class="text-muted text-right"
+						style="font-family: Calibri;text-color:black;">
+						Page:
+						<span class="page" />
+						of
+						<span class="topage" />
+					</div>
+					<div class="clearfix mb8" />
+				</div>
+			</div>
+		</div>
+
+		<div class="article o_report_layout_background">
+			<t t-raw="0" />
+		</div>
+
+		<div class="footer" style="margin-bottom:250px">
+
+		</div>
+
+	</template>
+
+	<template id="inherit_report_saleorder_document"
+		inherit_id="sale.report_saleorder_document">
+
+		<xpath expr="//t[@t-call='web.external_layout']"
+			position="replace">
+			<t t-call="pecko_so_po_report.external_layout_so_report">
+				<div class="page" style="font-family: Calibri;text-color:black;">
+					<p align="center">
+						<strong>SALES ORDER</strong>
+					</p>
+					<table
+						style="width: 100%;height:120px;background-color: white;line-height:12pt;">
+						<tbody>
+							<tr>
+								<td style="width:55%;background-color: white;">
+									<strong>
+										<span t-field="doc.partner_id.name" />
+									</strong>
+									<br />
+									<span t-field="doc.partner_id.street" />
+									<span t-field="doc.partner_id.street2" />
+									<br />
+									<span t-field="doc.partner_id.city" />
+									<span t-field="doc.partner_id.state_id" />
+									<br />
+									<span t-field="doc.partner_id.country_id" />
+									<span t-field="doc.partner_id.zip" />
+									<br />
+									Phone:
+									<span t-field="doc.partner_id.phone" />
+									<br />
+									Email:
+									<span t-field="doc.partner_id.email" />
+								</td>
+								<td style="width:45%;background-color: white;">
+									<table>
+										<tbody>
+											<tr width="45%">
+												<td width="15%">
+													<strong>SALES ORDER NO</strong>
+												</td>
+												<td width="20%">
+													<span style="text-align:left" t-field="doc.name" />
+												</td>
+											</tr>
+											<tr width="45%">
+												<td width="15%">
+													<strong>CUSTOMER PO NO</strong>
+												</td>
+												<td width="20%">
+													<span style="text-align:left"
+														t-field="doc.customer_po_no" />
+												</td>
+											</tr>
+											<tr width="45%">
+												<td width="15%">
+													<strong>DATE ORDER</strong>
+												</td>
+												<td width="20%">
+													<span style="text-align:left"
+														t-field="doc.confirmation_date"
+														t-options='{"format":"dd/MM/yyyy"}' />
+												</td>
+											</tr>
+											<tr width="45%">
+												<td width="15%">
+													<strong>PAYMENT TERM</strong>
+												</td>
+												<td width="20%">
+													<span style="text-align:left"
+														t-field="doc.payment_term_id.name" />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="table table-sm" style="table-layout:fixed;">
+						<style>
+							tbody tr:nth-child(odd){
+							background-color: #e9ecef;
+							}
+							th{font-size:13px}
+							td{font-size:13px}
+
+						</style>
+						<thead>
+							<tr
+								style="border-top:1px solid black;border-bottom:1px solid black;">
+								<t t-set="colspan" t-value="5" />
+								<th class="text-left" style="width:4%;color:#ab1478">NO</th>
+								<th class="text-left" style="width:20%;color:#ab1478">PECKO PART NUMBER</th>
+								<th class="text-left" style="width:15%;color:#ab1478">PART NUMBER</th>
+								<th class="text-left" style="width:15%;color:#ab1478">DESCRIPTION</th>
+								<th class="text-center" style="width:10%;color:#ab1478">QUANTITY</th>
+								<th class="text-center" style="width:13%;color:#ab1478">NEED DATE</th>
+								<th class="text-right" style="width:8%;color:#ab1478">PRICE</th>
+								<th t-if="display_discount" class="text-right" style="width:10%;color:#ab1478"
+									groups="sale.group_discount_per_so_line">
+									<span>DISC.(%)</span>
+									<t t-set="colspan" t-value="colspan+1" />
+								</th>
+								<t t-if="doc.amount_tax>0">
+									<th class="text-right" style="width:10%;color:#ab1478">TAXES</th>
+								</t>
+								<th class="text-right" style="width:15%;color:#ab1478">
+									<t groups="account.group_show_line_subtotals_tax_excluded">AMOUNT</t>
+									<t groups="account.group_show_line_subtotals_tax_included">TOTAL</t>
+								</th>
+							</tr>
+						</thead>
+						<tbody class="sale_tbody">
+
+							<t t-set="current_subtotal" t-value="0" />
+							<t t-set="i" t-value="1" />
+
+							<t t-foreach="doc.order_line" t-as="line">
+
+								<t t-set="current_subtotal"
+									t-value="current_subtotal + line.price_subtotal"
+									groups="account.group_show_line_subtotals_tax_excluded" />
+								<t t-set="current_subtotal"
+									t-value="current_subtotal + line.price_total"
+									groups="account.group_show_line_subtotals_tax_included" />
+
+								<tr
+									t-att-class="'bg-200 font-weight-bold' if line.display_type == 'line_section' else 'font-italic' if line.display_type == 'line_note' else ''">
+									<t t-if="not line.display_type">
+										<td>
+											<span t-esc="i" />
+										</td>
+										<td>
+											<span t-field="line.product_id.default_code" />
+											<!-- <span t-field="line.customer_part_no" /> -->
+										</td>
+
+										<td>
+											<span t-field="line.customer_part_no" />
+										</td>
+										<td>
+											<span t-field="line.name" />
+										</td>
+										<td class="text-center">
+											<span t-field="line.product_uom_qty" />
+											<span t-field="line.product_uom" />
+										</td>
+
+										<td class="text-center">
+											<span t-field="doc.date_order"
+												t-options='{"format":"dd-MMM-yyyy"}' />
+										</td>
+										<td class="text-right">
+											<span t-field="line.price_unit" />
+										</td>
+										<td t-if="display_discount" class="text-right"
+											groups="sale.group_discount_per_so_line">
+											<span t-field="line.discount" />
+										</td>
+										<t t-if="doc.amount_tax>0">
+											<td class="text-right">
+												<span t-esc="line.tax_id.code" />
+											</td>
+										</t>
+										<td class="text-right">
+											<span t-field="line.price_subtotal"
+												groups="account.group_show_line_subtotals_tax_excluded" />
+											<span t-field="line.price_total"
+												groups="account.group_show_line_subtotals_tax_included" />
+										</td>
+									</t>
+									<t t-if="line.display_type == 'line_section'">
+										<td t-att-colspan="colspan">
+											<span t-field="line.name" />
+										</td>
+										<t t-set="current_section" t-value="line" />
+										<t t-set="current_subtotal" t-value="0" />
+									</t>
+									<t t-if="line.display_type == 'line_note'">
+										<td t-att-colspan="colspan">
+											<span t-field="line.name" />
+										</td>
+									</t>
+								</tr>
+							<t t-set="i" t-value="i+1" />
+
+							</t>
+						</tbody>
+					</table>
+					<div class="clearfix">
+						<div class="row" name="total">
+							<div
+								t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+								<table class="table table-sm">
+
+									<t t-foreach="doc.amount_by_group" t-as="amount_by_group">
+										<tr style="border-bottom:1px solid #dddddd;">
+											<t
+												t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
+												<td>
+													<span t-esc="amount_by_group[0]" />
+													<span>
+														&amp;nbsp;
+														<span>on</span>
+														&amp;nbsp;
+														<t t-esc="amount_by_group[2]"
+															t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}' />
+													</span>
+												</td>
+												<td class="text-right">
+													<span t-esc="amount_by_group[1]"
+														t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}' />
+												</td>
+											</t>
+											<t t-else="">
+												<td>
+													<span t-esc="amount_by_group[0]" />
+												</td>
+												<td class="text-right">
+													<span t-esc="amount_by_group[1]"
+														t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}' />
+												</td>
+											</t>
+										</tr>
+									</t>
+									<tr class="border-black">
+										<td style="font-size:13px">
+											<strong>
+												Total(
+												<span t-field="doc.pricelist_id.currency_id" />
+												):
+											</strong>
+										</td>
+										<td class="text-right">
+											<span t-field="doc.amount_total" />
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+				</div>
+				<table width="100%"
+					style="font-family: Calibri;text-color:black;font-size:13px">
+					<tbody>
+						<tr>
+							<td width="25%" style="text-align:center">
+								<span>--------------------</span>
+								<br />
+								<span>Prepared By</span>
+							</td>
+
+							<td width="25%" style="text-align:center">
+								<span>-------------------</span>
+								<br />
+								<span>Verified By</span>
+							</td>
+
+							<td width="25%" style="text-align:center">
+								<span>---------------------</span>
+								<br />
+								<span>Approved By</span>
+							</td>
+							<td width="25%">
+
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</t>
+		</xpath>
+	</template>
+
+
+
+
+	<template id="inherit_report_purchaseorder_document"
+		inherit_id="purchase.report_purchaseorder_document">
+
+		<xpath expr="//t[@t-call='web.external_layout']"
+			position="replace">
+			<t t-call="pecko_so_po_report.external_layout_po_report">
+				<div class="page" style="font-family: Calibri;text-color:black;">
+					<p align="center">
+						<strong>PURCHASE ORDER</strong>
+					</p>
+					<div width="100%">
+						<div style="float:left;font-size:13px">
+							<span>
+								<strong>
+									<t t-esc="o.partner_id.name" />
+								</strong>
+							</span>
+							<br />
+							<span>
+								<t t-esc="o.partner_id.street" />
+								<t t-esc="o.partner_id.street2" />
+							</span>
+							<br />
+							<span>
+								<t t-esc="o.partner_id.city" />
+								<t t-esc="o.partner_id.state_id.name" />
+							</span>
+							<br />
+							<span>
+								<t t-esc="o.partner_id.country_id.name" />
+								<t t-esc="o.partner_id.zip" />
+							</span>
+							<!--<span>Tel : <t t-esc="o.partner_id.phone"/> FAX : <t t-esc="o.partner_id.fax"/></span> -->
+							<br />
+							<br />
+							<span>
+								ATTN :
+								<t t-esc="o.attn.name" />
+							</span>
+							<br />
+							<br />
+							<div>Please supply the following :</div>
+						</div>
+						<div style="float:right;font-size:13px">
+							<span>
+								PO NO :
+								<strong>
+									<t t-esc="o.name" />
+								</strong>
+							</span>
+							<br />
+
+							<span>
+								DATE :
+								<strong>
+									<span t-field="o.date_order"
+										t-options='{"format": "dd-MMM-yyyy"}' />
+								</strong>
+							</span>
+
+						</div>
+					</div>
+
+
+					<table class="table table-sm"
+						style="margin-top:170px;table-layout:fixed;">
+						<style>
+							th{font-size:13px}
+						</style>
+						<thead>
+							<tr style="text-size:13px;width:100%">
+								<t t-set="colspan" t-value="5" />
+								<th class="text-left" style="width:5%">NO</th>
+								<th class="text-left" style="width:15%">PECKO PART NUMBER</th>
+								<th class="text-left" style="width:15%">PART NUMBER</th>
+								<th class="text-left" style="width:15%">DESCRIPTION</th>
+								<th class="text-left" style="width:19%">MANUFACTURER</th>
+								<th class="text-left" style="width:12%">QUANTITY</th>
+								<th class="text-center" style="width:13%">ETA DATE</th>
+								<th class="text-right" style="width:10%">PRICE</th>
+								<t t-if="o.amount_tax>0">
+									<th class="text-right" style="width:10%">TAXES</th>
+								</t>
+								<th class="text-right" style="width:15%">
+									<t groups="account.group_show_line_subtotals_tax_excluded"
+										>AMOUNT</t>
+									<t groups="account.group_show_line_subtotals_tax_included"
+										>TOTAL</t>
+								</th>
+							</tr>
+						</thead>
+						<tbody class="sale_tbody" style="font-size:12px">
+
+							<t t-set="current_subtotal" t-value="0" />
+							<t t-set="i" t-value="1" />
+
+							<t t-foreach="o.order_line" t-as="line">
+
+								<t t-set="current_subtotal"
+									t-value="current_subtotal + line.price_subtotal"
+									groups="account.group_show_line_subtotals_tax_excluded" />
+								<t t-set="current_subtotal"
+									t-value="current_subtotal + line.price_total"
+									groups="account.group_show_line_subtotals_tax_included" />
+
+								<tr>
+									<td>
+										<span t-esc="i" />
+									</td>
+									<td>
+										<span t-field="line.product_id" />
+									</td>
+									<td>
+										<span t-field="line.product_id.name" />
+									</td>
+									<td>
+										<span t-field="line.name" />
+									</td>
+									<td>
+										<span t-field="line.product_id.manufacturer_id" />
+									</td>
+									<td class="text-left">
+										<span t-field="line.product_qty" />
+										<span t-field="line.product_uom" />
+									</td>
+
+									<td class="text-center">
+										<span t-field="o.date_planned"
+											t-options='{"format":"dd-MMM-yyyy"}' />
+									</td>
+									<td class="text-right">
+										<span t-field="line.price_unit" />
+									</td>
+									<t t-if="o.amount_tax>0">
+										<td>
+											<span t-esc="line.taxes_id.code" />
+										</td>
+									</t>
+									<td class="text-right">
+										<span t-field="line.price_subtotal"
+											groups="account.group_show_line_subtotals_tax_excluded" />
+										<span t-field="line.price_total"
+											groups="account.group_show_line_subtotals_tax_included" />
+									</td>
+
+
+								</tr>
+								<t t-set="i" t-value="i+1" />
+							</t>
+						</tbody>
+					</table>
+					<div class="row justify-content-end">
+						<div class="col-4">
+							<table class="table table-sm" style="font-size:13px">
+								<t t-if="o.amount_tax>0">
+									<tr>
+
+										<td>Taxes</td>
+										<td class="text-right">
+											<span t-field="o.amount_tax"
+												t-options='{"widget": "monetary", "display_currency": o.currency_id}' />
+										</td>
+									</tr>
+								</t>
+								<tr class="border-black">
+									<td>
+										<strong>
+											Total(
+											<span t-field="o.currency_id" />
+											):
+										</strong>
+									</td>
+									<td class="text-right">
+										<span t-field="o.amount_total"
+											t-options='{"widget": "monetary", "display_currency": o.currency_id}' />
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+					<br />
+				</div>
+
+				<table width="100%"
+					style="font-family: Calibri;text-color:black;font-size:13px">
+					<tbody>
+						<tr>
+							<td width="25%" style="text-align:center">
+								<span>--------------------</span>
+								<br />
+								<span>Prepared By</span>
+							</td>
+
+							<td width="25%" style="text-align:center">
+								<span>-------------------</span>
+								<br />
+								<span>Verified By</span>
+							</td>
+
+							<td width="25%" style="text-align:center">
+								<span>---------------------</span>
+								<br />
+								<span>Approved By</span>
+							</td>
+							<td width="25%">
+
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+				<br />
+				<br />
+				<br />
+				<br />
+				<table
+					style="font-family: Calibri;text-color:black;font-size:13px">
+					<tbody>
+						<tr>
+							<td width="7%">
+								<span>NOTE :</span>
+							</td>
+							<td width="63%">
+								<span>PLEASE
+									SIGN &amp; REPLY BY EMAIL TO ACKNOWLEDGE ACCEPTANCE OF ORDER
+									SCHEDULE.
+									<br />
+									ALL ITEMS MUST BE RoHS COMPLIANCE AND MUST ACCOMPANY WITH
+									CERTIFICATE OF COMPLIANCE (COC).
+									<br />
+									ANY PRODUCTS SUBJECT TO End-Of-Life (EOL) NEED TO BE INFORM 12
+									MONTH AHEAD.
+								</span>
+
+							</td>
+							<td width="30%" style="text-align:center">
+								<span>------------------------------------------</span>
+								<br />
+								<span>Supplier's Acceptance &amp; Confirmation</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+
+			</t>
+		</xpath>
+	</template>
+
+</odoo>

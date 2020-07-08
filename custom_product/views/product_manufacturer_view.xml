@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="product_manufacturer_form" model="ir.ui.view">
+		<field name="name">product.manufacturer.form</field>
+		<field name="model">product.manufacturer</field>
+		<field name="arch" type="xml">
+			<form string="Manufacturer">
+				<group>
+					<group>
+						<field name="name"/>
+					</group>
+				</group>
+			</form>
+		</field>
+	</record>
+	
+	<record id="product_manufacturer_tree" model="ir.ui.view">
+		<field name="name">product.manufacturer.tree</field>
+		<field name="model">product.manufacturer</field>
+		<field name="arch" type="xml">
+			<tree string="Manufacturer">
+				<field name="name" />
+			</tree>
+		</field>
+	</record>
+		
+	<record id="action_product_manufacturer" model="ir.actions.act_window">
+		<field name="name">Manufacturer/Customer</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">product.manufacturer</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+				Click here to create a Manufacturer
+			</p>
+		</field>
+	</record>
+	
+	<menuitem action="action_product_manufacturer" id="menu_Manufacturer" sequence="1" 
+		parent="mrp.menu_mrp_configuration"	groups="mrp.group_mrp_manager" name="Manufacturer/Customer" />
+	
+</odoo>

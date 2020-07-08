@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_manufacturer_user,product.manufacturer,custom_product.model_product_manufacturer,mrp.group_mrp_user,1,1,1,1
+access_product_manufacturer_manager,product.manufacturer.manager,custom_product.model_product_manufacturer,mrp.group_mrp_manager,1,1,1,1
+access_product_manufacturer_routing,product.manufacturer.routing,custom_product.model_product_manufacturer,mrp.group_mrp_routings,1,1,1,1
