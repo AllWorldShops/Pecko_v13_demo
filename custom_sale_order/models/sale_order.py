@@ -35,7 +35,9 @@ class SaleOrderLine(models.Model):
     
     @api.onchange('product_id')
     def _onchange_product_id(self):
-        if self.product_id:
+        if self.product_id.name:
             self.update({'customer_part_no':self.product_id.name,
                          'name':self.product_id.name})
+      
+            
         

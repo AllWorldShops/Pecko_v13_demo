@@ -22,7 +22,9 @@ class Product(models.Model):
 #         name = self.display_name
 #         if self.description_sale:
 #             name += '\n' + self.description_sale
-        name = self.product_tmpl_id.x_studio_field_mHzKJ
+        name=''
+        if self.product_tmpl_id.x_studio_field_mHzKJ:
+            name = self.product_tmpl_id.x_studio_field_mHzKJ
         return name
 
 class SaleOrder(models.Model):   
