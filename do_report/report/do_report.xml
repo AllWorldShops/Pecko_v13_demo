@@ -149,6 +149,7 @@
 			<field name="dpi">90</field>
 		</record>
 
+
 		<!-- QWeb Reports -->
 		<report id="do_ppts" model="stock.picking" string="Do Report"
 			report_type="qweb-pdf" name="do_report.report_custom_do"
