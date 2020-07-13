@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<template id="custom_do_external_layout_background">
+
+			<div class="header o_background_header">
+				<div class="row">
+					<div class="col-8">
+						<img t-if="company.logo"
+							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
+						<div class="company_address"
+							style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;">
+							<div>
+								<strong>
+									<span style="font-size: 25px;"
+										t-field="company.partner_id.name" />
+								</strong>
+								<br />
+								<span t-field="o.company_id.street" />
+								<t t-if="o.company_id.street1">
+									<span t-field="o.company_id.street1" />
+									,
+									<br />
+									<span t-field="o.company_id.street2" />
+								</t>
+								<t t-else="">
+									<span t-field="o.company_id.street2" />
+								</t>
+								<br />
+								<span t-field="o.company_id.city" />
+								,
+								<span t-field="o.company_id.state_id" />
+								,
+								<span t-field="o.company_id.country_id" />
+								-
+								<span t-field="o.company_id.zip" />
+								<br />
+								<span>TEL :</span>
+								<span t-field="o.company_id.phone" />
+								<t t-if="o.company_id.fax">
+									|
+									<span>FAX :</span>
+									<span t-field="o.company_id.fax" />
+								</t>
+								<br />
+								<span>E-mail:</span>
+								<span t-field="o.company_id.email" />
+								,
+								<span>URL:</span>
+								<span t-field="o.company_id.website" />
+								<br />
+								<span>Company Reg No:</span>
+								<span t-field="o.company_id.company_registry" />
+							</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="text-muted text-right">
+							Page:
+							<span class="page" />
+							of
+							<span class="topage" />
+						</div>
+						<div class="clearfix mb8" />
+					</div>
+				</div>
+			</div>
+
+			<div class="article o_report_layout_background"
+				t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+				<t t-raw="0" />
+			</div>
+
+			<div class="footer o_background_footer"
+				style="font-family: Calibri;font-size:12px;">
+				<table width="100%" style="border-top: 1px solid black;">
+					<tr width="100%">
+						<td width="50%" style="text-align:center">
+							<strong>RECEIVED IN GOOD ORDER</strong>
+							<br />
+							<br />
+							<br />
+						</td>
+						<td width="50%" style="text-align:center">
+							<strong>PECKO (M) SDN BHD.</strong>
+							<br />
+							<br />
+							<br />
+						</td>
+					</tr>
+					<tr width="100%">
+						<td width="50%" style="text-align:center">
+							<strong>CUSTOMER'S STAMP &amp; SIGNATURE</strong>
+						</td>
+						<td width="50%" style="text-align:center">
+							<strong>AUTHORISED SIGNATURE</strong>
+						</td>
+					</tr>
+				</table>
+				<table width="100%">
+					<tr>
+						<td>
+							<strong>
+								NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
+								THEIR INTENDED USE,AND USERS ASSUME ALL RISK AND LIABILITY
+								WHATSOEVER IN CONNECTION THEREWITH
+							</strong>
+						</td>
+					</tr>
+				</table>
+				<div style="text-align:right">
+					<span>user:</span>
+					<span t-esc="user.name" />
+				</div>
+			</div>
+		</template>
+
+		<template id="custom_do_external_layout">
+			<!-- Multicompany -->
+			<t t-if="not o and doc">
+				<t t-set="o" t-value="doc" />
+			</t>
+
+			<t t-if="o and 'company_id' in o">
+				<t t-set="company" t-value="o.company_id.sudo()" />
+			</t>
+			<t t-if="not o or not 'company_id' in o">
+				<t t-set="company" t-value="res_company" />
+			</t>
+
+			<t t-call="do_report.custom_do_external_layout_background">
+				<t t-raw="0" />
+			</t>
+
+		</template>
+
+		<record id="paperformat_do" model="report.paperformat">
+			<field name="name">Do Paperformat</field>
+			<field name="default" eval="True" />
+			<field name="format">A4</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">35</field>
+			<field name="margin_bottom">41</field>
+			<field name="margin_left">6</field>
+			<field name="margin_right">6</field>
+			<field name="header_line" eval="False" />
+			<field name="header_spacing">30</field>
+			<field name="dpi">90</field>
+		</record>
+
+		<!-- QWeb Reports -->
+		<report id="do_ppts" model="stock.picking" string="Do Report"
+			report_type="qweb-pdf" name="do_report.report_custom_do"
+			file="do_report.report_custom_do" paperformat="paperformat_do" />
+
+	</data>
+</odoo>

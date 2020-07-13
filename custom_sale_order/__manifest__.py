@@ -7,7 +7,7 @@
     'website': 'https://www.pptssolutions.com',
     'category': 'sale',
     'description': """Enhancement in sale module""",
-    'depends': ['base','sale_management'],
+    'depends': ['base','sale_management','sales_team'],
     'data': [
         'views/sale_order_views.xml',
     ],

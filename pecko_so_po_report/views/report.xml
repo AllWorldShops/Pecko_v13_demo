@@ -582,7 +582,7 @@
 									</td>
 
 									<td class="text-center">
-										<span t-field="o.date_planned"
+										<span t-field="line.date_planned"
 											t-options='{"format":"dd-MMM-yyyy"}' />
 									</td>
 									<td class="text-right">

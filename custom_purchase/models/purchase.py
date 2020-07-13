@@ -13,6 +13,11 @@ class PurchaseOrderLine(models.Model):
     
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer')
     notes = fields.Char(string='Notes')
+    order_ref = fields.Char('Order Reference',related='order_id.name')   
+    vendor_id = fields.Many2one('res.partner',related='order_id.partner_id')
+    schedule_date = fields.Datetime(related='order_id.date_planned')
+    promise_date = fields.Datetime(related='order_id.date_planned')
+    order_date = fields.Datetime(related='order_id.date_order')
     
 
     @api.onchange('product_id')
