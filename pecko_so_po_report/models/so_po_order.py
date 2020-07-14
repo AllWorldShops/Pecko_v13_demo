@@ -22,7 +22,9 @@ class Product(models.Model):
 #         name = self.display_name
 #         if self.description_sale:
 #             name += '\n' + self.description_sale
-        name = self.product_tmpl_id.x_studio_field_mHzKJ
+        name=''
+        if self.product_tmpl_id.x_studio_field_mHzKJ:
+            name = self.product_tmpl_id.x_studio_field_mHzKJ
         return name
 
 class SaleOrder(models.Model):   
@@ -80,22 +82,55 @@ class SaleOrder(models.Model):
 #     
 #     customer_part_no = fields.Text(string='Part Number')
          
-# class AccountInvoice(models.Model):   
-#     _inherit = "account.invoice"
+class AccountMove(models.Model):   
+    _inherit = "account.move"
+     
+    attn = fields.Many2one('res.partner',string="ATTN")
+    customer_po_no = fields.Char(string="Customer PO No.")
+    do_name = fields.Char(string="DO No.")
+    exchange_rate = fields.Float(string="Rate",compute="_compute_currency_rate")
+    
+    def _compute_currency_rate(self):
+        for mov in self:
+            if mov.currency_id:
+                currency_id_rates = self.env['res.currency.rate'].search([('currency_id','=',mov.currency_id.id)])
+                for currency_id_rate in currency_id_rates:
+                    if currency_id_rate.name == mov.invoice_date:
+                        mov.exchange_rate =currency_id_rate.rate
+                    else:
+                        print(mov.invoice_date.month)
+                        if currency_id_rate.name.month == mov.invoice_date.month:
+                            mov.exchange_rate =currency_id_rate.rate
+
+class AccountMoveLine(models.Model):   
+    _inherit = "account.move.line"
+     
+    customer_part_no = fields.Text(string='Customer Part No',compute="_compute_product_name")
+    manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer/Customer Name')
+
 #     
-#     attn = fields.Many2one('res.partner',string="ATTN")
-#     customer_po_no = fields.Char(string="Customer PO No.")
-#     
-# class AccountInvoiceLine(models.Model):   
-#     _inherit = "account.invoice.line"
-#     
-#     customer_part_no = fields.Text(string='Customer Part No',compute="_compute_product_name")
-#     
-#     @api.depends('product_id')
-#     def _compute_product_name(self):
-#         for pro in self:
-#             if pro.product_id:
-#                 pro.customer_part_no = pro.product_id.name
+    @api.depends('product_id')
+    def _compute_product_name(self):
+        for pro in self:
+            if pro.product_id:
+                pro.customer_part_no = pro.product_id.name
+            else:
+                pro.customer_part_no =''
+            if pro.product_id.product_tmpl_id.manufacturer_id:
+                pro.manufacturer_id = pro.product_id.product_tmpl_id.manufacturer_id.id
+            
+#     @api.model
+#     def create(self, vals):
+#         if vals.get('product_id'):
+#             product_id = self.env['product.product'].search([('id','=',vals.get('product_id'))])
+#             vals['manufacturer_id'] = product_id.product_tmpl_id.manufacturer_id.id
+#         return super(AccountMoveLine, self).create(vals)
+    
+    @api.onchange('product_id')
+    def onchange_invoice_line_product(self):
+        if self.product_id:
+            self.manufacturer_id = self.product_id.product_tmpl_id.manufacturer_id.id
+            
     
 class PurchaseOrder(models.Model):   
     _inherit = "purchase.order"
@@ -166,4 +201,14 @@ class PurchaseOrderLine(models.Model):
         vals['customer_part_no'] = product_id.name
         vals['name'] = product_id.product_tmpl_id.x_studio_field_mHzKJ
         return super(PurchaseOrderLine, self).create(vals)
+    
+class AccountTax(models.Model):
+    _inherit = 'account.tax'
+
+    code = fields.Char(size=5)
+
+    _sql_constraints = [
+        ('code_company_uniq', 'unique (code,company_id)',
+         'The code of the Tax must be unique per company !')
+    ]
     

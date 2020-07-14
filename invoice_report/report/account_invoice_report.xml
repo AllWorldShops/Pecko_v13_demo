@@ -2,15 +2,15 @@
 <odoo>
 	<data>
 
-		<template id="custom_do_external_layout_background">
+		<template id="custom_invoice_external_layout_background">
 
 			<div class="header o_background_header">
 				<div class="row">
-					<div class="col-8">
+					<div class="col-10">
 						<img t-if="company.logo"
 							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
 						<div class="company_address"
-							style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;">
+							style="padding-top:14px;line-height:14px;font-family: Calibri;">
 							<div>
 								<strong>
 									<span style="font-size: 25px;"
@@ -55,7 +55,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-4">
+					<div class="col-2">
 						<div class="text-muted text-right">
 							Page:
 							<span class="page" />
@@ -74,49 +74,37 @@
 
 			<div class="footer o_background_footer"
 				style="font-family: Calibri;font-size:12px;">
-				<table width="100%" style="border-top: 1px solid black;">
-					<tr width="100%">
-						<td width="50%" style="text-align:center">
-							<strong>RECEIVED IN GOOD ORDER</strong>
-							<br />
-							<br />
-							<br />
-						</td>
-						<td width="50%" style="text-align:center">
-							<strong>PECKO (M) SDN BHD.</strong>
-							<br />
-							<br />
-							<br />
-						</td>
-					</tr>
-					<tr width="100%">
-						<td width="50%" style="text-align:center">
-							<strong>CUSTOMER'S STAMP &amp; SIGNATURE</strong>
-						</td>
-						<td width="50%" style="text-align:center">
-							<strong>AUTHORISED SIGNATURE</strong>
-						</td>
-					</tr>
-				</table>
-				<table width="100%">
+				<table width="100%"
+					style="border-top: 1px solid black;border-bottom: 1px solid black;">
 					<tr>
-						<td>
-							<strong>
-								NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
-								THEIR INTENDED USE,AND USERS ASSUME ALL RISK AND LIABILITY
-								WHATSOEVER IN CONNECTION THEREWITH
-							</strong>
+						<td width="75%">
+							1.Please remit to Pecko (M) Sdn Bhd, Swift Code: MBBEMYKL, 
+							Maybank Islamic Berhad (MYR A/C: 551100316366); 
+							Malayan Banking Berhad (USD A/C: 701105010725).
+							<br />
+							2.Any discrepancy noted herein must be brought to our notice
+							within 7 days in writing from the date of this invoice.
+							<br />
+							3.Title to this merchandise remains with PECKO (M) SDN BHD until
+							such time as full settlement of all sums due from you to us under
+							this invoice or otherwise is received.
 						</td>
+
+							<!-- 1.Please remit to Pecko (M) Sdn Bhd Swt RHBBMYKL RHB BANK BERHAD,
+							MYR A/C 20113800034399; USD A/C 61302900000624 -->
+						<!-- <td width="25%">
+							PECKO (M) SDN BHD.
+							<br />
+							<br />
+							<br />
+							<br />
+						</td> -->
 					</tr>
 				</table>
-				<div style="text-align:right">
-					<span>user:</span>
-					<span t-esc="user.name" />
-				</div>
 			</div>
 		</template>
 
-		<template id="custom_do_external_layout">
+		<template id="custom_invoice_external_layout">
 			<!-- Multicompany -->
 			<t t-if="not o and doc">
 				<t t-set="o" t-value="doc" />
@@ -129,14 +117,15 @@
 				<t t-set="company" t-value="res_company" />
 			</t>
 
-			<t t-call="do_report.custom_do_external_layout_background">
+			<t
+				t-call="invoice_report.custom_invoice_external_layout_background">
 				<t t-raw="0" />
 			</t>
 
 		</template>
 
-		<record id="paperformat_do" model="report.paperformat">
-			<field name="name">Do Paperformat</field>
+		<record id="paperformat_invoice" model="report.paperformat">
+			<field name="name">Invoice Paperformat</field>
 			<field name="default" eval="True" />
 			<field name="format">A4</field>
 			<field name="orientation">Portrait</field>
@@ -150,9 +139,13 @@
 		</record>
 
 		<!-- QWeb Reports -->
-		<report id="do_ppts" model="stock.picking" string="Do Report"
-			report_type="qweb-pdf" name="do_report.report_custom_do"
-			file="do_report.report_custom_do" paperformat="paperformat_do" />
+		<report id="invoice_ppts" model="account.move"
+			string="Invoice Report" report_type="qweb-pdf"
+			name="invoice_report.report_ppts_invoice_custom"
+			file="invoice_report.report_ppts_invoice_custom"
+			paperformat="paperformat_invoice"
+			attachment="(object.state in ('draft','open','paid')) and ('INV'+(object.name or '').replace('/','')+'.pdf')"
+			print_report_name="(object._get_report_base_filename())" />
 
 	</data>
 </odoo>

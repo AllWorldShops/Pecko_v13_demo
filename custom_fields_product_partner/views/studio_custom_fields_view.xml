@@ -10,15 +10,15 @@
                 <xpath expr="//field[@name='default_code']" position="after">
                 	<field name="quote_description" invisible="1"/>
                 	<field name="activity_date_deadline" invisible="1"/>
-                    <field name="x_studio_field_pFxVK" />
+                    <field name="x_studio_field_pFxVK" invisible="1"/>
                     <field name="x_studio_field_mHzKJ" />
-                    <field name="x_studio_field_CPhNY"/>
+                    <field name="x_studio_field_CPhNY" invisible="1"/>
                     <field name="x_studio_field_CLVhW"/>
-                    <field name="x_studio_field_qr3ai" string="MPN"/>
-                    <field name="x_studio_field_ZhMOw" string="Description" help="Description" placeholder="Description"/>
+                    <field name="x_studio_field_qr3ai" string="MPN/Customer/Supplier Part No"/>
+                    <field name="x_studio_field_ZhMOw" string="Description" help="Description" placeholder="Description" invisible="1"/>
                 </xpath>
                 <xpath expr="//field[@name='uom_po_id']" position="after">
-                    <field name="x_studio_field_jXS3W" string="Sale Unit of Measure - Reference ONLY"/>
+                    <field name="x_studio_field_jXS3W" string="Sale Unit of Measure - Reference ONLY" invisible="1"/>
                     <!-- <field name="x_studio_field_CCkqP" string="Storage Location (text)"/> -->
                 </xpath>
             </field>
@@ -150,8 +150,8 @@
             </field>
         </record>
 
-        <menuitem id="menu_action_x_itemgroup_tree" action="x_itemgroup_action" parent="stock.menu_stock_inventory_control" groups="stock.group_stock_user" sequence="4"/>
- 
+<!--         <menuitem id="menu_action_x_itemgroup_tree" action="x_itemgroup_action" parent="stock.menu_stock_inventory_control" groups="stock.group_stock_user" sequence="4"/>
+ --> 
         <!-- Studio fields for BOM -->
 
         <record id="mrp_bom_inherit_form" model="ir.ui.view">
