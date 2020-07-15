@@ -98,8 +98,10 @@ class AccountMove(models.Model):
                     if currency_id_rate.name == mov.invoice_date:
                         mov.exchange_rate =currency_id_rate.rate
                     else:
-                        print(mov.invoice_date.month)
-                        if currency_id_rate.name.month == mov.invoice_date.month:
+                        if mov.invoice_date and currency_id_rate.name:
+                            if currency_id_rate.name.month == mov.invoice_date.month:
+                                mov.exchange_rate =currency_id_rate.rate
+                        else:
                             mov.exchange_rate =currency_id_rate.rate
 
 class AccountMoveLine(models.Model):   
@@ -150,8 +152,8 @@ class PurchaseOrder(models.Model):
                 for line in loop.move_ids_without_package:
                     line.customer_part_no = line.product_id.name
                     
-        if not self.partner_id.segment_master_id:   
-            raise UserError(_("Please Configure Segment In Vendor Master"))      
+#         if not self.partner_id.segment_master_id:   
+#             raise UserError(_("Please Configure Segment In Vendor Master"))      
 
         return res
 
