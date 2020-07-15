@@ -13,10 +13,10 @@
                     <field name="x_studio_field_pFxVK" invisible="1"/>
                     <field name="x_studio_field_mHzKJ" />
                     <field name="x_studio_field_CPhNY" invisible="1"/>
-                    <field name="x_studio_field_CLVhW"/>
+                    <!-- <field name="x_studio_field_CLVhW"/> -->
                     <field name="x_studio_field_qr3ai" string="MPN/Customer/Supplier Part No"/>
-                    <field name="x_studio_field_ZhMOw" string="Description" help="Description" placeholder="Description" invisible="1"/>
-                </xpath>
+<!--                     <field name="x_studio_field_ZhMOw" string="Description" help="Description" placeholder="Description" invisible="1"/>
+ -->                </xpath>
                 <xpath expr="//field[@name='uom_po_id']" position="after">
                     <field name="x_studio_field_jXS3W" string="Sale Unit of Measure - Reference ONLY" invisible="1"/>
                     <!-- <field name="x_studio_field_CCkqP" string="Storage Location (text)"/> -->
@@ -164,13 +164,13 @@
                     <field name="x_studio_field_bzUKS" string="Expiry Date"/>
                 </xpath> -->
                 <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='product_id']" position="after">
-                    <field name="x_studio_field_CY3Z4" string="Customer Part Number" help="Customer Part Number" placeholder="Description"/>
+                    <field name="x_studio_field_CY3Z4" string="Customer Part Number" help="Customer Part Number" placeholder="Description" invisible="1"/>
                 </xpath>
                 <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='type']" position="attributes">
                     <attribute name="default_value">normal</attribute>
                 </xpath>
                 <xpath expr="//field[@name='company_id']" position="after">
-                    <field name="x_studio_field_IMTtD" string="Description" help="Description"/>
+                    <field name="x_studio_field_IMTtD" string="Description" help="Description" invisible="1"/>
                     <field name="x_studio_field_E1iTU" string="Verification Status"/>
                 </xpath>
                 <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='sequence']" position="before">

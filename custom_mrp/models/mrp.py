@@ -111,6 +111,8 @@ class StockMove(models.Model):
         product_id = self.env['product.product'].search([('id','=',vals['product_id'])])
         vals['storage_location_id'] = product_id.product_tmpl_id.storage_location_id.id
         vals['manufacturer_id'] = product_id.product_tmpl_id.manufacturer_id.id
+        vals['description_picking'] = product_id.product_tmpl_id.x_studio_field_mHzKJ
+        
         if product_id.product_tmpl_id.x_studio_field_mHzKJ:
             vals['name'] = product_id.product_tmpl_id.x_studio_field_mHzKJ
         else:
