@@ -11,6 +11,7 @@ class MrpBom(models.Model):
     x_studio_field_IMTtD = fields.Char(string='Description')
     x_studio_field_E1iTU = fields.Selection([('Please Select', 'Please Select'),('Confirmed', 'Confirmed'),('Not Confirmed','Not Confirmed')],string='Verification Status')
 
+
 class MrpBomLine(models.Model):
     _inherit = 'mrp.bom.line'
 
