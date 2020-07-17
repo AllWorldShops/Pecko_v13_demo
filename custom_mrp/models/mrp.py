@@ -93,7 +93,7 @@ class MrpBomLine(models.Model):
 class StockMove(models.Model):
     _inherit = 'stock.move'
     
-    storage_location_id = fields.Many2one('stock.location',string='Storage Location')
+    storage_location_id = fields.Char(string='Storage Location')
     to_consume_qty = fields.Float(string="To Consume Quantity", compute='_get_consumed_data')
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer Name')
     customer_part_no = fields.Text(string='Part Number',compute="_compute_product_name",store=True)
@@ -109,7 +109,7 @@ class StockMove(models.Model):
     @api.model
     def create(self, vals):
         product_id = self.env['product.product'].search([('id','=',vals['product_id'])])
-        vals['storage_location_id'] = product_id.product_tmpl_id.storage_location_id.id
+        vals['storage_location_id'] = product_id.product_tmpl_id.storage_location_id
         vals['manufacturer_id'] = product_id.product_tmpl_id.manufacturer_id.id
         vals['description_picking'] = product_id.product_tmpl_id.x_studio_field_mHzKJ
         

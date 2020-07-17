@@ -6,13 +6,14 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer/Customer Name')
-    storage_location_id = fields.Many2one('stock.location',string='Storage Location')
+    storage_location_id = fields.Char(string='Storage Location')
+
     
 class ProductProduct(models.Model):
     _inherit = 'product.product'
  
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer/Customer Name',related='product_tmpl_id.manufacturer_id',store=True)
-    storage_location_id = fields.Many2one('stock.location',string='Storage Location',related='product_tmpl_id.storage_location_id')
+    storage_location_id = fields.Char(string='Storage Location',related='product_tmpl_id.storage_location_id')
    
 #     @api.multi
     def write(self, vals):
