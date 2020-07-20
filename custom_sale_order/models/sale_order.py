@@ -34,7 +34,7 @@ class SaleOrderLine(models.Model):
     
     customer_part_no = fields.Text(string='Customer Part No')
     need_date = fields.Date(string="Need Date")
-    line_no = fields.Integer(compute='_compute_get_number', string='Position',readonly=True, default=False)
+    line_no = fields.Integer(string='Position' ,default=False)
     requested_date_line = fields.Date(string="Requested Date")
     order_ref = fields.Char('Order Reference',related='order_id.name')   
     customer_id = fields.Many2one('res.partner',related='order_id.partner_id')
@@ -42,20 +42,14 @@ class SaleOrderLine(models.Model):
     promise_date = fields.Datetime('Promised Date',related='order_id.commitment_date')
 
 
-    @api.depends('sequence', 'order_id')
-    def _compute_get_number(self):
-        for recs in self:
-            for order in recs.mapped('order_id'):
-                test_val = 0
-                test_val_count = 0
-                line_no_val = 1
-                for line in order.order_line:
-                    test_val_count +=1
-                    line.line_no = line_no_val
-                    line_no_val += 1
-                if test_val_count == 0:
-                    recs.line_no = test_val
-                    
+#     @api.depends('sequence', 'order_id')
+#     def _compute_get_number(self):
+#         for recs in self:
+#             for order in recs.mapped('order_id'):
+#                 line_no_val = 1
+#                 for line in order.order_line:
+#                     line.line_no = line_no_val
+#                     line_no_val += 1
     
     @api.onchange('product_id')
     def _onchange_product_id(self):
