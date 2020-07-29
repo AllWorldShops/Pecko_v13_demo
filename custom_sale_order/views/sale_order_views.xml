@@ -54,13 +54,16 @@
 				<field name="line_no" string="Position"/>
 				<field name="customer_id" string="Customer"/>
 				<field name="product_id" string="Pecko Part Number" invisible="1"/>
-				<field name="customer_part_no" string="Customer Part Number" invisible="1"/>
+				<field name="customer_part_no" string="Customer Part Number" invisible="0"/>
+				<field name="internal_ref_no"></field>
+				<field name="customer_po_no" string="Customer Po No" invisible="0"/>
 				<field name="name" string="Description"/>
 				<field name="sales_person_id" string="Salesperson"/>
 				<field name="price_unit" string="Unit Price"/>
 				<field name="product_uom_qty" string="Qty"/>
 				<field name="qty_delivered" string="Delivered"/>
 				<field name="qty_invoiced" string="Invoiced"/>
+				<field name="back_order_qty"/>
 				<field name="product_uom" string="Unit of Measure"/>
 				<field name="requested_date_line" string="Requested Date"/>
 				<field name="requested_date_line" string="Promised Date"/>

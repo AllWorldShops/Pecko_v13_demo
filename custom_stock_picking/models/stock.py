@@ -21,3 +21,17 @@ class StockMove(models.Model):
     
     additional_notes = fields.Char(string='Additional Notes')
     customer_part_no = fields.Text(string='Part Number')
+    
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+    
+    customer_part_no = fields.Text(string='Part Number',compute="_compute_product_name",store=True)
+    
+    
+    @api.depends('product_id')
+    def _compute_product_name(self):
+        for pro in self:
+            if pro.product_id:
+                pro.customer_part_no = pro.product_id.name
+            else:
+                pro.customer_part_no = ''
