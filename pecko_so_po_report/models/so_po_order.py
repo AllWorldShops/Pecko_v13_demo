@@ -101,6 +101,8 @@ class AccountMove(models.Model):
                         if mov.invoice_date and currency_id_rate.name:
                             if currency_id_rate.name.month == mov.invoice_date.month:
                                 mov.exchange_rate =currency_id_rate.rate
+                            else:
+                                mov.exchange_rate =currency_id_rate.rate
                         else:
                             mov.exchange_rate =currency_id_rate.rate
 
