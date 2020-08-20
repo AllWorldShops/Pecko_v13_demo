@@ -10,6 +10,16 @@ class MrpProduction(models.Model):
     description = fields.Char(string='Description')
     project = fields.Char(string='Project')
     
+    # MRP 3 Step Location Auto Change
+    def step_location_sync(self):     
+        location_route =  self.env['stock.location.route'].search([('name','=','PM Warehouse: Pick components, manufacture and then store products (3 steps)')],limit=1)
+        for loc_route in location_route:
+            for rul in loc_route.rule_ids:
+                if rul.location_src_id.complete_name == 'PM-WH/Production Floor':
+                    loc_id = self.env['stock.location'].search([('complete_name','=','Virtual Locations/My Company: Production')],limit=1)
+                    if loc_id:
+                        rul.location_id = loc_id.id
+                        
     def _generate_raw_move(self, bom_line, line_data):
         quantity = line_data['qty']
         # alt_op needed for the case when you explode phantom bom and all the lines will be consumed in the operation given by the parent bom line
