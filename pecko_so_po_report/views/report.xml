@@ -228,7 +228,7 @@
 												</td>
 												<td width="20%">
 													<span style="text-align:left"
-														t-field="doc.confirmation_date"
+														t-field="doc.date_order"
 														t-options='{"format":"dd/MM/yyyy"}' />
 												</td>
 											</tr>

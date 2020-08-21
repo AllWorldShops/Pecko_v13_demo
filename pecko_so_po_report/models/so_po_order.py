@@ -88,7 +88,7 @@ class AccountMove(models.Model):
     attn = fields.Many2one('res.partner',string="ATTN")
     customer_po_no = fields.Char(string="Customer PO No.")
     do_name = fields.Char(string="DO No.")
-    exchange_rate = fields.Float(string="Rate",compute="_compute_currency_rate")
+    exchange_rate = fields.Float(string="Rate",digits=(12,4),compute="_compute_currency_rate")
     
     def _compute_currency_rate(self):
         for mov in self:
@@ -97,12 +97,18 @@ class AccountMove(models.Model):
                 for currency_id_rate in currency_id_rates:
                     if currency_id_rate.name == mov.invoice_date:
                         mov.exchange_rate =currency_id_rate.rate
+                        break
                     else:
                         if mov.invoice_date and currency_id_rate.name:
                             if currency_id_rate.name.month == mov.invoice_date.month:
                                 mov.exchange_rate =currency_id_rate.rate
+                                break
+                            else:
+                                mov.exchange_rate =currency_id_rate.rate
+                                break
                         else:
                             mov.exchange_rate =currency_id_rate.rate
+                            break
 
 class AccountMoveLine(models.Model):   
     _inherit = "account.move.line"
