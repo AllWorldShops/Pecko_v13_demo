@@ -10,7 +10,7 @@
 						<img t-if="company.logo"
 							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
 						<div class="company_address"
-							style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;">
+							style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;font-size: 13px;">
 							<div>
 								<strong>
 									<span style="font-size: 25px;"
