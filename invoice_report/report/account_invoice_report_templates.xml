@@ -178,15 +178,15 @@
 					<br />
 					<t t-set="product_stock_uom_qty" t-value="0" />
 					<table class="table table-condensed"
-						name="invoice_line_table" style="line-height:12pt;font-size:11px;">
+						name="invoice_line_table" style="line-height:12pt;font-size:10px;">
 						<thead>
 							<tr>
-								<th class="text-left" style="width:11%">S.No</th>
-								<th class="text-left" style="width:25%">Pecko Part No</th>
-								<th class="text-left" style="width:25%">Part No</th>
+								<th class="text-left" style="width:6%">S.No</th>
+								<th class="text-left" style="width:30%">Pecko Part No</th>
+								<th class="text-left" style="width:30%">Part No</th>
 								<th class="text-left" style="width:28%">Description</th>
 								<th class="text-center" style="width:18%">Quantity</th>
-								<th class="text-center" style="width:15%">Unit</th>
+								<th class="text-center" style="width:13%">Unit</th>
 
 								
 
@@ -244,7 +244,7 @@
 						</tr>
 					</table>
 					<table width="100%"
-						style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:13px;">
+						style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;">
 						<tr>
 							<td width="25%">
 								For Tax Purpose in MYR Only
