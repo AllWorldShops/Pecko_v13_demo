@@ -10,8 +10,8 @@
 						<img t-if="company.logo"
 							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
 						<div class="company_address"
-							style="padding-top:14px;line-height:14px;font-family: Calibri;">
-							<div>
+							style="padding-top:14px;line-height:12pt;font-family: Calibri;">
+							<div style="font-size: 13px;">
 								<strong>
 									<span style="font-size: 25px;"
 										t-field="company.partner_id.name" />
