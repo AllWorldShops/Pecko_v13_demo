@@ -229,7 +229,8 @@
 										<span t-field="l.tax_ids.code" />
 									</td>
 									<td style=" text-align: right;padding-right:2px">
-										<span t-field="l.price_subtotal" />
+										<span t-esc="'%.2f'%(l.price_subtotal)" />
+										<!-- <span t-field="l.price_subtotal" /> -->
 									</td>
 								</t>
 							</tr>
@@ -288,11 +289,14 @@
 								) :
 							</td>
 							<td width="5%" style="text-align:right">
-								<span t-field="o.amount_untaxed" />
+								<span t-esc="'%.2f'%(o.amount_untaxed)" />
+								<!-- <span t-field="o.amount_untaxed" /> -->
 								<br />
-								<span t-field="o.amount_tax" />
+								<span t-esc="'%.2f'%(o.amount_tax)" />
+								<!-- <span t-field="o.amount_tax" /> -->
 								<br />
-								<span t-field="o.amount_total" />
+								<span t-esc="'%.2f'%(o.amount_total)" />
+								<!-- <span t-field="o.amount_total" /> -->
 								<br />
 							</td>
 						</tr>
