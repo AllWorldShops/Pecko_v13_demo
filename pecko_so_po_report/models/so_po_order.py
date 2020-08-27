@@ -105,7 +105,6 @@ class AccountMove(models.Model):
                                 break
                             else:
                                 mov.exchange_rate =currency_id_rate.rate
-                                break
                         else:
                             mov.exchange_rate =currency_id_rate.rate
                             break
