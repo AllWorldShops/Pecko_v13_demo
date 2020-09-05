@@ -165,7 +165,7 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):   
     _inherit = "purchase.order.line"
     
-    product_id = fields.Many2one('product.product', string='Pecko Part Number', domain=[('purchase_ok', '=', True)], change_default=True, required=True)
+    # product_id = fields.Many2one('product.product', string='Pecko Part Number', domain=[('purchase_ok', '=', True)], change_default=True, required=True)
     customer_part_no = fields.Text(string='Part Number')
     
     @api.onchange('product_id')
