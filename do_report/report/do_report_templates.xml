@@ -110,7 +110,7 @@
                                             <tr>
                                                 <td><strong>Date</strong></td>
                                                 <td>
-                                                    <span style="text-align:left" t-field="o.scheduled_date" t-options='{"format": "dd/MM/yyyy"}'/>
+                                                    <span style="text-align:left" t-field="o.date_done" t-options='{"format": "dd/MM/yyyy"}'/>
                                                 </td>
                                             </tr>
                                             <tr>
