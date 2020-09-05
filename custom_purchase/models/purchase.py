@@ -27,6 +27,7 @@ class PurchaseOrderLine(models.Model):
             
     @api.model
     def create(self, vals):
-        product_id = self.env['product.product'].search([('id','=',vals['product_id'])])
-        vals['manufacturer_id'] = product_id.product_tmpl_id.manufacturer_id.id
+        if vals['product_id']:
+            product_id = self.env['product.product'].search([('id','=',vals['product_id'])])
+            vals['manufacturer_id'] = product_id.product_tmpl_id.manufacturer_id.id
         return super(PurchaseOrderLine, self).create(vals)
