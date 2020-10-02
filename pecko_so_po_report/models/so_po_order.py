@@ -4,7 +4,7 @@ from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from odoo import api, fields, models, SUPERUSER_ID, _
 from odoo.exceptions import AccessError, UserError
-
+import math
 
 class Product(models.Model):   
     _inherit = "product.product"
@@ -118,7 +118,7 @@ class AccountMoveLine(models.Model):
 
     def get_price_subtotal_report(self,price_subtotal):
         return math.floor(price_subtotal * 100) / 100
-    
+
     @api.depends('product_id')
     def _compute_product_name(self):
         for pro in self:
