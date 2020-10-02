@@ -229,7 +229,10 @@
 										<span t-field="l.tax_ids.code" />
 									</td>
 									<td style=" text-align: right;padding-right:2px">
-										<span t-esc="'%.2f'%(l.price_subtotal)" />
+										<t t-set="get_price_subtotal_report"
+							t-value="l.get_price_subtotal_report(l.price_subtotal)" />
+										<span t-esc="'%.2f'% get_price_subtotal_report" />
+										<!-- <span t-esc="'%.2f'%(l.price_subtotal)" /> -->
 										<!-- <span t-field="l.price_subtotal" /> -->
 									</td>
 								</t>
