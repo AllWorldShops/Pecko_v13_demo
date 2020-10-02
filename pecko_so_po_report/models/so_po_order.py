@@ -32,6 +32,12 @@ class SaleOrder(models.Model):
      
     attn = fields.Many2one('res.partner',string="ATTN")
     customer_po_no = fields.Char(string="Customer PO No")
+
+    def get_price_subtotal_report(self,price_subtotal):
+        result = 0.00
+        result = math.floor(price_subtotal * 100) / 100
+        return result
+        
 #  
 #     @api.multi
 #     def _prepare_invoice(self):
