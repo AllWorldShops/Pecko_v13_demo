@@ -33,10 +33,6 @@ class SaleOrder(models.Model):
     attn = fields.Many2one('res.partner',string="ATTN")
     customer_po_no = fields.Char(string="Customer PO No")
 
-    def get_price_subtotal_report(self,price_subtotal):
-        return math.floor(price_subtotal * 100) / 100
-
-
 #  
 #     @api.multi
 #     def _prepare_invoice(self):
@@ -120,7 +116,9 @@ class AccountMoveLine(models.Model):
     customer_part_no = fields.Text(string='Customer Part No',compute="_compute_product_name")
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer/Customer Name')
 
-#     
+    def get_price_subtotal_report(self,price_subtotal):
+        return math.floor(price_subtotal * 100) / 100
+    
     @api.depends('product_id')
     def _compute_product_name(self):
         for pro in self:
