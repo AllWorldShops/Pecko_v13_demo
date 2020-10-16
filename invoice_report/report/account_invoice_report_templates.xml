@@ -48,9 +48,10 @@
 
 				<div class="page">
 					<div style="font-size:20px;text-align:center;padding-top:14px;">
-						<span>
+						<span ><strong> <t t-if="o.type == 'out_invoice'"> Tax Invoice </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span>
+						<!-- <span>
 							<strong> Tax Invoice </strong>
-						</span>
+						</span> -->
 					</div>
 					<table
 						style="width: 100%;height:120px;background-color: white;line-height:12pt;">
@@ -114,7 +115,8 @@
                                         <tbody>
 											<tr>
 												<td>
-													<strong>Invoice No.</strong>
+													<strong> <t t-if="o.type == 'out_invoice'"> Invoice No. </t><t t-if="o.type == 'out_refund'"> CN No.
+													<!-- <strong>Invoice No.</strong> -->
 												</td>
 												<td>
 													<span t-field="o.name" />
