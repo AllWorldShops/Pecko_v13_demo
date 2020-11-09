@@ -24,7 +24,7 @@
         'security/ir.model.access.csv',
         'security/user_log_security.xml',
         'views/user_activity_view.xml',
-        'views/custom_xml.xml',
+        # 'views/custom_xml.xml',
 
     ],
     'qweb': ['static/src/xml/user_menu_template.xml'],
