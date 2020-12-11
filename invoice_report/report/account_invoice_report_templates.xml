@@ -206,7 +206,7 @@
 							<t t-set="i" t-value="1" />
 							<tr t-foreach="o.invoice_line_ids" t-as="l">
 								<!-- <t> -->
-								<t t-if="not l.display_type" name="account_invoice_line_accountable">
+								<t t-if="not l.display_type" name="account_invoice_line_accountable">   
 									<td style=" text-align: left;">
 										<span t-esc="i" />
 										<span t-set="i" t-value="i+1" />
@@ -241,22 +241,13 @@
 									</td>
 								</t>
 								<t t-if="l.display_type == 'line_section'">
-                                    <td colspan="3">
-                                    </td>
-                                    <td colspan="4" style="font-style: Italic;">
+                                    <td colspan="99" style="font-style: Italic;">
                                         <span t-field="l.name"/>
                                     </td>
-                                    <td colspan="9">
-                                    </td>
-                                    
                                 </t>
                                 <t t-if="l.display_type == 'line_note'">
-                                    <td colspan="3">
-                                    </td>
-                                    <td colspan="4" style="font-style: Italic;">
+                                    <td colspan="99" style="font-style: Italic;">
                                         <span t-field="l.name"/>
-                                    </td>
-                                    <td colspan="9">
                                     </td>
                                 </t>
 							</tr>
