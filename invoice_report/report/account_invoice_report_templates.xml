@@ -241,23 +241,14 @@
 									</td>
 								</t>
 								<t t-if="l.display_type == 'line_section'">
-                                    <td colspan="3">
-                                    </td>
-                                    <td colspan="4" style="font-style: Italic;">
+                                    <td colspan="99" style="font-style: Italic;">
                                         <span t-field="l.name"/>
                                     </td>
-                                    <td colspan="5">
-                                    </td>
-                                    
                                 </t>
                                 <t t-if="l.display_type == 'line_note'">
-                                    <td colspan="3">
-                                    </td>
-                                    <td colspan="4" style="font-style: Italic;">
+                                    <td colspan="99" style="font-style: Italic;">
                                         <span t-field="l.name"/>
-                                    </td>
-                                    <td colspan="5">
-                                    </td>
+                                    </td> 
                                 </t>
 							</tr>
 						</tbody>
