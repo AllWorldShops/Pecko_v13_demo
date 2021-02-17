@@ -51,7 +51,8 @@
 				<field name="product_qty" string="Quantity"/>
 				<field name="qty_received" string="Received Qty"/>
 				<field name="product_uom" string="Product Unit of Measure"/>
-				<field name="schedule_date" string="Scheduled Date"/>
+				<!-- <field name="schedule_date" string="Scheduled Date"/> -->
+				<field name="date_planned" string="Scheduled Date"/>
 				<field name="promise_date" string="Promised Date"/>
 				<field name="order_date" string="Order Date"/>
 				<!-- <field name="price_subtotal" string="Subtotal"/> -->
