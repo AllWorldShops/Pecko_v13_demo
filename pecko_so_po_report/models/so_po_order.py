@@ -101,7 +101,7 @@ class AccountMove(models.Model):
                         break
                     else:
                         if mov.invoice_date and currency_id_rate.name:
-                            if currency_id_rate.name.month == mov.invoice_date.month:
+                            if currency_id_rate.name.month == mov.invoice_date.month and currency_id_rate.name.year == mov.invoice_date.year:
                                 mov.exchange_rate =currency_id_rate.rate
                                 break
                             else:
