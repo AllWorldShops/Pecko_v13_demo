@@ -9,7 +9,8 @@
             	<field name="manufacturer_id"/>
             </xpath>
             <xpath expr="//field[@name='uom_po_id']" position="after">
-            	<field name="storage_location_id"/>
+                <field name="storage_location_id"/>
+            	<field name="project"/>
             </xpath> 
         </field>
     </record>
@@ -21,7 +22,8 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='default_code']" position="after">
             	<field name="manufacturer_id"/>
-            	<field name="storage_location_id"/>
+                <field name="storage_location_id"/>
+            	<field name="project"/>
             </xpath> 
         </field>
     </record> 
