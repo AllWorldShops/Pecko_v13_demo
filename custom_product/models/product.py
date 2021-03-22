@@ -7,14 +7,15 @@ class ProductTemplate(models.Model):
 
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer/Customer Name')
     storage_location_id = fields.Char(string='Storage Location')
-
+    project = fields.Char(string='Project')
     
 class ProductProduct(models.Model):
     _inherit = 'product.product'
  
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer/Customer Name',related='product_tmpl_id.manufacturer_id',store=True)
     storage_location_id = fields.Char(string='Storage Location',related='product_tmpl_id.storage_location_id')
-   
+    project = fields.Char(string='Project',related='product_tmpl_id.project')
+    
 #     @api.multi
     def write(self, vals):
         rec = super(ProductProduct, self).write(vals)

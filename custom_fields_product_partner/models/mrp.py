@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+    # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
 from datetime import datetime,date
@@ -10,7 +10,8 @@ class MrpBom(models.Model):
     x_studio_field_CY3Z4 = fields.Char(string='Customer Part Number')
     x_studio_field_IMTtD = fields.Char(string='Description')
     x_studio_field_E1iTU = fields.Selection([('Please Select', 'Please Select'),('Confirmed', 'Confirmed'),('Not Confirmed','Not Confirmed')],string='Verification Status')
-
+    project = fields.Char(string='Project',related='product_tmpl_id.project')
+    
 class MrpBomLine(models.Model):
     _inherit = 'mrp.bom.line'
 

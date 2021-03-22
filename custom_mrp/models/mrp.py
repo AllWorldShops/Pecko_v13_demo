@@ -9,7 +9,8 @@ class MrpProduction(models.Model):
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer Name')
     customer_part_no = fields.Char(string='Part Number')
     description = fields.Char(string='Description')
-    project = fields.Char(string='Project')
+    # project = fields.Char(string='Project')
+    project = fields.Char(string='Project',related='product_tmpl_id.project')
     
     # MRP 3 Step Location Auto Change
     def step_location_sync(self):     
