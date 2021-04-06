@@ -10,6 +10,7 @@
     'depends': ['product','mrp','stock'],
     'data': [
         'security/ir.model.access.csv',
+        'data/stock_sequence_data.xml',
         'views/product_manufacturer_view.xml',
         'views/product_view.xml'
     ],
