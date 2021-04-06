@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_stage_view_form_inherit" model="ir.ui.view">
+        <field name="name">helpdesk.stage.inherit</field>
+        <field name="model">helpdesk.stage</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_stage_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="solved"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
