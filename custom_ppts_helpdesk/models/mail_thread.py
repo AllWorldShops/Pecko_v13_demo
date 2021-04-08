@@ -92,6 +92,7 @@ class MailThread(models.AbstractModel):
         routes = self.message_route(message, msg_dict, model, thread_id, custom_values)
         try:
             print(routes)
+            _logger.info(str(routes)+"Checking Incoming mail")
             if model and routes:
                 if model == 'helpdesk.ticket' and routes[0][0] == 'helpdesk.ticket' and routes[0][1]:
                     help_id = self.env['helpdesk.ticket'].sudo().browse(routes[0][1])
