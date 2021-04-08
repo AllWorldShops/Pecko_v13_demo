@@ -93,8 +93,8 @@ class MailThread(models.AbstractModel):
         try:
             print(routes)
             _logger.info(str(routes)+"Checking Incoming mail")
-            if model and routes:
-                if model == 'helpdesk.ticket' and routes[0][0] == 'helpdesk.ticket' and routes[0][1]:
+            if model or routes:
+                if model == 'helpdesk.ticket' or routes[0][0] == 'helpdesk.ticket' and routes[0][1]:
                     _logger.info(str(model)+"Inside Model")
                     help_id = self.env['helpdesk.ticket'].sudo().browse(routes[0][1])
                     
