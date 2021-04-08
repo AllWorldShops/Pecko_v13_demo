@@ -95,11 +95,15 @@ class MailThread(models.AbstractModel):
             _logger.info(str(routes)+"Checking Incoming mail")
             if model and routes:
                 if model == 'helpdesk.ticket' and routes[0][0] == 'helpdesk.ticket' and routes[0][1]:
+                    _logger.info(str(model)+"Inside Model")
                     help_id = self.env['helpdesk.ticket'].sudo().browse(routes[0][1])
+                    
                     if help_id:
+                        _logger.info(str(help_id)+"inside help_id")
                         if help_id.stage_id.solved:
                             if help_id.team_id:
                                 if help_id.team_id.stage_ids:
+                                    _logger.info(str(help_id.team_id._determine_stage()[help_id.team_id.id])+"inside help_id")
                                     help_id.stage_id = help_id.team_id._determine_stage()[help_id.team_id.id]
 #                             ori_routes=routes[0]
 #                             list_routes=list(ori_routes)
