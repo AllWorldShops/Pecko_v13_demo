@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="view_url_form" model="ir.ui.view">
+		<field name="name">url.form</field>
+		<field name="model">url.config</field>
+		<field name="arch" type="xml">
+			<form string="url">
+				<sheet>
+					<group>
+						<field name="name" />
+						<field name="code" />
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	
+	<!-- Tree -->
+	<record id="view_url_tree" model="ir.ui.view">
+		<field name="name">url.tree</field>
+		<field name="model">url.config</field>
+		<field name="arch" type="xml">
+			<tree string="url">
+				<field name="name"/>
+				<field name="code"/>
+			</tree>
+		</field>
+	</record>
+
+	<!-- Action View -->
+	<record id="view_url_action" model="ir.actions.act_window">
+		<field name="name">URL</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">url.config</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<!-- Menu Details -->
+	<menuitem id="view_url_menu" name="URL" parent="mrp.menu_mrp_configuration" groups="mrp.group_mrp_manager" sequence="99" action="view_url_action"/>
+	
+	
+</odoo>   
