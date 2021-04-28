@@ -24,7 +24,8 @@ class MrpWorkorder(models.Model):
         url = self.env['url.config'].search([('code', '=','WO')])
         if url.name:
             data= url.name + res.product_id.x_studio_field_qr3ai + '/' + res.product_id.name + '/'+ str(res.qty_production) + '/' + res.production_id.routing_id.name + '/' + res.production_id.name 
-            img = qrcode.make(data)
+            data_encode = base64.b64encode(data.encode())
+            img = qrcode.make(data_encode)
             result = io.BytesIO()
             img.save(result, format='PNG')
             result.seek(0)
