@@ -23,7 +23,6 @@ class MrpWorkorder(models.Model):
         res = super(MrpWorkorder,self).create(vals)
         url = self.env['url.config'].search([('code', '=','WO')])
         if url.name:
-            code = quote(res.product_id.x_studio_field_qr3ai,safe='')
             if res.product_id.x_studio_field_qr3ai:
                 code = quote(res.product_id.x_studio_field_qr3ai,safe='')
             else:
