@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
-
+from urllib.parse import quote
 import qrcode
 import base64
 import io
@@ -23,9 +23,13 @@ class MrpWorkorder(models.Model):
         res = super(MrpWorkorder,self).create(vals)
         url = self.env['url.config'].search([('code', '=','WO')])
         if url.name:
-            data= url.name + res.product_id.x_studio_field_qr3ai + '/' + res.product_id.name + '/'+ str(res.qty_production) + '/' + res.production_id.routing_id.name + '/' + res.production_id.name 
-            data_encode = base64.b64encode(data.encode())
-            img = qrcode.make(data_encode)
+            code = quote(res.product_id.x_studio_field_qr3ai,safe='')
+            product = quote(res.product_id.default_code,safe='')
+            qty = quote(str(res.qty_producing),safe='')
+            routing = quote(res.name,safe='')
+            production = quote(res.production_id.name,safe='')
+            data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production 
+            img = qrcode.make(data)
             result = io.BytesIO()
             img.save(result, format='PNG')
             result.seek(0)
