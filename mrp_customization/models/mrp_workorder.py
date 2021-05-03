@@ -64,3 +64,14 @@ class MrpWorkorder(models.Model):
                     base64_encoded_result_bytes = base64.b64encode(img_bytes)
                     base64_encoded_result_str = base64_encoded_result_bytes.decode('ascii')
                     rec.image = base64_encoded_result_str
+
+    def image_url_redirect(self):
+        url = self.env['url.config'].search([('code', '=','WO')])
+        if url.name:
+            url = url.name + '/' + self.product_id.x_studio_field_qr3ai + '/' + self.product_id.default_code + '/'+ str(self.qty_production) + '/' + self.production_id.routing_id.name + '/' + self.production_id.name  
+            return {   
+                  'name'     : 'Go to website',
+                  'res_model': 'ir.actions.act_url',
+                  'type'     : 'ir.actions.act_url',
+                  'url'      :  url
+               }

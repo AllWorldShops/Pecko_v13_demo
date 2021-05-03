@@ -13,8 +13,10 @@
             </xpath>
             <field name="is_produced" position="after">
             	<field name="url" invisible='1'/>
-
         	</field>
+        	<xpath expr="//form/header/field[@name='state']" position="before">
+				<button name="image_url_redirect" type="object" string="Start Timer"/>
+			</xpath>
 
 		</field>
 	</record>
