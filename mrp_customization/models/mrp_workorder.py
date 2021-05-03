@@ -27,6 +27,7 @@ class MrpWorkorder(models.Model):
                 code = quote(res.product_id.x_studio_field_qr3ai,safe='')
             else:
                 code = ''
+            product = quote(rec.product_id.default_code,safe='')
             qty = quote(str(res.qty_producing),safe='')
             routing = quote(res.name,safe='')
             production = quote(res.production_id.name,safe='')
