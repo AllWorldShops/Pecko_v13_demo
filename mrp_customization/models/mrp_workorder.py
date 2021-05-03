@@ -68,11 +68,19 @@ class MrpWorkorder(models.Model):
 
     def image_url_redirect(self):
         url = self.env['url.config'].search([('code', '=','WO')])
-        if url.name:
-            url = url.name + '/' + self.product_id.x_studio_field_qr3ai + '/' + self.product_id.default_code + '/'+ str(self.qty_production) + '/' + self.production_id.routing_id.name + '/' + self.production_id.name  
+        if url.name and not self.image:
+            if res.product_id.x_studio_field_qr3ai:
+                code = quote(res.product_id.x_studio_field_qr3ai,safe='')
+            else:
+                code = ''
+            product = quote(rec.product_id.default_code,safe='')
+            qty = quote(str(res.qty_producing),safe='')
+            routing = quote(res.name,safe='')
+            production = quote(res.production_id.name,safe='')
+            data = url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production 
             return {   
                   'name'     : 'Go to website',
                   'res_model': 'ir.actions.act_url',
                   'type'     : 'ir.actions.act_url',
-                  'url'      :  url
+                  'url'      :  data
                }
