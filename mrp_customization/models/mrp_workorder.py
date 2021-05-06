@@ -40,7 +40,8 @@ class MrpWorkorder(models.Model):
             qty = quote(str(res.qty_producing),safe='')
             routing = quote(res.name,safe='')
             production = quote(res.production_id.name,safe='')
-            data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production + "/" + date_code + "/" + task_code + "/" + company 
+            production_double_code = quote(production,safe='')
+            data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production_double_code + "/" + date_code + "/" + task_code + "/" + company 
             img = qrcode.make(data)
             result = io.BytesIO()
             img.save(result, format='PNG')
@@ -75,7 +76,8 @@ class MrpWorkorder(models.Model):
                     qty = quote(str(rec.qty_producing),safe='')
                     routing = quote(rec.name,safe='')
                     production = quote(rec.production_id.name,safe='')
-                    data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production + "/" + date_code + "/" + task_code + "/" + company
+                    production_double_code = quote(production,safe='')
+                    data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production_double_code + "/" + date_code + "/" + task_code + "/" + company
                     img = qrcode.make(data)
                     result = io.BytesIO()
                     img.save(result, format='PNG')
@@ -106,7 +108,8 @@ class MrpWorkorder(models.Model):
             qty = quote(str(self.qty_producing),safe='')
             routing = quote(self.name,safe='')
             production = quote(self.production_id.name,safe='')
-            data = url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production + "/" + date_code + "/" + task_code + "/" + company
+            production_double_code = quote(production,safe='')
+            data = url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production_double_code + "/" + date_code + "/" + task_code + "/" + company
             print("\n\n",data)
             return {   
                   'name'     : 'Go to website',
