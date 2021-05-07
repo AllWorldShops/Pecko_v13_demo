@@ -3,7 +3,6 @@ from odoo import models, fields, api, _
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
-
     consumed_move_raw_ids = fields.One2many(related='move_raw_ids', string="Consumed Products")
     finished_line_ids = fields.One2many(related='finished_move_line_ids', string="Consumed Products")
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer Name')
