@@ -38,7 +38,8 @@ class MrpWorkorder(models.Model):
             date_code = quote(date_start,safe='')
             product = quote(res.product_id.default_code,safe='')   
             qty = quote(str(res.qty_producing),safe='')
-            routing = quote(res.name,safe='')
+            routing_single_encode = quote(res.name,safe='')
+            routing = quote(routing_single_encode,safe='')
             production = quote(res.production_id.name,safe='')
             production_double_code = quote(production,safe='')
             data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production_double_code + "/" + date_code + "/" + task_code + "/" + company 
@@ -74,7 +75,8 @@ class MrpWorkorder(models.Model):
                     date_code = quote(date_start,safe='')
                     product = quote(rec.product_id.default_code,safe='')
                     qty = quote(str(rec.qty_producing),safe='')
-                    routing = quote(rec.name,safe='')
+                    routing_single_encode = quote(rec.name,safe='')
+                    routing = quote(routing_single_encode,safe='')
                     production = quote(rec.production_id.name,safe='')
                     production_double_code = quote(production,safe='')
                     data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production_double_code + "/" + date_code + "/" + task_code + "/" + company
@@ -106,11 +108,11 @@ class MrpWorkorder(models.Model):
             date_code = quote(date_start,safe='')
             product = quote(self.product_id.default_code,safe='')
             qty = quote(str(self.qty_producing),safe='')
-            routing = quote(self.name,safe='')
+            routing_single_encode = quote(self.name,safe='')
+            routing = quote(routing_single_encode,safe='')
             production = quote(self.production_id.name,safe='')
             production_double_code = quote(production,safe='')
             data = url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production_double_code + "/" + date_code + "/" + task_code + "/" + company
-            print("\n\n",data)
             return {   
                   'name'     : 'Go to website',
                   'res_model': 'ir.actions.act_url',
