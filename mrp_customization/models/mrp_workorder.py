@@ -67,8 +67,8 @@ class MrpWorkorder(models.Model):
                         critical_task = "1"
                     else:
                         critical_task = "0"
-                    if not rec.production_id.date_start_wo:
-                        raise UserError(_('Kindly enter the WorkOrder Start date'))
+                    # if not rec.production_id.date_start_wo:
+                    #     raise UserError(_('Kindly enter the WorkOrder Start date'))
                     if rec.production_id.date_start_wo:
                         date_start = rec.production_id.date_start_wo.strftime("%Y-%m-%d")
                     else:
