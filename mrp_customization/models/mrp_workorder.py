@@ -58,7 +58,7 @@ class MrpWorkorder(models.Model):
         if wo_id:
             url = self.env['url.config'].search([('code', '=','WO')])
             for rec in wo_id:
-                if url.name and not rec.image:
+                if url.name:
                     if rec.product_id.x_studio_field_qr3ai:
                         code = quote(rec.product_id.x_studio_field_qr3ai,safe='')
                     else:
