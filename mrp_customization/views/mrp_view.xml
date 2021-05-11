@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+	<record model="ir.ui.view" id="mrp_workorder_form_view_inherit">
+        <field name="name">mrp.workorer.form.inherit</field>
+        <field name="model">mrp.workorder</field>
+		<field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+		<field name="arch" type="xml">			
+			<xpath expr="//form/sheet/group/group" position="after">
+				<group>
+                	<field name="image" widget='image' class="oe_right" options='{"zoom": true}' readonly='1' nolabel='1' style="max-width:130px;max-height:130px;"/>
+            	</group>
+            </xpath>
+        <field name="is_produced" position="after">
+            	<field name="critical_task"/>
+            	<field name="url" invisible='1'/>
+        	</field>
+        	<xpath expr="//form/header/field[@name='state']" position="before">
+				<button name="image_url_redirect" type="object" string="Start Timer"/>
+			</xpath>
+
+		</field>
+	</record>
+	<record model="ir.ui.view" id="mrp_routing_workcenter_form_view_inherit">
+        <field name="name">mrp.routing.workcenter.form.inherit</field>
+        <field name="model">mrp.routing.workcenter</field>
+		<field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>
+		<field name="arch" type="xml">
+			<field name="batch_size" position="after">
+				<field name="critical_task"/>
+			</field>
+		</field>
+	</record>
+</odoo>
