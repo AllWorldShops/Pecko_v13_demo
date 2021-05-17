@@ -54,7 +54,7 @@ class MrpWorkorder(models.Model):
         return res
 
     def qrcode_image(self):
-        wo_id = self.env['mrp.workorder'].search([('state','in',('pending','ready'))],limit=2000)
+        wo_id = self.env['mrp.workorder'].search([('state','in',('pending','ready')),('image','=',False)],limit=2000)
         if wo_id:
             url = self.env['url.config'].search([('code', '=','WO')])
             for rec in wo_id:
