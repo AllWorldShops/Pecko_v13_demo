@@ -18,6 +18,9 @@
             <xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="after">
                 <field name="notes"/>
             </xpath>
+             <xpath expr="//field[@name='order_line']//tree//field[@name='date_planned']" position="after">
+                <field name="promise_date" optional="hide"/>
+            </xpath>
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="old_po_no" attrs="{'readonly': [('state', 'not in', ['draft','sent'])]}"/>
             </xpath>
@@ -64,6 +67,17 @@
 		</field>
 	</record>
 	
+	<record id="purchase_order_line_search_inherit" model="ir.ui.view">
+		<field name="name">purchase.order.line.search.inherit</field>
+		<field name="model">purchase.order.line</field>
+		<field name="inherit_id" ref="purchase.purchase_order_line_search"/>
+		<field name="arch" type="xml">
+			<xpath expr="//search/group" position="inside">
+				<filter string="Promised Date" name="Promised Date" context="{'group_by':'promise_date'}"/>
+			</xpath>
+		</field>
+	</record>
+
 	<record id="action_purchase_lines_menu"
 		model="ir.actions.act_window">
 		<field name="name">Purchase Order Lines</field>
