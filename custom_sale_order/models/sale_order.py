@@ -39,8 +39,12 @@ class SaleOrderLine(models.Model):
     order_ref = fields.Char('Order Reference',related='order_id.name')   
     customer_id = fields.Many2one('res.partner',related='order_id.partner_id')
     sales_person_id = fields.Many2one('res.users',related='order_id.user_id')
-    promise_date = fields.Datetime('Promised Date',related='order_id.commitment_date')
-
+    promise_date = fields.Datetime('Delivery Date',related='order_id.commitment_date')
+    promised_date = fields.Date(string="Promised Date")
+    customer_po_no = fields.Char('Customer Po No',related='order_id.customer_po_no')   
+    internal_ref_no = fields.Char('Internal Ref No',related='product_id.default_code') 
+    back_order_qty = fields.Integer(string='Back Order Qty', compute='_compute_back_order_qty', store=True)
+  
 
 #     @api.depends('sequence', 'order_id')
 #     def _compute_get_number(self):
@@ -51,11 +55,39 @@ class SaleOrderLine(models.Model):
 #                     line.line_no = line_no_val
 #                     line_no_val += 1
     
+    @api.depends('product_uom_qty','qty_delivered')
+    def _compute_back_order_qty(self):
+        for pro in self:
+            if pro.qty_delivered:
+                pro.back_order_qty = pro.product_uom_qty - pro.qty_delivered
+            else:
+                pro.back_order_qty = 0
+                
     @api.onchange('product_id')
     def _onchange_product_id(self):
         if self.product_id.name:
             self.update({'customer_part_no':self.product_id.name,
                          'name':self.product_id.name})
+            
+            
+class AccountGeneralLedgerReport(models.AbstractModel):
+    _inherit = "account.general.ledger"
+    
+    @api.model
+    def _get_account_total_line(self, options, account, amount_currency, debit, credit, balance):
+        return {
+            'id': 'total_%s' % account.id,
+            'class': 'o_account_reports_domain_total',
+            'parent_id': 'account_%s' % account.id,
+            'name': _('Total'),
+            'columns': [
+                {'name': '', 'class': 'number'},
+                {'name': self.format_value(debit), 'class': 'number'},
+                {'name': self.format_value(credit), 'class': 'number'},
+                {'name': self.format_value(balance), 'class': 'number'},
+            ],
+            'colspan': 4,
+        }
       
             
         

@@ -22,6 +22,7 @@
 			</xpath>
 			<xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='price_unit']" position="after">
 				<field name="requested_date_line"/>
+				<field name="promised_date" optional="hide"/>
 			</xpath>
 			<!--	<xpath expr="//form/sheet/notebook/page/field[@name='order_line'/form/group/group[1]/field[@name='product_id']" position="replace">
 				<field name="product_id" string="Pecko Part Number"/>
@@ -32,7 +33,7 @@
 			<xpath expr="//field[@name='effective_date']" position="replace">
 			</xpath>
 			<xpath expr="//field[@name='origin']" position="after">
-				<field name="effective_date" />
+				<field name="effective_date"/>
 			</xpath>
 			<xpath expr="//field[@name='origin']" position="replace">
 			</xpath>
@@ -54,28 +55,42 @@
 				<field name="line_no" string="Position"/>
 				<field name="customer_id" string="Customer"/>
 				<field name="product_id" string="Pecko Part Number" invisible="1"/>
-				<field name="customer_part_no" string="Customer Part Number" invisible="1"/>
+				<field name="customer_part_no" string="Customer Part Number" invisible="0"/>
+				<field name="internal_ref_no"></field>
+				<field name="customer_po_no" string="Customer Po No" invisible="0"/>
 				<field name="name" string="Description"/>
 				<field name="sales_person_id" string="Salesperson"/>
 				<field name="price_unit" string="Unit Price"/>
 				<field name="product_uom_qty" string="Qty"/>
 				<field name="qty_delivered" string="Delivered"/>
 				<field name="qty_invoiced" string="Invoiced"/>
+				<field name="back_order_qty"/>
 				<field name="product_uom" string="Unit of Measure"/>
 				<field name="requested_date_line" string="Requested Date"/>
-				<field name="requested_date_line" string="Promised Date"/>
+				<field name="promised_date"/>
 				<field name="price_subtotal" string="Subtotal"/>
 			</tree>
 		</field>
 	</record>
 	
+	<record id="view_sales_order_line_filter_inherit" model="ir.ui.view">
+		<field name="name">sale.order.line.select.inherit</field>
+		<field name="model">sale.order.line</field>
+		<field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
+		<field name="arch" type="xml">
+			<xpath expr="//search/group" position="inside">
+				<filter string="Promised Date" name="Promised Date" context="{'group_by':'promised_date'}"/>
+			</xpath>
+		</field>
+	</record>
+
 	<record id="action_sale_lines_menu"
 		model="ir.actions.act_window">
 		<field name="name">Sale Order Lines</field>
 		<field name="type">ir.actions.act_window</field>
 		<field name="res_model">sale.order.line</field>
 		<field name="view_id" ref="custom_sale_order.view_sale_order_line_inherited"/>
-		<field name="view_mode">tree</field>
+		<field name="view_mode">tree,form</field>
 	</record>
 	
 	<menuitem id="action_sale_lines_menu_id" name="Sale Lines"
