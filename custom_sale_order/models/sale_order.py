@@ -40,6 +40,7 @@ class SaleOrderLine(models.Model):
     customer_id = fields.Many2one('res.partner',related='order_id.partner_id')
     sales_person_id = fields.Many2one('res.users',related='order_id.user_id')
     promise_date = fields.Datetime('Promised Date',related='order_id.commitment_date')
+    promised_date = fields.Date(string="Promised Date")
     customer_po_no = fields.Char('Customer Po No',related='order_id.customer_po_no')   
     internal_ref_no = fields.Char('Internal Ref No',related='product_id.default_code') 
     back_order_qty = fields.Integer(string='Back Order Qty', compute='_compute_back_order_qty', store=True)
