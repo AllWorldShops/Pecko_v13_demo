@@ -287,11 +287,19 @@
 							<td width="5%" style="text-align:right">
 								<!-- <t t-set="ex" t-value="o.currency_conv_rate" /> -->
 								<!-- <t t-set="ex" t-value="o.get_currency_conv_rate()" /> -->
-								<span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" />
+								<!-- <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" />
 								<br />
 								<span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />
 								<br />
 								<span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" />
+								<br /> -->
+								<span t-esc="o.get_net_amount_report()" />
+								<!-- <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" /> -->
+								<br />
+								<span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />
+								<br />
+								<span t-esc="'%.2f'%((o.amount_tax / o.exchange_rate) + o.get_net_amount_report())" />
+								<!-- <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" /> -->
 								<br />
 							</td>
 							<td width="25%" style="text-align:right">

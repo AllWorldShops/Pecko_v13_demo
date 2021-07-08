@@ -110,6 +110,11 @@ class AccountMove(models.Model):
                             mov.exchange_rate =currency_id_rate.rate
                             break
 
+    def get_net_amount_report(self):
+        net_total = 0
+        net_total = round(sum([(line.debit - (line.move_id.amount_tax / line.move_id.exchange_rate)) for line in self.line_ids if line.debit > 0]),2)
+        return net_total
+
 class AccountMoveLine(models.Model):   
     _inherit = "account.move.line"
      
