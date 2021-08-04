@@ -48,7 +48,8 @@
 
 				<div class="page">
 					<div style="font-size:20px;text-align:center;padding-top:14px;">
-						<span ><strong> <t t-if="o.type == 'out_invoice'"> Tax Invoice </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span>
+						<!-- <span ><strong> <t t-if="o.type == 'out_invoice'"> Tax Invoice </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span> -->
+						<span ><strong> <t t-if="o.type == 'out_invoice' and o.journal_id.name != 'Debit Note'"> Tax Invoice </t><t t-if="o.journal_id.name == 'Debit Note'"> DEBIT NOTE </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span>
 						<!-- <span>
 							<strong> Tax Invoice </strong>
 						</span> -->
@@ -59,7 +60,8 @@
 							<tr>
 								<td style="width:55%;background-color: white;font-size:13px;">
 									<strong>
-										<span style="color:#875A7B">Invoice-To</span>
+										<t t-if="o.journal_id.name != 'Debit Note'"> <span style="color:#875A7B">Invoice-To </span></t><t t-if="o.journal_id.name == 'Debit Note'"> <span style="color:#875A7B">Debit Note-To </span></t>
+										<!-- <span style="color:#875A7B">Invoice-To</span> -->
 									</strong>
 									<br />
 									<strong>
@@ -115,8 +117,10 @@
                                         <tbody>
 											<tr>
 												<td>
-													<strong> <t t-if="o.type == 'out_invoice'"> Invoice No. </t><t t-if="o.type == 'out_refund'"> CN No.
-													</t></strong>
+													<strong> <t t-if="o.type == 'out_invoice' and o.journal_id.name != 'Debit Note'"> Invoice No. </t><t t-if="o.journal_id.name == 'Debit Note'"> DN No. </t> <t t-if="o.type == 'out_invoice'">  </t><t t-if="o.type == 'out_refund'"> CN No.
+												</t></strong>
+													<!-- <strong> <t t-if="o.type == 'out_invoice'"> Invoice No. </t><t t-if="o.type == 'out_refund'"> CN No.
+													</t></strong> -->
 													<!-- <strong>Invoice No.</strong> -->
 												</td>
 												<td>
