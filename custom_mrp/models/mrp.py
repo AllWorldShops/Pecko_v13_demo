@@ -165,3 +165,4 @@ class SaleOrderInherit(models.Model):
             for line in mrp:
                 line.user_id = line.product_id.responsible_id.id or False
         return res
+        
