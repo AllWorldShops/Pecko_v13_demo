@@ -11,6 +11,11 @@ class MrpProduction(models.Model):
     # project = fields.Char(string='Project')
     project = fields.Char(string='Project',related='product_tmpl_id.project')
     
+    @api.onchange('product_id')
+    def onchange_responsible(self):
+        if self.product_id:
+            self.user_id = self.product_id.responsible_id.id
+            
     # MRP 3 Step Location Auto Change
     def step_location_sync(self):     
         location_route =  self.env['stock.location.route'].search([('name','=','PM Warehouse: Pick components, manufacture and then store products (3 steps)')],limit=1)
@@ -149,3 +154,14 @@ class StockMoveLine(models.Model):
     def _to_produce_qty(self):
         for rec in self:
             rec.qty_to_produce = rec.move_id.product_uom_qty - rec.qty_done
+
+class SaleOrderInherit(models.Model):
+    _inherit = 'sale.order'
+
+    def action_confirm(self):
+        res = super(SaleOrderInherit, self).action_confirm()
+        mrp = self.env['mrp.production'].search([('origin', '=', self.name)])
+        if mrp:
+            for line in mrp:
+                line.user_id = line.product_id.responsible_id.id or False
+        return res
