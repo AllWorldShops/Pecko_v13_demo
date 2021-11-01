@@ -10,6 +10,7 @@ class MrpProduction(models.Model):
     description = fields.Char(string='Description')
     # project = fields.Char(string='Project')
     project = fields.Char(string='Project',related='product_tmpl_id.project')
+    start_date = fields.Date('Start Date')
     
     @api.onchange('product_id')
     def onchange_responsible(self):
