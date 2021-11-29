@@ -171,16 +171,17 @@
                                     </td>
                                 <!-- when delivery order uom and sale order uom is same -->
 
-                                    <td t-if="l.product_id.uom_id.name == l.sale_line_id.product_uom.name" style=" text-align: left;">
+                                    <td  style=" text-align: left;">
                                         <!-- <span t-field="l.sale_line_id.qty_delivered" /> -->
                                         <span t-field="l.quantity_done" />
                                         <span t-field="l.product_uom" />
                                     </td>
+                                    <t t-if="l.sale_line_id">
                                     <td t-if="l.product_id.uom_id.name != l.sale_line_id.product_uom.name" style=" text-align: left;">
                                         <span t-esc="round(l.quantity_done / l.sale_line_id.product_uom.factor_inv,2)" />
                                         <span t-field="l.sale_line_id.product_uom" />
                                     </td>
-                                    
+                                   
 
                                     <!-- when delivery order uom and sale order uom is not same -->
                                     <td style=" text-align: left;">
@@ -188,6 +189,7 @@
                                         <span t-esc="round(l.sale_line_id.product_uom_qty - qty,2)" />
                                         <span t-field="l.sale_line_id.product_uom" />
                                     </td>
+                                     </t>
                                     <!-- 
                                     <td t-if="l.product_id.uom_id.name != l.sale_line_id.product_uom.name" style=" text-align: left;">
                                         <t t-set="qty" t-value="l.sale_line_id.qty_delivered" />
