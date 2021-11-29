@@ -176,12 +176,11 @@
                                         <span t-field="l.quantity_done" />
                                         <span t-field="l.product_uom" />
                                     </td>
-                                    <t t-if="l.sale_line_id">
                                     <td t-if="l.product_id.uom_id.name != l.sale_line_id.product_uom.name" style=" text-align: left;">
                                         <span t-esc="round(l.quantity_done / l.sale_line_id.product_uom.factor_inv,2)" />
                                         <span t-field="l.sale_line_id.product_uom" />
                                     </td>
-                                    </t>
+                                    
 
                                     <!-- when delivery order uom and sale order uom is not same -->
                                     <td style=" text-align: left;">
