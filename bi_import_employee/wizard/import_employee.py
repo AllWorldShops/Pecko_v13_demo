@@ -147,20 +147,13 @@ class ImportProducts(models.TransientModel):
 				})
 			return uom
 
-		uom_po = self.env['uom.uom'].search([('name', '=', values.get('uom_po_id'))], limit=1)
-		uom_category = self.env['uom.category'].search([], limit=1)
-		if not uom_po:
-			uom_po.create({
-				'name': str(values.get('uom_po_id')),
-				'category_id': uom_category.id,
-				'uom_type': 'bigger',
+
+		product_categ = self.env['product.category'].search([('name', '=', values.get('categ_id'))], limit=1)
+		if not product_categ:
+			product_categ.create({
+				'name': str(values.get('categ_id'))
 				})
-			return uom_po
-
-		uom_categ = self.env['uom.category'].search([('name', '=', values.get('categ_id'))], limit=1)
-		if not uom_categ:
-			uom_categ = self.env['uom.category'].search([], limit=1)
-
+			return product_categ
 
 		# birthday = self.get_birthday(values.get('birthday'))
 		vals = {
@@ -187,7 +180,7 @@ class ImportProducts(models.TransientModel):
 				# 'seller_ids.price': values.get('seller_ids.price'),
 				# 'seller_ids.delay': values.get('seller_ids.delay'),
 				# 'route_ids': 1,
-				'categ_id': uom_category.id,
+				'categ_id': product_categ.id,
 				}
 
 
