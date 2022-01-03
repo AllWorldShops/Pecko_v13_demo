@@ -20,7 +20,8 @@ class PurchaseOrderLine(models.Model):
     order_date = fields.Datetime(related='order_id.date_order')
     back_order_qty = fields.Integer(string='Back Order Qty', compute='_compute_back_order_qty', store=True)
     line_no = fields.Integer(string='Position', default=False)
-
+    old_po_no = fields.Char(string="Old PO Number", related="order_id.old_po_no")
+    
     @api.depends('product_qty','qty_received')
     def _compute_back_order_qty(self):
         for pro in self:
