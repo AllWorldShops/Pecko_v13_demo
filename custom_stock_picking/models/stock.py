@@ -34,8 +34,8 @@ class ProductTemplate(models.Model):
     def _get_default_buy(self):
         buy_route = self.env.ref('purchase_stock.route_warehouse0_buy', raise_if_not_found=False)
         if buy_route:
-            route = self.env['stock.location.route'].sudo().search([('id', '=', buy_route.id)])
-            if route.company_id == self.env.company:
-                print(route.name,"////_--------------;;;;;;;", route)
-                return buy_route.ids
+            route = self.env['stock.location.route'].sudo().search(['|',('id', '=', buy_route.id),('name', 'ilike', 'PEI - Buy from Vendor')])
+            for rte in route:
+                if rte.company_id == self.env.company:
+                    return rte.ids
         return []
