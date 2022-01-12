@@ -22,9 +22,6 @@
 			<xpath expr="//field[@name='partner_id']" position="after">
 				<field name="attn" domain="[('parent_id', '=', partner_id)]" invisible="1"/>
 			</xpath>
-			<xpath expr="//button[@name='action_cancel']" position="after">
-				<button name="test_purchase" type="object" class="oe_highlight" string="Test Products" invisible="0" groups="base.group_no_one"/>
-			</xpath>
         </field>
     </record>
 </odoo>
