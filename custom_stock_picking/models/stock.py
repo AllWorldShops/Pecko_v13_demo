@@ -17,6 +17,18 @@ class StockPicking(models.Model):
             sale_id = self.env['sale.order'].search([('name','=',vals['origin'])])
             vals['customer_po_no'] = sale_id.customer_po_no
         return super(StockPicking, self).create(vals) 
+
+    def test_purchase(self):
+        self.ensure_one()
+        product = self.env['product.template'].search([('taxes_id', '=', False),('supplier_taxes_id', '=', False)], limit=500)
+        # print(product, "[[[[productproductproduct+++++++++++++++")
+        sale_tax = self.env['account.tax'].sudo().search([('code','=', 'SZERO')])
+        purchase_tax = self.env['account.tax'].sudo().search([('code', '=', 'PTAX0')])
+        if product:
+            product.write({
+                'taxes_id': sale_tax.ids,
+                'supplier_taxes_id': purchase_tax.ids,
+            })
     
 class StockMove(models.Model):
     _inherit = 'stock.move'
