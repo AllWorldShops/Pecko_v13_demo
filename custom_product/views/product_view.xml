@@ -10,7 +10,7 @@
             </xpath>
             <xpath expr="//field[@name='uom_po_id']" position="after">
             	<field name="storage_location_id" invisible="0"/>
-                <field name="new_storage_loc" />
+                <field name="new_storage_loc" invisible="1"/>
                 
             </xpath>
             <page name="invoicing" position="after">
