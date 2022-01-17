@@ -45,7 +45,7 @@
 				</style>
 				<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
 
-
+				<br/><br/>
 				<div class="page">
 					<div style="font-size:20px;text-align:center;padding-top:14px;">
 						<!-- <span ><strong> <t t-if="o.type == 'out_invoice'"> Tax Invoice </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span> -->
@@ -71,7 +71,8 @@
 									<span t-field="o.partner_id.street" />
 									<span t-field="o.partner_id.street2" />
 									<br />
-									<span t-field="o.partner_id.city" />
+									<t t-if="o.company_id.country_id.code != 'SG'">
+									<span t-field="o.partner_id.city" /></t>
 									<span t-field="o.partner_id.state_id" />
 									<br />
 									<span t-field="o.partner_id.country_id" />
@@ -80,8 +81,10 @@
 									Phone:
 									<span t-field="o.partner_id.phone" />
 									<br />
+									<t t-if="o.company_id.country_id.code != 'SG'">
 									Email:
 									<span t-field="o.partner_id.email" />
+									</t>
 									<br />
 									<br />
 
@@ -265,6 +268,77 @@
 							</td>
 						</tr>
 					</table>
+      
+           <t t-if="o.company_id.country_id.code == 'SG'">
+					<table width="100%"
+						style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;position:relative; top:490px;">
+						<tr>
+							<td width="25%">
+								For Tax Purpose in SGD Only
+								<br />
+								1 SGD =
+								<span t-esc="'%.4f'%(o.exchange_rate)" />
+								USD
+								<!-- <span t-field="o.company_currency_id.name" /> -->
+								<br />
+								Conversation Rate =
+								<span t-esc="'%.4f'%(o.exchange_rate)" />
+								<!-- 1 USD = <span t-esc="'%.4f'% o.currency_conv_rate"/> <span t-field="o.company_currency_id.name"/><br/> -->
+
+							</td>
+							<td width="25%" style="text-align:right">
+								Net Total (SGD) :
+								<br />
+								Tax Amount :
+								<br />
+								Grand Total (SGD) :
+							</td>
+							<td width="5%" style="text-align:right">
+								<!-- <t t-set="ex" t-value="o.currency_conv_rate" /> -->
+								<!-- <t t-set="ex" t-value="o.get_currency_conv_rate()" /> -->
+								<!-- <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" />
+								<br />
+								<span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />
+								<br />
+								<span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" />
+								<br /> -->
+								<span t-esc="'%.2f'%(o.get_net_amount_report())" />
+								<!-- <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" /> -->
+								<br />
+								<span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />
+								<br />
+								<span t-esc="'%.2f'%((o.amount_tax / o.exchange_rate) + o.get_net_amount_report())" />
+								<!-- <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" /> -->
+								<br />
+							</td>
+							<td width="25%" style="text-align:right">
+								Net Total (
+								<span t-field="o.currency_id" />
+								) :
+								<br />
+								Tax Amount :
+								<br />
+								Grand Total (
+								<span t-field="o.currency_id" />
+								) :
+							</td>
+							<td width="5%" style="text-align:right">
+								<span t-esc="'%.2f'%(o.amount_untaxed)" />
+								<!-- <span t-field="o.amount_untaxed" /> -->
+								<br />
+								<span t-esc="'%.2f'%(o.amount_tax)" />
+								<!-- <span t-field="o.amount_tax" /> -->
+								<br />
+								<span t-esc="'%.2f'%(o.amount_total)" />
+								<!-- <span t-field="o.amount_total" /> -->
+								<br />
+							</td>
+						</tr>
+					</table>
+					</t>
+
+
+					<t t-if="o.company_id.country_id.code != 'SG'">
 					<table width="100%"
 						style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;">
 						<tr>
@@ -330,7 +404,10 @@
 							</td>
 						</tr>
 					</table>
+					</t>
 					</div>
+					
+					
 			 <p style="page-break-after:always"></p> 
 			</t>
 		</template>

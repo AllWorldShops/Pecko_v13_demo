@@ -17,21 +17,23 @@
 										t-field="company.partner_id.name" />
 								</strong>
 								<br />
-								<span t-field="o.company_id.street" />
+								<span t-field="o.company_id.street" />,
 								<t t-if="o.company_id.street1">
-									<span t-field="o.company_id.street1" />
-									,
+									<span t-field="o.company_id.street1" />,
 									<br />
+									
 									<span t-field="o.company_id.street2" />
 								</t>
 								<t t-else="">
-									<span t-field="o.company_id.street2" />
+									<span t-field="o.company_id.street2" />,
 								</t>
 								<br />
-								<span t-field="o.company_id.city" />
-								,
+								<t t-if="o.company_id.country_id.code != 'SG'">
+									<span t-field="o.company_id.city" />
+								</t>
+								
 								<span t-field="o.company_id.state_id" />
-								,
+								
 								<span t-field="o.company_id.country_id" />
 								-
 								<span t-field="o.company_id.zip" />
@@ -44,9 +46,10 @@
 									<span t-field="o.company_id.fax" />
 								</t>
 								<br />
+								<t t-if="o.company_id.country_id.code != 'SG'">
 								<span>E-mail:</span>
 								<span t-field="o.company_id.email" />
-								,
+								,</t>
 								<span>URL:</span>
 								<span t-field="o.company_id.website" />
 								<br />
@@ -77,13 +80,16 @@
 				<table width="100%" style="border-top: 1px solid black;">
 					<tr width="100%">
 						<td width="50%" style="text-align:center">
-							<strong>RECEIVED IN GOOD ORDER</strong>
+						<t t-if="o.company_id.country_id.code != 'SG'">
+							<strong>RECEIVED IN GOOD ORDER</strong></t>
 							<br />
 							<br />
 							<br />
 						</td>
+						
 						<td width="50%" style="text-align:center">
-							<strong>PECKO (M) SDN BHD.</strong>
+						<t t-if="o.company_id.country_id.code != 'SG'">
+							<strong>PECKO (M) SDN BHD.</strong></t>
 							<br />
 							<br />
 							<br />
@@ -91,25 +97,41 @@
 					</tr>
 					<tr width="100%">
 						<td width="50%" style="text-align:center">
-							<strong>CUSTOMER'S STAMP &amp; SIGNATURE</strong>
+						<t t-if="o.company_id.country_id.code != 'SG'">
+							<strong>CUSTOMER'S STAMP &amp; SIGNATURE</strong></t>
 						</td>
 						<td width="50%" style="text-align:center">
-							<strong>AUTHORISED SIGNATURE</strong>
+						<t t-if="o.company_id.country_id.code != 'SG'">
+							<strong>AUTHORISED SIGNATURE</strong></t>
 						</td>
 					</tr>
 				</table>
 				<table width="100%">
 					<tr>
-						<td>
+					  <td>
+							<div style="text-align:center;">
+							<strong>
+								**This is a computer generated document. Signature is not required.**
+							</strong>
+							 </div>
+						   <br/>
+						  
+						   <span>
 							<strong>
 								NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
-								THEIR INTENDED USE,AND USERS ASSUME ALL RISK AND LIABILITY
+								THEIR INTENDED USE,AND USERS ASSUME ALL <br/>RISK AND LIABILITY
 								WHATSOEVER IN CONNECTION THEREWITH
 							</strong>
+							</span>
 						</td>
 					</tr>
+
 				</table>
+				<t t-if="o.company_id.country_id.code == 'SG'">
+						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_one)" style="position:relative; bottom:115px; left:730px; width:130px;" />
+					</t>
 				<div style="text-align:right">
+					
 					<span>user:</span>
 					<span t-esc="user.name" />
 				</div>
@@ -140,7 +162,7 @@
 			<field name="default" eval="True" />
 			<field name="format">A4</field>
 			<field name="orientation">Portrait</field>
-			<field name="margin_top">35</field>
+			<field name="margin_top">30</field>
 			<field name="margin_bottom">41</field>
 			<field name="margin_left">6</field>
 			<field name="margin_right">6</field>

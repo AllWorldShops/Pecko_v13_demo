@@ -9,9 +9,30 @@
             	<field name="manufacturer_id"/>
             </xpath>
             <xpath expr="//field[@name='uom_po_id']" position="after">
-            	<field name="storage_location_id"/>
-                <field name="project"/>
-            </xpath> 
+            	<field name="storage_location_id" invisible="0"/>
+                <field name="new_storage_loc" />
+                
+            </xpath>
+            <page name="invoicing" position="after">
+                <page string="Malaysia" >
+                    <group>
+                        <group>
+                            <field name="project"/>
+                            <field name="production_cell" />
+                            <field name="order_seq" />
+                        </group>
+                    </group>
+                    
+                </page>
+                <page string="Singapore" >
+                    <group>
+                        <group>
+                            <field name="production_type" />
+                        </group>
+                    </group>
+                </page>
+            </page>
+
         </field>
     </record>
     
@@ -25,6 +46,37 @@
             	<field name="storage_location_id"/>
                 <field name="project"/>
             </xpath> 
+            <page name="invoicing"  position="after">
+                <page string="Malaysia" >
+                    <group>
+                        <group>
+                            <field name="production_cell" />
+                            <field name="order_seq" />
+                        </group>
+                    </group>
+                    
+                </page>
+                <page string="Singapore">
+                    <group>
+                        <group>
+                            <field name="production_type" />
+                        </group>
+                    </group>
+                </page>
+            </page>
         </field>
     </record> 
+
+    <record id="view_company_form_inherit_ttse" model="ir.ui.view">
+		<field name="name">res.company.form</field>
+		<field name="model">res.company</field>
+		<field name="inherit_id" ref="base.view_company_form" />
+		<field name="arch" type="xml">
+			<field name="currency_id" position="after">
+				<field name="logo_one"/>
+                <field name="logo_two" />
+                <field name="logo_three" />
+			</field>
+		</field>
+	</record>
 </odoo>

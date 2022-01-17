@@ -4,7 +4,7 @@
 	<template id="external_layout_so_report">
 
 		<t t-if="not o and doc">
-			<t t-set="o" t-value="doc" />
+			<t t-set="o" t-value="doc"/>
 		</t>
 		<t t-if="o and 'company_id' in o">
 			<t t-set="company" t-value="o.company_id.sudo()" />
@@ -16,7 +16,7 @@
 			<div class="row">
 				<div class="col-8">
 					<img t-if="company.logo"
-						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
+						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width:100px;"/>
 					<div class="company_address"
 						style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;">
 						<div>
@@ -25,10 +25,9 @@
 									t-field="company.partner_id.name" />
 							</strong>
 							<br />
-							<span t-field="o.company_id.street" />
-							<t t-if="o.company_id.street1">
-								<span t-field="o.company_id.street1" />
-								,
+							<span t-field="o.company_id.street" />,
+							<t t-if="o.company_id.street1">,
+								<span t-field="o.company_id.street1" />,
 								<br />
 								<span t-field="o.company_id.street2" />
 							</t>
@@ -36,11 +35,12 @@
 								<span t-field="o.company_id.street2" />
 							</t>
 							<br />
+							<t t-if="o.company_id.country_id.code != 'SG'">
 							<span t-field="o.company_id.city" />
-							,
+							,</t>
 							<span t-field="o.company_id.state_id" />
-							,
-							<span t-field="o.company_id.country_id" />
+							
+					       <span t-field="o.company_id.country_id" />
 							-
 							<span t-field="o.company_id.zip" />
 							<br />
@@ -52,9 +52,10 @@
 								<span t-field="o.company_id.fax" />
 							</t>
 							<br />
-							<span>E-mail:</span>
-							<span t-field="o.company_id.email" />
-							,
+							<t t-if="o.company_id.country_id.code != 'SG'">
+								<span>E-mail:</span>
+								<span t-field="o.company_id.email" />
+							,</t>
 							<span>URL:</span>
 							<span t-field="o.company_id.website" />
 							<br />
@@ -107,21 +108,22 @@
 									t-field="company.partner_id.name" />
 							</strong>
 							<br />
-							<span t-field="o.company_id.street" />
+							<span t-field="o.company_id.street" />,
 							<t t-if="o.company_id.street1">
-								<span t-field="o.company_id.street1" />
-								,
+								<span t-field="o.company_id.street1" />,
+								
 								<br />
-								<span t-field="o.company_id.street2" />
+								<span t-field="o.company_id.street2" />,
 							</t>
 							<t t-else="">
-								<span t-field="o.company_id.street2" />
+								<span t-field="o.company_id.street2" />,
 							</t>
 							<br />
+							<t t-if="o.company_id.country_id.code != 'SG'">
 							<span t-field="o.company_id.city" />
-							,
+							,</t>
 							<span t-field="o.company_id.state_id" />
-							,
+							
 							<span t-field="o.company_id.country_id" />
 							-
 							<span t-field="o.company_id.zip" />
@@ -134,9 +136,10 @@
 								<span t-field="o.company_id.fax" />
 							</t>
 							<br />
+							<t t-if="o.company_id.country_id.code != 'SG'">
 							<span>E-mail:</span>
 							<span t-field="o.company_id.email" />
-							,
+							,</t>
 							<span>URL:</span>
 							<span t-field="o.company_id.website" />
 							<br />
@@ -175,6 +178,7 @@
 			position="replace">
 			<t t-call="pecko_so_po_report.external_layout_so_report">
 				<div class="page" style="font-family: Calibri;text-color:black;">
+				<div style="position:relative;top:70px;">
 					<p align="center">
 						<strong>SALES ORDER</strong>
 					</p>
@@ -199,8 +203,10 @@
 									Phone:
 									<span t-field="doc.partner_id.phone" />
 									<br />
+								
 									Email:
 									<span t-field="doc.partner_id.email" />
+								
 								</td>
 								<td style="width:45%;background-color: white;">
 									<table>
@@ -448,6 +454,7 @@
 
 					</tbody>
 				</table>
+				</div>
 			</t>
 		</xpath>
 	</template>
@@ -461,7 +468,9 @@
 		<xpath expr="//t[@t-call='web.external_layout']"
 			position="replace">
 			<t t-call="pecko_so_po_report.external_layout_po_report">
+			<div style="position:relative;top:50px;">
 				<div class="page" style="font-family: Calibri;text-color:black;">
+				
 					<p align="center">
 						<strong>PURCHASE ORDER</strong>
 					</p>
@@ -479,8 +488,10 @@
 							</span>
 							<br />
 							<span>
+							
 								<t t-esc="o.partner_id.city" />
 								<t t-esc="o.partner_id.state_id.name" />
+						
 							</span>
 							<br />
 							<span>
@@ -662,7 +673,7 @@
 					<br />
 					<br />
 				</div>
-
+               <t t-if="o.company_id.country_id.code != 'SG'">
 				<table width="100%"
 					style="font-family: Calibri;text-color:black;font-size:13px">
 					<tbody>
@@ -690,32 +701,39 @@
 						</tr>
 
 					</tbody>
-				</table>
+				</table></t>
 				<br />
 				<br />
 				<br />
 				<br />
+					
+					
 				<table
-					style="font-family: Calibri;text-color:black;font-size:13px">
+					style="font-family: Calibri;text-color:black;font-size:13px;position:relative;top:100px;">
 					<tbody>
 						<tr>
-							<td width="7%">
-								<span>NOTE :</span>
-							</td>
-							<td width="63%">
-								<span>PLEASE
+						
+							<td width="63%" style="position:relative;top:66px;">
+
+							<span style="text-align:center;">**This is a computer generated document. Signature is not required.**</span><br/>
+							<span>NOTE :</span><br/>
+								<span>- PLEASE
 									SIGN &amp; REPLY BY EMAIL TO ACKNOWLEDGE ACCEPTANCE OF ORDER
 									SCHEDULE.
 									<br />
-									ALL ITEMS MUST BE RoHS COMPLIANCE AND MUST ACCOMPANY WITH
+								-	ALL ITEMS MUST BE RoHS COMPLIANCE AND MUST ACCOMPANY WITH
 									CERTIFICATE OF COMPLIANCE (COC).
 									<br />
-									ANY PRODUCTS SUBJECT TO End-Of-Life (EOL) NEED TO BE INFORM 12
+								-	ANY PRODUCTS SUBJECT TO End-Of-Life (EOL) NEED TO BE INFORM 12
 									MONTH AHEAD.
 								</span>
 
 							</td>
-							<td width="30%" style="text-align:center">
+							<!-- <td> -->
+								
+							<!-- </td> -->
+							<td width="30%" style="text-align:center;position:relative;top:20px;">
+							
 								<span>------------------------------------------</span>
 								<br />
 								<span>Supplier's Acceptance &amp; Confirmation</span>
@@ -723,7 +741,12 @@
 						</tr>
 					</tbody>
 				</table>
-
+				<div>
+				<t t-if="o.company_id.country_id.code == 'SG'">
+					<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_two)" style="width:120px;position:relative;top:60px;left:650px;" />
+				</t>
+				</div>
+				</div>
 
 			</t>
 		</xpath>

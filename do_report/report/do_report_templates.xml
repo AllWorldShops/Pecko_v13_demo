@@ -44,7 +44,8 @@
                 <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
 
                     
-                <div class="page" style="text-color:black">
+                <div class="page" style="text-color:black;">
+                <div style="position:relative;top:70px;">
                     <div style="font-size: 20px;text-align: center;padding-top:15px;">
                         <span ><strong> Delivery Order </strong></span>
                     </div>
@@ -207,11 +208,13 @@
                         </td>
                     </tr>
                     </table>
+                    </div>
                     <table width="100%" style="border-top: 1px solid black;border-bottom: 1px solid black;">
                     
                 </table>
                     <p style="page-break-after:always"></p>
-                </div>
+                    </div>
+                
             </t>
         </template>
 

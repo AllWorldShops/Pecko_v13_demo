@@ -17,21 +17,20 @@
 										t-field="company.partner_id.name" />
 								</strong>
 								<br />
-								<span t-field="o.company_id.street" />
+								<span t-field="o.company_id.street" />,
 								<t t-if="o.company_id.street1">
-									<span t-field="o.company_id.street1" />
-									,
+									<span t-field="o.company_id.street1" />,
 									<br />
-									<span t-field="o.company_id.street2" />
+									<span t-field="o.company_id.street2" />,
 								</t>
 								<t t-else="">
-									<span t-field="o.company_id.street2" />
+									<span t-field="o.company_id.street2" />,
 								</t>
 								<br />
+								<t t-if="o.company_id.country_id.code != 'SG'">
 								<span t-field="o.company_id.city" />
-								,
+								,</t>
 								<span t-field="o.company_id.state_id" />
-								,
 								<span t-field="o.company_id.country_id" />
 								-
 								<span t-field="o.company_id.zip" />
@@ -44,9 +43,10 @@
 									<span t-field="o.company_id.fax" />
 								</t>
 								<br />
+								<t t-if="o.company_id.country_id.code != 'SG'">
 								<span>E-mail:</span>
 								<span t-field="o.company_id.email" />
-								,
+								,</t>
 								<span>URL:</span>
 								<span t-field="o.company_id.website" />
 								<br />
@@ -71,13 +71,21 @@
 				t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
 				<t t-raw="0" />
 			</div>
+			
 
 			<div class="footer o_background_footer"
 				style="font-family: Calibri;font-size:12px;">
+				
+				<!-- <div > -->
+				
+				<!-- </div> -->
+				<t t-if="o.company_id.country_id.code != 'SG'">
 				<table width="100%"
-					style="border-top: 1px solid black;border-bottom: 1px solid black;">
+					style="border-bottom: 1px solid black;">
 					<tr>
-						<td width="75%">
+					    
+						<td width="85%" >
+						**This is a computer generated document. Signature is not required.**<br/>
 							1.Please remit to Pecko (M) Sdn Bhd, Swift Code: MBBEMYKL, 
 							Maybank Islamic Berhad (MYR A/C: 551100316366); 
 							Malayan Banking Berhad (USD A/C: 701105010725).
@@ -88,19 +96,68 @@
 							3.Title to this merchandise remains with PECKO (M) SDN BHD until
 							such time as full settlement of all sums due from you to us under
 							this invoice or otherwise is received.
+							
+						</td>
+						<td width="15%">
+						
+						<div style="position:relative;top:40px;">
+							<t t-if="o.company_id.country_id.code == 'SG'">
+							
+								<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)" style="width:110px;" />
+							</t>
+						</div>
 						</td>
 
-							<!-- 1.Please remit to Pecko (M) Sdn Bhd Swt RHBBMYKL RHB BANK BERHAD,
-							MYR A/C 20113800034399; USD A/C 61302900000624 -->
-						<!-- <td width="25%">
-							PECKO (M) SDN BHD.
-							<br />
-							<br />
-							<br />
-							<br />
-						</td> -->
+						   
+
 					</tr>
 				</table>
+				</t>
+       <t t-if="o.company_id.country_id.code == 'SG'">
+				<table width="100%"
+					style="border-bottom: 1px solid black;position:relative; bottom:30px;">
+					<tr>
+					    
+						<td width="85%" >
+						**This is a computer generated document. Signature is not required.**<br/>
+							1.Please remit to Pecko Electronics Industries Pte.Ltd, Swift Code: (UOVBSGSG), 
+							United Overseas Bank (SGD A/C: 213-307-107-7); 
+							United Overseas Bank (USD A/C: 213-900-224-7).
+							<br />
+							2.Any discrepancy noted herein must be brought to our notice
+							within 7 days in writing from the date of this invoice.
+							<br />
+							3.Title to this merchandise remains with Pecko Electronics Industries Pte.Ltd until
+							such time as full settlement of all sums due from you to us under
+							this invoice or otherwise is received.
+							
+						</td>
+						<td width="15%">
+						
+						<div style="position:relative;top:40px;">
+							<t t-if="o.company_id.country_id.code == 'SG'">
+							
+								<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)" style="width:110px;" />
+							</t>
+						</div>
+						</td>
+
+						   
+
+					</tr>
+				</table>
+				</t>
+				<!-- <t t-if="o.company_id.country_id.code == 'SG'">
+				<table width="100%"
+					style="border-bottom:1px solid black;border-top:1px solid black;" >
+					<tr>
+				
+						
+							
+					</tr>
+				</table>
+			</t> -->
+				
 			</div>
 		</template>
 
