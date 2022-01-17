@@ -2,7 +2,6 @@ from odoo import models, fields, api, _
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
-    
 
     consumed_move_raw_ids = fields.One2many(related='move_raw_ids', string="Consumed Products")
     finished_line_ids = fields.One2many(related='finished_move_line_ids', string="Consumed Products")
@@ -12,11 +11,14 @@ class MrpProduction(models.Model):
     # project = fields.Char(string='Project')
     project = fields.Char(string='Project',related='product_tmpl_id.project')
     start_date = fields.Date('Start Date')
+    order_seq = fields.Text(string='Order Sequence', readonly=True)
+    production_cell = fields.Char(string='Production Cell',related='product_tmpl_id.production_cell')
     
     @api.onchange('product_id')
     def onchange_responsible(self):
         if self.product_id:
             self.user_id = self.product_id.responsible_id.id
+            self.order_seq = self.product_id.order_seq or ' '
             
     # MRP 3 Step Location Auto Change
     def step_location_sync(self):     
@@ -111,10 +113,15 @@ class MrpBomLine(models.Model):
 class StockMove(models.Model):
     _inherit = 'stock.move'
     
-    storage_location_id = fields.Char(string='Storage Location')
+    storage_location_id = fields.Char(string='Storage Location', company_dependent=True,store=True)
     to_consume_qty = fields.Float(string="To Consume Quantity", compute='_get_consumed_data')
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer Name')
     customer_part_no = fields.Text(string='Part Number',compute="_compute_product_name",store=True)
+    
+    # def _compute_storage_location_id(self):
+    #     ir_property = self.env['ir.property'].browse()
+        
+    #     for line in self:
     
     @api.depends('product_id')
     def _compute_product_name(self):
@@ -122,7 +129,7 @@ class StockMove(models.Model):
             if pro.product_id:
                 pro.customer_part_no = pro.product_id.name
             else:
-                pro.customer_part_no = ''
+                pro.customer_part_no = ' '
                 
     @api.model
     def create(self, vals):

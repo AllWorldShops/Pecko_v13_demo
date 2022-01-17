@@ -108,12 +108,12 @@
 				</table>
 				<table width="100%">
 					<tr>
-					  <td>
+					  <td><t t-if="o.company_id.country_id.code == 'SG'">
 							<div style="text-align:center;">
 							<strong>
 								**This is a computer generated document. Signature is not required.**
 							</strong>
-							 </div>
+							 </div></t>
 						   <br/>
 						  
 						   <span>
@@ -167,7 +167,7 @@
 			<field name="margin_left">6</field>
 			<field name="margin_right">6</field>
 			<field name="header_line" eval="False" />
-			<field name="header_spacing">30</field>
+			<field name="header_spacing">25</field>
 			<field name="dpi">90</field>
 		</record>
 

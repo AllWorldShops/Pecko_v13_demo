@@ -72,7 +72,8 @@
                                     <br />
                                     Phone: <span t-field="o.partner_id.phone" />
                                     <br/>
-                                    Email: <span t-field="o.partner_id.email" />
+                                    <t t-if="o.company_id.country_id.code != 'SG'">
+                                    Email: <span t-field="o.partner_id.email" /></t>
                                     <br/>
                                     <br/>
                                                                         
@@ -170,27 +171,30 @@
                                     <td style=" text-align: left;">
                                         <span t-field="l.name" />
                                     </td>
-                                <!-- when delivery order uom and sale order uom is same -->
-
-                                    <td  style=" text-align: left;">
-                                        <!-- <span t-field="l.sale_line_id.qty_delivered" /> -->
-                                        <span t-field="l.quantity_done" />
-                                        <span t-field="l.product_uom" />
-                                    </td>
-                                    <t t-if="l.sale_line_id">
-                                    <td t-if="l.product_id.uom_id.name != l.sale_line_id.product_uom.name" style=" text-align: left;">
+ 
+                                    
+                                    <t t-if="l.sale_line_id and l.product_id.uom_id.name != l.sale_line_id.product_uom.name">
+                                    <td style=" text-align: left;">
                                         <span t-esc="round(l.quantity_done / l.sale_line_id.product_uom.factor_inv,2)" />
                                         <span t-field="l.sale_line_id.product_uom" />
                                     </td>
-                                   
-
-                                    <!-- when delivery order uom and sale order uom is not same -->
-                                    <td style=" text-align: left;">
+                                   <td style=" text-align: left;">
                                         <t t-set="qty" t-value="l.sale_line_id.qty_delivered" />
                                         <span t-esc="round(l.sale_line_id.product_uom_qty - qty,2)" />
                                         <span t-field="l.sale_line_id.product_uom" />
                                     </td>
+                                    
                                      </t>
+                                      <td  style=" text-align: left;">
+                                        <span t-field="l.quantity_done" />
+                                        <span t-field="l.product_uom" />
+                                    </td>
+
+                                     <td style=" text-align: left;">
+                                        <t t-set="qty" t-value="l.sale_line_id.qty_delivered" />
+                                        <span t-esc="round(l.sale_line_id.product_uom_qty - qty,2)" />
+                                        <span t-field="l.sale_line_id.product_uom" />
+                                    </td>
                                     <!-- 
                                     <td t-if="l.product_id.uom_id.name != l.sale_line_id.product_uom.name" style=" text-align: left;">
                                         <t t-set="qty" t-value="l.sale_line_id.qty_delivered" />

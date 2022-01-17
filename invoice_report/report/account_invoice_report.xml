@@ -114,6 +114,72 @@
 				</table>
 				</t>
        <t t-if="o.company_id.country_id.code == 'SG'">
+					<table width="100%"
+						style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;">
+						<tr>
+							<td width="25%">
+								For Tax Purpose in SGD Only
+								<br />
+								1 SGD =
+								<span t-esc="'%.4f'%(o.exchange_rate)" />
+								USD
+								<!-- <span t-field="o.company_currency_id.name" /> -->
+								<br />
+								Conversation Rate =
+								<span t-esc="'%.4f'%(o.exchange_rate)" />
+								<!-- 1 USD = <span t-esc="'%.4f'% o.currency_conv_rate"/> <span t-field="o.company_currency_id.name"/><br/> -->
+
+							</td>
+							<td width="25%" style="text-align:right">
+								Net Total (SGD) :
+								<br />
+								Tax Amount :
+								<br />
+								Grand Total (SGD) :
+							</td>
+							<td width="5%" style="text-align:right">
+								<!-- <t t-set="ex" t-value="o.currency_conv_rate" /> -->
+								<!-- <t t-set="ex" t-value="o.get_currency_conv_rate()" /> -->
+								<!-- <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" />
+								<br />
+								<span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />
+								<br />
+								<span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" />
+								<br /> -->
+								<span t-esc="'%.2f'%(o.get_net_amount_report())" />
+								<!-- <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" /> -->
+								<br />
+								<span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />
+								<br />
+								<span t-esc="'%.2f'%((o.amount_tax / o.exchange_rate) + o.get_net_amount_report())" />
+								<!-- <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" /> -->
+								<br />
+							</td>
+							<td width="25%" style="text-align:right">
+								Net Total (
+								<span t-field="o.currency_id" />
+								) :
+								<br />
+								Tax Amount :
+								<br />
+								Grand Total (
+								<span t-field="o.currency_id" />
+								) :
+							</td>
+							<td width="5%" style="text-align:right">
+								<span t-esc="'%.2f'%(o.amount_untaxed)" />
+								<!-- <span t-field="o.amount_untaxed" /> -->
+								<br />
+								<span t-esc="'%.2f'%(o.amount_tax)" />
+								<!-- <span t-field="o.amount_tax" /> -->
+								<br />
+								<span t-esc="'%.2f'%(o.amount_total)" />
+								<!-- <span t-field="o.amount_total" /> -->
+								<br />
+							</td>
+						</tr>
+					</table>
+					
 				<table width="100%"
 					style="border-bottom: 1px solid black;position:relative; bottom:30px;">
 					<tr>
@@ -187,11 +253,11 @@
 			<field name="format">A4</field>
 			<field name="orientation">Portrait</field>
 			<field name="margin_top">35</field>
-			<field name="margin_bottom">41</field>
+			<field name="margin_bottom">45</field>
 			<field name="margin_left">6</field>
 			<field name="margin_right">6</field>
 			<field name="header_line" eval="False" />
-			<field name="header_spacing">30</field>
+			<field name="header_spacing">25</field>
 			<field name="dpi">90</field>
 		</record>
 
