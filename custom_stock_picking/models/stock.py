@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
+from statistics import mode
 from odoo import models, fields, api, _
+from datetime import date
 
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
@@ -16,13 +18,19 @@ class StockPicking(models.Model):
         if vals.get('origin'):
             sale_id = self.env['sale.order'].search([('name','=',vals['origin'])])
             vals['customer_po_no'] = sale_id.customer_po_no
-        return super(StockPicking, self).create(vals) 
+        return super(StockPicking, self).create(vals) s
     
 class StockMove(models.Model):
     _inherit = 'stock.move'
     
     additional_notes = fields.Char(string='Additional Notes')
     customer_part_no = fields.Text(string='Part Number')
+    
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+    
+    part_no = fields.Char('Customer / Manufacturer Part no', related="product_id.name")
+
 
 class ProductTemplate(models.Model):
     _name = 'product.template'
@@ -36,6 +44,7 @@ class ProductTemplate(models.Model):
         if buy_route:
             route = self.env['stock.location.route'].sudo().search(['|',('id', '=', buy_route.id),('name', 'ilike', 'PEI - Buy from Vendor')])
             for rte in route:
+                print(rte.name,"////_--------------;;;;;;;", rte)
                 if rte.company_id == self.env.company:
                     return rte.ids
         return []
