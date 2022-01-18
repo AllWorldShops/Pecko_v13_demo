@@ -18,7 +18,7 @@ class StockPicking(models.Model):
         if vals.get('origin'):
             sale_id = self.env['sale.order'].search([('name','=',vals['origin'])])
             vals['customer_po_no'] = sale_id.customer_po_no
-        return super(StockPicking, self).create(vals) s
+        return super(StockPicking, self).create(vals)
     
 class StockMove(models.Model):
     _inherit = 'stock.move'
