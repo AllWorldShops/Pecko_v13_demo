@@ -10,7 +10,7 @@
             </xpath>
             <xpath expr="//field[@name='uom_po_id']" position="after">
             	<field name="storage_location_id" invisible="0"/>
-                <field name="new_storage_loc" invisible="1"/>
+                <field name="new_storage_loc" />
                 
             </xpath>
             <page name="invoicing" position="after">
@@ -18,16 +18,15 @@
                     <group>
                         <group>
                             <field name="project"/>
-                            <field name="production_cell" />
-                            <field name="order_seq" />
+                            <field name="production_cell"/>
+                            <field name="order_seq" invisible="1"/>
                         </group>
                     </group>
-                    
                 </page>
                 <page string="Singapore" >
                     <group>
                         <group>
-                            <field name="production_type" />
+                            <field name="country_origin"/>
                         </group>
                     </group>
                 </page>
@@ -51,7 +50,7 @@
                     <group>
                         <group>
                             <field name="production_cell" />
-                            <field name="order_seq" />
+                            <field name="order_seq" invisible="1"/>
                         </group>
                     </group>
                     
@@ -59,7 +58,7 @@
                 <page string="Singapore">
                     <group>
                         <group>
-                            <field name="production_type" />
+                            <field name="country_origin" />
                         </group>
                     </group>
                 </page>

@@ -11,14 +11,14 @@ class MrpProduction(models.Model):
     # project = fields.Char(string='Project')
     project = fields.Char(string='Project',related='product_tmpl_id.project')
     start_date = fields.Date('Start Date')
-    order_seq = fields.Text(string='Order Sequence', readonly=True)
+    order_seq = fields.Char(string='Order Sequence')
     production_cell = fields.Char(string='Production Cell',related='product_tmpl_id.production_cell')
     
     @api.onchange('product_id')
     def onchange_responsible(self):
         if self.product_id:
             self.user_id = self.product_id.responsible_id.id
-            self.order_seq = self.product_id.order_seq or ' '
+            # self.order_seq = self.product_id.order_seq or ' '
             
     # MRP 3 Step Location Auto Change
     def step_location_sync(self):     

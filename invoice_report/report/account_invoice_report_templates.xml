@@ -195,11 +195,9 @@
 								<th class="text-left" style="width:30%">Pecko Part No</th>
 								<th class="text-left" style="width:30%">Part No</th>
 								<th class="text-left" style="width:28%">Description</th>
+							    <th t-if="o.company_id.country_id.code == 'SG'" class="text-left" style="width:20%;">Country of Origin</th>
 								<th class="text-center" style="width:18%">Quantity</th>
 								<th class="text-center" style="width:13%">Unit</th>
-
-								
-
 								<th class="text-right" style="width:20%">
 									Price(<span t-field="o.currency_id" />)
 								</th>
@@ -227,6 +225,9 @@
 									<td style=" text-align: left;">
 										<span t-field="l.name" />
 									</td>
+									<td t-if="o.company_id.country_id.code == 'SG'" style=" text-align: left;">
+                                        <span t-field="l.product_id.country_origin" />
+                                    </td>
 									<td style=" text-align: left;">
 										<span t-field="l.quantity" />
 									</td>

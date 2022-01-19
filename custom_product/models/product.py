@@ -13,7 +13,7 @@ class ProductTemplate(models.Model):
     production_cell = fields.Char(string="Production Cell")
     order_seq = fields.Char(string="Order Sequence")
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured")
-
+    country_origin = fields.Char("Country of Origin")
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
@@ -24,8 +24,7 @@ class ProductProduct(models.Model):
     production_cell = fields.Char(string="Production Cell", related='product_tmpl_id.production_cell')
     order_seq = fields.Char(string="Order Sequence", related='product_tmpl_id.order_seq')
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured", related='product_tmpl_id.production_type')
-
-    
+    country_origin = fields.Char("Country of Origin", related='product_tmpl_id.country_origin', readonly=False)
 
 #     @api.multi
     def write(self, vals):

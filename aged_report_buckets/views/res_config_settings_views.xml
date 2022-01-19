@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="res_config_settings_view" model="ir.ui.view">
+			<field name="name">res.config.settings</field>
+			<field name="model">res.config.settings</field>
+			<field name="priority" eval="40" />
+			<field name="inherit_id"
+				ref="base.res_config_settings_view_form" />
+			<field name="arch" type="xml">
+				<xpath
+					expr="//div[hasclass('settings')]//div[@id='eu_service']//div[@name='l10n_eu_service_right_pane']"
+					position="after">
+					<div>
+						<span class="o_form_label">Days</span>
+					</div>
+					<div class="content-group">
+						<field name="days_count" />
+					</div>
+					<div class="text-muted">
+						Bucket Calculation Days
+					</div>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>
+                    

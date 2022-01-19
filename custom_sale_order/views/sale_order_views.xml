@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+  <record id="view_sale_order_tree_inherited" model="ir.ui.view">
+		<field name="name">sale order tree inherited</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_quotation_tree" />
+		<field name="arch" type="xml">
+		   <field name="create_date" position="before">
+                <field name="origin" />
+		   </field>
+ 
+		</field>
+	</record>
 	<record id="view_sale_order_form_inherited" model="ir.ui.view">
 		<field name="name">sale order inherited</field>
 		<field name="model">sale.order</field>
@@ -59,6 +70,7 @@
 				<field name="internal_ref_no"></field>
 				<field name="customer_po_no" string="Customer Po No" invisible="0"/>
 				<field name="name" string="Description"/>
+				<field name="production_type" string="Purchased / Manufactured" invisible="1"/>
 				<field name="sales_person_id" string="Salesperson"/>
 				<field name="price_unit" string="Unit Price"/>
 				<field name="product_uom_qty" string="Qty"/>
