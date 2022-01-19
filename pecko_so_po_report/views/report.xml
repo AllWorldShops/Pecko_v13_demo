@@ -165,9 +165,48 @@
 			<t t-raw="0" />
 		</div>
 
-		<div class="footer" style="margin-bottom:250px">
+		<div class="footer o_background_footer" style="margin-bottom:280px">
+             <table
+					style="font-family: Calibri;text-color:black;font-size:13px;
+					">
+					<tbody>
+						<tr>
+							<td width="63%" style="position:relative;bottom:5px;">
 
+							<span style="text-align:center;">**This is a computer generated document. Signature is not required.**</span><br/>
+							<span>NOTE :</span><br/>
+								<span>- PLEASE
+									SIGN &amp; REPLY BY EMAIL TO ACKNOWLEDGE ACCEPTANCE OF ORDER
+									SCHEDULE.
+									<br />
+								-	ALL ITEMS MUST BE RoHS COMPLIANCE AND MUST ACCOMPANY WITH
+									CERTIFICATE OF COMPLIANCE (COC).
+									<br />
+								-	ANY PRODUCTS SUBJECT TO End-Of-Life (EOL) NEED TO BE INFORM 12
+									MONTH AHEAD.
+								</span>
+								
+							</td>
+							<!-- <td> -->
+								
+							<!-- </td> -->
+							<td width="30%" style="text-align:center;position:relative;bottom:1px;">
+							
+								<span>------------------------------------------</span>
+								<br />
+								<span>Supplier's Acceptance &amp; Confirmation</span>
+									<t t-if="o.company_id.country_id.code == 'SG'">
+					              <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_two)" style="width:100px;position:relative;bottom:12px;" />
+				                  </t>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 		</div>
+		<!-- <div class="footer o_background_footer"
+				style="font-family: Calibri;font-size:12px;">
+				
+				</div> -->
 
 	</template>
 
@@ -525,6 +564,14 @@
 										t-options='{"format": "dd-MMM-yyyy"}' />
 								</strong>
 							</span>
+							<br />
+
+							<span>
+								Old PO Number:
+								<strong>
+									<span t-field="o.old_po_no" />
+								</strong>
+							</span>
 
 						</div>
 					</div>
@@ -535,6 +582,7 @@
 						<style>
 							th{font-size:13px}
 						</style>
+						
 						<thead>
 							<tr style="text-size:13px;width:100%">
 								<t t-set="colspan" t-value="5" />
@@ -630,9 +678,18 @@
 		                            </t>
 
 								</tr>
+		                        <tr style="width=100%">
+								<td></td>
+								 <td colspan="99">
+								  <span t-field="line.notes" />
+								 </td>
+								</tr>
 								<t t-set="i" t-value="i+1" />
+						   
 							</t>
 						</tbody>
+						
+						
 					</table>
 					<div class="row justify-content-end">
 						<div class="col-4">
@@ -707,45 +764,10 @@
 				<br />
 				<br />
 					
-					
-				<table
-					style="font-family: Calibri;text-color:black;font-size:13px;position:relative;top:100px;">
-					<tbody>
-						<tr>
-						
-							<td width="63%" style="position:relative;top:66px;">
-
-							<span style="text-align:center;">**This is a computer generated document. Signature is not required.**</span><br/>
-							<span>NOTE :</span><br/>
-								<span>- PLEASE
-									SIGN &amp; REPLY BY EMAIL TO ACKNOWLEDGE ACCEPTANCE OF ORDER
-									SCHEDULE.
-									<br />
-								-	ALL ITEMS MUST BE RoHS COMPLIANCE AND MUST ACCOMPANY WITH
-									CERTIFICATE OF COMPLIANCE (COC).
-									<br />
-								-	ANY PRODUCTS SUBJECT TO End-Of-Life (EOL) NEED TO BE INFORM 12
-									MONTH AHEAD.
-								</span>
-
-							</td>
-							<!-- <td> -->
-								
-							<!-- </td> -->
-							<td width="30%" style="text-align:center;position:relative;top:20px;">
-							
-								<span>------------------------------------------</span>
-								<br />
-								<span>Supplier's Acceptance &amp; Confirmation</span>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div>
-				<t t-if="o.company_id.country_id.code == 'SG'">
-					<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_two)" style="width:120px;position:relative;top:60px;left:650px;" />
-				</t>
-				</div>
+			
+				<!-- <div>
+			
+				</div> -->
 				</div>
 
 			</t>
