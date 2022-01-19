@@ -120,13 +120,14 @@
 							<td width="25%">
 								For Tax Purpose in SGD Only
 								<br />
-								1 SGD =
+								1 USD =
 								<span t-esc="'%.4f'%(o.exchange_rate)" />
-								USD
+								SGD
 								<!-- <span t-field="o.company_currency_id.name" /> -->
 								<br />
 								Conversation Rate =
 								<span t-esc="'%.4f'%(o.exchange_rate)" />
+								SGD
 								<!-- 1 USD = <span t-esc="'%.4f'% o.currency_conv_rate"/> <span t-field="o.company_currency_id.name"/><br/> -->
 
 							</td>
