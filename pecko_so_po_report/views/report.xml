@@ -344,7 +344,8 @@
 									t-att-class="'bg-200 font-weight-bold' if line.display_type == 'line_section' else 'font-italic' if line.display_type == 'line_note' else ''">
 									<t t-if="not line.display_type">
 										<td>
-											<span t-esc="i" />
+											<!-- <span t-esc="i" /> -->
+											<span t-field="line.line_no" />
 										</td>
 										<td>
 											<span t-field="line.product_id.default_code" />
@@ -621,8 +622,9 @@
 
 								<tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
 									<t t-if="not line.display_type">
-										<td name="td_name">
-											<span t-esc="i" />
+										<td >
+										    <span t-field="line.line_no" />
+											<!-- <span t-esc="i" /> -->
 										</td>
 									<!-- <td>
 										<span t-esc="i" />
