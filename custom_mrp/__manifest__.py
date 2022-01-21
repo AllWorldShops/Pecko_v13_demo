@@ -9,7 +9,8 @@
     'description': """Manufacturing lines split""",
     'depends': ['mrp','stock','custom_product','sale'],
     'data': [
-        'views/mrp_line.xml'
+        'views/mrp_line.xml',
+        'report/bom_structure.xml'
     ],
     'installable': True,
     'application': True,
