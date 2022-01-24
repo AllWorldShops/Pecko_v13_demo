@@ -181,7 +181,11 @@
           <t t-set="space_td" t-value="'margin-left: '+ str(l['level'] * 20) + 'px;'"/>
           <tr t-if="data['report_structure'] != 'bom_structure' or l['type'] != 'operation'">
               <td>
-                  <span t-esc="l['po_no']" />
+                  <span  >
+                    <t t-if="l['type'] == 'operation'" t-esc="l['po_no']" />
+                      <t t-if="l['type'] == 'bom'" t-esc="l['po_no']" />
+
+                  </span>
               </td>
               <td>
                   <div t-att-style="space_td">

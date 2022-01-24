@@ -11,10 +11,10 @@ class MrpProduction(models.Model):
     customer_part_no = fields.Char(string='Part Number')
     description = fields.Char(string='Description')
     # project = fields.Char(string='Project')
-    project = fields.Char(string='Project',related='product_tmpl_id.project')
+    project = fields.Char(string='Project',related='product_tmpl_id.project', store=True)
     start_date = fields.Date('Start Date')
     order_seq = fields.Char(string='Order Sequence')
-    production_cell = fields.Char(string='Production Cell',related='product_tmpl_id.production_cell')
+    production_cell = fields.Char(string='Production Cell',related='product_tmpl_id.production_cell', store=True)
     
     @api.onchange('product_id')
     def onchange_responsible(self):
