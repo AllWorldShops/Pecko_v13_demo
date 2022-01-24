@@ -147,12 +147,12 @@
 								<br />
 								<span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" />
 								<br /> -->
-								<span t-esc="'%.2f'%(o.get_net_amount_report())" />
-								<!-- <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" /> -->
+								<!-- <span t-esc="'%.2f'%(o.get_net_amount_report())" /> -->
+								<span t-esc="'%.2f'%(o.amount_untaxed * o.exchange_rate)" />
 								<br />
-								<span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />
+								<span t-esc="'%.2f'%(o.amount_tax * o.exchange_rate)" />
 								<br />
-								<span t-esc="'%.2f'%((o.amount_tax / o.exchange_rate) + o.get_net_amount_report())" />
+								<span t-esc="'%.2f'%((o.amount_tax * o.exchange_rate) + (o.amount_untaxed * o.exchange_rate))" />
 								<!-- <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" /> -->
 								<br />
 							</td>
