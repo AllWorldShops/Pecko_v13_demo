@@ -364,7 +364,7 @@
 										</td>
 
 										<td class="text-center">
-											<span t-field="doc.date_order"
+											<span t-field="line.requested_date_line"
 												t-options='{"format":"dd-MMM-yyyy"}' />
 										</td>
 										<td class="text-right">
