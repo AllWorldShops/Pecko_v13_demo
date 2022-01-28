@@ -146,8 +146,10 @@ class AgedReceivable(models.AbstractModel):
                         'parent_id': 'partner_%s' % (values['partner_id'],),
                         # 'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.code, self._format_aml_name(aml)]] + \
                         #            [{'name': v} for v in [line['period'] == 6 - i and self.format_value(sign * line['amount']) or '' for i in range(7)]],
-                        'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.display_name, format_date(self.env, aml.expected_pay_date)]] +
+                        'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.display_name, aml.move_id.customer_po_no]] +
                                    [{'name': self.format_value(sign * v, blank_if_zero=True), 'no_format': sign * v} for v in [line['period'] == 7-i and line['amount'] or 0 for i in range(8)]],
+                        # 'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.display_name, format_date(self.env, aml.expected_pay_date)]] +
+                        #            [{'name': self.format_value(sign * v, blank_if_zero=True), 'no_format': sign * v} for v in [line['period'] == 7-i and line['amount'] or 0 for i in range(8)]],
                         'action_context': {
                             'default_type': aml.move_id.type,
                             'default_journal_id': aml.move_id.journal_id.id,
