@@ -51,6 +51,7 @@ class AgedReceivable(models.AbstractModel):
         results, total, amls = self.env['report.account.report_agedpartnerbalance'].with_context(include_nullified_amount=True)._get_partner_move_lines(account_types, self._context['date_to'], 'posted', bucket_days)
         for values in results:
             user_company = self.env.company
+            # print(user_company.name,"////user_companyuser_companyuser_company+=========")
             user_currency = user_company.currency_id
             ac_move = self.env['account.move'].search([('partner_id','=',values['partner_id'])],limit=1)
             # if ac_move:
@@ -132,7 +133,7 @@ class AgedReceivable(models.AbstractModel):
                     aml = line['line']
                     caret_type = 'account.move'
                     if aml.move_id:
-                        caret_type = 'account.invoice.in' if aml.invoice_id.type in ('in_refund', 'in_invoice') else 'account.invoice.out'
+                        caret_type = 'account.invoice.in' if aml.move_id.type in ('in_refund', 'in_invoice') else 'account.invoice.out'
                     elif aml.payment_id:
                         caret_type = 'account.payment'
                     
@@ -140,10 +141,18 @@ class AgedReceivable(models.AbstractModel):
                         'id': aml.id,
                         'name': aml.date_maturity or aml.date,
                         'caret_options': caret_type,
+                        'class': 'date',
                         'level': 4,
                         'parent_id': 'partner_%s' % (values['partner_id'],),
-                        'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.code, self._format_aml_name(aml)]] + \
-                                   [{'name': v} for v in [line['period'] == 6 - i and self.format_value(sign * line['amount']) or '' for i in range(7)]],
+                        # 'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.code, self._format_aml_name(aml)]] + \
+                        #            [{'name': v} for v in [line['period'] == 6 - i and self.format_value(sign * line['amount']) or '' for i in range(7)]],
+                        'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.display_name, format_date(self.env, aml.expected_pay_date)]] +
+                                   [{'name': self.format_value(sign * v, blank_if_zero=True), 'no_format': sign * v} for v in [line['period'] == 7-i and line['amount'] or 0 for i in range(8)]],
+                        'action_context': {
+                            'default_type': aml.move_id.type,
+                            'default_journal_id': aml.move_id.journal_id.id,
+                        },
+                        'title_hover': self._format_aml_name(aml.name, aml.ref, aml.move_id.name),
                     }
                     lines.append(vals)
         if total and not line_id:
