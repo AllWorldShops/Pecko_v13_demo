@@ -7,8 +7,8 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
     
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer/Customer Name')
-    storage_location_id = fields.Char(string='Storage Location')
-    new_storage_loc = fields.Char(string="Storage Location")
+    storage_location_id = fields.Char(string='Storage Location', company_dependent=True)
+    new_storage_loc = fields.Char(string="Storage Location New")
     # new_storage_loc = fields.Char(string="Storage Location", company_dependent=True)
     project = fields.Char(string='Project')
     production_cell = fields.Char(string="Production Cell")
