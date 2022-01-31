@@ -94,30 +94,66 @@ class AccountMove(models.Model):
     def _compute_currency_rate(self):
         for mov in self:
             if mov.currency_id:
-                currency_id_rates = self.env['res.currency.rate'].search([('currency_id','=',mov.currency_id.id)])
-                for currency_id_rate in currency_id_rates:
-                    if currency_id_rate.name == mov.invoice_date and mov.company_id.country_id.code != 'SG':
-                        mov.exchange_rate = currency_id_rate.rate
-                    if currency_id_rate.name == mov.invoice_date and mov.company_id.country_id.code == 'SG':
-                        mov.exchange_rate = 1 / currency_id_rate.rate
-                        break
-                    else:
-                        if mov.invoice_date and currency_id_rate.name:
-                            if currency_id_rate.name.month == mov.invoice_date.month and currency_id_rate.name.year == mov.invoice_date.year and mov.company_id.country_id.code != 'SG':
-                                mov.exchange_rate = currency_id_rate.rate
-                            if currency_id_rate.name.month == mov.invoice_date.month and currency_id_rate.name.year == mov.invoice_date.year and mov.company_id.country_id.code == 'SG':
-                                mov.exchange_rate = 1 / currency_id_rate.rate
-                                break
-                            else:
-                               if mov.company_id.country_id.code == 'SG':
-                                  mov.exchange_rate = 1 / currency_id_rate.rate
-                               else:
-                                  mov.exchange_rate = currency_id_rate.rate   
-                        if mov.company_id.country_id.code == 'SG':
-                            mov.exchange_rate = 1 / currency_id_rate.rate
-                        else:
+                if mov.company_id.country_id.code != 'SG':
+                    currency_id_rates = self.env['res.currency.rate'].search([('currency_id','=',mov.currency_id.id)])
+                    for currency_id_rate in currency_id_rates:
+                        if currency_id_rate.name == mov.invoice_date:
                             mov.exchange_rate = currency_id_rate.rate
                             break
+                        else:
+                            if mov.invoice_date and currency_id_rate.name:
+                                if currency_id_rate.name.month == mov.invoice_date.month and currency_id_rate.name.year == mov.invoice_date.year:
+                                    mov.exchange_rate = currency_id_rate.rate
+                                    break
+                                else:
+                                    mov.exchange_rate = currency_id_rate.rate
+                            else:
+                                mov.exchange_rate = currency_id_rate.rate
+                                break
+                else:
+                    currency_id_rates = self.env['res.currency.rate'].search([('currency_id','=',mov.currency_id.id)])
+                    for currency_id_rate in currency_id_rates:
+                        if currency_id_rate.name == mov.invoice_date:
+                            mov.exchange_rate = 1 / currency_id_rate.rate
+                            break
+                        else:
+                            if mov.invoice_date and currency_id_rate.name:
+                                if currency_id_rate.name.month == mov.invoice_date.month and currency_id_rate.name.year == mov.invoice_date.year:
+                                    mov.exchange_rate = 1 / currency_id_rate.rate
+                                    break
+                                else:
+                                    mov.exchange_rate = 1 / currency_id_rate.rate
+                            else:
+                                mov.exchange_rate = 1 / currency_id_rate.rate
+                                break
+                                
+    # def _compute_currency_rate(self):
+    #     for mov in self:
+    #         if mov.currency_id:
+    #             currency_id_rates = self.env['res.currency.rate'].search([('currency_id','=',mov.currency_id.id)])
+    #             for currency_id_rate in currency_id_rates:
+    #                 if currency_id_rate.name == mov.invoice_date and mov.company_id.country_id.code != 'SG':
+    #                     mov.exchange_rate = currency_id_rate.rate
+    #                 if currency_id_rate.name == mov.invoice_date and mov.company_id.country_id.code == 'SG':
+    #                     mov.exchange_rate = 1 / currency_id_rate.rate
+    #                     break
+    #                 else:
+    #                     if mov.invoice_date and currency_id_rate.name:
+    #                         if currency_id_rate.name.month == mov.invoice_date.month and currency_id_rate.name.year == mov.invoice_date.year and mov.company_id.country_id.code != 'SG':
+    #                             mov.exchange_rate = currency_id_rate.rate
+    #                         if currency_id_rate.name.month == mov.invoice_date.month and currency_id_rate.name.year == mov.invoice_date.year and mov.company_id.country_id.code == 'SG':
+    #                             mov.exchange_rate = 1 / currency_id_rate.rate
+    #                             break
+    #                         else:
+    #                            if mov.company_id.country_id.code == 'SG':
+    #                               mov.exchange_rate = 1 / currency_id_rate.rate
+    #                            else:
+    #                               mov.exchange_rate = currency_id_rate.rate   
+    #                     if mov.company_id.country_id.code == 'SG':
+    #                         mov.exchange_rate = 1 / currency_id_rate.rate
+    #                     else:
+    #                         mov.exchange_rate = currency_id_rate.rate
+    #                         break
 
     def get_net_amount_report(self):
         net_total = 0
