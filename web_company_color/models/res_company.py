@@ -15,6 +15,10 @@ class ResCompany(models.Model):
     _inherit = "res.company"
 
     SCSS_TEMPLATE = """
+         .o_home_menu_background {
+         background: url(/web_enterprise/static/src/img/home-menu-bg-overlay.svg), linear-gradient(to right bottom, %(color_navbar_bg)s, %(color_navbar_bg_hover)s) !important;
+         background-size: cover !important;
+            }
         .o_main_navbar {
           background-color: %(color_navbar_bg)s !important;
           color: %(color_navbar_text)s !important;
