@@ -8,6 +8,11 @@
             <xpath expr="//field[@name='default_code']" position="after">
             	<field name="manufacturer_id"/>
             </xpath>
+           
+            <group name="group_general" position="inside">
+                <field name="item_text" />
+
+            </group>
             <xpath expr="//field[@name='uom_po_id']" position="after">
             	<field name="storage_location_id" invisible="0"/>
                 <!-- <field name="new_storage_loc" /> -->
@@ -45,6 +50,11 @@
             	<field name="storage_location_id"/>
                 <field name="project"/>
             </xpath> 
+
+            <group name="group_general" position="inside">
+                <field name="item_text" />
+
+            </group>
             <page name="invoicing"  position="after">
                 <page string="Malaysia" >
                     <group>

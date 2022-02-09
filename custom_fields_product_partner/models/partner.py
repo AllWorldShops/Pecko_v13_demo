@@ -14,3 +14,4 @@ class Partner(models.Model):
     x_studio_field_cH3lX = fields.Char('')
     x_studio_field_cpiWw = fields.Char('')
     x_studio_field_MTmaF = fields.Selection([('PEI', 'PEI'),('PKS', 'PKS'),('PM','PM'),('Avill','Avill')],string='Verification Status')
+    incoterms = fields.Char("IncoTerm")

@@ -39,6 +39,7 @@
                 </xpath>
                 <xpath expr="//field[@name='category_id']" position="after">
                     <field name="x_studio_field_MTmaF" string="For Company"/>
+                    <field name="incoterms" />
                 </xpath>
                 <xpath expr="//field[@name='user_id']" position="after">
                     <field name="opt_out" string="Mailing Opt-Out" groups="base.group_no_one"/>

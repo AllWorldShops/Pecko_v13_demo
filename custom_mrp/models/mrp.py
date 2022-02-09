@@ -97,7 +97,8 @@ class MrpBomLine(models.Model):
     
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer')
     customer_part_no = fields.Text(string='Part Number',compute="_compute_product_name",store=True)
-    
+    item_text = fields.Char("Item Text", related='product_id.item_text')
+
     @api.depends('product_id')
     def _compute_product_name(self):
         for pro in self:
@@ -119,7 +120,8 @@ class StockMove(models.Model):
     to_consume_qty = fields.Float(string="To Consume Quantity", compute='_get_consumed_data')
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer Name')
     customer_part_no = fields.Text(string='Part Number',compute="_compute_product_name",store=True)
-    
+    item_text = fields.Char("Item Text", related='product_id.item_text')
+
     # def _compute_storage_location_id(self):
     #     ir_property = self.env['ir.property'].browse()
         

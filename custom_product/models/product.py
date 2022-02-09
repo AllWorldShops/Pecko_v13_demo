@@ -15,6 +15,7 @@ class ProductTemplate(models.Model):
     order_seq = fields.Char(string="Order Sequence")
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured")
     country_origin = fields.Char("Country of Origin")
+    item_text = fields.Char("Item Text")
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
@@ -26,7 +27,8 @@ class ProductProduct(models.Model):
     order_seq = fields.Char(string="Order Sequence", related='product_tmpl_id.order_seq')
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured", related='product_tmpl_id.production_type')
     country_origin = fields.Char("Country of Origin", related='product_tmpl_id.country_origin', readonly=False)
-
+    item_text = fields.Char("Item Text", related='product_tmpl_id.item_text')
+    
 #     @api.multi
     def write(self, vals):
         rec = super(ProductProduct, self).write(vals)

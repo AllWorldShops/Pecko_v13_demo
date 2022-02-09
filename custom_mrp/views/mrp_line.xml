@@ -25,6 +25,7 @@
 	                		<field name="product_id" required="1" string="Pecko Part Number"/>
 	                		<field name="customer_part_no" />
                             <field name="name" />
+							<field name="item_text" />
                             <field name="manufacturer_id" />
                             <field name="unit_factor" invisible="1"/>
                             <field name="product_uom" />
@@ -135,7 +136,8 @@
 	            <attribute name="string">Pecko Part No</attribute>
 	        </xpath>
 	        <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='product_qty']" position="before">
-	            <field name="manufacturer_id"/>
+	            <field name="item_text" />
+				<field name="manufacturer_id"/>
 	        </xpath>
 <!-- 
 	        <xpath expr="//field[@name='mobile']" position="attributes">

@@ -41,3 +41,8 @@ class PurchaseOrderLine(models.Model):
             product_id = self.env['product.product'].search([('id','=',vals['product_id'])])
             vals['manufacturer_id'] = product_id.product_tmpl_id.manufacturer_id.id
         return super(PurchaseOrderLine, self).create(vals)
+    
+class PurchaseOrdLine(models.Model):
+    _inherit = 'purchase.order.line'
+    
+    item_text = fields.Char("Item Text", related='product_id.item_text')
