@@ -157,7 +157,7 @@
                         <tbody class="invoice_tbody" style="line-height:10pt;font-size:12px;">
                             <t t-set="i" t-value="1" />
                             <tr t-foreach="o.move_ids_without_package" t-as="l">
-                                <t>
+                                <t t-if="l.quantity_done > 0">
                                     <td style=" text-align: left;">
                                         <span t-esc="i" />
                                         <span t-set="i" t-value="i+1" />
