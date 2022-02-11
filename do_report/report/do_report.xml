@@ -61,8 +61,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-4" style="position:relative; top:12px;">
-						<div class="text-muted text-right">
+					<div class="col-4">
+						<div class="text-muted text-right" style="position:relative; top:12px;">
 							Page:
 							<span class="page" />
 							of
