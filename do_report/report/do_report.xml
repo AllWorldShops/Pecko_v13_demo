@@ -9,6 +9,7 @@
 					<div class="col-8">
 						<img t-if="company.logo"
 							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
+							
 						<div class="company_address"
 							style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;font-size: 13px;">
 							<div>
@@ -167,7 +168,7 @@
 			<field name="margin_left">6</field>
 			<field name="margin_right">6</field>
 			<field name="header_line" eval="False" />
-			<field name="header_spacing">25</field>
+			<field name="header_spacing">29</field>
 			<field name="dpi">90</field>
 		</record>
 
