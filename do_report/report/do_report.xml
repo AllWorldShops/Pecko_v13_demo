@@ -61,7 +61,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-4">
+					<div class="col-4" style="position:relative; top:12px;">
 						<div class="text-muted text-right">
 							Page:
 							<span class="page" />
