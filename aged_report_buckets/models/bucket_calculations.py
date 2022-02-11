@@ -2,6 +2,7 @@ from odoo.tools import float_is_zero
 from odoo.exceptions import UserError
 from odoo import fields, models, api, _
 from odoo.tools.misc import format_date
+from datetime import datetime
 
 
 class AgedReceivable(models.AbstractModel):
@@ -136,6 +137,48 @@ class AgedReceivable(models.AbstractModel):
                         caret_type = 'account.invoice.in' if aml.move_id.type in ('in_refund', 'in_invoice') else 'account.invoice.out'
                     elif aml.payment_id:
                         caret_type = 'account.payment'
+                    fts = 1
+                    fte = bucket_days
+                    ss = fte + 1
+                    se = bucket_days * 2
+                    ts = se + 1
+                    te = bucket_days * 3
+                    fs = te + 1
+                    fe = bucket_days * 4
+
+                    date_format = "%Y-%m-%d"
+                    date_to = datetime.strptime(str(self._context['date_to']), date_format)
+                    rep_date = datetime.strptime(str(aml.date_maturity or aml.date), date_format)
+                    delta = date_to - rep_date
+                    diff_days = int(delta.days)
+                    # print(diff_days, "delta__")
+                    a_var = []
+                    b_var = []
+                    c_var = []
+                    d_var = []
+                    for i in range(fts, fte):
+                        a_var.append(i)
+                    for i in range(ss, se):
+                        b_var.append(i)
+                    for i in range(ts, te):
+                        c_var.append(i)
+                    for i in range(fs, fe):
+                        d_var.append(i)
+                    print(sign, "x_var")
+                    cur_aml = aml.move_id.currency_id
+                    inv_total = aml.move_id.amount_total / cur_aml.rate
+                    conv_amt = aml.move_id.amount_total
+                    t1 = round(inv_total,2)
+                    s1 = f"{t1:,}"
+                    
+                    if cur_aml.position == 'before':
+                        conv_amt = str(cur_aml.symbol) + ' ' + str(conv_amt)
+                    if cur_aml.position == 'after':
+                        conv_amt = str(conv_amt) + ' ' + str(cur_aml.symbol)
+                    if user_currency.position == 'before':
+                        inv_total = str(user_currency.symbol) + ' ' + s1
+                    if user_currency.position == 'after':
+                        inv_total = s1 + ' ' + str(user_currency.symbol)
                     
                     vals = {
                         'id': aml.id,
@@ -144,10 +187,13 @@ class AgedReceivable(models.AbstractModel):
                         'class': 'date',
                         'level': 4,
                         'parent_id': 'partner_%s' % (values['partner_id'],),
-                        # 'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.code, self._format_aml_name(aml)]] + \
-                        #            [{'name': v} for v in [line['period'] == 6 - i and self.format_value(sign * line['amount']) or '' for i in range(7)]],
                         'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.display_name, aml.move_id.customer_po_no]] +
-                                   [{'name': self.format_value(sign * v, blank_if_zero=True), 'no_format': sign * v} for v in [line['period'] == 7-i and line['amount'] or 0 for i in range(8)]],
+                                   [{'name': v} for v in [inv_total if diff_days == 0 else False, conv_amt if diff_days == 0 else False,
+                                                inv_total if diff_days in a_var else False, conv_amt if diff_days in a_var else False,
+                                                inv_total if diff_days in b_var else False, conv_amt if diff_days in b_var else False,
+                                                inv_total if diff_days in c_var else False, conv_amt if diff_days in c_var else False,
+                                                inv_total if diff_days in d_var else False, conv_amt if diff_days in d_var else False,
+                                                inv_total if diff_days > d_var[-1] else False, conv_amt if diff_days > d_var[-1] else False]],
                         # 'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.display_name, format_date(self.env, aml.expected_pay_date)]] +
                         #            [{'name': self.format_value(sign * v, blank_if_zero=True), 'no_format': sign * v} for v in [line['period'] == 7-i and line['amount'] or 0 for i in range(8)]],
                         'action_context': {
@@ -174,7 +220,6 @@ class AccountReport(models.AbstractModel):
 
     def _get_reports_buttons(self):
         return [{'name': _('Print Preview'), 'action': 'print_pdf'}, {'name': _('Export (XLSX)'), 'action': 'print_xlsx'}, {'name': _('Bucket Days'), 'action': 'bucket_calc'}]
-
 
     def bucket_calc(self,options):
         view_id = self.env.ref('aged_report_buckets.bucket_days_wizard').id
