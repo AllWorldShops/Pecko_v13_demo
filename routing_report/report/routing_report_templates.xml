@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="report_ro_document">
+            <t t-call="routing_report.custom_ro_external_layout">
+			<div>
+
+                <div class="page" style="text-color:black;">
+                <div style="position:relative;top:55px;">
+                
+                    <div style="font-size: 15px;text-align: center;padding-top:15px;position:relative;bottom:25px;">
+                        <span ><strong> ROUTING</strong></span>
+                    </div>
+                    <div style="font-size: 12px;text-align: left;padding-top:15px;position:relative;bottom:10px;">
+                        Product :<span t-field="o.name"></span>
+                    </div>
+                    <div style="font-size: 17px;text-align: left;padding-top:15px;position:relative;bottom:10px;">
+                        <span ><strong> Operations Planned</strong></span>
+                    </div>
+
+                    
+                    
+                    <table class="table table-condensed" name="invoice_line_table" style="width:100%;table-layout:fixed;">
+                        <thead style="font-size:13px">
+                            <tr>
+                              	<!-- <t t-set="colspan" t-value="5" /> -->
+                                <th class="text-left" style="width:35%;color:#875A7B">Operation</th>
+                                <th class="text-left" style="width:35%;color:#875A7B">WorkCenter</th>
+                                <th class="text-left" style="width:30%;color:#875A7B">No. Of Minutes</th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody" style="line-height:10pt;font-size:12px;">
+                            <t t-set="lines" t-value="o.operation_ids"/>
+                            <tr t-foreach="lines" t-as="l">
+                            <t>
+                                <td style="text-align: left;position: sticky;top: -1px;">
+                                    <span t-field="l.name" /><br/><br/>
+                                 <span style="white-space: nowrap;" t-field="l.note"/>  
+                                </td>
+                                <td t-if="l.note" style="text-align: left; position:relative;bottom:5px;">
+                                    <span t-field="l.workcenter_id" />
+                                </td>
+                                <td t-if="l.note" style="text-align: left; position:relative;bottom:5px;">
+                                    <span t-field="l.time_cycle_manual" />
+                                </td>
+                                <td t-if="not l.note" style="text-align: left;">
+                                    <span t-field="l.workcenter_id" />
+                                </td>
+                                <td t-if="not  l.note" style="text-align: left;">
+                                    <span t-field="l.time_cycle_manual" />
+                                </td>
+								</t>
+                                <!-- <t t-if="l.note">
+                                <td colspan="99" name="td_section_line" >
+									<span t-field="l.note" />
+								</td>
+                                
+                                </t> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                                       
+                    <table style='width:100%;background:transparent;'>
+                        <tr style='background-color: white;background:transparent !important;'>
+                            <td>
+                        </td>
+                    </tr>
+                    </table>
+                    </div>
+                    <table width="100%" style="">
+                    
+                </table>
+                    <p style="page-break-after:always"></p>
+                    </div>
+                </div>
+            </t>
+            
+        </template>
+
+        <template id="report_custom_ro">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="routing_report.report_ro_document"
+                        t-lang="o.company_id.partner_id.lang" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
