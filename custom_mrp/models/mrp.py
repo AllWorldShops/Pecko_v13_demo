@@ -12,7 +12,8 @@ class MrpProduction(models.Model):
     description = fields.Char(string='Description')
     # project = fields.Char(string='Project')
     project = fields.Char(string='Project',related='product_tmpl_id.project', store=True)
-    start_date = fields.Date('Start Date')
+    start_date = fields.Date('Start Date P2')
+    start_date_one = fields.Date('Start Date P1')
     order_seq = fields.Char(string='Order Sequence')
     production_cell = fields.Char(string='Production Cell',related='product_tmpl_id.production_cell', store=True)
     
