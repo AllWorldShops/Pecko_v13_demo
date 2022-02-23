@@ -7,7 +7,7 @@
     'website': 'https://www.pptssolutions.com',
     'category': 'Company',
     'description': """Enhancement in base module""",
-    'depends': ['base'],
+    'depends': ['base', 'mail'],
     'data': [
         'views/company_view.xml',
     ],
