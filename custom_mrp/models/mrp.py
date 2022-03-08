@@ -1,6 +1,6 @@
+from email.policy import default
 from odoo import models, fields, api, _
 from odoo.tools import float_round
-
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
@@ -16,6 +16,23 @@ class MrpProduction(models.Model):
     start_date_one = fields.Date('Start Date P1')
     order_seq = fields.Char(string='Order Sequence')
     production_cell = fields.Char(string='Production Cell',related='product_tmpl_id.production_cell', store=True)
+    reserved = fields.Boolean("Reserved Compute", compute="_compute_reserved")
+    reserved_check = fields.Boolean("Reserved", default=False)
+    
+    def _compute_reserved(self):
+        reserved_qty = []
+        wo_flag = self.env['ir.config_parameter'].sudo().get_param(
+                    'custom_mrp.workorder_flag')
+
+        for line in self.move_raw_ids:
+            reserved_qty.append(line.reserved_availability)
+        for rec in self:
+            if 0 in reserved_qty and wo_flag:
+                rec.reserved = True
+                rec.reserved_check = rec.reserved
+            else:
+                rec.reserved = False
+                rec.reserved_check = False
     
     @api.onchange('product_id')
     def onchange_responsible(self):

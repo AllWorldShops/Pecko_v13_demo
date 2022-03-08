@@ -13,7 +13,24 @@
         	<xpath expr="//field[@name='date_deadline']" position="before">
 			<field name="start_date_one" />
             <field name="start_date"/>
+			<field name="reserved" invisible="1"/>
+			<field name="reserved_check" invisible="1"/>
           </xpath>
+
+		  <xpath expr="//sheet/div[@name='button_box']/button[2]" position="attributes">
+			  <attribute name="attrs">{'invisible': ['|',('workorder_count', '=', 0),('reserved_check', '=', True)]}</attribute>
+		  </xpath>
+
+		  <xpath expr="//form/header/button[6]" position="attributes">
+			  <attribute name="attrs">{'invisible': ['|', '|', '|', '|', ('state', '=', 'to_close'), ('is_locked', '=', False), ('reservation_state', '!=', 'assigned'), ('routing_id', '!=', False),('reserved_check', '=', True)]}</attribute>
+		  </xpath>
+
+		  <xpath expr="//form/header/button[7]" position="attributes">
+			  <attribute name="attrs">{'invisible': ['|', '|', '|','|', ('state', '=', 'to_close'), ('is_locked', '=', False), ('reservation_state', 'not in', ('confirmed', 'waiting')), ('routing_id', '!=', False), ('reserved_check', '=', True)]}</attribute>
+		  </xpath>
+
+
+
         	<xpath expr="//field[@name='company_id']" position="after">
         		<field name="project"/>
 				<field name="production_cell" />
@@ -159,5 +176,7 @@
 		<field name="numbercall">-1</field>
 		<field name="doall" eval="True"/>
 	</record>
+
+	
 	  
 </odoo>

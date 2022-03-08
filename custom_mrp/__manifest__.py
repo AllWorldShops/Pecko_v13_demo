@@ -7,10 +7,12 @@
     'website': 'https://www.pptssolutions.com',
     'category': 'Manufacturing',
     'description': """Manufacturing lines split""",
-    'depends': ['mrp','stock','custom_product','sale'],
+    'depends': ['mrp','stock','base','custom_product','sale'],
     'data': [
         'views/mrp_line.xml',
-        'report/bom_structure.xml'
+        'views/decimal_data.xml',
+        'views/res_config_view.xml',
+        'report/bom_structure.xml',
     ],
     'installable': True,
     'application': True,

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.mrp</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="35"/>
+            <field name="inherit_id" ref="mrp.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+            <xpath expr="//div[@id='quality_control']" position="before">
+               <div class="col-lg-6 col-12 o_setting_box">
+                    <div class="o_setting_left_pane">
+                        <field name="workorder_flag"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="workorder_flag"/>
+                        <div class="text-muted">
+                            If this is enabled the workorder and produce option will only show if the reserved quantities is greater than zero.
+                        </div>
+                    </div>
+                </div>
+                
+            </xpath>
+        </field>
+        </record>
+    </data>
+</odoo>
