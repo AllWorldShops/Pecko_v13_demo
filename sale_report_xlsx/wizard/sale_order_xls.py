@@ -57,17 +57,32 @@ class WizardWizards(models.TransientModel):
             ('state', '!=', 'cancel')
         ])
         for order in sale_order_ids:
+            # invoice_ids = order.invoice_ids.filtered(lambda invoice:invoice.state != 'cancel')
+            # for invoice in invoice_ids:
             date_from = fields.Datetime.from_string(order.date_order)
             date_from = fields.Datetime.context_timestamp(order, date_from).date()
             date_to = date_from + relativedelta(months=+1, day=1, days=-1)
             date_diffrence = relativedelta(date_to, date_from)
-            sum_turnover = sum(line.qty_delivered * line.price_unit for line in order.order_line)
             for record in res:
                 if int(date_from.strftime('%m')) == record.get('months_name') \
                 and int(date_from.strftime('%Y')) == record.get('year_name'):
                     record['months_amount'] += order.amount_untaxed or 0.00
-                    record['months_turnover'] += sum_turnover or 0.00
+                    # record['months_turnover'] += invoice.amount_untaxed
                     record['months_name'] = int(date_from.strftime('%m') or '')
+            invoice_ids = order.invoice_ids.filtered(lambda invoice:invoice.state != 'cancel')
+            for invoice in invoice_ids:
+                turnover_amount = invoice.amount_untaxed
+                company = invoice.company_id
+                currency = invoice.currency_id
+                company_currency = company.currency_id
+                invoice_date = invoice.date or fields.Date.context_today(self)
+                if currency and currency != company_currency:
+                    turnover_amount = invoice.amount_untaxed * invoice.exchange_rate
+                for record in res:
+                    if int(date_from.strftime('%m')) == record.get('months_name') \
+                and int(date_from.strftime('%Y')) == record.get('year_name'):
+                        record['months_turnover'] += turnover_amount
+                
         return res
     
     def _get_data_subtotal_amount(self, data):
@@ -124,24 +139,23 @@ class WizardWizards(models.TransientModel):
         start = self.date_from
         end = self.date_to
 
-        for sale in sale_ord_line:
-            date = sale.order_id.date_order.date()
-            if start <= date <= end:
-                sheet.write(0, 0, 'Customer Name', format6)
-                sheet.write(0, 1, 'Turnover(T) or Intake(I)', format6)
-                get_months_records = self._get_months(self.date_from, self.date_to)
-                col = 2
-                for g_months in get_months_records:
-                    sheet.write(0, col, str(g_months['month_name']), format6)
-                    sheet.write(0, col+1, "Turnover", format6)
-                    sheet.write(0, col+2, "Intake", format6)
-                    col += 1
+        # for sale in sale_ord_line:
+        #     date = sale.order_id.date_order.date()
+        #     if start <= date <= end:
+        sheet.write(0, 0, 'Customer Name', format6)
+        sheet.write(0, 1, 'Turnover(T) or Intake(I)', format6)
+        get_months_records = self._get_months(self.date_from, self.date_to)
+        col = 2
+        for g_months in get_months_records:
+            sheet.write(0, col, str(g_months['month_name']), format6)
+            sheet.write(0, col+1, "Turnover", format6)
+            sheet.write(0, col+2, "Intake", format6)
+            col += 1
                         
         i=2
         t=1
         k=2
         l=2
-        sum_intake = 0
         for partners in partner:
             data['partner'] = partners.id
             sheet.write(i, 0, partners.name, format2)
@@ -153,7 +167,6 @@ class WizardWizards(models.TransientModel):
                 for emp in obj['data']:
                     col = 2
                     for details in emp['display']:
-                        sum_intake += details['months_amount']
                         sheet.write(i, col, str('%.2f' % details['months_amount']), format4)
                         sheet.write(t, col, str('%.2f' % details['months_turnover']), format4)
                         col += 1
