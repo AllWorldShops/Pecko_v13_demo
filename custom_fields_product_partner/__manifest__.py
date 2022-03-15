@@ -6,7 +6,7 @@
     'version': '1.1',
     'summary': 'Custom Studio fields',
     'website': 'https://www.pptssolutions.com',
-    'depends': ['product', 'stock','base','uom','mrp','account'],
+    'depends': ['product', 'stock','base','uom','mrp','account','account_followup'],
     'category': 'stock',
     'sequence': 13,
     'description': """
