@@ -36,7 +36,6 @@ class AgedReceivable(models.AbstractModel):
     
     @api.model
     def _get_lines(self, options, line_id=None):
-        
 #         print('---------------------',self._context)
 #         print('+++++++++++++++++',self._context.get('days'))
         if not self._context.get('days'):
@@ -72,13 +71,13 @@ class AgedReceivable(models.AbstractModel):
             v6 = f"{r6:,}"
             v7 = f"{r7:,}"
             # print(v6, "////++++++++=================")
-            val_one = round(values['direction'] * ac_move.currency_id.rate, 2)
-            val_two = round(values['4'] * ac_move.currency_id.rate, 2)
-            val_three = round(values['3'] * ac_move.currency_id.rate, 2)
-            val_four = round(values['2'] * ac_move.currency_id.rate, 2)
-            val_five = round(values['1'] * ac_move.currency_id.rate, 2)
-            val_six = round(values['0'] * ac_move.currency_id.rate, 2)
-            val_seven = round(values['total'] * ac_move.currency_id.rate, 2) 
+            val_one = round(values['direction'] * ac_move.exchange_rate, 2)
+            val_two = round(values['4'] * ac_move.exchange_rate, 2)
+            val_three = round(values['3'] * ac_move.exchange_rate, 2)
+            val_four = round(values['2'] * ac_move.exchange_rate, 2)
+            val_five = round(values['1'] * ac_move.exchange_rate, 2)
+            val_six = round(values['0'] * ac_move.exchange_rate, 2)
+            val_seven = round(values['total'] * ac_move.exchange_rate, 2) 
             cur_one = ac_move.currency_id
             if cur_one.position == 'before':
                 val_one = str(cur_one.symbol) + ' ' + str(val_one)
@@ -164,9 +163,9 @@ class AgedReceivable(models.AbstractModel):
                         c_var.append(i)
                     for i in range(fs, fe):
                         d_var.append(i)
-                    print(sign, "x_var")
+                    # print(sign, "x_var")
                     cur_aml = aml.move_id.currency_id
-                    inv_total = aml.move_id.amount_total / cur_aml.rate
+                    inv_total = aml.move_id.amount_total / aml.move_id.exchange_rate
                     conv_amt = aml.move_id.amount_total
                     t1 = round(inv_total,2)
                     s1 = f"{t1:,}"
@@ -189,11 +188,11 @@ class AgedReceivable(models.AbstractModel):
                         'parent_id': 'partner_%s' % (values['partner_id'],),
                         'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.display_name, aml.move_id.customer_po_no]] +
                                    [{'name': v} for v in [inv_total if diff_days == 0 else False, conv_amt if diff_days == 0 else False,
-                                                inv_total if diff_days in a_var else False, conv_amt if diff_days in a_var else False,
-                                                inv_total if diff_days in b_var else False, conv_amt if diff_days in b_var else False,
-                                                inv_total if diff_days in c_var else False, conv_amt if diff_days in c_var else False,
-                                                inv_total if diff_days in d_var else False, conv_amt if diff_days in d_var else False,
-                                                inv_total if diff_days > d_var[-1] else False, conv_amt if diff_days > d_var[-1] else False]],
+                                                        inv_total if diff_days in a_var else False, conv_amt if diff_days in a_var else False,
+                                                        inv_total if diff_days in b_var else False, conv_amt if diff_days in b_var else False,
+                                                        inv_total if diff_days in c_var else False, conv_amt if diff_days in c_var else False,
+                                                        inv_total if diff_days in d_var else False, conv_amt if diff_days in d_var else False,
+                                                        inv_total if diff_days > d_var[-1] else False, conv_amt if diff_days > d_var[-1] else False]],
                         # 'columns': [{'name': v} for v in [aml.journal_id.code, aml.account_id.display_name, format_date(self.env, aml.expected_pay_date)]] +
                         #            [{'name': self.format_value(sign * v, blank_if_zero=True), 'no_format': sign * v} for v in [line['period'] == 7-i and line['amount'] or 0 for i in range(8)]],
                         'action_context': {
