@@ -98,7 +98,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
             {'name': aml['journal_code']},
             {'name': aml['account_code']},
             {'name': self._format_aml_name(aml['name'], aml['ref'], aml['move_name'])},
-            {'name': aml['customer_po_no']},
+            {'name': aml['customer_po_no'] or ''},
             {'name': date_maturity or '', 'class': 'date'},
             {'name': aml['full_rec_name'] or ''},
             {'name': self.format_value(cumulated_init_balance), 'class': 'number'},
@@ -127,9 +127,8 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     def _get_report_line_partner(self, options, partner, initial_balance, debit, credit, balance):
         company_currency = self.env.company.currency_id
         unfold_all = self._context.get('print_mode') and not options.get('unfolded_lines')
-
         columns = [
-            # {'name': ' ', 'class': 'number'},
+            {'name': ' ', 'class': 'number'},
             {'name': self.format_value(initial_balance), 'class': 'number'},
             {'name': self.format_value(debit), 'class': 'number'},
             {'name': self.format_value(credit), 'class': 'number'},
@@ -139,14 +138,14 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
         columns.append({'name': self.format_value(balance), 'class': 'number'})
 
         return {
-            'id': 'partner_%s' % partner.id,
+            'id': 'partner_%s' % partner.id or False,
             'name': partner.name[:128],
             'columns': columns,
             'level': 2,
             'trust': partner.trust,
             'unfoldable': not company_currency.is_zero(debit) or not company_currency.is_zero(credit),
             'unfolded': 'partner_%s' % partner.id in options['unfolded_lines'] or unfold_all,
-            'colspan': 7,
+            'colspan': 6,
         }
         
     @api.model
