@@ -134,10 +134,9 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
         lines = []
         unfold_all = options.get('unfold_all') or (self._context.get('print_mode') and not options['unfolded_lines'])
 
+        _logger.info('line_id[8:] -------line_id[8:]------- %s' % line_id)
+
         expanded_partner = line_id and self.env['res.partner'].browse(int(line_id[8:]))
-
-        _logger.info('line_id[8:] -------line_id[8:]------- %s' % line_id[8:])
-
 
         _logger.info('expanded_partner -------expanded_partner------- %s' % expanded_partner)
 
