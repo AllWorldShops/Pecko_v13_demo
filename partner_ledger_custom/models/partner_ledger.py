@@ -58,7 +58,6 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
                 partner.name                            AS partner_name,
                 account_move_line__move_id.type         AS move_type,
                 account.code                            AS account_code,
-                account_move_line__move_id.customer_po_no         AS customer_po_no,
                 account.name                            AS account_name,
                 journal.code                            AS journal_code,
                 journal.name                            AS journal_name,
@@ -100,7 +99,6 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
             {'name': aml['journal_code']},
             {'name': aml['account_code']},
             {'name': self._format_aml_name(aml['name'], aml['ref'], aml['move_name'])},
-            {'name': aml['customer_po_no'] or ''},
             {'name': date_maturity or '', 'class': 'date'},
             {'name': aml['full_rec_name'] or ''},
             {'name': self.format_value(cumulated_init_balance), 'class': 'number'},
@@ -214,7 +212,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
         company_currency = self.env.company.currency_id
         unfold_all = self._context.get('print_mode') and not options.get('unfolded_lines')
         columns = [
-            {'name': ' ', 'class': 'number'},
+            # {'name': ' ', 'class': 'number'},
             {'name': self.format_value(initial_balance), 'class': 'number'},
             {'name': self.format_value(debit), 'class': 'number'},
             {'name': self.format_value(credit), 'class': 'number'},
@@ -233,7 +231,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
             'trust': partner.trust,
             'unfoldable': not company_currency.is_zero(debit) or not company_currency.is_zero(credit),
             'unfolded': 'partner_%s' % partner.id in options['unfolded_lines'] or unfold_all,
-            'colspan': 7,
+            'colspan': 6,
         }
         
     @api.model
@@ -253,7 +251,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
             'class': 'total',
             'level': 1,
             'columns': columns,
-            'colspan': 7,
+            'colspan': 6,
         }
     
     def _get_columns_name(self, options):
@@ -262,7 +260,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
             {'name': _('JRNL')},
             {'name': _('Account')},
             {'name': _('Ref')},
-            {'name': _('Customer PO No.')},
+            # {'name': _('Customer PO No.')},
             {'name': _('Due Date'), 'class': 'date'},
             {'name': _('Matching Number')},
             {'name': _('Initial Balance'), 'class': 'number'},
