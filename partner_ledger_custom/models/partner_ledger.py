@@ -6,6 +6,9 @@ from odoo import api, fields, models, _
 from odoo.addons.web_editor.models.ir_qweb import Integer
 from odoo.tools.misc import format_date
 
+import logging
+_logger = logging.getLogger(__name__)
+
 class AccountPartnerLedgerReportInh(models.AbstractModel):
     _inherit = "account.partner.ledger"
     
@@ -135,7 +138,9 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
         if self.user_has_groups('base.group_multi_currency'):
             columns.append({'name': ''})
         columns.append({'name': self.format_value(balance), 'class': 'number'})
-        print(partner, "---++++++++++++", partner.id)
+
+        _logger.info('partner -------------- %s' % partner)
+
         return {
             'id': 'partner_%s' % partner.id or False,
             'name': partner.name[:128],
