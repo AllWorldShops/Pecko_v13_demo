@@ -149,7 +149,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
             'trust': partner.trust,
             'unfoldable': not company_currency.is_zero(debit) or not company_currency.is_zero(credit),
             'unfolded': 'partner_%s' % partner.id in options['unfolded_lines'] or unfold_all,
-            'colspan': 6,
+            'colspan': 7,
         }
         
     @api.model
