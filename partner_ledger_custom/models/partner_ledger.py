@@ -135,6 +135,12 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
         unfold_all = options.get('unfold_all') or (self._context.get('print_mode') and not options['unfolded_lines'])
 
         expanded_partner = line_id and self.env['res.partner'].browse(int(line_id[8:]))
+
+        _logger.info('line_id[8:] -------line_id[8:]------- %s' % line_id[8:])
+
+
+        _logger.info('expanded_partner -------expanded_partner------- %s' % expanded_partner)
+
         partners_results = self._do_query(options, expanded_partner=expanded_partner)
 
         _logger.info('partners_results -------partners_results------- %s' % partners_results)
@@ -143,7 +149,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
         for partner, results in partners_results:
 
             _logger.info('partner -------partner------partner- %s' % partner)
-            
+
             is_unfolded = 'partner_%s' % (partner.id if partner else 0) in options['unfolded_lines']
 
             # res.partner record line.
