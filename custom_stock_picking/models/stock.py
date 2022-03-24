@@ -9,7 +9,7 @@ class StockPicking(models.Model):
     
     attn = fields.Many2one('res.partner',string="ATTN")
     carrier = fields.Char(string='Carrier')
-    customer_po_no = fields.Char(string="Customer PO No") 
+    customer_po_no = fields.Char(string="Customer PO No")
     picking_type_code = fields.Selection([('incoming', 'Receipt'),('outgoing', 'Delivery'),('internal','Internal Transfer'),('mrp_operation','Manufacturing')], related='picking_type_id.code',string="Picking Type Code") 
     packing_slip = fields.Char(string="Packing Slip / DO No")
     

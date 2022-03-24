@@ -7,9 +7,10 @@
     'website': 'https://www.pptssolutions.com',
     'category': 'Stock',
     'description': """Enhancement in inventory module""",
-    'depends': ['stock','sale_stock'],
+    'depends': ['stock','account','sale_stock'],
     'data': [
         'views/stock_view.xml',
+        'views/ac_move_view.xml',
     ],
     'installable': True,
     'application': True,
