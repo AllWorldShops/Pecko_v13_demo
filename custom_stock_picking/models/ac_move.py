@@ -36,6 +36,8 @@ class AcmoveInherit(models.Model):
                     product_price_unit = company_currency._convert(line.purchase_line_id.price_unit, currency, company, date)
                 val = {
                     'product_id':line.product_id.id,
+                    'customer_part_no' : line.product_id.name,
+                    'name' : line.product_id.default_code,
                     'quantity':line.quantity_done,
                     'price_unit': line.purchase_line_id.price_unit if line.purchase_line_id else line.product_id.standard_price,
                     'account_id': False,
@@ -46,7 +48,6 @@ class AcmoveInherit(models.Model):
                     # 'price_subtotal': line.quantity_done * product_price_unit,
                 }
                 receipt_lines.append((0, 0, val))
-
             id_list.append(self.receipts_id.id)
             # if not self.invoice_line_ids:
             # self.receipts_id = False
@@ -61,6 +62,9 @@ class AcmoveInherit(models.Model):
                     rec._onchange_currency()
                 for i_line in rec.invoice_line_ids:
                     i_line.account_id = i_line._get_computed_account()
+                    print(i_line.name, "i_line.customer_part_no---------")
+                    i_line.name = i_line.product_id.default_code or ''
+                
                 
 class AcMoveLine(models.Model):
     _inherit = 'account.move.line'
