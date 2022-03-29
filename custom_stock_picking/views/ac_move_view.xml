@@ -8,7 +8,11 @@
 			<xpath expr="//field[@name='invoice_vendor_bill_id']" position="after">
 				<field name="receipts_id" attrs="{'invisible': ['|', '|', ('state','not in',['draft']), ('state', '=', 'purchase'), ('type', '!=', 'in_invoice')]}"
                        class="oe_edit_only"
-                       options="{'no_create': True, 'no_open': True}"/>
+                       domain="partner_id and [('company_id', '=', company_id), ('partner_id','child_of', [partner_id])] or [('company_id', '=', company_id)]"
+                       placeholder="Select a receipt transfer"
+                       options="{'no_create': True, 'no_open': True}"
+                       context="{'show_total_amount': True}"/>
+                <field name="picking_ids" widget="many2many_tags" invisible="1"/>
 			</xpath>
 
         </field>
