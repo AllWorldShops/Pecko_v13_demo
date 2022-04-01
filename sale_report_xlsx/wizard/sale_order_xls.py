@@ -68,21 +68,29 @@ class WizardWizards(models.TransientModel):
                 and int(date_from.strftime('%Y')) == record.get('year_name'):
                     record['months_amount'] += order.amount_untaxed or 0.00
                     # record['months_turnover'] += invoice.amount_untaxed
-                    record['months_name'] = int(date_from.strftime('%m') or '')
-            invoice_ids = order.invoice_ids.filtered(lambda invoice:invoice.state != 'cancel')
-            for invoice in invoice_ids:
-                turnover_amount = invoice.amount_untaxed
-                company = invoice.company_id
-                currency = invoice.currency_id
-                company_currency = company.currency_id
-                invoice_date = invoice.date or fields.Date.context_today(self)
-                if currency and currency != company_currency:
-                    turnover_amount = invoice.amount_untaxed * invoice.exchange_rate
-                for record in res:
-                    if int(date_from.strftime('%m')) == record.get('months_name') \
-                and int(date_from.strftime('%Y')) == record.get('year_name'):
-                        record['months_turnover'] += turnover_amount
-                
+                    # record['months_name'] = int(date_from.strftime('%m') or '')
+        invoice_ids = self.env['account.move'].search([
+            ('partner_id', '=', partnerid), 
+            ('invoice_date', '<=', str(end_date)),
+            ('invoice_date', '>=', str(start_date)),
+            ('type', '=', 'out_invoice'),
+            ('state', '!=', 'cancel')
+             ])
+        for invoice in invoice_ids:
+            date_from = fields.Datetime.from_string(invoice.invoice_date)
+            date_from = fields.Datetime.context_timestamp(invoice, date_from)
+            date_to = date_from + relativedelta(months=+1, day=1, days=-1)
+            turnover_amount = invoice.amount_untaxed
+            company = invoice.company_id
+            currency = invoice.currency_id
+            company_currency = company.currency_id
+            invoice_date = invoice.date or fields.Date.context_today(self)
+            if currency and currency != company_currency:
+                turnover_amount = invoice.amount_untaxed * invoice.exchange_rate
+            for record in res:
+                if int(invoice_date.strftime('%m')) == record.get('months_name') \
+            and int(invoice_date.strftime('%Y')) == record.get('year_name'):
+                    record['months_turnover'] += (invoice.amount_untaxed / invoice.exchange_rate)
         return res
     
     def _get_data_subtotal_amount(self, data):
@@ -114,7 +122,6 @@ class WizardWizards(models.TransientModel):
                 })
         return res
     
-
     # @api.multi
     def action_sale_report(self):
         self.ensure_one()
@@ -122,8 +129,16 @@ class WizardWizards(models.TransientModel):
         file_name = 'Sale Order Report.xls'
         date_from = str(self.date_from) + ' 00:00:00'
         date_to = str(self.date_to) + ' 00:00:00'
+        partners_list = []
         sale_ord_line = self.env['sale.order.line'].search([('order_id.date_order', '>=', date_from),('order_id.date_order', '<=', date_to)])
         partner = sale_ord_line.mapped('order_id.partner_id')
+        for part in partner:
+            partners_list.append(part.id)
+        ac_move_line = self.env['account.move.line'].search([('move_id.invoice_date', '>=', self.date_from),('move_id.invoice_date', '<=', self.date_to)])
+        ac_partner = ac_move_line.mapped('move_id.partner_id')
+        for acs in ac_partner:
+            if acs.id not in partners_list:
+                partners_list.append(acs.id)
         workbook = xlwt.Workbook(encoding="UTF-8")
         style2 = xlwt.easyxf('font: name Times New Roman bold on;align: horiz center;', num_format_str='#,##0')
         style0 = xlwt.easyxf('font: name Times New Roman bold on;align: horiz right;', num_format_str='#,##0.00')
@@ -150,13 +165,14 @@ class WizardWizards(models.TransientModel):
             sheet.write(0, col, str(g_months['month_name']), format6)
             sheet.write(0, col+1, "Turnover", format6)
             sheet.write(0, col+2, "Intake", format6)
-            col += 1
-                        
+            col += 1    
         i=2
         t=1
         k=2
         l=2
-        for partners in partner:
+        res_partners = self.env['res.partner'].search([('id', 'in', partners_list)])
+        print(res_partners,"res_partnersres_partners---------")
+        for partners in res_partners:
             data['partner'] = partners.id
             sheet.write(i, 0, partners.name, format2)
             sheet.write(i, 1, "I" , format1)
@@ -174,7 +190,6 @@ class WizardWizards(models.TransientModel):
                         if emp['partner_id'] == total_obj['partner_id']:
                             sheet.write(t, col, str('%.2f' % total_obj['amount_turn_over']), format4)
                             sheet.write(i, col+1, str('%.2f' % total_obj['amount_totals']), format4)
-
             i=i+2
             t=t+2
             
