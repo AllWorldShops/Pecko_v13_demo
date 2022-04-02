@@ -86,11 +86,14 @@ class WizardWizards(models.TransientModel):
             company_currency = company.currency_id
             invoice_date = invoice.date or fields.Date.context_today(self)
             if currency and currency != company_currency:
-                turnover_amount = invoice.amount_untaxed * invoice.exchange_rate
+                if company_currency.name == 'SGD':
+                    turnover_amount = invoice.amount_untaxed * invoice.exchange_rate
+                if company_currency.name == 'MYR':
+                    turnover_amount = invoice.amount_untaxed / invoice.exchange_rate
             for record in res:
                 if int(invoice_date.strftime('%m')) == record.get('months_name') \
             and int(invoice_date.strftime('%Y')) == record.get('year_name'):
-                    record['months_turnover'] += (invoice.amount_untaxed / invoice.exchange_rate)
+                    record['months_turnover'] += turnover_amount
         return res
     
     def _get_data_subtotal_amount(self, data):
@@ -171,7 +174,6 @@ class WizardWizards(models.TransientModel):
         k=2
         l=2
         res_partners = self.env['res.partner'].search([('id', 'in', partners_list)])
-        print(res_partners,"res_partnersres_partners---------")
         for partners in res_partners:
             data['partner'] = partners.id
             sheet.write(i, 0, partners.name, format2)
@@ -183,13 +185,21 @@ class WizardWizards(models.TransientModel):
                 for emp in obj['data']:
                     col = 2
                     for details in emp['display']:
-                        sheet.write(i, col, str('%.2f' % details['months_amount']), format4)
-                        sheet.write(t, col, str('%.2f' % details['months_turnover']), format4)
+                        r1 = round(details['months_amount'],2)    
+                        v1 = f"{r1:,}"
+                        r2 = round(details['months_turnover'],2)    
+                        v2 = f"{r2:,}"
+                        sheet.write(i, col, str(v1), format4)
+                        sheet.write(t, col, str(v2), format4)
                         col += 1
                     for total_obj in emp['subtotal_datas']:
+                        s1 = round(total_obj['amount_turn_over'],2)    
+                        t1 = f"{s1:,}"
+                        s2 = round(total_obj['amount_totals'],2)
+                        t2 = f"{s2:,}"
                         if emp['partner_id'] == total_obj['partner_id']:
-                            sheet.write(t, col, str('%.2f' % total_obj['amount_turn_over']), format4)
-                            sheet.write(i, col+1, str('%.2f' % total_obj['amount_totals']), format4)
+                            sheet.write(t, col, str(t1), format4)
+                            sheet.write(i, col+1, str(t2), format4)
             i=i+2
             t=t+2
             
