@@ -19,9 +19,8 @@ class StockPicking(models.Model):
         for rec in self:
             if rec.packing_slip:
                 existing_records = self.search([('packing_slip', '=', rec.packing_slip)])
-                print("\n\n\n===",existing_records)
                 if len(existing_records) > 1:
-                    raise ValidationError(_("Packing Slip / DO No '%s' must be unique !" %rec.packing_slip))
+                    raise ValidationError(_('There is already a packing slip/Do Number for "%s". Please enter a new number.' %rec.packing_slip))
                 
     @api.model
     def create(self, vals):
