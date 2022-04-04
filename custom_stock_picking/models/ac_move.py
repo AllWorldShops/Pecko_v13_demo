@@ -44,7 +44,7 @@ class AcmoveInherit(models.Model):
                     'name':line.product_id.name,
                     'tax_ids': line.purchase_line_id.taxes_id.ids,
                     'product_uom_id': line.product_uom.id if line.product_uom else line.product_id.uom_id.id,
-                    'st_move_id': line.id,
+                    # 'st_move_id': line.id,
                     # 'price_subtotal': line.quantity_done * product_price_unit,
                 }
                 receipt_lines.append((0, 0, val))
@@ -69,7 +69,7 @@ class AcmoveInherit(models.Model):
 class AcMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    st_move_id = fields.Many2one('stock.move')
+    # st_move_id = fields.Many2one('stock.move')
         
             
         
