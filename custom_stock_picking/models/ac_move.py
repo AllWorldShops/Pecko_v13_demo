@@ -11,11 +11,11 @@ class AcmoveInherit(models.Model):
     picking_ids = fields.Many2many('stock.picking', string="Picking_ids")
     # amount_untaxed = fields.Float(string='Untaxed Amount', store=True, readonly=True, tracking=True,
     #     compute='_compute_amount' ,digits='Product Price')
+   
     @api.onchange('partner_id')
     def onchange_partner_id(self):
         res = super(AcmoveInherit, self)._onchange_partner_id()
         for rec in self:
-            # if rec.partner_id:
             return {'domain': {'receipts_id':[('partner_id', '=', rec.partner_id.id),('state', '=', 'done'),('picking_type_id.code', '=', 'incoming')]}}
         return res
 
@@ -45,24 +45,19 @@ class AcmoveInherit(models.Model):
                     'tax_ids': line.purchase_line_id.taxes_id.ids,
                     'product_uom_id': line.product_uom.id if line.product_uom else line.product_id.uom_id.id,
                     # 'st_move_id': line.id,
-                    # 'price_subtotal': line.quantity_done * product_price_unit,
                 }
                 receipt_lines.append((0, 0, val))
             id_list.append(self.receipts_id.id)
-            # if not self.invoice_line_ids:
-            # self.receipts_id = False
             
             for rec in self:
                 if rec.receipts_id.id in rec.picking_ids.ids:
                     pass
-                    # raise Warning("This Receipt has been already selected !")
                 else:
                     rec.picking_ids = [(4, x, None) for x in id_list]
                     self.invoice_line_ids = receipt_lines
                     rec._onchange_currency()
                 for i_line in rec.invoice_line_ids:
                     i_line.account_id = i_line._get_computed_account()
-                    print(i_line.name, "i_line.customer_part_no---------")
                     i_line.name = i_line.product_id.default_code or ''
                 
                 
