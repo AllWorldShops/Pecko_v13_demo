@@ -85,6 +85,7 @@
 				<field name="logo_one"/>
                 <field name="logo_two" />
                 <field name="logo_three" />
+                <field name="logo_four" />
 			</field>
 		</field>
 	</record>

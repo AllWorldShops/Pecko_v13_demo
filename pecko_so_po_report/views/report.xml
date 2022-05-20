@@ -79,9 +79,37 @@
 		<div class="article o_report_layout_background">
 			<t t-raw="0" />
 		</div>
+		<div class="footer o_background_footer" style="margin-bottom:280px">
+            <table width="100%">
+					<tr>
+					  <td><t>
+							<div style="text-align:center;font-size:12px;position:relative; top:17px;">
+							<strong>
+								**This is a computer generated document. Signature is not required.**
+							</strong>
+							 </div></t>
+						   <br/>
+						  
+						   <!-- <span style="font-size:12px;">
+							<strong>
+								NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
+								THEIR INTENDED USE,AND USERS ASSUME ALL <br/>RISK AND LIABILITY
+								WHATSOEVER IN CONNECTION THEREWITH
+							</strong>
+							</span> -->
+						</td>
+					</tr>
 
-		
-
+				</table>
+				<t t-if="o.company_id.country_id.code == 'SG'">
+						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_four)" style="position:relative; bottom:54px; left:730px; width:130px;" />
+					</t>
+				<div style="text-align:right">
+					
+					<span>user:</span>
+					<span t-esc="user.name" />
+				</div>
+		</div>
 	</template>
 
 	<template id="external_layout_po_report">
@@ -209,7 +237,7 @@
 				</div> -->
 
 	</template>
-
+	
 	<template id="inherit_report_saleorder_document"
 		inherit_id="sale.report_saleorder_document">
 
@@ -217,12 +245,13 @@
 			position="replace">
 			<t t-call="pecko_so_po_report.external_layout_so_report">
 				<div class="page" style="font-family: Calibri;text-color:black;">
-				<div style="position:relative;top:70px;">
+				<div style="position:relative;top:30px;">
 					<p align="center">
 						<strong>SALES ORDER</strong>
 					</p>
+					<br/>
 					<table
-						style="width: 100%;height:120px;background-color: white;line-height:12pt;">
+						style="width: 100%;height:120px;background-color: white;line-height:12pt;position:relative;bottom:20px;">
 						<tbody>
 							<tr>
 								<td style="width:55%;background-color: white;">
@@ -244,7 +273,7 @@
 									<br />
 								
 									Email:
-									<span t-field="doc.partner_id.email" />
+									<span style="word-break: break-all;" t-field="doc.partner_id.email" />
 								
 								</td>
 								<td style="width:45%;background-color: white;">
@@ -458,48 +487,13 @@
 					</div>
 					<br />
 					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
-					<br />
+				
 				</div>
-				<table width="100%"
-					style="font-family: Calibri;text-color:black;font-size:13px">
-					<tbody>
-						<tr>
-							<td width="25%" style="text-align:center">
-								<span>--------------------</span>
-								<br />
-								<span>Prepared By</span>
-							</td>
-
-							<td width="25%" style="text-align:center">
-								<span>-------------------</span>
-								<br />
-								<span>Verified By</span>
-							</td>
-
-							<td width="25%" style="text-align:center">
-								<span>---------------------</span>
-								<br />
-								<span>Approved By</span>
-							</td>
-							<td width="25%">
-
-							</td>
-						</tr>
-
-					</tbody>
-				</table>
+				
 				</div>
 			</t>
 		</xpath>
 	</template>
-
-
 
 
 	<template id="inherit_report_purchaseorder_document"
@@ -678,7 +672,6 @@
 		                                    <t t-set="i" t-value="i-1" />
 		                                </td>
 		                            </t>
-
 								</tr>
 		                        <tr style="width=100%">
 								<td></td>
@@ -690,8 +683,6 @@
 						   
 							</t>
 						</tbody>
-						
-						
 					</table>
 					<div class="row justify-content-end">
 						<div class="col-4">

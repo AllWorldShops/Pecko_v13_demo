@@ -102,8 +102,8 @@ class AccountGeneralLedgerReport(models.AbstractModel):
 #     name = fields.Char(string='Label')
 
 
-class AcAgedinherit(models.AbstractModel):
-    _inherit = 'account.aged.partner'
+# class AcAgedinherit(models.AbstractModel):
+#     _inherit = 'account.aged.partner'
 
     # def _get_columns_name(self, options):
     #     columns = [

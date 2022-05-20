@@ -16,6 +16,16 @@ class ProductTemplate(models.Model):
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured")
     country_origin = fields.Char("Country of Origin")
     item_text = fields.Char("Item Text")
+    standard_price = fields.Float(
+        'Cost', compute='_compute_standard_price',
+        inverse='_set_standard_price', search='_search_standard_price',
+        digits='Cost Price',
+        groups="base.group_user",
+        help="""In Standard Price & AVCO: value of the product (automatically computed in AVCO).
+        In FIFO: value of the last unit that left the stock (automatically computed).
+        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).
+        Used to compute margins on sale orders.""")
+
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
@@ -28,6 +38,14 @@ class ProductProduct(models.Model):
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured", related='product_tmpl_id.production_type')
     country_origin = fields.Char("Country of Origin", related='product_tmpl_id.country_origin', readonly=False)
     item_text = fields.Char("Item Text", related='product_tmpl_id.item_text')
+    standard_price = fields.Float(
+        'Cost', company_dependent=True,
+        digits='Cost Price',
+        groups="base.group_user",
+        help="""In Standard Price & AVCO: value of the product (automatically computed in AVCO).
+        In FIFO: value of the last unit that left the stock (automatically computed).
+        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).
+        Used to compute margins on sale orders.""")
     
 #     @api.multi
     def write(self, vals):
@@ -43,5 +61,6 @@ class ResCompanyInh(models.Model):
     logo_one = fields.Binary("DO Report Logo")
     logo_two = fields.Binary("PO Report Logo")
     logo_three = fields.Binary("Invoice Report Logo")
+    logo_four = fields.Binary("SO Report Logo")
 
             
