@@ -30,7 +30,6 @@ class StockPicking(models.Model):
             vals['customer_po_no'] = sale_id.customer_po_no
         return super(StockPicking, self).create(vals)
     
-    
 class StockMove(models.Model):
     _inherit = 'stock.move'
     

@@ -5,20 +5,25 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
+		
             <xpath expr="//field[@name='origin']" position="after">
                 <field name="carrier"/>
                 <field name="customer_po_no" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
                 <field name="packing_slip" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
             </xpath>
+
             <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='product_id']" position="after">
 				<field name="customer_part_no" string="Part Number" />
 			</xpath>
+
 			 <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='description_picking']" position="after">
 				<field name="additional_notes" readonly="1"/>
 			</xpath>
+			
 			<xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='product_id']" position="replace">
 				<field name="product_id" string="Pecko Part Number" required="1" attrs="{'readonly': ['|', '&amp;', ('state', '!=', 'draft'), ('additional', '=', False), ('has_move_lines', '=', True)]}"/>	
 			</xpath>
+
 			<xpath expr="//field[@name='partner_id']" position="after">
 				<field name="attn" domain="[('parent_id', '=', partner_id)]" invisible="1"/>
 			</xpath>
@@ -46,6 +51,7 @@
 
 			<xpath expr="//field[@name='move_line_nosuggest_ids']" position="inside">
 			<tree editable="0">
+			
 						<field name="position_no" />
 			           <field name="product_id" />
 					   <field name="part_no" string="Customer / Manufacturer Part Number" />

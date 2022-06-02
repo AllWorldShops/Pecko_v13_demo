@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_account_payment_receipt" inherit_id="account.report_payment_receipt_document">
+            <xpath expr="//t/t/div/div[2]/div[2]" position="replace">
+                <strong>Payment Method</strong>
+                <span t-field="o.journal_id.name"/>
+            </xpath>
+            <xpath expr="//t/t/div/div[3]/div[2]" position="replace">
+
+            </xpath>
+            <xpath expr="//t/t/div/table/tbody/tr" position="replace">
+                <t t-set="i" t-value="0"/>
+                <t t-set="j" t-value="0"/>
+                <t t-set="k" t-value="0"/>
+
+                <tr t-foreach="o.reconciled_invoice_ids" t-as="inv">
+                    <td>
+                        <span t-field="inv.invoice_date"/>
+                    </td>
+                    <td>
+                        <span t-field="inv.name"/>
+                    </td>
+                    <td>
+                        <span t-field="inv.ref"/>
+                    </td>
+                    <td class="text-right">
+                        <span t-field="inv.amount_total"/>
+                        <span t-set="i" t-value="i+inv.amount_total"/>
+                        <span t-set="currency" t-value="inv.currency_id.name"/>
+                    </td>
+                    <td class="text-right">
+                        <span t-esc="o._get_invoice_payment_amount(inv)"
+                              t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                        <span t-set="j" t-value="j+o._get_invoice_payment_amount(inv)"/>
+                    </td>
+                    <td class="text-right">
+                        <span t-field="inv.amount_residual"/>
+                        <span t-set="k" t-value="k+inv.amount_residual"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: right;border-top:1px solid black;">
+                        <strong>Total:</strong>
+                    </td>
+                    <td style="text-align: right;border-top:1px solid black;">
+                        <strong>
+                            <span t-esc="i " t-options='{"widget": "float", "precision": 2}'/>
+                        </strong>
+                        <span t-esc="o.currency_id.symbol"/>
+                    </td>
+                    <td style="text-align: right;border-top:1px solid black;">
+                        <strong>
+                            <span t-esc="j " t-options='{"widget": "float", "precision": 2}'/>
+                        </strong>
+                        <span t-esc="o.currency_id.symbol"/>
+                    </td>
+                    <td style="text-align: right;border-top:1px solid black;">
+                        <strong>
+                            <span t-esc="k " t-options='{"widget": "float", "precision": 2}'/>
+                        </strong>
+                        <span t-esc="o.currency_id.symbol"/>
+                    </td>
+                </tr>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>
+

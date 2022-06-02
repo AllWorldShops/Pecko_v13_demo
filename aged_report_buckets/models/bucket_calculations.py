@@ -32,8 +32,6 @@ class AgedReceivable(models.AbstractModel):
         
         return columns
     
-    
-    
     @api.model
     def _get_lines(self, options, line_id=None):
 #         print('---------------------',self._context)
@@ -53,7 +51,7 @@ class AgedReceivable(models.AbstractModel):
             user_company = self.env.company
             # print(user_company.name,"////user_companyuser_companyuser_company+=========")
             user_currency = user_company.currency_id
-            ac_move = self.env['account.move'].search([('partner_id','=',values['partner_id'])],limit=1)
+            ac_move = self.env['account.move'].search([('partner_id','=',values['partner_id'])],order='invoice_date desc', limit=1)
             # if ac_move:
             r1 = round(values['direction'],2)
             r2 = round(values['4'],2)
@@ -87,6 +85,7 @@ class AgedReceivable(models.AbstractModel):
                 val_five = str(cur_one.symbol) + ' ' + str(val_five)
                 val_six = str(cur_one.symbol) + ' ' + str(val_six)
                 val_seven = str(cur_one.symbol) + ' ' + str(val_seven)
+                
             if cur_one.position == 'after':
                 val_one = str(val_one) + ' ' + str(cur_one.symbol)
                 val_two = str(val_two) + ' ' + str(cur_one.symbol)
@@ -144,7 +143,6 @@ class AgedReceivable(models.AbstractModel):
                     te = bucket_days * 3
                     fs = te + 1
                     fe = bucket_days * 4
-
                     date_format = "%Y-%m-%d"
                     date_to = datetime.strptime(str(self._context['date_to']), date_format)
                     rep_date = datetime.strptime(str(aml.date_maturity or aml.date), date_format)
@@ -163,17 +161,21 @@ class AgedReceivable(models.AbstractModel):
                         c_var.append(i)
                     for i in range(fs, fe):
                         d_var.append(i)
-                    # print(sign, "x_var")
-                    cur_aml = aml.move_id.currency_id
-                    inv_total = aml.move_id.amount_total / aml.move_id.exchange_rate
+                    cur_aml = aml.move_id.currency_id                        
+                    if aml.move_id.exchange_rate > 1:
+                        inv_total = aml.move_id.amount_total * aml.move_id.exchange_rate
+                    else:
+                        inv_total = aml.move_id.amount_total / aml.move_id.exchange_rate
                     conv_amt = aml.move_id.amount_total
-                    t1 = round(inv_total,2)
+                    t1 = round(inv_total, 2)
                     s1 = f"{t1:,}"
+                    t2 = round(conv_amt, 2)
+                    s2 = f"{t2:,}"
                     
                     if cur_aml.position == 'before':
-                        conv_amt = str(cur_aml.symbol) + ' ' + str(conv_amt)
+                        conv_amt = str(cur_aml.symbol) + ' ' + s2
                     if cur_aml.position == 'after':
-                        conv_amt = str(conv_amt) + ' ' + str(cur_aml.symbol)
+                        conv_amt = s2 + ' ' + str(cur_aml.symbol)
                     if user_currency.position == 'before':
                         inv_total = str(user_currency.symbol) + ' ' + s1
                     if user_currency.position == 'after':
@@ -202,6 +204,7 @@ class AgedReceivable(models.AbstractModel):
                         'title_hover': self._format_aml_name(aml.name, aml.ref, aml.move_id.name),
                     }
                     lines.append(vals)
+
         if total and not line_id:
             total_line = {
                 'id': 0,

@@ -17,4 +17,14 @@
 
         </field>
     </record>
+      <record id="billed_amount_view_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_origin']" position="after">
+                <field name="amount_total" invisible="context.get('default_type') != 'in_invoice'" groups="base.group_user" string="Billed Amount" />
+            </xpath>
+        </field>
+    </record>
 </odoo>

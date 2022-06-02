@@ -37,13 +37,15 @@ class AccountFollowupReport(models.AbstractModel):
                    {'name': _('Communication'), 'style': 'text-align:right; white-space:nowrap;'},
                    {'name': _('Expected Date'), 'class': 'date', 'style': 'white-space:nowrap;'},
                    {'name': _('Excluded'), 'class': 'date', 'style': 'white-space:nowrap;'},
-                   {'name': _('Total Due'), 'class': 'number o_price_total', 'style': 'text-align:right; white-space:nowrap;'}
+                   {'name': _('Total Due'), 'class': 'number o_price_total', 'style': 'text-align:right; white-space:nowrap;'},
+                   {'name': _('Running Total'), 'class': 'number o_price_total', 'style': 'text-align:right; white-space:nowrap;'}
                   ]
         if self.env.context.get('print_mode'):
             headers = headers[:5] + headers[7:]  # Remove the 'Expected Date' and 'Excluded' columns
         return headers
     
     def _get_lines(self, options, line_id=None):
+
         """
         Override
         Compute and return the lines of the columns of the follow-ups report.
@@ -69,8 +71,21 @@ class AccountFollowupReport(models.AbstractModel):
         for currency, aml_recs in res.items():
             total = 0
             total_issued = 0
-            for aml in aml_recs:
+            sum_amt = 0
+            print("=======",aml_recs)
+            aml_obj = self.env['account.move.line']
+            for aml_sort in aml_recs:
+                aml_obj = aml_obj + aml_sort
+            for aml in aml_obj.sorted(key=lambda r: r.date_maturity or r.date, reverse=False):
                 amount = aml.amount_residual_currency if aml.currency_id else aml.amount_residual
+                sum_amt += amount
+                s1 = round(sum_amt, 2)
+                s1 = f"{s1:,}"
+                cur_aml = aml.move_id.currency_id
+                if cur_aml.position == 'before':
+                    running_total = str(cur_aml.symbol) + ' ' + s1
+                if cur_aml.position == 'after':
+                    running_total = s1 + ' ' + str(cur_aml.symbol)
                 date_due = format_date(self.env, aml.date_maturity or aml.date, lang_code=lang_code)
                 total += not aml.blocked and amount or 0
                 is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
@@ -85,6 +100,7 @@ class AccountFollowupReport(models.AbstractModel):
                 if self.env.context.get('print_mode'):
                     move_line_name = {'name': move_line_name, 'style': 'text-align:right; white-space:normal;'}
                 amount = formatLang(self.env, amount, currency_obj=currency)
+                # sum_amt = formatLang(self.env, sum_amt, currency_obj=currency)
                 line_num += 1
                 expected_pay_date = format_date(self.env, aml.expected_pay_date, lang_code=lang_code) if aml.expected_pay_date else ''
                 columns = [
@@ -96,6 +112,7 @@ class AccountFollowupReport(models.AbstractModel):
                     (expected_pay_date and expected_pay_date + ' ') + (aml.internal_note or ''),
                     {'name': '', 'blocked': aml.blocked},
                     amount,
+                    running_total,
                 ]
                 if self.env.context.get('print_mode'):
                     columns = columns[:4] + columns[6:]

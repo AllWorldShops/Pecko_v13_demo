@@ -38,12 +38,13 @@ class AcmoveInherit(models.Model):
                     'product_id':line.product_id.id,
                     'customer_part_no' : line.product_id.name,
                     'name' : line.product_id.default_code,
-                    'quantity':line.quantity_done,
+                    # 'quantity':line.purchase_line_id.qty_received if line.purchase_line_id else line.quantity_done,
+                    'quantity': line.quantity_done / line.purchase_line_id.product_uom.factor_inv if line.purchase_line_id and line.product_uom.id != line.purchase_line_id.product_uom.id else line.quantity_done,
                     'price_unit': line.purchase_line_id.price_unit if line.purchase_line_id else line.product_id.standard_price,
                     'account_id': False,
                     'name':line.product_id.name,
-                    'tax_ids': line.purchase_line_id.taxes_id.ids,
-                    'product_uom_id': line.product_uom.id if line.product_uom else line.product_id.uom_id.id,
+                    'tax_ids': line.purchase_line_id.taxes_id.ids if line.purchase_line_id else False,
+                    'product_uom_id': line.purchase_line_id.product_uom.id if line.purchase_line_id else line.product_uom.id,
                     # 'st_move_id': line.id,
                 }
                 receipt_lines.append((0, 0, val))
@@ -55,9 +56,11 @@ class AcmoveInherit(models.Model):
                 else:
                     rec.picking_ids = [(4, x, None) for x in id_list]
                     self.invoice_line_ids = receipt_lines
+                    self.invoice_line_ids._onchange_mark_recompute_taxes()
                     rec._onchange_currency()
                 for i_line in rec.invoice_line_ids:
                     i_line.account_id = i_line._get_computed_account()
+                    # i_line._onchange_mark_recompute_taxes()
                     i_line.name = i_line.product_id.default_code or ''
                 
                 
