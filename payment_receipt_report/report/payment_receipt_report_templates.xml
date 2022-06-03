@@ -43,23 +43,44 @@
                     <td colspan="3" style="text-align: right;border-top:1px solid black;">
                         <strong>Total:</strong>
                     </td>
-                    <td style="text-align: right;border-top:1px solid black;">
+                    <td t-if="o.currency_id.position == 'after'" style="text-align: right;border-top:1px solid black;">
                         <strong>
                             <span t-esc="i " t-options='{"widget": "float", "precision": 2}'/>
                         </strong>
                         <span t-esc="o.currency_id.symbol"/>
                     </td>
-                    <td style="text-align: right;border-top:1px solid black;">
+                    <td t-if="o.currency_id.position == 'after'" style="text-align: right;border-top:1px solid black;">
                         <strong>
                             <span t-esc="j " t-options='{"widget": "float", "precision": 2}'/>
                         </strong>
                         <span t-esc="o.currency_id.symbol"/>
                     </td>
-                    <td style="text-align: right;border-top:1px solid black;">
+                    <td t-if="o.currency_id.position == 'after'" style="text-align: right;border-top:1px solid black;">
                         <strong>
                             <span t-esc="k " t-options='{"widget": "float", "precision": 2}'/>
                         </strong>
                         <span t-esc="o.currency_id.symbol"/>
+                    </td>
+
+
+                    <td t-if="o.currency_id.position == 'before'" style="text-align: right;border-top:1px solid black;">
+                        <span t-esc="o.currency_id.symbol"/>
+                        <strong>
+                            <span t-esc="i " t-options='{"widget": "float", "precision": 2}'/>
+                        </strong>
+                    </td>
+                    <td t-if="o.currency_id.position == 'before'" style="text-align: right;border-top:1px solid black;">
+                        <span t-esc="o.currency_id.symbol"/>
+
+                        <strong>
+                            <span t-esc="j " t-options='{"widget": "float", "precision": 2}'/>
+                        </strong>
+                    </td>
+                    <td t-if="o.currency_id.position == 'before'" style="text-align: right;border-top:1px solid black;">
+                        <span t-esc="o.currency_id.symbol"/>
+                        <strong>
+                            <span t-esc="k " t-options='{"widget": "float", "precision": 2}'/>
+                        </strong>
                     </td>
                 </tr>
             </xpath>
