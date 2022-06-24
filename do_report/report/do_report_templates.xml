@@ -167,8 +167,9 @@
                             <tr t-foreach="o.move_ids_without_package" t-as="l">
                                 <t t-if="l.quantity_done > 0">
                                     <td style=" text-align: left;">
-                                        <span t-esc="i" />
-                                        <span t-set="i" t-value="i+1" />
+                                        <span t-field="l.position_no" />
+                                        <!-- <span t-esc="i" />
+                                        <span t-set="i" t-value="i+1" /> -->
                                     </td>
                                     <td style=" text-align: left;">
                                         <span t-field="l.product_id" />
