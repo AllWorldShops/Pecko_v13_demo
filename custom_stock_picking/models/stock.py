@@ -29,21 +29,37 @@ class StockPicking(models.Model):
             sale_id = self.env['sale.order'].search([('name','=',vals['origin'])])
             vals['customer_po_no'] = sale_id.customer_po_no
         return super(StockPicking, self).create(vals)
-    
+
 class StockMove(models.Model):
     _inherit = 'stock.move'
     
     additional_notes = fields.Char(string='Additional Notes')
     customer_part_no = fields.Text(string='Part Number')
-    position_no = fields.Integer(string="Position", related="purchase_line_id.line_no")
+    position_no = fields.Integer(string="Position", compute="_compute_position_no")
     
-    
+    def _compute_position_no(self):
+        for move in self:
+            if move.sale_line_id:
+                move.position_no = move.sale_line_id.line_no
+            elif move.purchase_line_id:
+                move.position_no = move.purchase_line_id.line_no
+            else:
+                move.position_no = 0
     
 class StockMoveLine(models.Model):
     _inherit = 'stock.move.line'
     
     part_no = fields.Char('Customer / Manufacturer Part no', related="product_id.name")
-    position_no = fields.Integer(string="Position", related="move_id.purchase_line_id.line_no")
+    position_no = fields.Integer(string="Position", compute="_compute_position_no")
+    
+    def _compute_position_no(self):
+        for line in self:
+            if line.move_id.sale_line_id:
+                line.position_no = line.move_id.sale_line_id.line_no
+            elif line.move_id.purchase_line_id:
+                line.position_no = line.move_id.purchase_line_id.line_no
+            else:
+                line.position_no = 0
 
 
 class ProductTemplate(models.Model):
