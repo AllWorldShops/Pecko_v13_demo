@@ -75,25 +75,34 @@ class AgedReceivable(models.AbstractModel):
             val_four = round(values['2'] * ac_move.exchange_rate, 2)
             val_five = round(values['1'] * ac_move.exchange_rate, 2)
             val_six = round(values['0'] * ac_move.exchange_rate, 2)
-            val_seven = round(values['total'] * ac_move.exchange_rate, 2) 
+            val_seven = round(values['total'] * ac_move.exchange_rate, 2)
+
+            c1 = f"{val_one:,}"
+            c2 = f"{val_two:,}"
+            c3 = f"{val_three:,}"
+            c4 = f"{val_four:,}"
+            c5 = f"{val_five:,}"
+            c6 = f"{val_six:,}"
+            c7 = f"{val_seven:,}"
+            
             cur_one = ac_move.currency_id
             if cur_one.position == 'before':
-                val_one = str(cur_one.symbol) + ' ' + str(val_one)
-                val_two = str(cur_one.symbol) + ' ' + str(val_two)
-                val_three = str(cur_one.symbol) + ' ' + str(val_three)
-                val_four = str(cur_one.symbol) + ' ' + str(val_four)
-                val_five = str(cur_one.symbol) + ' ' + str(val_five)
-                val_six = str(cur_one.symbol) + ' ' + str(val_six)
-                val_seven = str(cur_one.symbol) + ' ' + str(val_seven)
+                c1 = str(cur_one.symbol) + ' ' + str(c1)
+                c2 = str(cur_one.symbol) + ' ' + str(c2)
+                c3 = str(cur_one.symbol) + ' ' + str(c3)
+                c4 = str(cur_one.symbol) + ' ' + str(c4)
+                c5 = str(cur_one.symbol) + ' ' + str(c5)
+                c6 = str(cur_one.symbol) + ' ' + str(c6)
+                c7 = str(cur_one.symbol) + ' ' + str(c7)
                 
             if cur_one.position == 'after':
-                val_one = str(val_one) + ' ' + str(cur_one.symbol)
-                val_two = str(val_two) + ' ' + str(cur_one.symbol)
-                val_three = str(val_three) + ' ' + str(cur_one.symbol)
-                val_four = str(val_four) + ' ' + str(cur_one.symbol)
-                val_five = str(val_five) + ' ' + str(cur_one.symbol)
-                val_six = str(val_six) + ' ' + str(cur_one.symbol)
-                val_seven = str(val_seven) + ' ' + str(cur_one.symbol)
+                c1 = str(c1) + ' ' + str(cur_one.symbol)
+                c2 = str(c2) + ' ' + str(cur_one.symbol)
+                c3 = str(c3) + ' ' + str(cur_one.symbol)
+                c4 = str(c4) + ' ' + str(cur_one.symbol)
+                c5 = str(c5) + ' ' + str(cur_one.symbol)
+                c6 = str(c6) + ' ' + str(cur_one.symbol)
+                c7 = str(c7) + ' ' + str(cur_one.symbol)
             
             if user_currency.position == 'before':
                 values['direction'] = str(user_currency.symbol) + ' ' + v1
@@ -119,9 +128,9 @@ class AgedReceivable(models.AbstractModel):
                 'id': 'partner_%s' % (values['partner_id'],),
                 'name': values['name'],
                 'level': 2,
-                'columns': [{'name': ''}] * 3 + [{'name':  v} for v in [values['direction'],val_one, values['4'],val_two,
-                                                                                                 values['3'],val_three, values['2'],val_four,
-                                                                                                 values['1'],val_five, values['0'],val_six, values['total'],val_seven]],
+                'columns': [{'name': ''}] * 3 + [{'name':  v} for v in [values['direction'],c1, values['4'],c2,
+                                                                                                 values['3'],c3, values['2'],c4,
+                                                                                                 values['1'],c5, values['0'],c6, values['total'],c7]],
                 'trust': values['trust'],
                 'unfoldable': True,
                 'unfolded': 'partner_%s' % (values['partner_id'],) in options.get('unfolded_lines'),
