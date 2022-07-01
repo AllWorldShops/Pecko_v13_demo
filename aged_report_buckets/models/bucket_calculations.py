@@ -51,7 +51,10 @@ class AgedReceivable(models.AbstractModel):
             user_company = self.env.company
             # print(user_company.name,"////user_companyuser_companyuser_company+=========")
             user_currency = user_company.currency_id
-            ac_move = self.env['account.move'].search([('partner_id','=',values['partner_id'])],order='invoice_date desc', limit=1)
+            move = self.env['account.move'].search([('partner_id','=',values['partner_id']),('state','=', 'posted'),('type','=', 'out_invoice')],order='invoice_date desc')
+            # for moves in move:
+            # print(move[:1].partner_id.name, "sss",  move[:1].invoice_date, "invoice_dateinvoice_date---------")
+            ac_move = move[:1]
             # if ac_move:
             r1 = round(values['direction'],2)
             r2 = round(values['4'],2)
@@ -75,8 +78,7 @@ class AgedReceivable(models.AbstractModel):
             val_four = round(values['2'] * ac_move.exchange_rate, 2)
             val_five = round(values['1'] * ac_move.exchange_rate, 2)
             val_six = round(values['0'] * ac_move.exchange_rate, 2)
-            val_seven = round(values['total'] * ac_move.exchange_rate, 2)
-
+            val_seven = round(values['total'] * ac_move.exchange_rate, 2) 
             c1 = f"{val_one:,}"
             c2 = f"{val_two:,}"
             c3 = f"{val_three:,}"
@@ -84,8 +86,11 @@ class AgedReceivable(models.AbstractModel):
             c5 = f"{val_five:,}"
             c6 = f"{val_six:,}"
             c7 = f"{val_seven:,}"
-            
+            # print(c1, "xxcccc-----------")
+
             cur_one = ac_move.currency_id
+            # print(cur_one.name, "cur_onecur_one============")
+            # print(ac_move.invoice_date, "invoice_dateinvoice_date------------")
             if cur_one.position == 'before':
                 c1 = str(cur_one.symbol) + ' ' + str(c1)
                 c2 = str(cur_one.symbol) + ' ' + str(c2)
@@ -103,7 +108,7 @@ class AgedReceivable(models.AbstractModel):
                 c5 = str(c5) + ' ' + str(cur_one.symbol)
                 c6 = str(c6) + ' ' + str(cur_one.symbol)
                 c7 = str(c7) + ' ' + str(cur_one.symbol)
-            
+                
             if user_currency.position == 'before':
                 values['direction'] = str(user_currency.symbol) + ' ' + v1
                 values['4'] = str(user_currency.symbol) + ' ' + v2
@@ -121,7 +126,7 @@ class AgedReceivable(models.AbstractModel):
                 values['1'] = v5 + ' ' + user_currency.symbol
                 values['0'] = v6 + ' ' + user_currency.symbol
                 values['total'] = v7 + ' ' + user_currency.symbol
-            
+            # print(val_one, "val_oneval_oneval_one------")
             if line_id and 'partner_%s' % (values['partner_id'],) != line_id:
                 continue
             vals = {
