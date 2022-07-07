@@ -76,6 +76,29 @@
         </field>
     </record> 
 
+
+    <record id="product_seller_inherited_view" model="ir.ui.view">
+        <field name="name">product.seller.inherited</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sequence']" position="attributes">
+                <attribute name="widget">False</attribute>
+            </xpath>
+        </field>
+    </record>
+    
+    <record id="product_supplierinfo_form_inherited_view" model="ir.ui.view">
+        <field name="name">product.seller.view</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="sequence"/>
+            </xpath>
+        </field>
+    </record>
+
     <record id="view_company_form_inherit_ttse" model="ir.ui.view">
 		<field name="name">res.company.form</field>
 		<field name="model">res.company</field>
