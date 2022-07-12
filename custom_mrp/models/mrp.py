@@ -49,7 +49,12 @@ class MrpProduction(models.Model):
                     loc_id = self.env['stock.location'].search([('complete_name','=','Virtual Locations/My Company: Production')],limit=1)
                     if loc_id:
                         rul.location_id = loc_id.id
-                        
+                    
+    def _get_move_raw_values(self, bom_line, line_data):
+        res = super(MrpProduction, self)._get_move_raw_values(bom_line, line_data)
+        res['name'] = bom_line.product_id.product_tmpl_id.x_studio_field_mHzKJ if bom_line.product_id.product_tmpl_id.x_studio_field_mHzKJ else self.name
+        return res
+            
     def _generate_raw_move(self, bom_line, line_data):
         quantity = line_data['qty']
         # alt_op needed for the case when you explode phantom bom and all the lines will be consumed in the operation given by the parent bom line
