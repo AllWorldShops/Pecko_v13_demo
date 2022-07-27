@@ -23,11 +23,12 @@ class MrpProduction(models.Model):
         reserved_qty = []
         wo_flag = self.env['ir.config_parameter'].sudo().get_param(
                     'custom_mrp.workorder_flag')
-
         for line in self.move_raw_ids:
-            reserved_qty.append(line.reserved_availability)
+            if line.production_id.state not in ['draft', 'done']:
+                reserved_qty.append(line.reserved_availability)
+        print(reserved_qty, "reserved_qty")
         for rec in self:
-            if 0 in reserved_qty and wo_flag:
+            if 0 in reserved_qty and wo_flag and rec.state not in ['draft', 'done']:
                 rec.reserved = True
                 rec.reserved_check = rec.reserved
             else:
@@ -49,12 +50,12 @@ class MrpProduction(models.Model):
                     loc_id = self.env['stock.location'].search([('complete_name','=','Virtual Locations/My Company: Production')],limit=1)
                     if loc_id:
                         rul.location_id = loc_id.id
-                    
+                        
     def _get_move_raw_values(self, bom_line, line_data):
         res = super(MrpProduction, self)._get_move_raw_values(bom_line, line_data)
         res['name'] = bom_line.product_id.product_tmpl_id.x_studio_field_mHzKJ if bom_line.product_id.product_tmpl_id.x_studio_field_mHzKJ else self.name
         return res
-            
+        
     def _generate_raw_move(self, bom_line, line_data):
         quantity = line_data['qty']
         # alt_op needed for the case when you explode phantom bom and all the lines will be consumed in the operation given by the parent bom line
