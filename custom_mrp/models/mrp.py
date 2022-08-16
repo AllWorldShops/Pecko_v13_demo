@@ -157,7 +157,7 @@ class StockMove(models.Model):
     customer_part_no = fields.Text(string='Part Number',compute="_compute_product_name",store=True)
     item_text = fields.Char("Item Text", related='product_id.item_text')
     position_no = fields.Integer(string="Position", compute="_compute_position_no")
-    
+
     # def _compute_storage_location_id(self):
     #     ir_property = self.env['ir.property'].browse()
         
