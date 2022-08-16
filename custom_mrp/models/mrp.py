@@ -140,12 +140,24 @@ class MrpBomLine(models.Model):
 class StockMove(models.Model):
     _inherit = 'stock.move'
     
+    def _compute_position_no(self):
+        for move in self:
+            if move.sale_line_id:
+                move.position_no = move.sale_line_id.line_no
+            elif move.purchase_line_id:
+                move.position_no = move.purchase_line_id.line_no
+            elif move.bom_line_id:
+                move.position_no = move.bom_line_id.x_studio_field_c9hp1
+            else:
+                move.position_no = 0
+
     storage_location_id = fields.Char(string='Storage Location', company_dependent=True,store=True)
     to_consume_qty = fields.Float(string="To Consume Quantity", compute='_get_consumed_data')
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer Name')
     customer_part_no = fields.Text(string='Part Number',compute="_compute_product_name",store=True)
     item_text = fields.Char("Item Text", related='product_id.item_text')
-
+    position_no = fields.Integer(string="Position", compute="_compute_position_no")
+    
     # def _compute_storage_location_id(self):
     #     ir_property = self.env['ir.property'].browse()
         

@@ -67,6 +67,7 @@
 		<field name="priority">1000</field>
 		<field name="arch" type="xml">
 			<tree delete="0" default_order="is_done,sequence" decoration-muted="is_done" decoration-warning="quantity_done - product_uom_qty &gt; 0.0001" decoration-success="not is_done and quantity_done - product_uom_qty &lt; 0.0001" decoration-danger="not is_done and reserved_availability &lt; product_uom_qty and product_uom_qty - reserved_availability &gt; 0.0001">
+				<field name="position_no" />
 				<field name="storage_location_id" />
 				<field name="product_id" required="1" string="Pecko Part Number"/>
 				<field name="company_id" invisible="1"/>

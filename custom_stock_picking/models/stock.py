@@ -43,6 +43,8 @@ class StockMove(models.Model):
                 move.position_no = move.sale_line_id.line_no
             elif move.purchase_line_id:
                 move.position_no = move.purchase_line_id.line_no
+            elif move.bom_line_id:
+                move.position_no = move.bom_line_id.x_studio_field_c9hp1
             else:
                 move.position_no = 0
     
@@ -58,6 +60,8 @@ class StockMoveLine(models.Model):
                 line.position_no = line.move_id.sale_line_id.line_no
             elif line.move_id.purchase_line_id:
                 line.position_no = line.move_id.purchase_line_id.line_no
+            elif line.move_id.bom_line_id:
+                line.position_no = line.move_id.bom_line_id.x_studio_field_c9hp1
             else:
                 line.position_no = 0
 
