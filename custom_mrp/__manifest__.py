@@ -9,6 +9,7 @@
     'description': """Manufacturing lines split""",
     'depends': ['mrp','stock','base','custom_product','sale'],
     'data': [
+        'security/button_return_access_group_view.xml',
         'views/mrp_line.xml',
         'views/decimal_data.xml',
         'views/res_config_view.xml',

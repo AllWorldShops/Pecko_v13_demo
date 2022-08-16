@@ -359,3 +359,6 @@ class ReportBomStructureInherit(models.AbstractModel):
         data["components"] = []
         data["lines"] = pdf_lines
         return data
+
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
