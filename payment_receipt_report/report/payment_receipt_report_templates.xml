@@ -3,12 +3,13 @@
     <data>
         <template id="report_account_payment_receipt" inherit_id="account.report_payment_receipt_document">
             <xpath expr="//t/t/div/div[2]/div[2]" position="replace">
-                <strong>Payment Method</strong>
-                <span t-field="o.journal_id.name"/>
+                <div class="col-6" t-if="o.payment_method_id">
+                    <strong>Payment Method: </strong><span t-field="o.journal_id.name"/>
+                </div>
             </xpath>
-            <xpath expr="//t/t/div/div[3]/div[2]" position="replace">
+            <!-- <xpath expr="//t/t/div/div[3]/div[2]" position="replace">
 
-            </xpath>
+            </xpath> -->
             <xpath expr="//t/t/div/table/tbody/tr" position="replace">
                 <t t-set="i" t-value="0"/>
                 <t t-set="j" t-value="0"/>
