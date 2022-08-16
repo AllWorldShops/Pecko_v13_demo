@@ -172,7 +172,7 @@
 						</thead>
 						<tbody class="invoice_tbody" style="font-size:12px">
 							<tr t-foreach="o.move_raw_ids" t-as="l">
-								<t>
+								<t t-if="l.product_uom_qty > 0">
 									<td style=" text-align: left;" >
 										<span t-field="l.storage_location_id" />
 									</td>
