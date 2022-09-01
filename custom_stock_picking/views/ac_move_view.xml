@@ -27,4 +27,17 @@
             </xpath>
         </field>
     </record>
+
+    <record id="customer_po_no_search_form_inherit" model="ir.ui.view">
+        <field name="name">customer.po.no.search.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='partner_id']" position="after">
+                <field name="customer_po_no" filter_domain="[('customer_po_no','ilike',self)]"/>
+                <field name="do_name" filter_domain="[('do_name','ilike',self)]"/>
+            </xpath>
+        </field>
+    </record>
+    
 </odoo>
