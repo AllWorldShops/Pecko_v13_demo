@@ -168,5 +168,16 @@
 			</xpath>
         </field>
     </record>
+
+    <record id="mrp_action_assign_button_show_view" model="ir.ui.view">
+        <field name="name">mrp.action.assign.button.show.view</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_assign']" position="attributes">
+                <attribute name="groups">custom_mrp.group_mrp_action_assign_button_show</attribute>
+            </xpath>
+        </field>
+    </record>
 	  
 </odoo>
