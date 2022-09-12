@@ -53,7 +53,7 @@ class AgedReceivable(models.AbstractModel):
             user_currency = user_company.currency_id
             move = self.env['account.move'].search([('partner_id','=',values['partner_id']),('state','=', 'posted'),('type','=', 'out_invoice')],order='invoice_date desc')
             # for moves in move:
-            # print(move[:1].partner_id.name, "sss",  move[:1].invoice_date, "invoice_dateinvoice_date---------")
+            print(move[:1].partner_id.name, "sss",  move[:1], "invoice_dateinvoice_date---------")
             ac_move = move[:1]
             # if ac_move:
             r1 = round(values['direction'],2)
@@ -72,13 +72,23 @@ class AgedReceivable(models.AbstractModel):
             v6 = f"{r6:,}"
             v7 = f"{r7:,}"
             # print(v6, "////++++++++=================")
-            val_one = round(values['direction'] * ac_move.exchange_rate, 2)
-            val_two = round(values['4'] * ac_move.exchange_rate, 2)
-            val_three = round(values['3'] * ac_move.exchange_rate, 2)
-            val_four = round(values['2'] * ac_move.exchange_rate, 2)
-            val_five = round(values['1'] * ac_move.exchange_rate, 2)
-            val_six = round(values['0'] * ac_move.exchange_rate, 2)
-            val_seven = round(values['total'] * ac_move.exchange_rate, 2) 
+            if ac_move.exchange_rate > 1:
+                val_one = round(values['direction'] / ac_move.exchange_rate, 2)
+                val_two = round(values['4'] / ac_move.exchange_rate, 2)
+                val_three = round(values['3'] / ac_move.exchange_rate, 2)
+                val_four = round(values['2'] / ac_move.exchange_rate, 2)
+                val_five = round(values['1'] / ac_move.exchange_rate, 2)
+                val_six = round(values['0'] / ac_move.exchange_rate, 2)
+                val_seven = round(values['total'] / ac_move.exchange_rate, 2)
+            else:
+                val_one = round(values['direction'] * ac_move.exchange_rate, 2)
+                val_two = round(values['4'] * ac_move.exchange_rate, 2)
+                val_three = round(values['3'] * ac_move.exchange_rate, 2)
+                val_four = round(values['2'] * ac_move.exchange_rate, 2)
+                val_five = round(values['1'] * ac_move.exchange_rate, 2)
+                val_six = round(values['0'] * ac_move.exchange_rate, 2)
+                val_seven = round(values['total'] * ac_move.exchange_rate, 2)
+             
             c1 = f"{val_one:,}"
             c2 = f"{val_two:,}"
             c3 = f"{val_three:,}"
