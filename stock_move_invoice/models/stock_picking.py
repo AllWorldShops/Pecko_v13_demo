@@ -37,10 +37,8 @@ class StockPicking(models.Model):
         for picking_id in self:
             print(picking_id.state, "picking_id.state")
             if picking_id.state == 'done' and picking_id.picking_type_id.code == 'outgoing' and 'Return' not in str(picking_id.origin):
-                print("ssssss")
                 picking_id.create_invoice()
             if picking_id.state == 'done' and picking_id.picking_type_id.code == 'incoming' and 'Return' in str(picking_id.origin):
-                print("rrrrrrr")
                 picking_id.create_customer_credit()
         return res
 
@@ -58,7 +56,7 @@ class StockPicking(models.Model):
         from the picking"""
         for picking_id in self:
             current_user = self.env.uid
-            if picking_id.picking_type_id.code == 'outgoing' and picking_id.sale_id:
+            if picking_id.picking_type_id.code == 'outgoing' and picking_id.sale_id and picking_id.invoice_status not in ['invoiced', 'no']:
                 # customer_journal_id = picking_id.env['ir.config_parameter'].sudo().get_param(
                 #     'stock_move_invoice.customer_journal_id') or False
                 # if not customer_journal_id:
@@ -130,7 +128,7 @@ class StockPicking(models.Model):
                 from the picking"""
         for picking_id in self:
             current_user = picking_id.env.uid
-            if picking_id.picking_type_id.code == 'incoming' and picking_id.sale_id:
+            if picking_id.picking_type_id.code == 'incoming' and picking_id.sale_id and picking_id.invoice_status not in ['invoiced', 'no']:
                 # customer_journal_id = picking_id.env['ir.config_parameter'].sudo().get_param(
                 #     'stock_move_invoice.customer_journal_id') or False
                 # if not customer_journal_id:
