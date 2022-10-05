@@ -32,4 +32,3 @@ class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
     position_no = fields.Integer("Position")
-

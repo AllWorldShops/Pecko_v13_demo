@@ -19,15 +19,20 @@
                     </button>
                 </xpath>
                 <xpath expr="//button[@name='action_toggle_is_locked']" position="after">
-                    <button name="create_invoice" class="oe_highlight"
+                    <!-- <button name="create_invoice" class="oe_highlight"
                             string="Create Invoice" type="object"
-                            attrs="{'invisible': ['|','|','|','|','|',('invoice_count','!=', 0),('state','!=','done'),('operation_code','=','incoming'),('is_return','=',True),('origin', 'ilike', 'Return'),('invoice_status', '=', 'invoiced')]}" invisible="1"/>
+                            attrs="{'invisible': ['|','|','|','|','|',('invoice_count','!=', 0),('state','!=','done'),('operation_code','=','incoming'),('is_return','=',True),('origin', 'ilike', 'Return'),('invoice_status', '=', 'invoiced')]}" invisible="1"/> -->
+                     <button name="create_invoice" class="oe_highlight"
+                            string="Create Invoice" type="object" invisible="1"/>
                     <!-- <button name="create_bill" class="oe_highlight"
                             string="Create Bill" type="object"
                             attrs="{'invisible': ['|','|','|',('invoice_count','!=', 0),('state','!=','done'),('operation_code','=','outgoing'),('is_return','=',True)]}"/> -->
-                    <button name="create_customer_credit" class="oe_highlight"
+                    <!-- <button name="create_customer_credit" class="oe_highlight"
                             string="Create Credit Note" type="object"
-                            attrs="{'invisible': ['|','|','|','|',('invoice_count','!=', 0),('state','!=','done'),('operation_code','=','outgoing'),('is_return','=', False),('invoice_status', '=', 'invoiced')]}" invisible="1"/>
+                            attrs="{'invisible': ['|','|','|','|',('invoice_count','!=', 0),('state','!=','done'),('operation_code','=','outgoing'),('is_return','=', False),('invoice_status', '=', 'invoiced')]}" invisible="1"/> -->
+
+                    <button name="create_customer_credit" class="oe_highlight"
+                            string="Create Credit Note" type="object" invisible="1"/>
                     <!-- <button name="create_vendor_credit" class="oe_highlight"
                             string="Create Vendor Credit" type="object"
                             attrs="{'invisible': ['|','|','|',('invoice_count','!=', 0),('state','!=','done'),('operation_code','=','incoming'),('is_return','=',False)]}"/> -->

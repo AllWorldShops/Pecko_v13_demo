@@ -28,12 +28,21 @@
 		  <xpath expr="//form/header/button[7]" position="attributes">
 			  <attribute name="attrs">{'invisible': ['|', '|', '|','|', ('state', '=', 'to_close'), ('is_locked', '=', False), ('reservation_state', 'not in', ('confirmed', 'waiting')), ('routing_id', '!=', False), ('reserved_check', '=', True)]}</attribute>
 		  </xpath>
-
+			<xpath expr="//form/sheet/group/group/div/div/button" position="replace">
+				
+			</xpath>
+			<xpath expr="//field[@name='routing_id']" position="after">
+        		<field name="customer_po_no"/>
+        	</xpath>
         	<xpath expr="//field[@name='company_id']" position="after">
         		<field name="project"/>
 				<field name="production_cell" />
 				<field name="order_seq"/>
         	</xpath>
+			 <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="groups">custom_mrp.group_mrp_show_cancel_button</attribute>
+            </xpath>
+			
         	<!-- <xpath expr="//field[@name='move_raw_ids']" position="replace">
 					<field name="move_raw_ids" context="{'final_lots': show_final_lots, 'tree_view_ref': 'mrp.view_stock_move_raw_tree', 'form_view_ref': 'mrp.view_stock_move_lots', 'default_location_id': location_src_id, 'default_location_dest_id': production_location_id, 'default_state': 'draft', 'default_raw_material_production_id': id, 'default_picking_type_id': picking_type_id}" attrs="{'readonly': ['&amp;', ('state', '!=', 'draft'), ('is_locked', '=', True)]}">
 	                	<tree delete="0" default_order="is_done,sequence" decoration-muted="is_done" decoration-warning="quantity_done&gt;product_uom_qty" decoration-success="not is_done and quantity_done==product_uom_qty" decoration-danger="not is_done and reserved_availability &lt; product_uom_qty">
@@ -138,10 +147,10 @@
         <field name="name">mrp.create.button.access.tree</field>
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
-        <field name="groups_id" eval="[(6, 0, [ref('custom_mrp.group_mrp_create_button_show')])]"/>
+        <field name="groups_id" eval="[(6, 0, [ref('custom_mrp.group_mrp_create_button_hide')])]"/>
         <field name="arch" type="xml">
             <xpath expr="//tree" position="attributes">
-                <attribute name="create">1</attribute>
+                <attribute name="create">0</attribute>
             </xpath>
         </field>
     </record>
@@ -150,10 +159,10 @@
         <field name="name">mrp.create.button.access.form</field>
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
-        <field name="groups_id" eval="[(6, 0, [ref('custom_mrp.group_mrp_create_button_show')])]"/>
+        <field name="groups_id" eval="[(6, 0, [ref('custom_mrp.group_mrp_create_button_hide')])]"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="attributes">
-                <attribute name="create">1</attribute>
+                <attribute name="create">0</attribute>
             </xpath>
         </field>
     </record>

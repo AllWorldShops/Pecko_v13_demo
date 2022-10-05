@@ -2,6 +2,7 @@ from email.policy import default
 from odoo import models, fields, api, _
 from odoo.tools import float_round
 
+
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
@@ -18,6 +19,7 @@ class MrpProduction(models.Model):
     production_cell = fields.Char(string='Production Cell',related='product_tmpl_id.production_cell', store=True)
     reserved = fields.Boolean("Reserved Compute", compute="_compute_reserved")
     reserved_check = fields.Boolean("Reserved", default=False)
+    customer_po_no = fields.Char(string="Customer PO No")
     
     def _compute_reserved(self):
         reserved_qty = []
@@ -211,8 +213,14 @@ class SaleOrderInherit(models.Model):
         res = super(SaleOrderInherit, self).action_confirm()
         mrp = self.env['mrp.production'].search([('origin', '=', self.name)])
         if mrp:
-            for line in mrp:
-                line.user_id = line.product_id.responsible_id.id or False
+            for rec in mrp:
+                rec.user_id = rec.product_id.responsible_id.id or False
+                rec.customer_po_no = self.customer_po_no 
+                so_line = self.order_line.filtered(lambda line: line.product_id.id == rec.product_id.id)
+                for s_line in so_line:
+                    if s_line.product_id.id == rec.product_id.id and self.name == rec.origin:
+                        s_line.mo_reference = rec.name
+
         return res
     
 class ReportBomStructureInherit(models.AbstractModel):

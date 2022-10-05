@@ -11,7 +11,7 @@
     'data': [
         'views/account_move_inherited.xml',
         'views/stock_picking_inherited.xml',
-        'views/res_config_settings_inherited.xml',
+        # 'views/res_config_settings_inherited.xml',
         'wizard/picking_invoice_wizard.xml',
     ],
     'license': "AGPL-3",

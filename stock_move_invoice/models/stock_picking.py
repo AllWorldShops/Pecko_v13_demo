@@ -35,7 +35,7 @@ class StockPicking(models.Model):
     def action_done(self):
         res = super(StockPicking, self).action_done()
         for picking_id in self:
-            print(picking_id.state, "picking_id.state")
+            # print(picking_id.state, "picking_id.state")
             if picking_id.state == 'done' and picking_id.picking_type_id.code == 'outgoing' and 'Return' not in str(picking_id.origin):
                 picking_id.create_invoice()
             if picking_id.state == 'done' and picking_id.picking_type_id.code == 'incoming' and 'Return' in str(picking_id.origin):
@@ -86,42 +86,42 @@ class StockPicking(models.Model):
                     picking_id.invoice_created = True
                     return invoices
 
-    def create_bill(self):
-        """This is the function for creating vendor bill
-                from the picking"""
-        for picking_id in self:
-            current_user = self.env.uid
-            if picking_id.picking_type_id.code == 'incoming':
-                vendor_journal_id = picking_id.env['ir.config_parameter'].sudo().get_param(
-                    'stock_move_invoice.vendor_journal_id') or False
-                if not vendor_journal_id:
-                    raise UserError(_("Please configure the journal from the settings."))
-                invoice_line_list = []
-                for move_ids_without_package in picking_id.move_ids_without_package:
-                    vals = (0, 0, {
-                        'name': move_ids_without_package.description_picking,
-                        'product_id': move_ids_without_package.product_id.id,
-                        'price_unit': move_ids_without_package.product_id.lst_price,
-                        'account_id': move_ids_without_package.product_id.property_account_income_id.id if move_ids_without_package.product_id.property_account_income_id
-                        else move_ids_without_package.product_id.categ_id.property_account_income_categ_id.id,
-                        'tax_ids': [(6, 0, [picking_id.company_id.account_purchase_tax_id.id])],
-                        'quantity': move_ids_without_package.quantity_done,
-                    })
-                    invoice_line_list.append(vals)
-                invoice = picking_id.env['account.move'].create({
-                    'type': 'in_invoice',
-                    'invoice_origin': picking_id.name,
-                    'invoice_user_id': current_user,
-                    # 'narration': picking_id.name,
-                    'partner_id': picking_id.partner_id.id,
-                    'currency_id': picking_id.env.user.company_id.currency_id.id,
-                    'journal_id': int(vendor_journal_id),
-                    'invoice_payment_ref': picking_id.name,
-                    'picking_id': picking_id.id,
-                    'invoice_line_ids': invoice_line_list
-                })
-                picking_id.invoice_created = True
-                return invoice
+    # def create_bill(self):
+    #     """This is the function for creating vendor bill
+    #             from the picking"""
+    #     for picking_id in self:
+    #         current_user = self.env.uid
+    #         if picking_id.picking_type_id.code == 'incoming':
+    #             vendor_journal_id = picking_id.env['ir.config_parameter'].sudo().get_param(
+    #                 'stock_move_invoice.vendor_journal_id') or False
+    #             if not vendor_journal_id:
+    #                 raise UserError(_("Please configure the journal from the settings."))
+    #             invoice_line_list = []
+    #             for move_ids_without_package in picking_id.move_ids_without_package:
+    #                 vals = (0, 0, {
+    #                     'name': move_ids_without_package.description_picking,
+    #                     'product_id': move_ids_without_package.product_id.id,
+    #                     'price_unit': move_ids_without_package.product_id.lst_price,
+    #                     'account_id': move_ids_without_package.product_id.property_account_income_id.id if move_ids_without_package.product_id.property_account_income_id
+    #                     else move_ids_without_package.product_id.categ_id.property_account_income_categ_id.id,
+    #                     'tax_ids': [(6, 0, [picking_id.company_id.account_purchase_tax_id.id])],
+    #                     'quantity': move_ids_without_package.quantity_done,
+    #                 })
+    #                 invoice_line_list.append(vals)
+    #             invoice = picking_id.env['account.move'].create({
+    #                 'type': 'in_invoice',
+    #                 'invoice_origin': picking_id.name,
+    #                 'invoice_user_id': current_user,
+    #                 # 'narration': picking_id.name,
+    #                 'partner_id': picking_id.partner_id.id,
+    #                 'currency_id': picking_id.env.user.company_id.currency_id.id,
+    #                 'journal_id': int(vendor_journal_id),
+    #                 'invoice_payment_ref': picking_id.name,
+    #                 'picking_id': picking_id.id,
+    #                 'invoice_line_ids': invoice_line_list
+    #             })
+    #             picking_id.invoice_created = True
+    #             return invoice
 
     def create_customer_credit(self):
         """This is the function for creating customer credit note
@@ -159,42 +159,42 @@ class StockPicking(models.Model):
                 picking_id.invoice_created = True
                 return invoices
 
-    def create_vendor_credit(self):
-        """This is the function for creating refund
-                from the picking"""
-        for picking_id in self:
-            current_user = self.env.uid
-            if picking_id.picking_type_id.code == 'outgoing':
-                vendor_journal_id = picking_id.env['ir.config_parameter'].sudo().get_param(
-                    'stock_move_invoice.vendor_journal_id') or False
-                if not vendor_journal_id:
-                    raise UserError(_("Please configure the journal from the settings."))
-                invoice_line_list = []
-                for move_ids_without_package in picking_id.move_ids_without_package:
-                    vals = (0, 0, {
-                        'name': move_ids_without_package.description_picking,
-                        'product_id': move_ids_without_package.product_id.id,
-                        'price_unit': move_ids_without_package.product_id.lst_price,
-                        'account_id': move_ids_without_package.product_id.property_account_income_id.id if move_ids_without_package.product_id.property_account_income_id
-                        else move_ids_without_package.product_id.categ_id.property_account_income_categ_id.id,
-                        'tax_ids': [(6, 0, [picking_id.company_id.account_purchase_tax_id.id])],
-                        'quantity': move_ids_without_package.quantity_done,
-                    })
-                    invoice_line_list.append(vals)
-                invoice = picking_id.env['account.move'].create({
-                    'type': 'in_refund',
-                    'invoice_origin': picking_id.name,
-                    'invoice_user_id': current_user,
-                    # 'narration': picking_id.name,
-                    'partner_id': picking_id.partner_id.id,
-                    'currency_id': picking_id.env.user.company_id.currency_id.id,
-                    'journal_id': int(vendor_journal_id),
-                    'invoice_payment_ref': picking_id.name,
-                    'picking_id': picking_id.id,
-                    'invoice_line_ids': invoice_line_list
-                })
-                picking_id.invoice_created = True
-                return invoice
+    # def create_vendor_credit(self):
+    #     """This is the function for creating refund
+    #             from the picking"""
+    #     for picking_id in self:
+    #         current_user = self.env.uid
+    #         if picking_id.picking_type_id.code == 'outgoing':
+    #             vendor_journal_id = picking_id.env['ir.config_parameter'].sudo().get_param(
+    #                 'stock_move_invoice.vendor_journal_id') or False
+    #             if not vendor_journal_id:
+    #                 raise UserError(_("Please configure the journal from the settings."))
+    #             invoice_line_list = []
+    #             for move_ids_without_package in picking_id.move_ids_without_package:
+    #                 vals = (0, 0, {
+    #                     'name': move_ids_without_package.description_picking,
+    #                     'product_id': move_ids_without_package.product_id.id,
+    #                     'price_unit': move_ids_without_package.product_id.lst_price,
+    #                     'account_id': move_ids_without_package.product_id.property_account_income_id.id if move_ids_without_package.product_id.property_account_income_id
+    #                     else move_ids_without_package.product_id.categ_id.property_account_income_categ_id.id,
+    #                     'tax_ids': [(6, 0, [picking_id.company_id.account_purchase_tax_id.id])],
+    #                     'quantity': move_ids_without_package.quantity_done,
+    #                 })
+    #                 invoice_line_list.append(vals)
+    #             invoice = picking_id.env['account.move'].create({
+    #                 'type': 'in_refund',
+    #                 'invoice_origin': picking_id.name,
+    #                 'invoice_user_id': current_user,
+    #                 # 'narration': picking_id.name,
+    #                 'partner_id': picking_id.partner_id.id,
+    #                 'currency_id': picking_id.env.user.company_id.currency_id.id,
+    #                 'journal_id': int(vendor_journal_id),
+    #                 'invoice_payment_ref': picking_id.name,
+    #                 'picking_id': picking_id.id,
+    #                 'invoice_line_ids': invoice_line_list
+    #             })
+    #             picking_id.invoice_created = True
+    #             return invoice
 
     def action_open_picking_invoice(self):
         """This is the function of the smart button which redirect to the
@@ -211,37 +211,8 @@ class StockPicking(models.Model):
                 'res_id': ac_move.id,
                 'target': 'current'
             }
-
-    # def action_open_picking_invoice(self):
-    #     invoices = self.invoice_count
-    #     action = self.env.ref('account.action_move_out_invoice_type').read()[0]
-    #     if invoices > 1:
-    #         action['domain'] = [('picking_id', '=', self.id)]
-    #     elif invoices == 1:
-    #         form_view = [(self.env.ref('account.view_move_form').id, 'form')]
-    #         if 'views' in action:
-    #             action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
-    #         else:
-    #             action['views'] = form_view
-    #         action['res_id'] = invoices.id
-    #     else:
-    #         action = {'type': 'ir.actions.act_window_close'}
-
-    #     context = {
-    #         'default_type': 'out_invoice',
-    #     }
-    #     if len(self.sale_id) == 1:
-    #         context.update({
-    #             'default_partner_id': self.sale_id.partner_id.id,
-    #             'default_partner_shipping_id': self.sale_id.partner_shipping_id.id,
-    #             'default_invoice_payment_term_id': self.sale_id.payment_term_id.id or self.sale_id.partner_id.property_payment_term_id.id or self.env['account.move'].default_get(['invoice_payment_term_id']).get('invoice_payment_term_id'),
-    #             'default_invoice_origin': self.sale_id.mapped('name'),
-    #             'default_user_id': self.sale_id.user_id.id,
-    #         })
-    #     action['context'] = context
-    #     return action
-
-
+        
+    
 class StockReturnInvoicePicking(models.TransientModel):
     _inherit = 'stock.return.picking'
 
