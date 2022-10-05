@@ -51,7 +51,20 @@ class SaleOrderLine(models.Model):
     internal_ref_no = fields.Char('Internal Ref No',related='product_id.default_code') 
     back_order_qty = fields.Integer(string='Back Order Qty', compute='_compute_back_order_qty', store=True)
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured")
-  
+    mo_reference = fields.Char("M.O Reference")
+    do_reference = fields.Char("D.O Reference", compute="_compute_do_reference", store=True)
+
+
+    @api.depends('order_id.picking_ids')
+    def _compute_do_reference(self):
+        # picking = self.order_id.picking_ids.filtered(lambda l: l.state not in ['done', 'cancel']).sorted(lambda line: line.id)
+        for line in self:
+            move = self.env['stock.move'].search([('sale_line_id','=', line.id),('product_id', '=', line.product_id.id)]).filtered(lambda l: l.picking_id.state not in ['done', 'cancel']).sorted(lambda line: line.picking_id.id)
+            if len(move) == 1: 
+                line.do_reference = move.picking_id.name
+            else:
+                line.do_reference = ' '
+
 #     @api.depends('sequence', 'order_id')
 #     def _compute_get_number(self):
 #         for recs in self:

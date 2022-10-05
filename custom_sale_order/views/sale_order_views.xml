@@ -68,6 +68,8 @@
 				<field name="product_id" string="Pecko Part Number" invisible="1"/>
 				<field name="customer_part_no" string="Customer Part Number" invisible="0"/>
 				<field name="internal_ref_no"></field>
+				<field name="mo_reference" />
+				<field name="do_reference" />
 				<field name="customer_po_no" string="Customer Po No" invisible="0"/>
 				<field name="name" string="Description"/>
 				<field name="production_type" string="Purchased / Manufactured" invisible="1"/>
