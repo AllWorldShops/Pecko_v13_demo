@@ -17,25 +17,23 @@ class MrpProduction(models.Model):
     start_date_one = fields.Date('Start Date P1')
     order_seq = fields.Char(string='Order Sequence')
     production_cell = fields.Char(string='Production Cell',related='product_tmpl_id.production_cell', store=True)
-    reserved = fields.Boolean("Reserved Compute", compute="_compute_reserved")
-    reserved_check = fields.Boolean("Reserved", default=False)
+    # reserved = fields.Boolean("Reserved Compute", compute="_compute_reserved")
+    reserved_check = fields.Boolean("Reserved", compute="_compute_reserved")
     customer_po_no = fields.Char(string="Customer PO No")
     
     def _compute_reserved(self):
-        reserved_qty = []
+        # reserved_qty = []
         wo_flag = self.env['ir.config_parameter'].sudo().get_param(
                     'custom_mrp.workorder_flag')
-        for line in self.move_raw_ids:
-            if line.production_id.state not in ['draft', 'done']:
-                reserved_qty.append(line.reserved_availability)
-        print(reserved_qty, "reserved_qty")
         for rec in self:
-            if 0 in reserved_qty and wo_flag and rec.state not in ['draft', 'done']:
-                rec.reserved = True
-                rec.reserved_check = rec.reserved
-            else:
-                rec.reserved = False
-                rec.reserved_check = False
+            rec.reserved_check = False
+            if wo_flag:
+                # for line in self.move_raw_ids:
+                #     if line.production_id.state not in ['draft', 'done']:
+                #         reserved_qty.append(line.reserved_availability)
+                reserved_qty = self.move_raw_ids.filtered(lambda l: l.reserved_availability == 0 )
+                if any(reserved_qty) and rec.state not in ['draft', 'done']:
+                    rec.reserved_check = True
     
     @api.onchange('product_id')
     def onchange_responsible(self):

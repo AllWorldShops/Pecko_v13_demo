@@ -55,12 +55,8 @@ class StockPicking(models.Model):
         """This is the function for creating customer invoice
         from the picking"""
         for picking_id in self:
-            current_user = self.env.uid
             if picking_id.picking_type_id.code == 'outgoing' and picking_id.sale_id and picking_id.invoice_status not in ['invoiced', 'no']:
-                # customer_journal_id = picking_id.env['ir.config_parameter'].sudo().get_param(
-                #     'stock_move_invoice.customer_journal_id') or False
-                # if not customer_journal_id:
-                #     raise UserError(_("Please configure the journal from settings"))
+
                 invoice_line_list = []
                 if picking_id.move_line_ids_without_package:
                     for move_line in picking_id.move_line_ids_without_package:
@@ -68,12 +64,16 @@ class StockPicking(models.Model):
                             for move in move_line.move_id:
                                 vals = move.sale_line_id._prepare_invoice_line()
                                 vals['position_no'] = move.position_no
+                                if move.sale_line_id.qty_to_invoice != move_line.qty_done:
+                                    vals['quantity'] = move_line.qty_done if move_line.product_id.uom_id.id == move_line.product_id.uom_po_id.id else move_line.qty_done / move.sale_line_id.product_uom.factor_inv
                                 invoice_line_list.append((0, 0, vals))
                 else:
                     for move in picking_id.move_ids_without_package:
                         if move.sale_line_id:
                             vals = move.sale_line_id._prepare_invoice_line()
                             vals['position_no'] = move.position_no
+                            if move.sale_line_id.qty_to_invoice != move.quantity_done:
+                                vals['quantity'] = move.quantity_done if move.product_id.uom_id.id == move.product_id.uom_po_id.id else move.quantity_done / move.sale_line_id.product_uom.factor_inv
                             invoice_line_list.append((0, 0, vals))
                 if invoice_line_list:
                     invoice = picking_id.sale_id._prepare_invoice()
@@ -127,12 +127,8 @@ class StockPicking(models.Model):
         """This is the function for creating customer credit note
                 from the picking"""
         for picking_id in self:
-            current_user = picking_id.env.uid
             if picking_id.picking_type_id.code == 'incoming' and picking_id.sale_id and picking_id.invoice_status not in ['invoiced', 'no']:
-                # customer_journal_id = picking_id.env['ir.config_parameter'].sudo().get_param(
-                #     'stock_move_invoice.customer_journal_id') or False
-                # if not customer_journal_id:
-                #     raise UserError(_("Please configure the journal from settings"))
+
                 invoice_line_list = []
                 if picking_id.move_line_ids_without_package:
                     for move_line in picking_id.move_line_ids_without_package:
@@ -140,12 +136,16 @@ class StockPicking(models.Model):
                             for move in move_line.move_id:
                                 vals = move.sale_line_id._prepare_invoice_line()
                                 vals['position_no'] = move.position_no
+                                if move.sale_line_id.qty_to_invoice != move_line.qty_done:
+                                    vals['quantity'] =  -abs(move_line.qty_done) if move_line.product_id.uom_id.id == move_line.product_id.uom_po_id.id else  -abs(move_line.qty_done / move.sale_line_id.product_uom.factor_inv)
                                 invoice_line_list.append((0, 0, vals))
                 else:
                     for move in picking_id.move_ids_without_package:
                         if move.sale_line_id:
                             vals = move.sale_line_id._prepare_invoice_line()
                             vals['position_no'] = move.position_no
+                            if move.sale_line_id.qty_to_invoice != move.quantity_done:
+                                vals['quantity'] =  -abs(move.quantity_done) if move.product_id.uom_id.id == move.product_id.uom_po_id.id else  -abs(move.quantity_done / move.sale_line_id.product_uom.factor_inv)
                             invoice_line_list.append((0, 0, vals))
                 
                 invoice = picking_id.sale_id._prepare_invoice()
