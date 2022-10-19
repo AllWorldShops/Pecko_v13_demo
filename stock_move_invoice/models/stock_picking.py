@@ -36,9 +36,9 @@ class StockPicking(models.Model):
         res = super(StockPicking, self).action_done()
         for picking_id in self:
             # print(picking_id.state, "picking_id.state")
-            if picking_id.state == 'done' and picking_id.picking_type_id.code == 'outgoing' and 'Return' not in str(picking_id.origin):
+            if picking_id.state == 'done' and picking_id.picking_type_id.code == 'outgoing' and picking_id.sale_id:
                 picking_id.create_invoice()
-            if picking_id.state == 'done' and picking_id.picking_type_id.code == 'incoming' and 'Return' in str(picking_id.origin):
+            if picking_id.state == 'done' and picking_id.picking_type_id.code == 'incoming' and 'Return' in str(picking_id.origin) and picking_id.sale_id:
                 picking_id.create_customer_credit()
         return res
 
@@ -55,7 +55,7 @@ class StockPicking(models.Model):
         """This is the function for creating customer invoice
         from the picking"""
         for picking_id in self:
-            if picking_id.picking_type_id.code == 'outgoing' and picking_id.sale_id and picking_id.invoice_status not in ['invoiced', 'no']:
+            if picking_id.invoice_status not in ['invoiced', 'no']:
 
                 invoice_line_list = []
                 if picking_id.move_line_ids_without_package:
@@ -127,7 +127,7 @@ class StockPicking(models.Model):
         """This is the function for creating customer credit note
                 from the picking"""
         for picking_id in self:
-            if picking_id.picking_type_id.code == 'incoming' and picking_id.sale_id and picking_id.invoice_status not in ['invoiced', 'no']:
+            if picking_id.invoice_status not in ['invoiced', 'no']:
 
                 invoice_line_list = []
                 if picking_id.move_line_ids_without_package:
