@@ -17,7 +17,7 @@ class MrpProduction(models.Model):
     start_date_one = fields.Date('Start Date P1')
     order_seq = fields.Char(string='Order Sequence')
     production_cell = fields.Char(string='Production Cell',related='product_tmpl_id.production_cell', store=True)
-    # reserved = fields.Boolean("Reserved Compute", compute="_compute_reserved")
+    # reserved = fields.Boolean("Reserved Compute")
     reserved_check = fields.Boolean("Reserved", compute="_compute_reserved")
     customer_po_no = fields.Char(string="Customer PO No")
     
@@ -214,10 +214,10 @@ class SaleOrderInherit(models.Model):
             for rec in mrp:
                 rec.user_id = rec.product_id.responsible_id.id or False
                 rec.customer_po_no = self.customer_po_no 
-                so_line = self.order_line.filtered(lambda line: line.product_id.id == rec.product_id.id)
-                for s_line in so_line:
-                    if s_line.product_id.id == rec.product_id.id and self.name == rec.origin:
-                        s_line.mo_reference = rec.name
+                # so_line = self.order_line.filtered(lambda line: line.product_id.id == rec.product_id.id)
+                # for s_line in so_line:
+                #     if s_line.product_id.id == rec.product_id.id and self.name == rec.origin:
+                #         s_line.mo_reference = rec.name
 
         return res
     

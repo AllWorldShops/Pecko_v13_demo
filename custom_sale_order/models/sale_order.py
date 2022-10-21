@@ -6,6 +6,7 @@ from odoo.exceptions import UserError
 from odoo.tools import float_is_zero
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import logging
 
 
 class SaleOrder(models.Model):   
@@ -26,7 +27,28 @@ class SaleOrder(models.Model):
         for loop in rec.picking_ids:
             for move in loop.move_ids_without_package:
                 move.customer_part_no = move.product_id.name
+        for line in self.order_line:
+            do_moves = self.env['stock.move'].search([('sale_line_id', '=', line.id),('product_id', '=', line.product_id.id)], limit=1)
+            # print(org_moves, "org_moves-----")
+            if do_moves:
+                for obj in do_moves.move_orig_ids:
+                    if move.group_id.name != move.origin:
+                        line.mo_reference = obj.group_id.name
         return res
+
+    # def action_update_mo(self):
+    #     # print("test--------")
+    #     sale_line = self.env['sale.order.line'].search([('mo_reference', '!=', None)], limit=1000)
+    #     # print(len(sale_line), "sale_line")
+    #     _logger.info("Sale Order Lines:- %s", len(sale_line))
+    #     for line in sale_line:
+    #         moves = self.env['stock.move'].search([('sale_line_id','=', line.id),('product_id', '=', line.product_id.id)])
+    #         # print(moves, "movesfsf====")
+    #         for move in moves.move_orig_ids:
+    #             if move.group_id.name != move.origin:
+    #             # print(move.group_id.name, "group_id.name-----")
+    #                 line.mo_reference = move.group_id.name
+                
     
 #     @api.multi
     def _prepare_invoice(self):
@@ -40,7 +62,7 @@ class SaleOrderLine(models.Model):
     
     customer_part_no = fields.Text(string='Customer Part No')
     need_date = fields.Date(string="Need Date")
-    line_no = fields.Integer(string='Position' ,default=False)
+    line_no = fields.Integer(string='Position', default=False)
     requested_date_line = fields.Date(string="Requested Date")
     order_ref = fields.Char('Order Reference',related='order_id.name')   
     customer_id = fields.Many2one('res.partner',related='order_id.partner_id')
