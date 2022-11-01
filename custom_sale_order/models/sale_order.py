@@ -71,7 +71,7 @@ class SaleOrderLine(models.Model):
     promised_date = fields.Date(string="Promised Date")
     customer_po_no = fields.Char('Customer Po No',related='order_id.customer_po_no')   
     internal_ref_no = fields.Char('Internal Ref No',related='product_id.default_code') 
-    back_order_qty = fields.Integer(string='Back Order Qty', compute='_compute_back_order_qty', store=True)
+    back_order_qty = fields.Float(string='Pending Qty', compute='_compute_back_order_qty', store=True)
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured")
     mo_reference = fields.Char("M.O Reference")
     do_reference = fields.Char("D.O Reference", compute="_compute_do_reference", store=True)
@@ -100,10 +100,10 @@ class SaleOrderLine(models.Model):
     @api.depends('product_uom_qty','qty_delivered')
     def _compute_back_order_qty(self):
         for pro in self:
-            if pro.qty_delivered:
-                pro.back_order_qty = pro.product_uom_qty - pro.qty_delivered
-            else:
-                pro.back_order_qty = 0
+            # if pro.qty_delivered:
+            pro.back_order_qty = pro.product_uom_qty - pro.qty_delivered
+            # else:
+            #     pro.back_order_qty = 0
                 
     @api.onchange('product_id')
     def _onchange_product_id(self):

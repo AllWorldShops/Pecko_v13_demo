@@ -30,17 +30,17 @@ class PurchaseOrderLine(models.Model):
     schedule_date = fields.Datetime(related='order_id.date_planned')
     promise_date = fields.Datetime(string="Promised Date")
     order_date = fields.Datetime(related='order_id.date_order')
-    back_order_qty = fields.Integer(string='Back Order Qty', compute='_compute_back_order_qty', store=True)
+    back_order_qty = fields.Float(string='Pending Qty', compute='_compute_back_order_qty', store=True)
     line_no = fields.Integer(string='Position', default=False)
     old_po_no = fields.Char(string="Old PO Number", related="order_id.old_po_no")
     
     @api.depends('product_qty','qty_received')
     def _compute_back_order_qty(self):
         for pro in self:
-            if pro.qty_received:
-                pro.back_order_qty = pro.product_qty - pro.qty_received
-            else:
-                pro.back_order_qty = 0
+            # if pro.qty_received:
+            pro.back_order_qty = pro.product_qty - pro.qty_received
+            # else:
+            #     pro.back_order_qty = 0
 
     @api.onchange('product_id')
     def onchange_purchase_line_product(self):

@@ -31,7 +31,7 @@ class MrpProduction(models.Model):
                 # for line in self.move_raw_ids:
                 #     if line.production_id.state not in ['draft', 'done']:
                 #         reserved_qty.append(line.reserved_availability)
-                reserved_qty = self.move_raw_ids.filtered(lambda l: l.reserved_availability == 0 )
+                reserved_qty = self.move_raw_ids.filtered(lambda l: l.reserved_availability == 0 and l.product_uom_qty != 0)
                 if any(reserved_qty) and rec.state not in ['draft', 'done']:
                     rec.reserved_check = True
     
