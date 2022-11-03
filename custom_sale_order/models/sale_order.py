@@ -32,7 +32,7 @@ class SaleOrder(models.Model):
             # print(org_moves, "org_moves-----")
             if do_moves:
                 for obj in do_moves.move_orig_ids:
-                    if move.group_id.name != move.origin:
+                    if obj.group_id.name != do_moves.origin:
                         line.mo_reference = obj.group_id.name
         return res
 
