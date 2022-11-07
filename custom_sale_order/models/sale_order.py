@@ -64,19 +64,19 @@ class SaleOrderLine(models.Model):
     need_date = fields.Date(string="Need Date")
     line_no = fields.Integer(string='Position', default=False)
     requested_date_line = fields.Date(string="Requested Date")
-    order_ref = fields.Char('Order Reference',related='order_id.name')   
+    order_ref = fields.Char('Order Reference',related='order_id.name', store=True)   
     customer_id = fields.Many2one('res.partner',related='order_id.partner_id')
     sales_person_id = fields.Many2one('res.users',related='order_id.user_id')
     promise_date = fields.Datetime('Promised Date',related='order_id.commitment_date')
     promised_date = fields.Date(string="Promised Date")
-    customer_po_no = fields.Char('Customer Po No',related='order_id.customer_po_no')   
+    customer_po_no = fields.Char('Customer Po No', related='order_id.customer_po_no')   
     internal_ref_no = fields.Char('Internal Ref No',related='product_id.default_code') 
     back_order_qty = fields.Float(string='Pending Qty', compute='_compute_back_order_qty', store=True)
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured")
     mo_reference = fields.Char("M.O Reference")
     do_reference = fields.Char("D.O Reference", compute="_compute_do_reference", store=True)
-
-
+    need_date = fields.Date(string="Need Date")
+    
     @api.depends('order_id.picking_ids')
     def _compute_do_reference(self):
         # picking = self.order_id.picking_ids.filtered(lambda l: l.state not in ['done', 'cancel']).sorted(lambda line: line.id)
@@ -97,13 +97,13 @@ class SaleOrderLine(models.Model):
 #                     line_no_val += 1
 
     
-    @api.depends('product_uom_qty','qty_delivered')
+    @api.depends('product_uom_qty', 'qty_delivered')
     def _compute_back_order_qty(self):
         for pro in self:
             # if pro.qty_delivered:
             pro.back_order_qty = pro.product_uom_qty - pro.qty_delivered
             # else:
-            #     pro.back_order_qty = 0
+            #     pro.back_order_qty = 0.0
                 
     @api.onchange('product_id')
     def _onchange_product_id(self):
