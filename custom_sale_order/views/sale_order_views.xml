@@ -36,8 +36,8 @@
 			</xpath>
 			<xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='price_unit']" position="after">
 				<field name="requested_date_line"/>
-				<field name="promised_date" optional="hide"/>
 				<field name="need_date" optional="hide"/>
+				<field name="promised_date" optional="hide"/>
 			</xpath>
 			<!--	<xpath expr="//form/sheet/notebook/page/field[@name='order_line'/form/group/group[1]/field[@name='product_id']" position="replace">
 				<field name="product_id" string="Pecko Part Number"/>
@@ -85,8 +85,8 @@
 				<field name="back_order_qty"/>
 				<field name="product_uom" string="Unit of Measure"/>
 				<field name="requested_date_line" string="Requested Date"/>
-				<field name="promised_date"/>
 				<field name="need_date" />
+				<field name="promised_date"/>
 				<field name="price_subtotal" string="Subtotal"/>
 			</tree>
 		</field>
