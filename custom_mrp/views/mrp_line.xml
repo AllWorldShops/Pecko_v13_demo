@@ -148,6 +148,9 @@
 		<field name="model">mrp.production</field>
 		<field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
 		<field name="arch" type="xml">
+			<xpath expr="//search/field[@name='origin']" position="after">
+				<field name="customer_po_no" />
+			</xpath>
 			<xpath expr="//search/group" position="inside">
 				 <filter string="Store Start Date" name="store_start_date_filter" domain="[]" context="{'group_by': 'store_start_date'}" />
 			</xpath>

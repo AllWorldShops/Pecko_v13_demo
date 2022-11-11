@@ -109,6 +109,9 @@
 		<!-- <field name="priority" eval="15"/> -->
 		<field name="inherit_id" ref="sale.view_sales_order_filter"/>
 		<field name="arch" type="xml">
+			<xpath expr="//search/field[@name='salesman_id']" position="after">
+				<field name="customer_po_no" />
+			</xpath>
 			<xpath expr="//search/field[@name='partner_id']" position="after">
 				<field name="customer_po_no" />
 			</xpath>
