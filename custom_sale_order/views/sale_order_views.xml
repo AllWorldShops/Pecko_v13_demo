@@ -97,6 +97,9 @@
 		<field name="model">sale.order.line</field>
 		<field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
 		<field name="arch" type="xml">
+			<xpath expr="//search/field[@name='salesman_id']" position="after">
+				<field name="customer_po_no" />
+			</xpath>
 			<xpath expr="//search/group" position="inside">
 				<filter string="Promised Date" name="Promised Date" context="{'group_by':'promised_date'}"/>
 			</xpath>
@@ -109,9 +112,6 @@
 		<!-- <field name="priority" eval="15"/> -->
 		<field name="inherit_id" ref="sale.view_sales_order_filter"/>
 		<field name="arch" type="xml">
-			<xpath expr="//search/field[@name='salesman_id']" position="after">
-				<field name="customer_po_no" />
-			</xpath>
 			<xpath expr="//search/field[@name='partner_id']" position="after">
 				<field name="customer_po_no" />
 			</xpath>
