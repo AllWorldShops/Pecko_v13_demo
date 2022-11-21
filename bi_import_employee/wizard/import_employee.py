@@ -43,9 +43,10 @@ class ImportProducts(models.TransientModel):
 			raise ValidationError(_("Please Upload File to Import Products !"))
 
 		if self.file_type == 'CSV':
-			line = keys = ['default_code', 'uom_id', 'name', 'x_studio_field_qr3ai','x_studio_field_mHzKJ',
-                  'standard_price','min_qty','pname','uom_po_id','currency_id',
-                  'price', 'delay', 'route_ids', 'categ_id']
+			# line = keys = ['default_code', 'uom_id', 'name', 'x_studio_field_qr3ai','x_studio_field_mHzKJ',
+            #       'standard_price','min_qty','pname','uom_po_id','currency_id',
+            #       'price', 'delay', 'route_ids', 'categ_id']
+			line = keys = ['name', 'order_seq']
 			try:
 				csv_data = base64.b64decode(self.file)
 				data_file = io.StringIO(csv_data.decode("utf-8"))
@@ -64,7 +65,8 @@ class ImportProducts(models.TransientModel):
 					if i == 0:
 						continue
 					else:
-						res = self.create_products(values)
+						# res = self.create_products(values)
+						res = self.update_record(values)
 		else:
 			try:
 				file = tempfile.NamedTemporaryFile(delete= False,suffix=".xlsx")
@@ -82,33 +84,38 @@ class ImportProducts(models.TransientModel):
 					fields = list(map(lambda row:row.value.encode('utf-8'), sheet.row(row_no)))
 				else:
 					line = list(map(lambda row:isinstance(row.value, bytes) and row.value.encode('utf-8') or str(row.value), sheet.row(row_no)))
-					values.update( {
-							# 'name':line[0],
-							# 'job_title': line[1],
-							# 'mobile_phone': line[2],
-							# 'work_phone':line[3],
-							# 'work_email':line[4],
-							# 'department_id':line[5],
-							# 'address_id':line[6],
-							# 'gender':line[7],
-							# 'birthday':line[8],
-							'default_code': line[0],
-       						'uom_id': line[1],
-							'name': line[2],
-       						'x_studio_field_qr3ai': line[3],
-             				'x_studio_field_mHzKJ': line[4],
-                  			'standard_price': line[5],
-                  			'min_qty':line[6],
-							'pname':line[7],
-       						'uom_po_id':line[8],
-             				'currency_id':line[9],
-                  			'price': line[10],
-                     		'delay': line[11],
-                       		'route_ids': line[12],
-                         	'categ_id': line[13]
-							})
-					res = self.create_products(values)
-    
+					# values.update( {
+					# 		# 'name':line[0],
+					# 		# 'job_title': line[1],,
+					# 		'default_code': line[0],
+       				# 		'uom_id': line[1],
+					# 		'name': line[2],
+       				# 		'x_studio_field_qr3ai': line[3],
+             		# 		'x_studio_field_mHzKJ': line[4],
+                  	# 		'standard_price': line[5],
+                  	# 		'min_qty':line[6],
+					# 		'pname':line[7],
+       				# 		'uom_po_id':line[8],
+             		# 		'currency_id':line[9],
+                  	# 		'price': line[10],
+                    #  		'delay': line[11],
+                    #    		'route_ids': line[12],
+                    #      	'categ_id': line[13]
+					# 		})
+					values.update({'name': line[0],
+								'order_seq': line[1]})
+					# res = self.create_products(values)
+					res = self.update_record(values)
+
+
+	def update_record(self, values):
+		print(values, "values--------------------")
+		mrp = self.env['mrp.production'].search([('name', '=', values.get('name'))])
+		res = mrp.update({
+			'order_seq' : values.get('order_seq')
+			})
+		return res
+
 	def create_products(self, values):
 		products = self.env['product.product']
         # birthday = self.get_birthday(values.get('birthday')
