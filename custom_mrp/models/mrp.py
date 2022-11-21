@@ -3,6 +3,7 @@ from odoo import models, fields, api, _
 from odoo.tools import float_round
 
 
+
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
