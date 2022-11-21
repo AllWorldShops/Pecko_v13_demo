@@ -110,7 +110,7 @@ class ImportProducts(models.TransientModel):
 
 	def update_record(self, values):
 		print(values, "values--------------------")
-		mrp = self.env['mrp.production'].search([('name', '=', values.get('name'))])
+		mrp = self.env['mrp.production'].sudo().search([('name', '=', values.get('name'))])
 		res = mrp.update({
 			'order_seq' : values.get('order_seq')
 			})
