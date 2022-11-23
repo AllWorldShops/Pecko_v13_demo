@@ -7,6 +7,7 @@ from odoo.tools import float_round
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
+
     def _action_cancel_orders(self):
         mrp = self.sudo().search([('id', 'in', [6696, 6050, 6051, 9002, 9289])])
         for rec in mrp:
