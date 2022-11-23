@@ -2,20 +2,15 @@ from email.policy import default
 from odoo import models, fields, api, _
 from odoo.tools import float_round
 
-import logging
-_logger = logging.getLogger(__name__)
-
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
     def _action_cancel_orders(self):
-        mrp = self.sudo().search([('order_seq', 'ilike', 'C-'),('state', '!=', 'cancel')])
-        _logger.info("Manufacturing Orders to cancel---:- %s", str(len(mrp)))
+        mrp = self.sudo().search([('order_seq', 'ilike', 'C-'),('state', '!=', 'cancel')], limit=1000)
         # ss
-        # for rec in mrp:
-        #     rec.with_delay().action_cancel()
-        # _logger.info("----Job Queue Done----------")
+        for rec in mrp:
+            rec.with_delay().action_cancel()
 
     consumed_move_raw_ids = fields.One2many(related='move_raw_ids', string="Consumed Products")
     finished_line_ids = fields.One2many(related='finished_move_line_ids', string="Consumed Products")
