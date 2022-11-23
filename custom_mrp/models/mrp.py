@@ -7,6 +7,11 @@ from odoo.tools import float_round
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
+    def _action_cancel_orders(self):
+        mrp = self.sudo().search([('id', 'in', [6696, 6050, 6051, 9002, 9289])])
+        for rec in mrp:
+            rec.with_delay().action_cancel()
+
     consumed_move_raw_ids = fields.One2many(related='move_raw_ids', string="Consumed Products")
     finished_line_ids = fields.One2many(related='finished_move_line_ids', string="Consumed Products")
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer Name')
