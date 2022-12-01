@@ -7,15 +7,24 @@
 		<field name="arch" type="xml">
 			<form string="url">
 				<sheet>
+					<!-- <div class="oe_button_box" name="button_box">
+						<button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+							<field name="active" widget="boolean_button"/>
+						</button>
+					</div> -->
 					<group>
 						<field name="name" />
 						<field name="code" />
 					</group>
 				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers"/>
+					<field name="message_ids" widget="mail_thread"/>
+				</div>
 			</form>
 		</field>
 	</record>
-	
+
 	<!-- Tree -->
 	<record id="view_url_tree" model="ir.ui.view">
 		<field name="name">url.tree</field>
@@ -24,6 +33,7 @@
 			<tree string="url">
 				<field name="name"/>
 				<field name="code"/>
+				<field name="active" widget="boolean_toggle"/>
 			</tree>
 		</field>
 	</record>
@@ -38,6 +48,6 @@
 
 	<!-- Menu Details -->
 	<menuitem id="view_url_menu" name="URL" parent="mrp.menu_mrp_configuration" groups="mrp.group_mrp_manager" sequence="99" action="view_url_action"/>
-	
-	
+
+
 </odoo>   
