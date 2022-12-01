@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="driver_master_view_form" model="ir.ui.view">
+        <field name="name">driver.master.view.form</field>
+        <field name="model">driver.master</field>
+        <field name="arch" type="xml">
+            <form string="drivers">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                        </group>
+                        <group>
+                            <field name="ph_no" />
+                        </group>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="driver_master_view_tree" model="ir.ui.view">
+        <field name="name">driver.master.view.tree</field>
+        <field name="model">driver.master</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="ph_no" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="driver_master_action" model="ir.actions.act_window">
+        <field name="name">Drivers</field>
+        <field name="res_model">driver.master</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="driver_master_menu" action="driver_master_action" parent="stock.menu_stock_config_settings" sequence="5"/>
+</odoo>
