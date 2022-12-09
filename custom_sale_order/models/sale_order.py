@@ -14,10 +14,10 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     def _action_confirm_orders(self):
-        sale = self.sudo().search([('origin', '=', 'Activate-'),('state', '=', 'draft'), ('company_id', '=', 1)])
+        sale = self.sudo().search([('origin', '=', 'Activate-'),('state', '=', 'draft'), ('company_id', '=', 1)], limit=500)
         _logger.info("---------Sales Length ---------: %s", str(len(sale)))
-        # for rec in mrp:
-        #     rec.with_delay().action_cancel()
+        for rec in sale:
+            rec.with_delay().action_confirm()
     
     attn = fields.Many2one('res.partner',string="ATTN")
     customer_po_no = fields.Char(string="Customer PO No")
