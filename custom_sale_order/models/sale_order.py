@@ -15,10 +15,17 @@ class SaleOrder(models.Model):
 
     def _action_confirm_orders(self):
         sale = self.sudo().search([('origin', '=', 'Activate-'),('state', '=', 'draft'), ('company_id', '=', 1)], limit=500)
+        _logger.info("---------Sales Length ----------: %s", str(len(sale)))
+        for rec in sale:
+            rec.with_delay().action_confirm()
+
+    def _action_confirm_orders_without_delay(self):
+        sale = self.sudo().search([('origin', '=', 'Activate-'),('state', '=', 'draft'), ('company_id', '=', 1)], limit=30)
         _logger.info("---------Sales Length ---------: %s", str(len(sale)))
         for rec in sale:
             rec.with_delay().action_confirm()
-    
+            self.env.cr.commit()
+
     attn = fields.Many2one('res.partner',string="ATTN")
     customer_po_no = fields.Char(string="Customer PO No")
     origin = fields.Char(string='Order Ref No', help="Reference of the document that generated this sales order request.")
