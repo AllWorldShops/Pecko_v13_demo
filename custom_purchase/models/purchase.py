@@ -20,6 +20,22 @@ class PurchaseOrder(models.Model):
     
     old_po_no = fields.Char(string='Old PO Number')
 
+
+    # passing the values customer_po_no field , purchase order to sale order)
+    def _prepare_sale_order_data(self, name, partner, company, direct_delivery_address):
+        val = super(PurchaseOrder, self)._prepare_sale_order_data(name, partner, company, direct_delivery_address)
+        val['customer_po_no'] = self.name
+        return val
+
+    # passing the values line_no field , purchase order to sale order)
+    @api.model
+    def _prepare_sale_order_line_data(self, line, company, sale_id):
+        res = super(PurchaseOrder, self)._prepare_sale_order_line_data(line, company, sale_id)
+        res['line_no'] = line.line_no
+        res['customer_part_no'] = line.customer_part_no
+        res['requested_date_line'] = line.date_planned
+        return res
+
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
     

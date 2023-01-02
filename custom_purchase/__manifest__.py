@@ -7,7 +7,7 @@
     'website': 'https://www.pptssolutions.com',
     'category': 'Purchase',
     'description': """Enhancement in Purchase module""",
-    'depends': ['purchase','custom_product','pecko_so_po_report'],
+    'depends': ['purchase','custom_product','pecko_so_po_report', 'inter_company_rules'],
     'data': [
         'views/purchase_view.xml'
     ],
