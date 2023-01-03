@@ -50,20 +50,20 @@ class SaleOrder(models.Model):
                         line.mo_reference = obj.group_id.name
         return res
 
-    def action_cancel(self):
-        for line in self.order_line:
-            st_mo = self.env['stock.move'].search([('raw_material_production_id.origin', '=', self.name), ('raw_material_production_id.name', '=', line.mo_reference), ('state', '!=', 'done')])
-            for rec in st_mo:
-                rec._action_cancel()
-            mo = self.env['mrp.production'].search([('origin', '=', self.name), ('product_id', '=', line.product_id.id)])
-            for obj in mo:
-                obj.action_cancel()
-            bc_mo = self.env['mrp.production'].search([('origin', '=', line.mo_reference)])
-            for bo in bc_mo:
-                bo.action_cancel()
-        for pick in self.picking_ids.filtered(lambda l: l.state != 'done'):
-            pick.action_cancel()
-        return self.write({'state': 'cancel'})
+    # def action_cancel(self):
+    #     for line in self.order_line:
+    #         st_mo = self.env['stock.move'].search([('raw_material_production_id.origin', '=', self.name), ('raw_material_production_id.name', '=', line.mo_reference), ('state', '!=', 'done')])
+    #         for rec in st_mo:
+    #             rec._action_cancel()
+    #         mo = self.env['mrp.production'].search([('origin', '=', self.name), ('product_id', '=', line.product_id.id)])
+    #         for obj in mo:
+    #             obj.action_cancel()
+    #         bc_mo = self.env['mrp.production'].search([('origin', '=', line.mo_reference)])
+    #         for bo in bc_mo:
+    #             bo.action_cancel()
+    #     for pick in self.picking_ids.filtered(lambda l: l.state != 'done'):
+    #         pick.action_cancel()
+    #     return self.write({'state': 'cancel'})
 
     # def action_update_mo(self):
     #     # print("test--------")
