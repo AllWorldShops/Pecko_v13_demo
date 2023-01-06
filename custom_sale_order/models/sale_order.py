@@ -54,14 +54,18 @@ class SaleOrder(models.Model):
         for line in self.order_line:
             st_mo = self.env['stock.move'].search([('raw_material_production_id.origin', '=', self.name), ('raw_material_production_id.name', '=', line.mo_reference), ('state', '!=', 'done')])
             for rec in st_mo:
+                _logger.info("------------Stock Moves------:- %s", rec.name)
                 rec._action_cancel()
             mo = self.env['mrp.production'].search([('origin', '=', self.name), ('product_id', '=', line.product_id.id)])
             for obj in mo:
+                _logger.info("------------Production------:- %s", obj.name)
                 obj.action_cancel()
             bc_mo = self.env['mrp.production'].search([('origin', '=', line.mo_reference)])
             for bo in bc_mo:
+                _logger.info("------------B/o namee------:- %s", bo.name)
                 bo.action_cancel()
         for pick in self.picking_ids.filtered(lambda l: l.state != 'done'):
+            _logger.info("------------Pickinggg------:- %s", pick.name)
             pick.action_cancel()
         return self.write({'state': 'cancel'})
 
