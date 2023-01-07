@@ -72,6 +72,38 @@ class StockMoveLine(models.Model):
 class StockInventory(models.Model):
     _inherit = 'stock.inventory'
 
+    def action_open_inventory_lines(self):
+        self.ensure_one()
+        action = {
+            'type': 'ir.actions.act_window',
+            'views': [(self.env.ref('stock.stock_inventory_line_tree2').id, 'tree')],
+            'view_mode': 'tree',
+            'name': _('Inventory Lines'),
+            'res_model': 'stock.inventory.line',
+        }
+        context = {
+            'default_is_editable': True,
+            'default_inventory_id': self.id,
+            'default_company_id': self.company_id.id,
+        }
+        # Define domains and context
+        domain = [
+            ('inventory_id', '=', self.id)
+        ]
+        if self.location_ids:
+            context['default_location_id'] = self.location_ids[0].id
+            if len(self.location_ids) == 1:
+                if not self.location_ids[0].child_ids:
+                    context['readonly_location_id'] = True
+
+        if self.product_ids:
+            if len(self.product_ids) == 1:
+                context['default_product_id'] = self.product_ids[0].id
+
+        action['context'] = context
+        action['domain'] = domain
+        return action
+
     location_ids = fields.Many2many(
         'stock.location', string='Locations',
         readonly=True, check_company=True,
