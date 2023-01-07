@@ -98,7 +98,7 @@ class StockInventoryLine(models.Model):
                 ('partner_id', '=', line.partner_id.id),
                 ('package_id', '=', line.package_id.id),
                 ('prod_lot_id', '=', line.prod_lot_id.id),
-                ('inventory_id', '=', line.inventory_id.id)
+                ('inventory_id', '=', line.inventory_id.id),
                 ('state', '!=', 'done')]
             # if line.location_id.usage != 'internal':
             #     dmn = self.search(domain)
