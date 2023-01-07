@@ -104,6 +104,8 @@ class StockInventoryLine(models.Model):
             #     dmn = self.search(domain)
             #     _logger.info("-------Duplicate Lineitem : %s------" % dmn)
             #     dmn.unlink()
+            rec = self.search(domain)
+            _logger.info("-------Duplicate Lineitem : %s------" % rec.inventory_id)
             existings = self.search_count(domain)
             if existings:
                 raise UserError(_("There is already one inventory adjustment line for this product,"
