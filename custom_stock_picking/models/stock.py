@@ -160,3 +160,16 @@ class ProductTemplate(models.Model):
                 if rte.company_id == self.env.company:
                     return rte.ids
         return []
+
+
+class StockLocation(models.Model):
+    _inherit = "stock.location"
+
+    def _should_be_valued(self):
+        """ This method returns a boolean reflecting whether the products stored in `self` should
+        be considered when valuating the stock of a company.
+        """
+        self.ensure_one()
+        if self.usage == 'internal' or (self.usage == 'transit' and self.company_id) or (self.usage == 'production' and self.company_id):
+            return True
+        return False
