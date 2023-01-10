@@ -97,4 +97,33 @@
 		action="custom_purchase.action_purchase_lines_menu" parent="purchase.menu_procurement_management"
 		 sequence="10"/>
 
+<record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.inter.company.rules.inherit</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="inter_company_rules.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='row ml32']" position="after">
+                    <div class="row ml32">
+                        <field name="split_so" class="col-1 col-lg-1"/>
+                        <label for="split_so" class="o_light_label"/>
+                    </div>
+                </xpath>
+            </field>
+    </record>
+
+
+    <record id="res_company_settings_view_form_inherit" model="ir.ui.view">
+            <field name="name">res_company_view_form_inherit</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="inter_company_rules.view_company_inter_change_inherit_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='auto_validation']" position="after">
+                    <field name="split_so"/>
+                </xpath>
+            </field>
+    </record>
+
+
+
+
 </odoo>
