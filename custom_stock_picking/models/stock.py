@@ -41,10 +41,10 @@ class StockMove(models.Model):
         assigned_moves = self.sudo().search([('location_id', '=', 8), ('state', 'in', ['assigned', 'partially_available'])],limit=50)
         _logger.info("---------Assigned stock moves -------: %s", len(assigned_moves))
         for rec in assigned_moves:
-            try:
-                rec.sudo()._do_unreserve()
-            except Exception as e:
-                _logger.info("-----Exception occurred stock moves--------- : %s", str(e))
+            rec.sudo()._do_unreserve()
+            self.env.cr.commit()
+            # except Exception as e:
+                # _logger.info("-----Exception occurred stock moves--------- : %s", str(e))
 
                 
     additional_notes = fields.Char(string='Additional Notes')
