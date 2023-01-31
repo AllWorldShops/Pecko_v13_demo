@@ -36,7 +36,17 @@ class StockPicking(models.Model):
     
 class StockMove(models.Model):
     _inherit = 'stock.move'
-    
+
+    def _action_unreserve(self):
+        assigned_moves = self.sudo().search([('location_id', '=', 8), ('state', 'in', ['assigned', 'partially_available'])],limit=50)
+        _logger.info("---------Assigned stock moves -------: %s", len(assigned_moves))
+        for rec in assigned_moves:
+            try:
+                rec.sudo()._do_unreserve()
+            except Exception as e:
+                _logger.info("-----Exception occurred stock moves--------- : %s", str(e))
+
+                
     additional_notes = fields.Char(string='Additional Notes')
     customer_part_no = fields.Text(string='Part Number')
     position_no = fields.Integer(string="Position", compute="_compute_position_no")
