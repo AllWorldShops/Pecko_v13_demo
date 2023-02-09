@@ -212,6 +212,9 @@
 			<xpath expr="//button[@name='action_assign']" position="attributes">
 				<attribute name="groups">custom_mrp.group_mrp_action_assign_button_show</attribute>
 			</xpath>
+			<xpath expr="//button[@name='button_unreserve']" position="attributes">
+				<attribute name="groups">custom_mrp.group_mrp_show_unreserve_button</attribute>
+			</xpath>
 		</field>
 	</record>
 

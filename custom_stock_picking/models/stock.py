@@ -194,7 +194,6 @@ class ProcurementRule(models.Model):
         self.sudo()._procure_orderpoint_confirm(use_new_cursor=use_new_cursor, company_id=company_id)
         if use_new_cursor:
             self._cr.commit()
-
         # Search all confirmed stock_moves and try to assign them
         # domain = self._get_moves_to_assign_domain(company_id)
         # moves_to_assign = self.env['stock.move'].search(domain, limit=None,

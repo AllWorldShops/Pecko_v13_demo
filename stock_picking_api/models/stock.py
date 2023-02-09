@@ -35,7 +35,6 @@ class StockPickingInherit(models.Model):
                         'sku' : line.product_id.default_code,
                         'description': str(line.part_no),
                         'quantity': str(line.qty_done),
-                        
                     })
                 data = {
                     "data": {
