@@ -124,12 +124,12 @@
 								1 USD =
 							<span t-esc="'%.4f'%(o.exchange_rate)" />
 								SGD
-															<!-- <span t-field="o.company_currency_id.name" /> -->
+																						<!-- <span t-field="o.company_currency_id.name" /> -->
 							<br />
 								Conversation Rate =
 							<span t-esc="'%.4f'%(o.exchange_rate)" />
 								SGD
-															<!-- 1 USD = <span t-esc="'%.4f'% o.currency_conv_rate"/> <span t-field="o.company_currency_id.name"/><br/> -->
+																						<!-- 1 USD = <span t-esc="'%.4f'% o.currency_conv_rate"/> <span t-field="o.company_currency_id.name"/><br/> -->
 
 						</td>
 						<td width="25%" style="text-align:right">
@@ -208,7 +208,7 @@
 							2.Any discrepancy noted herein must be brought to our notice
 							within 7 days in writing from the date of this invoice.
 					<br/>
-							3.Title to this merchandise remains with Pecko Electronics Industries Pte.Ltd until
+							3.Title to this merchandise remains with All World Shop Pte.Ltd until
 							such time as full settlement of all sums due from you to us under
 							this invoice or otherwise is received.
 							
@@ -225,9 +225,9 @@
 
 
 
-			</tr>
-		</table>
-	</t>
+				</tr>
+			</table>
+		</t>
 	<!-- <t t-if="o.company_id.country_id.code == 'SG'">
 				<table width="100%" style="border-bottom:1px solid black;border-top:1px solid black;">
 					<tr>
@@ -238,44 +238,44 @@
 				</table>
 			</t> -->
 
-</div>
-</template>
+		</div>
+	</template>
 
-<template id="custom_invoice_external_layout">
-<!-- Multicompany -->
-<t t-if="not o and doc">
-	<t t-set="o" t-value="doc" />
-</t>
+		<template id="custom_invoice_external_layout">
+			<!-- Multicompany -->
+			<t t-if="not o and doc">
+				<t t-set="o" t-value="doc" />
+			</t>
 
-<t t-if="o and 'company_id' in o">
-	<t t-set="company" t-value="o.company_id.sudo()" />
-</t>
-<t t-if="not o or not 'company_id' in o">
-	<t t-set="company" t-value="res_company" />
-</t>
+			<t t-if="o and 'company_id' in o">
+				<t t-set="company" t-value="o.company_id.sudo()" />
+			</t>
+			<t t-if="not o or not 'company_id' in o">
+				<t t-set="company" t-value="res_company" />
+			</t>
 
-<t t-call="invoice_report.custom_invoice_external_layout_background">
-	<t t-raw="0" />
-</t>
+			<t t-call="invoice_report.custom_invoice_external_layout_background">
+				<t t-raw="0" />
+			</t>
 
-</template>
+		</template>
 
-<record id="paperformat_invoice" model="report.paperformat">
-<field name="name">Invoice Paperformat</field>
-<field name="default" eval="True" />
-<field name="format">A4</field>
-<field name="orientation">Portrait</field>
-<field name="margin_top">35</field>
-<field name="margin_bottom">45</field>
-<field name="margin_left">6</field>
-<field name="margin_right">6</field>
-<field name="header_line" eval="False" />
-<field name="header_spacing">25</field>
-<field name="dpi">90</field>
-</record>
+	<record id="paperformat_invoice" model="report.paperformat">
+		<field name="name">Invoice Paperformat</field>
+		<field name="default" eval="True" />
+		<field name="format">A4</field>
+		<field name="orientation">Portrait</field>
+		<field name="margin_top">35</field>
+		<field name="margin_bottom">45</field>
+		<field name="margin_left">6</field>
+		<field name="margin_right">6</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">25</field>
+		<field name="dpi">90</field>
+	</record>
 
-<!-- QWeb Reports -->
-<report id="invoice_ppts" model="account.move" string="Invoice Report" report_type="qweb-pdf" name="invoice_report.report_ppts_invoice_custom" file="invoice_report.report_ppts_invoice_custom" paperformat="paperformat_invoice" attachment="(object.state in ('draft','open','paid')) and ('INV'+(object.name or '').replace('/','')+'.pdf')" print_report_name="(object._get_report_base_filename())" />
+	<!-- QWeb Reports -->
+	<report id="invoice_ppts" model="account.move" string="Invoice Report" report_type="qweb-pdf" name="invoice_report.report_ppts_invoice_custom" file="invoice_report.report_ppts_invoice_custom" paperformat="paperformat_invoice" attachment="(object.state in ('draft','open','paid')) and ('INV'+(object.name or '').replace('/','')+'.pdf')" print_report_name="(object._get_report_base_filename())" />
 
 </data>
 </odoo>
