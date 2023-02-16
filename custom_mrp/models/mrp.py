@@ -3,7 +3,8 @@ from odoo import models, fields, api, _
 from odoo.tools import float_round
 from odoo.exceptions import UserError
 
-
+import logging
+_logger = logging.getLogger(__name__)
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
@@ -414,7 +415,9 @@ class MrpAbstractWorkorderInherit(models.AbstractModel):
                     })
             else:
                 rounding = production_move.product_uom.rounding
+                _logger.info("----------Manufacturing _set_quantity_done---:- %s", str(production_move))
                 production_move._set_quantity_done(
                     float_round(abstract_wo.qty_producing, precision_rounding=rounding)
                 )
+            
         self.env['stock.move.line'].create(move_line_vals)
