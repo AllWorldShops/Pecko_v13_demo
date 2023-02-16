@@ -419,5 +419,5 @@ class MrpAbstractWorkorderInherit(models.AbstractModel):
                 production_move._set_quantity_done(
                     float_round(abstract_wo.qty_producing, precision_rounding=rounding)
                 )
-            
-        self.env['stock.move.line'].create(move_line_vals)
+        if production_move:
+            self.env['stock.move.line'].create(move_line_vals)
