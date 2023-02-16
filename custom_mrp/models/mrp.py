@@ -1,6 +1,8 @@
 from email.policy import default
 from odoo import models, fields, api, _
 from odoo.tools import float_round
+from odoo.exceptions import UserError
+
 
 
 class MrpProduction(models.Model):
@@ -371,5 +373,48 @@ class ReportBomStructureInherit(models.AbstractModel):
         data["lines"] = pdf_lines
         return data
 
-class StockPicking(models.Model):
-    _inherit = 'stock.picking'
+class MrpAbstractWorkorderInherit(models.AbstractModel):
+    _inherit = "mrp.abstract.workorder"
+
+    def _update_finished_move(self):
+        """ Update the finished move & move lines in order to set the finished
+        product lot on it as well as the produced quantity. This method get the
+        information either from the last workorder or from the Produce wizard."""
+        move_line_vals = []
+        for abstract_wo in self:
+            production_move = abstract_wo.production_id.move_finished_ids.filtered(
+                lambda move: move.product_id == abstract_wo.product_id and
+                move.state not in ('done', 'cancel')
+            )
+            if not production_move:
+                continue
+            if production_move.product_id.tracking != 'none':
+                if not abstract_wo.finished_lot_id:
+                    raise UserError(_('You need to provide a lot for the finished product.'))
+                move_line = production_move.move_line_ids.filtered(
+                    lambda line: line.lot_id.id == abstract_wo.finished_lot_id.id
+                )
+                if move_line:
+                    if abstract_wo.product_id.tracking == 'serial':
+                        raise UserError(_('You cannot produce the same serial number twice.'))
+                    move_line.product_uom_qty += abstract_wo.qty_producing
+                    move_line.qty_done += abstract_wo.qty_producing
+                else:
+                    location_dest_id = production_move.location_dest_id._get_putaway_strategy(abstract_wo.product_id).id or production_move.location_dest_id.id
+                    move_line_vals.append({
+                        'move_id': production_move.id,
+                        'product_id': production_move.product_id.id,
+                        'lot_id': abstract_wo.finished_lot_id.id,
+                        'product_uom_qty': abstract_wo.qty_producing,
+                        'product_uom_id': abstract_wo.product_uom_id.id,
+                        'qty_done': abstract_wo.qty_producing,
+                        'location_id': production_move.location_id.id,
+                        'company_id': production_move.company_id.id,
+                        'location_dest_id': location_dest_id,
+                    })
+            else:
+                rounding = production_move.product_uom.rounding
+                production_move._set_quantity_done(
+                    float_round(abstract_wo.qty_producing, precision_rounding=rounding)
+                )
+        self.env['stock.move.line'].create(move_line_vals)

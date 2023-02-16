@@ -212,7 +212,7 @@ class StockPicking(models.Model):
                 'target': 'current'
             }
         
-    
+        
 class StockReturnInvoicePicking(models.TransientModel):
     _inherit = 'stock.return.picking'
 
