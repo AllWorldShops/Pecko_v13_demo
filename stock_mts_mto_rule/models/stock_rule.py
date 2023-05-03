@@ -5,6 +5,13 @@ from odoo.exceptions import ValidationError
 from odoo.osv import expression
 from odoo.tools import float_compare, float_is_zero
 
+from collections import defaultdict
+from dateutil.relativedelta import relativedelta
+
+from odoo import api, fields, models, SUPERUSER_ID, _
+from odoo.osv import expression
+from odoo.addons.stock.models.stock_rule import ProcurementException
+from odoo.tools import float_compare, OrderedSet
 
 class StockRule(models.Model):
     _inherit = "stock.rule"
