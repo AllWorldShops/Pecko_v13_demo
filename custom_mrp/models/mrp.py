@@ -348,6 +348,10 @@ class ReportBomStructureInherit(models.AbstractModel):
                     lines += (get_sub_lines(line.child_bom_id, line.product_id.id, bom_line['prod_qty'], line, level + 1))
             if data['operations']:
                 lines.append({
+                    'po_no': ' ',
+                    'part_no': ' ',
+                    'description': ' ',
+                    'manufacturer': ' ',
                     'name': _('Operations'),
                     'type': 'operation',
                     'quantity': data['operations_time'],
@@ -358,6 +362,10 @@ class ReportBomStructureInherit(models.AbstractModel):
                 for operation in data['operations']:
                     if unfolded or 'operation-' + str(bom.id) in child_bom_ids:
                         lines.append({
+                            'po_no': ' ',
+                            'part_no': ' ',
+                            'description': ' ',
+                            'manufacturer': ' ',
                             'name': operation['name'],
                             'type': 'operation',
                             'quantity': operation['duration_expected'],
@@ -372,6 +380,7 @@ class ReportBomStructureInherit(models.AbstractModel):
         pdf_lines = get_sub_lines(bom, product, qty, False, 1)
         data["components"] = []
         data["lines"] = pdf_lines
+        print(data["lines"], "data[llll----------")
         return data
 
 class MrpAbstractWorkorderInherit(models.AbstractModel):
