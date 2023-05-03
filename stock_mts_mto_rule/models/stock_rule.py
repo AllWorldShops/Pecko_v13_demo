@@ -112,11 +112,11 @@ class StockRule(models.Model):
                 )
         return True
 
-    def _run_manufacture(self):
-        return self.with_delay()._run_manufacture_job(self, procurements)
-
-
     @api.model
+    def _run_manufacture(self,procurements):
+        return self.with_delay()._run_manufacture_job(procurements)
+
+
     def _run_manufacture_job(self, procurements):
         productions_values_by_company = defaultdict(list)
         for procurement, rule in procurements:
