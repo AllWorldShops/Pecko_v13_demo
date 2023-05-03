@@ -6,6 +6,7 @@ from odoo.osv import expression
 from odoo.tools import float_compare, float_is_zero
 
 from collections import defaultdict
+from odoo import api, fields, models, SUPERUSER_ID, _
 
 
 class StockRule(models.Model):
