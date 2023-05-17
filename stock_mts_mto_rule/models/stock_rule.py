@@ -110,8 +110,12 @@ class StockRule(models.Model):
                 )
         return True
 
+    from collections import defaultdict
+
+    from odoo import api, fields, models, SUPERUSER_ID, _
+    from odoo.tools import float_compare, OrderedSet
     from odoo.tools.profiler import profile
-    
+
     @profile
     @api.model
     def _run_manufacture(self, procurements):
