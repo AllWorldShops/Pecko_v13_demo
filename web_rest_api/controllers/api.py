@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 import base64
 import requests
 
-req_env = request.httprequest.headers.environ
+# req_env = request.httprequest.headers.environ
 
 class RestApi(http.Controller):
 

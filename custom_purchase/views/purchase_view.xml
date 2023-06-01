@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+
 	<record id="purchase_order_form_inherit" model="ir.ui.view">
         <field name="name">purchase.order.inherit.form</field>
         <field name="model">purchase.order</field>
@@ -9,24 +9,35 @@
         	<xpath expr="//button[@name='button_unlock']" position="attributes">
                 <attribute name="groups"></attribute>
             </xpath>
-            
+
+
             <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
             	<field name="manufacturer_id"/>
-            </xpath> 
-            <!-- <xpath expr="//field[@name='order_line']//tree//field[@name='company_id']" position="replace">
-            </xpath> -->
+            </xpath>
+
+
+
+
+<!--          <xpath expr="//field[@name='order_line']//tree//field[@name='company_id']" position="replace">-->
+<!--            </xpath>-->
+
             <xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="after">
                 <field name="notes"/>
             </xpath>
+
+
 			<xpath expr="//field[@name='order_line']//tree//field[@name='manufacturer_id']" position="after">
                 <field name="item_text"/>
             </xpath>
+
             <xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="before">
                 <field name="line_no"/>
             </xpath>
+
              <xpath expr="//field[@name='order_line']//tree//field[@name='date_planned']" position="after">
                 <field name="promise_date" optional="hide"/>
             </xpath>
+
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="old_po_no" attrs="{'readonly': [('state', 'not in', ['draft','sent'])]}"/>
             </xpath>
@@ -37,7 +48,7 @@
     <record id="purchase_order_tree_inherit_custom_purchase" model="ir.ui.view">
         <field name="name">purchase.order.tree.inherit.custom.purchase</field>
         <field name="model">purchase.order</field>
-        <field name="inherit_id" ref="purchase.purchase_order_tree" />
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree" />
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='name']" position="after">
@@ -46,7 +57,7 @@
 
         </field>
     </record>
-    
+
     <record id="view_purchase_order_line_inherited" model="ir.ui.view">
 		<field name="name">purchase.order.line</field>
 		<field name="model">purchase.order.line</field>
@@ -56,7 +67,7 @@
 				<field name="order_ref" string="Order Reference"/>
 				<field name="vendor_id" string="Vendor"/>
 				<field name="product_id" string="Product"/>
-				<field name="customer_part_no" string="Part No"/>
+<!--				<field name="customer_part_no" string="Part No"/>-->
 				<field name="old_po_no" string="Old PO Number"/>
 				<field name="name" string="Description"/>
 				<field name="manufacturer_id" string="Manufacturer"/>
@@ -73,7 +84,7 @@
 			</tree>
 		</field>
 	</record>
-	
+
 	<record id="purchase_order_line_search_inherit" model="ir.ui.view">
 		<field name="name">purchase.order.line.search.inherit</field>
 		<field name="model">purchase.order.line</field>
@@ -92,7 +103,11 @@
 		<field name="view_id" ref="custom_purchase.view_purchase_order_line_inherited"/>
 		<field name="view_mode">tree,form</field>
 	</record>
-	
+
+
+
+
+
 	<menuitem id="action_purchase_lines_menu_id" name="Purchase Lines"
 		action="custom_purchase.action_purchase_lines_menu" parent="purchase.menu_procurement_management"
 		 sequence="10"/>
@@ -100,7 +115,7 @@
 <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
             <field name="name">res.config.settings.view.form.inherit.inter.company.rules.inherit</field>
             <field name="model">res.config.settings</field>
-            <field name="inherit_id" ref="inter_company_rules.res_config_settings_view_form"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//div[@class='row ml32']" position="after">
                     <div class="row ml32">
@@ -115,7 +130,7 @@
     <record id="res_company_settings_view_form_inherit" model="ir.ui.view">
             <field name="name">res_company_view_form_inherit</field>
             <field name="model">res.company</field>
-            <field name="inherit_id" ref="inter_company_rules.view_company_inter_change_inherit_form"/>
+            <field name="inherit_id" ref="base.view_company_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='auto_validation']" position="after">
                     <field name="split_so"/>

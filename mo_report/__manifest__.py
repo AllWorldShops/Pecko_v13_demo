@@ -2,7 +2,7 @@
 
 {
     'name': 'MO Report',
-    'version': '12.0',
+    'version': '16.0',
     'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
     'category': 'MRP',

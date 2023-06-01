@@ -1,206 +1,221 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
-	<template id="custom_invoice_external_layout_background">
+    <data>
+        <template id="custom_invoice_external_layout_background">
 
-			<div class="header o_background_header">
-				<div class="row">
-					<div class="col-10">
-						<img t-if="company.logo"
-							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
-						<div class="company_address"
-							style="padding-bottom:24px;line-height:12pt;font-family: Calibri;">
-							<div style="font-size: 13px;">
-								<strong>
-									<span style="font-size: 25px;"
-										t-field="company.partner_id.name" />
-								</strong>
-								<br />
-								<span t-field="o.company_id.street" />,
-								<t t-if="o.company_id.street1">
-									<span t-field="o.company_id.street1" />,
-									<br />
-									<span t-field="o.company_id.street2" />,
-								</t>
-								<t t-else="">
-									<span t-field="o.company_id.street2" />,
-								</t>
-								<br />
-								<t t-if="o.company_id.country_id.code != 'SG'">
-								<span t-field="o.company_id.city" />
-								,</t>
-								<span t-field="o.company_id.state_id" />
-								<span t-field="o.company_id.country_id" />
-								-
-								<span t-field="o.company_id.zip" />
-								<br />
-								<span>TEL :</span>
-								<span t-field="o.company_id.phone" />
-								<t t-if="o.company_id.fax">
-									|
-									<span>FAX :</span>
-									<span t-field="o.company_id.fax" />
-								</t>
-								<br />
-								<t t-if="o.company_id.country_id.code != 'SG'">
-								<span>E-mail:</span>
-								<span t-field="o.company_id.email" />
-								,</t>
-								<span>URL:</span>
-								<span t-field="o.company_id.website" />
-								<br />
-								<span>Company Reg No:</span>
-								<span t-field="o.company_id.company_registry" />
-							</div>
-						</div>
-					</div>
-					<div class="col-2">
-						<div class="text-muted text-right">
-							Page:
-							<span class="page" />
-							of
-							<span class="topage" />
-						</div>
-						<div class="clearfix mb8" />
-					</div>
-				</div>
-			</div>
+            <div class="header o_background_header">
+                <div class="row">
+                    <div class="col-10">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                             alt="Logo"/>
 
-			<div class="article o_report_layout_background"
-				t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
-				<t t-raw="0" />
-			</div>
-			
+                        <!--                        i commented-->
+                        <!--						<img t-if="company.logo"-->
+                        <!--							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />-->
 
-			<div class="footer o_background_footer"
-				style="font-family: Calibri;font-size:12px;">
-				
-				<!-- <div > -->
-				
-				<!-- </div> -->
-				<t>
-				<table width="100%"
-					style="border-bottom: 1px solid black;">
-					<tr>
-					    
-						<td t-if="o.company_id.country_id.code != 'SG'" width="85%" >
-						**This is a computer generated document. Signature is not required.**<br/>
-							1.Please remit to Pecko (M) Sdn Bhd, Swift Code: MBBEMYKL, 
-							Maybank Islamic Berhad (MYR A/C: 551100316366); 
-							Malayan Banking Berhad (USD A/C: 701105010725).
-							<br />
-							2.Any discrepancy noted herein must be brought to our notice
-							within 7 days in writing from the date of this invoice.
-							<br />
-							3.Title to this merchandise remains with PECKO (M) SDN BHD until
-							such time as full settlement of all sums due from you to us under
-							this invoice or otherwise is received.
-							
-						</td>
-						<td t-if="o.company_id.country_id.code == 'SG'" width="85%" style="position:relative;bottom:10px;">
-						**This is a computer generated document. Signature is not required.**<br/>
-							1.Please remit to Pecko Electronics Industries Pte.Ltd, Swift Code: (UOVBSGSG), 
-							United Overseas Bank (SGD A/C: 213-307-107-7); 
-							United Overseas Bank (USD A/C: 213-900-224-7).
-							<br />
-							2.Any discrepancy noted herein must be brought to our notice
-							within 7 days in writing from the date of this invoice.
-							<br />
-							3.Title to this merchandise remains with Pecko Electronics Industries Pte.Ltd until
-							such time as full settlement of all sums due from you to us under
-							this invoice or otherwise is received.
-							
-						</td>
-						<td  t-if="o.company_id.country_id.code == 'SG'" width="15%">
-						
-						<div style="position:relative;top:40px;">
-							<t>
-								<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)" style="width:105px;" />
-							</t>
-						</div>
-						</td>
+                        <div class="company_address"
+                             style="padding-bottom:24px;line-height:12pt;font-family: Calibri;">
+                            <div style="font-size: 13px;">
+                                <strong>
+                                    <span style="font-size: 25px;"
+                                          t-field="company.partner_id.name"/>
+                                </strong>
+                                <br/>
+                                <span t-field="o.company_id.street"/>,
+                                <t t-if="o.company_id.street">
+                                    <span t-field="o.company_id.street"/>,
+                                    <br/>
+                                    <span t-field="o.company_id.street2"/>,
+                                </t>
+                                <t t-else="">
+                                    <span t-field="o.company_id.street2"/>,
+                                </t>
+                                <br/>
+                                <t t-if="o.company_id.country_id.code != 'SG'">
+                                    <span t-field="o.company_id.city"/>
+                                    ,
+                                </t>
+                                <span t-field="o.company_id.state_id"/>
+                                <span t-field="o.company_id.country_id"/>
+                                -
+                                <span t-field="o.company_id.zip"/>
+                                <br/>
+                                <span>TEL :</span>
+                                <span t-field="o.company_id.phone"/>
+                                <!--								<t t-if="o.company_id.fax">-->
+                                <!--									|-->
+                                <!--									<span>FAX :</span>-->
+                                <!--									<span t-field="o.company_id.fax" />-->
+                                <!--								</t>-->
+                                <br/>
+                                <t t-if="o.company_id.country_id.code != 'SG'">
+                                    <span>E-mail:</span>
+                                    <span t-field="o.company_id.email"/>
+                                    ,
+                                </t>
+                                <span>URL:</span>
+                                <span t-field="o.company_id.website"/>
+                                <br/>
+                                <span>Company Reg No:</span>
+                                <span t-field="o.company_id.company_registry"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="text-muted text-right">
+                            Page:
+                            <span class="page"/>
+                            of
+                            <span class="topage"/>
+                        </div>
+                        <div class="clearfix mb8"/>
+                    </div>
+                </div>
+            </div>
 
-					</tr>
-				</table>
-				</t>
-				</div>
-		</template>
-       <!-- <t t-if="o.company_id.country_id.code == 'SG'">
-					
-					
-				<table width="100%"
-					style="border-bottom: 1px solid black;position:relative; bottom:50px;">
-					<tr>
-					    
-						<td width="85%" >
-						**This is a computer generated document. Signature is not required.**<br/>
-							1.Please remit to Pecko Electronics Industries Pte.Ltd, Swift Code: (UOVBSGSG), 
-							United Overseas Bank (SGD A/C: 213-307-107-7); 
-							United Overseas Bank (USD A/C: 213-900-224-7).
-							<br />
-							2.Any discrepancy noted herein must be brought to our notice
-							within 7 days in writing from the date of this invoice.
-							<br />
-							3.Title to this merchandise remains with Pecko Electronics Industries Pte.Ltd until
-							such time as full settlement of all sums due from you to us under
-							this invoice or otherwise is received.
-							
-						</td>
-						<td width="15%">
-						
-						<div style="position:relative;top:40px;">
-							<t t-if="o.company_id.country_id.code == 'SG'">
-							
-								<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)" style="width:110px;" />
-							</t>
-						</div>
-						</td>
+            <div class="article o_report_layout_background"
+                 t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                <t t-raw="0"/>
+            </div>
 
-					</tr>
-				</table>
-				</t>
-			</div>
-		</template> -->
 
-		<template id="custom_invoice_external_layout">
-			<!-- Multicompany -->
-			<t t-if="not o and doc">
-				<t t-set="o" t-value="doc" />
-			</t>
+            <div class="footer o_background_footer"
+                 style="font-family: Calibri;font-size:12px;">
 
-			<t t-if="o and 'company_id' in o">
-				<t t-set="company" t-value="o.company_id.sudo()" />
-			</t>
-			<t t-if="not o or not 'company_id' in o">
-				<t t-set="company" t-value="res_company" />
-			</t>
+                <!-- <div > -->
 
-			<t
-				t-call="journal_entries_report.custom_invoice_external_layout_background">
-				<t t-raw="0" />
-			</t>
+                <!-- </div> -->
+                <t>
+                    <table width="100%"
+                           style="border-bottom: 1px solid black;">
+                        <tr>
 
-		</template>
-	<record id="paperformat_journal" model="report.paperformat">
-			<field name="name">Journal Paperformat</field>
-			<field name="default" eval="True" />
-			<field name="format">A4</field>
-			<field name="orientation">Portrait</field>
-			<field name="margin_top">35</field>
-			<field name="margin_bottom">35</field>
-			<field name="margin_left">6</field>
-			<field name="margin_right">6</field>
-			<field name="header_line" eval="False" />
-			<field name="header_spacing">35</field>
-			<field name="dpi">90</field>
-		</record>
-	<report id="journal_entry_report_id"
-				string="Journal Entries"
-				model="account.move"
-				report_type="qweb-pdf"
-				paperformat="paperformat_journal"
-				file="journal_entries_report.journal_entry_report_template_id"
-				name="journal_entries_report.journal_entry_report_template_id"/>	
-							
-	</data>
+                            <td t-if="o.company_id.country_id.code != 'SG'" width="85%">
+                                **This is a computer generated document. Signature is not required.**
+                                <br/>
+                                1.Please remit to Pecko (M) Sdn Bhd, Swift Code: MBBEMYKL,
+                                Maybank Islamic Berhad (MYR A/C: 551100316366);
+                                Malayan Banking Berhad (USD A/C: 701105010725).
+                                <br/>
+                                2.Any discrepancy noted herein must be brought to our notice
+                                within 7 days in writing from the date of this invoice.
+                                <br/>
+                                3.Title to this merchandise remains with PECKO (M) SDN BHD until
+                                such time as full settlement of all sums due from you to us under
+                                this invoice or otherwise is received.
+
+                            </td>
+                            <td t-if="o.company_id.country_id.code == 'SG'" width="85%"
+                                style="position:relative;bottom:10px;">
+                                **This is a computer generated document. Signature is not required.**
+                                <br/>
+                                1.Please remit to Pecko Electronics Industries Pte.Ltd, Swift Code: (UOVBSGSG),
+                                United Overseas Bank (SGD A/C: 213-307-107-7);
+                                United Overseas Bank (USD A/C: 213-900-224-7).
+                                <br/>
+                                2.Any discrepancy noted herein must be brought to our notice
+                                within 7 days in writing from the date of this invoice.
+                                <br/>
+                                3.Title to this merchandise remains with Pecko Electronics Industries Pte.Ltd until
+                                such time as full settlement of all sums due from you to us under
+                                this invoice or otherwise is received.
+
+                            </td>
+                            <td t-if="o.company_id.country_id.code == 'SG'" width="15%">
+
+                                <div style="position:relative;top:40px;">
+                                    <t>
+                                        <img t-att-src="image_data_uri(o.company_id.logo)"
+                                             alt="Logo" style="width:105px;"/>
+
+<!--                                        i commented (t)-->
+<!--                                        <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="width:105px;"/>-->
+
+                                    </t>
+                                </div>
+                            </td>
+
+                        </tr>
+                    </table>
+                </t>
+            </div>
+        </template>
+        <!-- <t t-if="o.company_id.country_id.code == 'SG'">
+
+
+                 <table width="100%"
+                     style="border-bottom: 1px solid black;position:relative; bottom:50px;">
+                     <tr>
+
+                         <td width="85%" >
+                         **This is a computer generated document. Signature is not required.**<br/>
+                             1.Please remit to Pecko Electronics Industries Pte.Ltd, Swift Code: (UOVBSGSG),
+                             United Overseas Bank (SGD A/C: 213-307-107-7);
+                             United Overseas Bank (USD A/C: 213-900-224-7).
+                             <br />
+                             2.Any discrepancy noted herein must be brought to our notice
+                             within 7 days in writing from the date of this invoice.
+                             <br />
+                             3.Title to this merchandise remains with Pecko Electronics Industries Pte.Ltd until
+                             such time as full settlement of all sums due from you to us under
+                             this invoice or otherwise is received.
+
+                         </td>
+                         <td width="15%">
+
+                         <div style="position:relative;top:40px;">
+                             <t t-if="o.company_id.country_id.code == 'SG'">
+
+                                 <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)" style="width:110px;" />
+                             </t>
+                         </div>
+                         </td>
+
+                     </tr>
+                 </table>
+                 </t>
+             </div>
+         </template> -->
+
+        <template id="custom_invoice_external_layout">
+            <!-- Multicompany -->
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc"/>
+            </t>
+
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+
+            <t
+                    t-call="journal_entries_report.custom_invoice_external_layout_background">
+                <t t-raw="0"/>
+            </t>
+
+        </template>
+        <record id="paperformat_journal" model="report.paperformat">
+            <field name="name">Journal Paperformat</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">35</field>
+            <field name="margin_bottom">35</field>
+            <field name="margin_left">6</field>
+            <field name="margin_right">6</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+        <report id="journal_entry_report_id"
+                string="Journal Entries"
+                model="account.move"
+                report_type="qweb-pdf"
+                paperformat="paperformat_journal"
+                file="journal_entries_report.journal_entry_report_template_id"
+                name="journal_entries_report.journal_entry_report_template_id"/>
+
+    </data>
 </odoo>

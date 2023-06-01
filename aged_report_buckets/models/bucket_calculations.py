@@ -6,8 +6,8 @@ from datetime import datetime
 
 
 class AgedReceivable(models.AbstractModel):
-    _inherit = 'account.aged.partner'
-       
+    _inherit = 'account.aged.partner.balance.report.handler'
+
     def _get_columns_name(self, options):
         columns = [{}]
         if not self._context.get('days'):
@@ -29,9 +29,9 @@ class AgedReceivable(models.AbstractModel):
             for v in [_("JRNL"), _("Account"), _("Reference"), _("Not due on: %s") % format_date(self.env, options['date']['date_to']),'Conversion',
                       _(str(fts) + "-" + str(fte) +' Days'),'Conversion', _(str(ss) + "-" + str(se) +' Days'),'Conversion', _(str(ts) + "-" + str(te) +' Days'),'Conversion', _(str(fs) + "-" + str(fe) +' Days'),'Conversion', _("Older"),'Conversion', _("Total"),'Conversion']
         ]
-        
+
         return columns
-    
+
     @api.model
     def _get_lines(self, options, line_id=None):
 #         print('---------------------',self._context)
@@ -40,9 +40,9 @@ class AgedReceivable(models.AbstractModel):
             bucket_days = int(self.env['ir.config_parameter'].sudo().get_param('aged_report_buckets.days_count'))
         else:
 #         print('---------------------',self._context['days'])
-            bucket_days = int(self._context['days']) 
+            bucket_days = int(self._context['days'])
             self.env['ir.config_parameter'].sudo().set_param('aged_report_buckets.days_count', bucket_days)
-            
+
         sign = -1.0 if self.env.context.get('aged_balance') else 1.0
         lines = []
         account_types = [self.env.context.get('account_type')]
@@ -62,8 +62,8 @@ class AgedReceivable(models.AbstractModel):
             r4 = round(values['2'],2)
             r5 = round(values['1'],2)
             r6 = round(values['0'],2)
-            r7 = round(values['total'],2)    
-            
+            r7 = round(values['total'],2)
+
             v1 = f"{r1:,}"
             v2 = f"{r2:,}"
             v3 = f"{r3:,}"
@@ -88,7 +88,7 @@ class AgedReceivable(models.AbstractModel):
                 val_five = round(values['1'] * ac_move.exchange_rate, 2)
                 val_six = round(values['0'] * ac_move.exchange_rate, 2)
                 val_seven = round(values['total'] * ac_move.exchange_rate, 2)
-             
+
             c1 = f"{val_one:,}"
             c2 = f"{val_two:,}"
             c3 = f"{val_three:,}"
@@ -109,7 +109,7 @@ class AgedReceivable(models.AbstractModel):
                 c5 = str(cur_one.symbol) + ' ' + str(c5)
                 c6 = str(cur_one.symbol) + ' ' + str(c6)
                 c7 = str(cur_one.symbol) + ' ' + str(c7)
-                
+
             if cur_one.position == 'after':
                 c1 = str(c1) + ' ' + str(cur_one.symbol)
                 c2 = str(c2) + ' ' + str(cur_one.symbol)
@@ -118,7 +118,7 @@ class AgedReceivable(models.AbstractModel):
                 c5 = str(c5) + ' ' + str(cur_one.symbol)
                 c6 = str(c6) + ' ' + str(cur_one.symbol)
                 c7 = str(c7) + ' ' + str(cur_one.symbol)
-                
+
             if user_currency.position == 'before':
                 values['direction'] = str(user_currency.symbol) + ' ' + v1
                 values['4'] = str(user_currency.symbol) + ' ' + v2
@@ -185,7 +185,7 @@ class AgedReceivable(models.AbstractModel):
                         c_var.append(i)
                     for i in range(fs, fe):
                         d_var.append(i)
-                    cur_aml = aml.move_id.currency_id                        
+                    cur_aml = aml.move_id.currency_id
                     if aml.move_id.exchange_rate > 1:
                         inv_total = aml.move_id.amount_total * aml.move_id.exchange_rate
                     else:
@@ -195,7 +195,7 @@ class AgedReceivable(models.AbstractModel):
                     s1 = f"{t1:,}"
                     t2 = round(conv_amt, 2)
                     s2 = f"{t2:,}"
-                    
+
                     if cur_aml.position == 'before':
                         conv_amt = str(cur_aml.symbol) + ' ' + s2
                     if cur_aml.position == 'after':
@@ -204,7 +204,7 @@ class AgedReceivable(models.AbstractModel):
                         inv_total = str(user_currency.symbol) + ' ' + s1
                     if user_currency.position == 'after':
                         inv_total = s1 + ' ' + str(user_currency.symbol)
-                    
+
                     vals = {
                         'id': aml.id,
                         'name': aml.date_maturity or aml.date,
@@ -239,7 +239,7 @@ class AgedReceivable(models.AbstractModel):
             }
             lines.append(total_line)
         return lines
-    
+#
     
 class AccountReport(models.AbstractModel):
     _inherit = 'account.report'

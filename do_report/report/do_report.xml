@@ -7,13 +7,16 @@
 			<div class="header o_background_header">
 				<div class="row">
 					<div class="col-8">
-						<div style="position:relative; top:12px;">
-						     <img t-if="company.logo"
-								t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
+						<div style="position:relative; top:19px;">
+<!--						     <img t-if="company.logo"-->
+<!--								t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />-->
+							    <img t-if="o.company_id.logo"
+									 t-att-src="image_data_uri(o.company_id.logo)"
+									 alt="Logo"/>
 						</div>
 							
 						<div class="company_address"
-							style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;font-size: 13px;">
+							style="font-family: Calibri;text-color:black;font-size: 13px;">
 							<div>
 								<strong>
 									<span style="font-size: 25px;"
@@ -62,7 +65,7 @@
 						</div>
 					</div>
 					<div class="col-4">
-						<div class="text-muted text-right" style="position:relative; top:12px;">
+						<div class="text-muted text-end" style="position:relative; top:12px;">
 							Page:
 							<span class="page" />
 							of
@@ -78,24 +81,21 @@
 				<t t-raw="0" />
 			</div>
 
-			<div class="footer o_background_footer"
-				style="font-family: Calibri;font-size:12px;">
-				<table width="100%" style="border-top: 1px solid black;">
+			<div class="footer o_boxed_footer o_background_footer"
+				style="font-family: Calibri;font-size:12px;border-top: 1px solid black;">
+				<table width="100%" class="table table-borderless">
 					<tr width="100%">
 						<td width="50%" style="text-align:center">
 						<t t-if="o.company_id.country_id.code != 'SG'">
 							<strong>RECEIVED IN GOOD ORDER</strong></t>
-							<br />
-							<br />
-							<br />
+							<br/>
+							<br/>
 						</td>
-						
 						<td width="50%" style="text-align:center">
 						<t t-if="o.company_id.country_id.code != 'SG'">
 							<strong>PECKO (M) SDN BHD.</strong></t>
-							<br />
-							<br />
-							<br />
+							<br/>
+							<br/>
 						</td>
 					</tr>
 					<tr width="100%">
@@ -109,7 +109,7 @@
 						</td>
 					</tr>
 				</table>
-				<table width="100%">
+				<table width="100%" class="table table-borderless">
 					<tr>
 					  <td><t t-if="o.company_id.country_id.code == 'SG'">
 							<div style="text-align:center;">
@@ -117,9 +117,7 @@
 								**This is a computer generated document. Signature is not required.**
 							</strong>
 							 </div></t>
-						   <br/>
-						  
-						   <span>
+						   	<span>
 							<strong>
 								NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
 								THEIR INTENDED USE,AND USERS ASSUME ALL <br/>RISK AND LIABILITY
@@ -128,10 +126,13 @@
 							</span>
 						</td>
 					</tr>
-
 				</table>
 				<t t-if="o.company_id.country_id.code == 'SG'">
-						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_one)" style="position:relative; bottom:115px; left:730px; width:130px;" />
+					<img t-if="o.company_id.logo"
+									 t-att-src="image_data_uri(o.company_id.logo)"
+									 alt="Logo"/>
+<!--						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_one)"-->
+<!--							 style="position:relative; bottom:115px; left:730px; width:130px;" />-->
 					</t>
 				<div style="text-align:right">
 					
@@ -157,7 +158,6 @@
 			<t t-call="do_report.custom_do_external_layout_background">
 				<t t-raw="0" />
 			</t>
-
 		</template>
 
 		<record id="paperformat_do" model="report.paperformat">

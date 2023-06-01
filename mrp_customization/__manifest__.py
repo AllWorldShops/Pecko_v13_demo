@@ -3,7 +3,7 @@
 
 {
     'name': 'Workorder QR Code',
-    'version': '13.0',
+    'version': '16.0',
     'category': 'MRP',
     'author': 'PPTS',
     'sequence': 15,

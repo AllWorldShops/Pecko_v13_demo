@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# (C) 2020 Smile (<http://www.smile.fr>)
+# (C) 2021 Smile (<https://www.smile.eu>)
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 
 import logging
@@ -28,7 +28,8 @@ class AuditRule(models.Model):
         'ir.model', 'Model', required=True,
         help='Select model for which you want to generate log.',
         domain=[('model', '!=', 'audit.log')],
-        readonly=True, states={'draft': [('readonly', False)]})
+        readonly=True, states={'draft': [('readonly', False)]},
+        ondelete='cascade')
     action_id = fields.Many2one(
         'ir.actions.act_window', "Add in the 'More' menu", readonly=True)
 
@@ -104,6 +105,7 @@ class AuditRule(models.Model):
                 while hasattr(func, 'origin'):
                     if func.__name__.startswith('audit_'):
                         break
+                    func = func.origin
                 else:
                     RecordModel._patch_method(method, audit_decorator(method))
             updated = bool(ids)

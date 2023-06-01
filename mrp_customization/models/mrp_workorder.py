@@ -19,6 +19,7 @@ class MrpWorkorder(models.Model):
 
     @api.model
     def create(self,vals):
+        
         res = super(MrpWorkorder,self).create(vals)
         url = self.env['url.config'].search([('code', '=','WO')])
         if url.name:
@@ -30,27 +31,27 @@ class MrpWorkorder(models.Model):
                 critical_task = "1"
             else:
                 critical_task = "0"
-            if not res.production_id.date_start_wo:
+            if not res.production_id.date_start:
                 raise UserError(_('Kindly enter the WorkOrder Start date'))
-            date_start = res.production_id.date_start_wo.strftime("%Y-%m-%d")
-            task_code = quote(critical_task,safe='')
-            company = quote("PM",safe='')
-            date_code = quote(date_start,safe='')
-            product = quote(res.product_id.default_code,safe='')   
-            qty = quote(str(res.qty_producing),safe='')
-            routing_single_encode = quote(res.name,safe='')
-            routing = quote(routing_single_encode,safe='')
-            production = quote(res.production_id.name,safe='')
-            production_double_code = quote(production,safe='')
-            data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production_double_code + "/" + date_code + "/" + task_code + "/" + company 
-            img = qrcode.make(data)
-            result = io.BytesIO()
-            img.save(result, format='PNG')
-            result.seek(0)
-            img_bytes = result.read()
-            base64_encoded_result_bytes = base64.b64encode(img_bytes)
-            base64_encoded_result_str = base64_encoded_result_bytes.decode('ascii')
-            res.image = base64_encoded_result_str
+            # date_start = res.production_id.date_start.strftime("%Y-%m-%d")
+            # task_code = quote(critical_task,safe='')
+            # company = quote("PM",safe='')
+            # date_code = quote(date_start,safe='')
+            # product = quote(res.product_id.default_code,safe='')   
+            # qty = quote(str(res.qty_producing),safe='')
+            # routing_single_encode = quote(res.name,safe='')
+            # routing = quote(routing_single_encode,safe='')
+            # production = quote(res.production_id.name,safe='')
+            # production_double_code = quote(production,safe='')
+            # data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production_double_code + "/" + date_code + "/" + task_code + "/" + company 
+            # img = qrcode.make(data)
+            # result = io.BytesIO()
+            # img.save(result, format='PNG')
+            # result.seek(0)
+            # img_bytes = result.read()
+            # base64_encoded_result_bytes = base64.b64encode(img_bytes)
+            # base64_encoded_result_str = base64_encoded_result_bytes.decode('ascii')
+            # res.image = base64_encoded_result_str
         return res
 
     def qrcode_image(self):
@@ -69,8 +70,8 @@ class MrpWorkorder(models.Model):
                         critical_task = "0"
                     # if not rec.production_id.date_start_wo:
                     #     raise UserError(_('Kindly enter the WorkOrder Start date'))
-                    if rec.production_id.date_start_wo:
-                        date_start = rec.production_id.date_start_wo.strftime("%Y-%m-%d")
+                    if rec.production_id.date_start:
+                        date_start = rec.production_id.date_start.strftime("%Y-%m-%d")
                     else:
                         date_start = ''
                     task_code = quote(critical_task,safe='')
@@ -103,9 +104,9 @@ class MrpWorkorder(models.Model):
                 critical_task = "1"
             else:
                 critical_task = "0"
-            if not self.production_id.date_start_wo:
+            if not self.production_id.date_start:
                 raise UserError(_('Kindly enter the WorkOrder Start date'))
-            date_start = self.production_id.date_start_wo.strftime("%Y-%m-%d")
+            date_start = self.production_id.date_start.strftime("%Y-%m-%d")
             task_code = quote(critical_task,safe='')
             company = quote("PM",safe='')
             date_code = quote(date_start,safe='')

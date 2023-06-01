@@ -3,7 +3,7 @@
 
 from odoo import api, fields, models, _, _lt
 # from odoo.tools.func import default
-from odoo.addons.web_editor.models.ir_qweb import Integer
+# from odoo.addons.web_editor.models.ir_qweb import Integer
 from odoo.tools.misc import format_date
 from datetime import timedelta
 

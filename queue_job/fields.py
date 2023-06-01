@@ -25,7 +25,7 @@ class JobSerialized(fields.Field):
     type = "job_serialized"
     column_type = ("text", "text")
 
-    _slots = {"_base_type": type}
+    _base_type = None
 
     # these are the default values when we convert an empty value
     _default_json_mapping = {
@@ -40,7 +40,7 @@ class JobSerialized(fields.Field):
     def __init__(self, string=fields.Default, base_type=fields.Default, **kwargs):
         super().__init__(string=string, _base_type=base_type, **kwargs)
 
-    def _setup_attrs(self, model, name):
+    def _setup_attrs(self, model, name):  # pylint: disable=missing-return
         super()._setup_attrs(model, name)
         if self._base_type not in self._default_json_mapping:
             raise ValueError("%s is not a supported base type" % (self._base_type))
@@ -101,7 +101,7 @@ class JobDecoder(json.JSONDecoder):
 
     def __init__(self, *args, **kwargs):
         env = kwargs.pop("env")
-        super(JobDecoder, self).__init__(object_hook=self.object_hook, *args, **kwargs)
+        super().__init__(object_hook=self.object_hook, *args, **kwargs)
         assert env
         self.env = env
 

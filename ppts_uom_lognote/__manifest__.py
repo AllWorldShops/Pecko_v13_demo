@@ -1,4 +1,3 @@
-
 {
     'name': 'UOM Log Note',
     'summary': """This module display the log note in uom master""",

@@ -9,9 +9,9 @@
     'description': """Routing Order PDF Report""",
     'depends': ['mrp', 'stock', 'web'],
     'data': [
-        'report/routing_report.xml',
-        'report/routing_report_templates.xml',
-        'report/layouts.xml',
+        # 'report/routing_report.xml',
+        # 'report/routing_report_templates.xml',
+        # 'report/layouts.xml',
     ],
     'installable': True,
     'application': True,

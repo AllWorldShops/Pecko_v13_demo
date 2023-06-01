@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-
 		<template id="custom_do_external_layout_background">
-
 			<div class="header o_background_header">
 				<div class="row">
 					<div class="col-8">
@@ -71,7 +69,6 @@
 				t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
 				<t t-raw="0" />
 			</div>
-
 			<div class="footer o_background_footer"
 				style="font-family: Calibri;font-size:12px;">
 				<table width="100%" style="border-top: 1px solid black;">
@@ -153,6 +150,5 @@
 		<report id="do_ppts" model="stock.picking" string="Do Report"
 			report_type="qweb-pdf" name="do_report.report_custom_do"
 			file="do_report.report_custom_do" paperformat="paperformat_do" />
-
 	</data>
 </odoo>

@@ -26,14 +26,17 @@ class StockPicking(models.Model):
                 print("\n\n\n===",len(existing_records))
                 if len(existing_records) > 1:
                     raise ValidationError(_('There is already a packing slip/Do Number for "%s". Please enter a new number.' %rec.packing_slip))
-    
+
     @api.model
     def create(self, vals):
         if vals.get('origin'):
             sale_id = self.env['sale.order'].search([('name','=',vals['origin'])])
             vals['customer_po_no'] = sale_id.customer_po_no
         return super(StockPicking, self).create(vals)
-    
+
+
+
+
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
@@ -47,9 +50,9 @@ class StockMove(models.Model):
                 _logger.info("-----Exception occurred stock moves--------- : %s", str(e))
 
     additional_notes = fields.Char(string='Additional Notes')
-    customer_part_no = fields.Text(string='Part Number')
+    customer_part_no = fields.Text(string='Part Num                ber')
     position_no = fields.Integer(string="Position", compute="_compute_position_no")
-    
+
     def _compute_position_no(self):
         for move in self:
             if move.sale_line_id:
@@ -66,7 +69,7 @@ class StockMoveLine(models.Model):
     
     part_no = fields.Char('Customer / Manufacturer Part no', related="product_id.name")
     position_no = fields.Integer(string="Position", compute="_compute_position_no")
-    
+
     def _compute_position_no(self):
         for line in self:
             if line.move_id.sale_line_id:
@@ -79,79 +82,79 @@ class StockMoveLine(models.Model):
                 line.position_no = 0
 
 
-class StockInventory(models.Model):
-    _inherit = 'stock.inventory'
+class StockQuant(models.Model):
+    _inherit = 'stock.quant'
 
-    def action_open_inventory_lines(self):
-        self.ensure_one()
-        action = {
-            'type': 'ir.actions.act_window',
-            'views': [(self.env.ref('stock.stock_inventory_line_tree2').id, 'tree')],
-            'view_mode': 'tree',
-            'name': _('Inventory Lines'),
-            'res_model': 'stock.inventory.line',
-        }
-        context = {
-            'default_is_editable': True,
-            'default_inventory_id': self.id,
-            'default_company_id': self.company_id.id,
-        }
-        # Define domains and context
-        domain = [
-            ('inventory_id', '=', self.id)
-        ]
-        if self.location_ids:
-            context['default_location_id'] = self.location_ids[0].id
-            if len(self.location_ids) == 1:
-                if not self.location_ids[0].child_ids:
-                    context['readonly_location_id'] = True
+    # def action_open_inventory_lines(self):
+    #     self.ensure_one()
+    #     action = {
+    #         'type': 'ir.actions.act_window',
+    #         'views': [(self.env.ref('stock.stock_inventory_line_tree2').id, 'tree')],
+    #         'view_mode': 'tree',
+    #         'name': _('Inventory Lines'),
+    #         'res_model': 'stock.inventory.line',
+    #     }
+    #     context = {
+    #         'default_is_editable': True,
+    #         'default_inventory_id': self.id,
+    #         'default_company_id': self.company_id.id,
+    #     }
+    #     # Define domains and context
+    #     domain = [
+    #         ('inventory_id', '=', self.id)
+    #     ]
+    #     if self.location_ids:
+    #         context['default_location_id'] = self.location_ids[0].id
+    #         if len(self.location_ids) == 1:
+    #             if not self.location_ids[0].child_ids:
+    #                 context['readonly_location_id'] = True
+    #
+    #     if self.product_ids:
+    #         if len(self.product_ids) == 1:
+    #             context['default_product_id'] = self.product_ids[0].id
+    #
+    #     action['context'] = context
+    #     action['domain'] = domain
+    #     return action
+    #
+    # location_ids = fields.Many2many(
+    #     'stock.location', string='Locations',
+    #     readonly=True, check_company=True,
+    #     states={'draft': [('readonly', False)]},
+    #     domain="[('company_id', '=', company_id)]")
+#
+# class StockInventoryLine(models.Model):
+#     _inherit = 'stock.inventory.line'
 
-        if self.product_ids:
-            if len(self.product_ids) == 1:
-                context['default_product_id'] = self.product_ids[0].id
-
-        action['context'] = context
-        action['domain'] = domain
-        return action
-
-    location_ids = fields.Many2many(
-        'stock.location', string='Locations',
-        readonly=True, check_company=True,
-        states={'draft': [('readonly', False)]},
-        domain="[('company_id', '=', company_id)]")
-
-class StockInventoryLine(models.Model):
-    _inherit = 'stock.inventory.line'
-
-    @api.model
-    def _domain_location_id(self):
-        if self.env.context.get('active_model') == 'stock.inventory':
-            inventory = self.env['stock.inventory'].browse(self.env.context.get('active_id'))
-            if inventory.exists() and inventory.location_ids:
-                return "[('company_id', '=', company_id), ('id', 'child_of', %s)]" % inventory.location_ids.ids
-        return "[('company_id', '=', company_id)]"
-
-    def _check_no_duplicate_line(self):
-        for line in self:
-            domain = [
-                ('id', '!=', line.id),
-                ('product_id', '=', line.product_id.id),
-                ('location_id', '=', line.location_id.id),
-                ('partner_id', '=', line.partner_id.id),
-                ('package_id', '=', line.package_id.id),
-                ('prod_lot_id', '=', line.prod_lot_id.id),
-                ('inventory_id', '=', line.inventory_id.id),
-                ('state', '!=', 'done')]
-            # if line.location_id.usage != 'internal':
-            #     dmn = self.search(domain)
-            #     _logger.info("-------Duplicate Lineitem : %s------" % dmn)
-            #     dmn.unlink()
-            rec = self.search(domain)
-            _logger.info("-------Duplicate Lineitem : %s------" % rec.inventory_id)
-            existings = self.search_count(domain)
-            if existings:
-                raise UserError(_("There is already one inventory adjustment line for this product,"
-                                  " you should rather modify this one instead of creating a new one."))
+    # @api.model
+    # def _domain_location_id(self):
+    #     if self.env.context.get('active_model') == 'stock.inventory':
+    #         inventory = self.env['stock.inventory'].browse(self.env.context.get('active_id'))
+    #         if inventory.exists() and inventory.location_ids:
+    #             return "[('company_id', '=', company_id), ('id', 'child_of', %s)]" % inventory.location_ids.ids
+    #     return "[('company_id', '=', company_id)]"
+    #
+    # def _check_no_duplicate_line(self):
+    #     for line in self:
+    #         domain = [
+    #             ('id', '!=', line.id),
+    #             ('product_id', '=', line.product_id.id),
+    #             ('location_id', '=', line.location_id.id),
+    #             ('partner_id', '=', line.partner_id.id),
+    #             ('package_id', '=', line.package_id.id),
+    #             ('prod_lot_id', '=', line.prod_lot_id.id),
+    #             ('inventory_id', '=', line.inventory_id.id),
+    #             ('state', '!=', 'done')]
+    #         # if line.location_id.usage != 'internal':
+    #         #     dmn = self.search(domain)
+    #         #     _logger.info("-------Duplicate Lineitem : %s------" % dmn)
+    #         #     dmn.unlink()
+    #         rec = self.search(domain)
+    #         _logger.info("-------Duplicate Lineitem : %s------" % rec.inventory_id)
+    #         existings = self.search_count(domain)
+    #         if existings:
+    #             raise UserError(_("There is already one inventory adjustment line for this product,"
+    #                               " you should rather modify this one instead of creating a new one."))
 
 
 class ProductTemplate(models.Model):
@@ -164,7 +167,7 @@ class ProductTemplate(models.Model):
     def _get_default_buy(self):
         buy_route = self.env.ref('purchase_stock.route_warehouse0_buy', raise_if_not_found=False)
         if buy_route:
-            route = self.env['stock.location.route'].sudo().search(['|',('id', '=', buy_route.id),('name', 'ilike', 'PEI - Buy from Vendor')])
+            route = self.env['stock.route'].sudo().search(['|',('id', '=', buy_route.id),('name', 'ilike', 'PEI - Buy from Vendor')])
             for rte in route:
                 # print(rte.name,"////_--------------;;;;;;;", rte)
                 if rte.company_id == self.env.company:

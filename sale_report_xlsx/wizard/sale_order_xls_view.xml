@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<record id="sale_excel_views" model="ir.ui.view">
-		<field name="name">wizard.reports</field>
-		<field name="model">wizard.reports</field>
-		<field name="arch" type="xml">
-			<form string="Export Sale Order">
-			<group >
-			      <group>
-			  		<field name="partner_ids" widget="many2many_tags" invisible="1"/>
-					<field name="date_from"/>
-					<field name="date_to" />
-			</group>
-			<group>
-				  <field name="move_data" colspan="4" invisible="1" />
-				<field name="file_name" filename="move_data" colspan="4"/>
-			</group>
-				
-			</group>
-			
-				<footer>
-					<button string="Prepare Excel Report" class="btn-primary"
-						name="action_sale_report" type="object" />
-					<button string="Cancel" class="btn-primary" special="cancel" />
-				</footer>
-			</form>
-		</field>
-	</record>
+    <record id="sale_excel_views" model="ir.ui.view">
+        <field name="name">wizard.reports</field>
+        <field name="model">wizard.reports</field>
+        <field name="arch" type="xml">
+            <form string="Export Sale Order">
+                <group>
+                    <group>
+                        <field name="partner_ids" widget="many2many_tags" invisible="1"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="move_data" colspan="4" invisible="1"/>
+                        <field name="file_name" filename="move_data" colspan="4"/>
+                    </group>
 
-	<act_window id="action_sale_excel" 
-		name="Sale Order Excel Report "
-		res_model="wizard.reports"
-		binding_model="sale.order" 
-		view_mode="form" target="new"/>
+                </group>
+                <footer>
+                    <button string="Prepare Excel Report" class="btn-primary"
+                            name="action_sale_report" type="object"/>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-	<menuitem id="menu_sales_service_summary"
+    <act_window id="action_sale_excel"
+                name="Sale Order Excel Report "
+                res_model="wizard.reports"
+                binding_model="sale.order"
+                view_mode="form" target="new"/>
+
+    <menuitem id="menu_sales_service_summary"
               name="Sale Order Report"
               parent="sale.menu_sale_report"
               action="sale_report_xlsx.action_sale_excel"

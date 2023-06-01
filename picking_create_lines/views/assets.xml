@@ -5,7 +5,7 @@
 
     <xpath expr="." position="inside">
       <script type="text/javascript" src="/picking_create_lines/static/src/js/picking_add_line_show.js"></script>
-  </xpath>
+    </xpath>
       
   </template>
 </odoo>

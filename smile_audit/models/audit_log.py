@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-# (C) 2020 Smile (<http://www.smile.fr>)
+# (C) 2021 Smile (<https://www.smile.eu>)
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 
 from dateutil import tz
-import datetime
 
 from odoo import fields, models, _
 from odoo.exceptions import UserError
-from odoo.tools.safe_eval import safe_eval
+from odoo.tools.safe_eval import safe_eval, datetime
 
 
 class AuditLog(models.Model):
@@ -17,17 +16,13 @@ class AuditLog(models.Model):
 
     name = fields.Char('Resource Name', size=256, compute='_get_name')
     create_date = fields.Datetime('Date', readonly=True)
-    user_id = fields.Many2one(
-        'res.users', 'User', required=True, readonly=True)
-    model_id = fields.Many2one(
-        'ir.model', 'Model', required=True, readonly=True)
-    model = fields.Char(
-        related='model_id.model', store=True, readonly=True, index=True)
+    user_id = fields.Many2one('res.users', 'User', required=True, readonly=True)
+    model_id = fields.Many2one('ir.model', 'Model', required=True, readonly=True, ondelete='cascade')
+    model = fields.Char(related='model_id.model', store=True, readonly=True, index=True)
     res_id = fields.Integer('Resource Id', readonly=True)
     method = fields.Char('Method', size=64, readonly=True)
     data = fields.Text('Data', readonly=True)
-    data_html = fields.Html(
-        'HTML Data', readonly=True, compute='_render_html')
+    data_html = fields.Html('HTML Data', readonly=True, compute='_render_html')
 
     def _get_name(self):
         for rec in self:
