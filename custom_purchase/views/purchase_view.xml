@@ -67,7 +67,7 @@
 				<field name="order_ref" string="Order Reference"/>
 				<field name="vendor_id" string="Vendor"/>
 				<field name="product_id" string="Product"/>
-<!--				<field name="customer_part_no" string="Part No"/>-->
+				<field name="customer_part_no" string="Part No"/>
 				<field name="old_po_no" string="Old PO Number"/>
 				<field name="name" string="Description"/>
 				<field name="manufacturer_id" string="Manufacturer"/>

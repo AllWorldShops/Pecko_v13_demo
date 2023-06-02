@@ -66,9 +66,8 @@
                             <strong> Tax Invoice </strong>
                         </span> -->
                     </div>
-                    <table style="width: 100%;height:120px;background-color: white;line-height:12pt;"
-                           class="table table-borderless">
-                        <tbody>
+                    <div class="row">
+                        <div class="col-7">
                             <tr>
                                 <td style="width:55%;background-color:white;font-size:13px;"
                                     class="table table-borderless">
@@ -108,127 +107,112 @@
                                     <br/>
 
                                 </td>
-                                <td style="width:45%;background-color:white;font-size:13px;">
-                                    <table
-                                            style="width:100%;background-color: white;">
-                                        <tbody>
-                                            <tr class="table table-borderless">
-                                                <td class="table table-borderless;">
-                                                    <strong>Delivery Address</strong>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="table table-borderless">
-                                                    <span t-field="o.partner_shipping_id"/>
-                                                    <br/>
-                                                    <span t-field="o.partner_shipping_id.street"/>
-                                                    <span t-field="o.partner_shipping_id.street2"/>
-                                                    <br/>
-                                                    <span t-field="o.partner_shipping_id.city"/>
-                                                    <br/>
-                                                    <span t-field="o.partner_shipping_id.state_id"/>
-                                                    <br/>
-                                                    <span t-field="o.partner_shipping_id.zip"/>
-                                                    <br/>
-                                                    <span t-field="o.partner_shipping_id.country_id"/>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <br/>
-                                    <br/>
-                                    <div>
-                                        <table class="table table-borderless">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <strong>
-                                                            <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">
-                                                                Invoice No.
-                                                            </t>
-                                                            <t t-if="o.journal_id.name == 'Debit Note'">DN No.</t>
-                                                            <t t-if="o.move_type == 'out_invoice'"></t>
-                                                            <t t-if="o.move_type == 'out_refund'">CN No.
-                                                            </t>
-                                                        </strong>
-                                                        <td>
-                                                            <span t-field="o.name"/>
-                                                        </td>
+                            </tr>
+                        </div>
+                        <div class="col-5">
+                            <td style="width:45%;background-color:white;font-size:13px;">
+                                <tr class="table table-borderless" >
+                                    <span class="table table-borderless;" style="background-color: #f4f4f5;">
+                                        <strong>Delivery Address</strong>
+                                    </span>
+                                </tr>
+                                <br/>
+                                <tr>
+                                    <td class="table table-borderless">
+                                        <span t-field="o.partner_shipping_id"/>
+                                        <br/>
+                                        <span t-field="o.partner_shipping_id.street"/>
+                                        <span t-field="o.partner_shipping_id.street2"/>
+                                        <br/>
+                                        <span t-field="o.partner_shipping_id.city"/>
+                                        <br/>
+                                        <span t-field="o.partner_shipping_id.state_id"/>
+                                        <br/>
+                                        <span t-field="o.partner_shipping_id.zip"/>
+                                        <br/>
+                                        <span t-field="o.partner_shipping_id.country_id"/>
+                                    </td>
+                                </tr>
+                            </td>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-7">
+                        </div>
+                        <div class="col-5">
+                            <span style="background-color: #f4f4f5;">
 
-                                                        <!-- <strong> <t t-if="o.type == 'out_invoice'"> Invoice No. </t><t t-if="o.type == 'out_refund'"> CN No.
-                                                        </t></strong> -->
-                                                        <!-- <strong>Invoice No.</strong> -->
-                                                        <tr style='padding-bottom:=3%'>
-                                                            <td>
-                                                                <strong>Date</strong>
-                                                            </td>
-                                                            <td>
-                                                                <span t-field="o.invoice_date"
-                                                                      t-options='{"format": "dd/MM/yyyy"}'/>
-                                                            </td>
-                                                        </tr>
+                                <strong>
+                                    <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">
+                                        Invoice No.
+                                    </t>
+                                    <t t-if="o.journal_id.name == 'Debit Note'">DN No.</t>
+                                    <t t-if="o.move_type == 'out_invoice'"></t>
+                                    <t t-if="o.move_type == 'out_refund'">CN No.
+                                    </t>
+                                </strong>
 
-                                                        <tr style='colspan="3"'>
-                                                            <td>
-                                                                <strong>Payment Terms</strong>
-                                                            </td>
-                                                            <td>
-                                                                <span t-field="o.invoice_payment_term_id.name"/>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr style="line-height:1;">
-                                                            <td>
-                                                                <strong>SO No.</strong>
-                                                            </td>
-                                                            <td>
-                                                                <span t-field="o.invoice_origin"/>
-                                                            </td>
-                                                        </tr>
-                                                        <tr style="line-height:1 ;">
-                                                            <td>
-                                                                <strong>Cust P.O</strong>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="table table-sm" style="line-height:1 ;">
-                                                            <td>
-                                                                <strong>Do No.</strong>
-                                                            </td>
-                                                        </tr>
-                                                    </td>
-                                                    <!--                                                    <td style="height:5px;">-->
-                                                    <!--                                                        <span t-field="o.name"/>-->
-                                                    <!--                                                        <br/>-->
-                                                    <!--                                                        <span t-field="o.invoice_date"-->
-                                                    <!--                                                              t-options='{"format": "dd/MM/yyyy"}'/>-->
-                                                    <!--                                                        <br/>-->
-                                                    <!--                                                        <span t-field="o.invoice_payment_term_id.name"/>-->
-                                                    <!--                                                        <br/>-->
-                                                    <!--                                                        <span t-field="o.invoice_origin"/>-->
-                                                    <!--                                                        <br/>-->
+                                <span style="padding-left:70px;" t-field="o.name"/>
+                            </span>
 
 
-                                                    <!--                                                    <td style="height:5px;">-->
-                                                    <!--													<t t-if="isinstance(o.do_name, str)">-->
-                                                    <!--														<t t-set="string_to_output"-->
-                                                    <!--															t-value="o.do_name.split(',')" />-->
-                                                    <!--														<t t-foreach="string_to_output" t-as="string_line">-->
-                                                    <!--															<span t-esc="string_line" />-->
-                                                    <!--															<br />-->
-                                                    <!--														</t>-->
-                                                    <!--													</t>-->
-
-
-                                                    <!-- <span t-field="o.do_name" /> -->
-                                                    <!--                                                    </td>-->
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                            <!-- <strong> <t t-if="o.type == 'out_invoice'"> Invoice No. </t><t t-if="o.type == 'out_refund'"> CN No.
+                            </t></strong> -->
+                            <!-- <strong>Invoice No.</strong> -->
+                            <br/>
+                            <tr>
+                                <td>
+                                    <strong>Date</strong>
+                                    <span style="padding-left:120px;" t-field="o.invoice_date"
+                                          t-options='{"format": "dd/MM/yyyy"}'/>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
+                            <br/>
+                            <tr>
+                                <span style="background-color: #f4f4f5;">
+                                    <strong>Payment Terms</strong>
+
+                                    <span style="padding-left:40px;background-color: #f4f4f5;"
+                                          t-field="o.invoice_payment_term_id.name"/>
+                                </span>
+                            </tr>
+                            <br/>
+                            <tr>
+                                <td>
+                                    <strong>SO No.</strong>
+                                    <span style="padding-left:30px;background-color: #f4f4f5;"
+                                          t-field="o.invoice_origin"/>
+                                </td>
+                            </tr>
+                            <br/>
+                            <tr>
+                                <span style="background-color: #f4f4f5;">
+                                    <strong>Cust P.O</strong>
+                                </span>
+                            </tr>
+                            <br/>
+                            <tr>
+                                <td>
+                                    <strong>Do No.</strong>
+                                </td>
+                            </tr>
+
+
+                            <!--                                                    <td style="height:5px;">-->
+                            <!--													<t t-if="isinstance(o.do_name, str)">-->
+                            <!--														<t t-set="string_to_output"-->
+                            <!--															t-value="o.do_name.split(',')" />-->
+                            <!--														<t t-foreach="string_to_output" t-as="string_line">-->
+                            <!--															<span t-esc="string_line" />-->
+                            <!--															<br />-->
+                            <!--														</t>-->
+                            <!--													</t>-->
+
+
+                            <!-- <span t-field="o.do_name" /> -->
+                            <!--                                                    </td>-->
+                        </div>
+                    </div>
                     <br/>
                     <t t-set="product_stock_uom_qty" t-value="0"/>
                     <table class="table table-borderless"
