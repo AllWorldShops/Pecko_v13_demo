@@ -88,7 +88,12 @@ class StockRule(models.Model):
                         print('1111111111111')
                         qty = ss.min_qty
                     else:
-                        qty = ss.min_qty * product_qty + qty_available
+                        ss_qty = (product_qty + qty_available) / 100
+                        if ss_qty > 0:
+                            import math
+                            qty = math.ceil(ss_qty) * ss.min_qty
+                        else:
+                            qty = ss.min_qty * product_qty + qty_available
                     
                 else:
                     print('222222222222')
