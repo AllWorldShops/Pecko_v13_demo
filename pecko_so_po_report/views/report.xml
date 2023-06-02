@@ -11,15 +11,15 @@
             <t t-set="company" t-value="res_company"/>
         </t>
         <div class="header o_background_header">
-            <div class="row" style="bottom:14px;top:50px">
+            <div class="row" style="bottom:1px;top:1px">
                 <div class="col-8" style="bottom:14px;">
-                    <img t-if="o.company_id.logo"
+                    <img t-if="o.company_id.logo" height="21" width="89"
                          t-att-src="image_data_uri(o.company_id.logo)"
                          alt="Logo"/>
                     <!--					<img t-if="company.logo"-->
                     <!--						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width:100px;"/>-->
                     <div class="company_address"
-                         style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;">
+                         style="line-height:10px;font-family: Calibri;text-color:black;">
                         <div>
                             <strong>
                                 <span style="font-size: 22px;"
@@ -132,12 +132,14 @@
             <t t-set="company" t-value="res_company"/>
         </t>
         <div class="header o_background_header">
-            <div class="row">
+            <div class="row" style="position:relative;bottom:1px;top:1px">
                 <div class="col-8">
-                    <!--					<img t-if="company.logo"-->
-                    <!--						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />-->
+<!--                    <img t-if="company.logo" -->
+<!--                         t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />-->
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="30" width="170"
+                             alt="Logo"/>
                     <div class="company_address"
-                         style="padding-top:4px;line-height:5px;font-family: Calibri;text-color:black;">
+                         style="line-height:5px;font-size: 10px;font-family: Calibri;ftext-color:black;">
                         <div>
                             <strong>
                                 <span style="font-size: 22px;"
@@ -197,6 +199,8 @@
                     <div class="clearfix mb8"/>
                 </div>
             </div>
+            <br/>
+            <br/>
         </div>
 
         <div class="article o_report_layout_background">
@@ -205,10 +209,10 @@
 
         <div class="footer o_boxed_footer o_background_footer" style="border-top-style: none;">
             <table class="table table-borderless"
-                   style="font-family: Calibri;text-color:black;font-size:13px;">
+                   style="font-family: Calibri;text-color:black;font-size:12px;">
                 <tbody>
                     <tr>
-                        <td width="63%" style="position:relative;bottom:14px;">
+                        <td width="63%" style="position:relative;bottom:11px;">
                             <span style="text-align:center;">
                                 **This is a computer generated document. Signature is not required.**
                             </span>
@@ -232,7 +236,7 @@
                         <!-- <td> -->
 
                         <!-- </td> -->
-                        <td width="30%" style="text-align:center;position:relative;bottom:14px;">
+                        <td width="30%" style="text-align:center;position:relative;bottom:11px;">
                             <span>------------------------------------------</span>
                             <br/>
                             <span>Supplier's Acceptance &amp; Confirmation</span>

@@ -61,12 +61,16 @@ class StockRule(models.Model):
             else:
                 ss = product.seller_ids[0] if product.seller_ids else ''
                 print('sssssssssss',ss)
-                print('sssssssssss',ss.min_qty)
-                print('product_qty + qty_available',product_qty + qty_available)
-                if product_qty + qty_available <= ss.min_qty:
-                    print('1111111111111')
-                    qty = ss.min_qty
-                
+                if ss:
+                    print('sssssssssss',ss.min_qty)
+                    print('product_qty + qty_available',product_qty + qty_available)
+                    if product_qty + qty_available <= ss.min_qty:
+                        print('1111111111111')
+                        qty = ss.min_qty
+                    
+                    else:
+                        print('222222222222')
+                        qty = product_qty - qty_available
                 else:
                     print('222222222222')
                     qty = product_qty - qty_available

@@ -140,8 +140,8 @@
                                     <div>
                                         <table class="table table-borderless">
                                             <tbody>
-                                                <tr style="height:1px;">
-                                                    <td style="height:2px;">
+                                                <tr>
+                                                    <td>
                                                         <strong>
                                                             <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">
                                                                 Invoice No.
@@ -151,55 +151,76 @@
                                                             <t t-if="o.move_type == 'out_refund'">CN No.
                                                             </t>
                                                         </strong>
-                                                        <br/>
+                                                        <td>
+                                                            <span t-field="o.name"/>
+                                                        </td>
+
                                                         <!-- <strong> <t t-if="o.type == 'out_invoice'"> Invoice No. </t><t t-if="o.type == 'out_refund'"> CN No.
                                                         </t></strong> -->
                                                         <!-- <strong>Invoice No.</strong> -->
-                                                        <span sytle='background-color:pink;height:5px;'>
-                                                            <strong>Date</strong>
-                                                        </span>
-                                                        <br/>
-                                                        <span style="backgroundcolor:#f4f4f5;">
-                                                            <strong>Payment Terms</strong>
-                                                        </span>
-                                                        <br/>
-                                                        <span style="height:5px;">
-                                                            <strong>SO No.</strong>
-                                                        </span>
-                                                        <br/>
-                                                        <span style="backgroundcolor:#F4F4F5;">
-                                                            <strong>Cust P.O</strong>
-                                                        </span>
-                                                        <br/>
-                                                        <span style="height:5px;">
-                                                            <strong>Do No.</strong>
-                                                        </span>
+                                                        <tr style='padding-bottom:=3%'>
+                                                            <td>
+                                                                <strong>Date</strong>
+                                                            </td>
+                                                            <td>
+                                                                <span t-field="o.invoice_date"
+                                                                      t-options='{"format": "dd/MM/yyyy"}'/>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr style='colspan="3"'>
+                                                            <td>
+                                                                <strong>Payment Terms</strong>
+                                                            </td>
+                                                            <td>
+                                                                <span t-field="o.invoice_payment_term_id.name"/>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr style="line-height:1;">
+                                                            <td>
+                                                                <strong>SO No.</strong>
+                                                            </td>
+                                                            <td>
+                                                                <span t-field="o.invoice_origin"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr style="line-height:1 ;">
+                                                            <td>
+                                                                <strong>Cust P.O</strong>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="table table-sm" style="line-height:1 ;">
+                                                            <td>
+                                                                <strong>Do No.</strong>
+                                                            </td>
+                                                        </tr>
                                                     </td>
-                                                    <td style="height:5px;">
-                                                        <span t-field="o.name"/>
-                                                        <br/>
-                                                        <span t-field="o.invoice_date"
-                                                              t-options='{"format": "dd/MM/yyyy"}'/>
-                                                        <br/>
-                                                        <span t-field="o.invoice_payment_term_id.name"/>
-                                                        <br/>
-                                                        <span t-field="o.invoice_origin"/>
-                                                        <br/>
+                                                    <!--                                                    <td style="height:5px;">-->
+                                                    <!--                                                        <span t-field="o.name"/>-->
+                                                    <!--                                                        <br/>-->
+                                                    <!--                                                        <span t-field="o.invoice_date"-->
+                                                    <!--                                                              t-options='{"format": "dd/MM/yyyy"}'/>-->
+                                                    <!--                                                        <br/>-->
+                                                    <!--                                                        <span t-field="o.invoice_payment_term_id.name"/>-->
+                                                    <!--                                                        <br/>-->
+                                                    <!--                                                        <span t-field="o.invoice_origin"/>-->
+                                                    <!--                                                        <br/>-->
 
 
-                                                        <!--                                                    <td style="height:5px;">-->
-                                                        <!--													<t t-if="isinstance(o.do_name, str)">-->
-                                                        <!--														<t t-set="string_to_output"-->
-                                                        <!--															t-value="o.do_name.split(',')" />-->
-                                                        <!--														<t t-foreach="string_to_output" t-as="string_line">-->
-                                                        <!--															<span t-esc="string_line" />-->
-                                                        <!--															<br />-->
-                                                        <!--														</t>-->
-                                                        <!--													</t>-->
+                                                    <!--                                                    <td style="height:5px;">-->
+                                                    <!--													<t t-if="isinstance(o.do_name, str)">-->
+                                                    <!--														<t t-set="string_to_output"-->
+                                                    <!--															t-value="o.do_name.split(',')" />-->
+                                                    <!--														<t t-foreach="string_to_output" t-as="string_line">-->
+                                                    <!--															<span t-esc="string_line" />-->
+                                                    <!--															<br />-->
+                                                    <!--														</t>-->
+                                                    <!--													</t>-->
 
 
-                                                        <!-- <span t-field="o.do_name" /> -->
-                                                    </td>
+                                                    <!-- <span t-field="o.do_name" /> -->
+                                                    <!--                                                    </td>-->
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -232,7 +253,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="invoice_tbody;table table-borderless" style="line-height:12pt;">
+                        <tbody class="invoice_tbody;table table-borderless">
                             <style>tbody tr:nth-child(odd){ background-color: #f4f4f5; }</style>
                             <t t-set="i" t-value="1"/>
                             <tr t-foreach="o.invoice_line_ids" t-as="l">
@@ -300,99 +321,102 @@
                         </tr>
                     </table>
                     <t t-if="o.company_id.country_id.code != 'SG'">
-<!--                        <table class="table table-borderless" width="100%" style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;table table-borderless">-->
-<!--                            <tr>-->
-                        <div class="row" style="border-top:1px solid black;border-bottom:1px solid black;background:#F4F4F5">
+                        <!--                        <table class="table table-borderless" width="100%" style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;table table-borderless">-->
+                        <!--                            <tr>-->
+                        <div class="row"
+                             style="border-top:1px solid black;border-bottom:1px solid black;background:#F4F4F5">
                             <div class="col-4">
-                                <td width="25%" style="line-height:2">
-                                   <div>
-                                    For Tax Purpose in MYR Only
+                                <td width="25%" style="line-height:2;padding:2px;font-size:13px;line-height:12px">
+                                    <div style="font-size:10px;line-height:2">
+                                        For Tax Purpose in MYR Only
                                     </div>
-                                  <br/>
-                                    <div>
-                                    1 MYR =
-                                         <span t-field="o.exchange_rate"/>
-                                    USD
-                                    <!-- <span t-field="o.company_currency_id.name" /> -->
+                                    <div style="font-size:10px;line-height:1">
+                                        1 MYR =
+                                        <span t-field="o.exchange_rate"/>
+                                        USD
+                                        <!-- <span t-field="o.company_currency_id.name" /> -->
                                     </div>
-                                    <br/>
-                                    Conversation Rate =
-                                    <span t-field="o.exchange_rate"/>
-                                    <!-- 1 USD = <span t-esc="'%.4f'% o.currency_conv_rate"/> <span t-field="o.company_currency_id.name"/><br/> -->
 
+                                    <div style="font-size:10px;line-height:1">
+                                        Conversation Rate =
+                                        <span t-field="o.exchange_rate"/>
+                                        <!-- 1 USD = <span t-esc="'%.4f'% o.currency_conv_rate"/> <span t-field="o.company_currency_id.name"/><br/> -->
+                                    </div>
                                 </td>
                             </div>
                             <div class="col-5">
-                                <td width="25%" style="text-align:right">
-                                    <div>
-                                    Net Total (MYR) :
-                                          <span t-esc="o.get_net_amount_report()" />
+                                <td width="25%" style="text-align:right;padding:2px;">
+                                    <div style="font-size:10px;line-height:1">
+                                        Net Total (MYR) :
+                                        <span t-esc="o.get_net_amount_report()"/>
                                     </div>
-                                    <br/>
-                                    <div>
-                                    Tax Amount :
-                                        <span t-esc="o.amount_tax / o.exchange_rate" />
+
+                                    <div style="font-size:10px;line-height:1">
+                                        Tax Amount :
+                                        <span t-esc="o.amount_tax / o.exchange_rate"/>
                                     </div>
-                                    <br/>
-                                    <div>
-                                    Grand Total (MYR) :
-                                    <span t-esc="o.amount_tax / o.exchange_rate + o.get_net_amount_report()" />
+
+                                    <div style="font-size:10px;line-height:1">
+                                        Grand Total (MYR) :
+                                        <span t-esc="o.amount_tax / o.exchange_rate + o.get_net_amount_report()"/>
                                     </div>
                                 </td>
                             </div>
-<!--                                <td width="5%" style="text-align:right">-->
-<!--                                    &lt;!&ndash; <t t-set="ex" t-value="o.currency_conv_rate" /> &ndash;&gt;-->
-<!--                                    &lt;!&ndash; <t t-set="ex" t-value="o.get_currency_conv_rate()" /> &ndash;&gt;-->
-<!--                                    &lt;!&ndash; <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" />-->
-<!--                                    <br />-->
-<!--                                    <span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />-->
-<!--                                    <br />-->
-<!--                                    <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" />-->
-<!--                                    <br /> &ndash;&gt;-->
-<!--                                   <span t-esc="o.get_net_amount_report()" />-->
-<!--                                    &lt;!&ndash; <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" /> &ndash;&gt;-->
-<!--                                    <br/>-->
+                            <!--                                <td width="5%" style="text-align:right">-->
+                            <!--                                    &lt;!&ndash; <t t-set="ex" t-value="o.currency_conv_rate" /> &ndash;&gt;-->
+                            <!--                                    &lt;!&ndash; <t t-set="ex" t-value="o.get_currency_conv_rate()" /> &ndash;&gt;-->
+                            <!--                                    &lt;!&ndash; <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" />-->
+                            <!--                                    <br />-->
+                            <!--                                    <span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />-->
+                            <!--                                    <br />-->
+                            <!--                                    <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" />-->
+                            <!--                                    <br /> &ndash;&gt;-->
+                            <!--                                   <span t-esc="o.get_net_amount_report()" />-->
+                            <!--                                    &lt;!&ndash; <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" /> &ndash;&gt;-->
+                            <!--                                    <br/>-->
 
-<!--                                    <span t-esc="o.amount_tax / o.exchange_rate" />-->
-<!--                                    <br/>-->
-<!--                                    <span t-esc="o.amount_tax / o.exchange_rate + o.get_net_amount_report()" />-->
-<!--                                    &lt;!&ndash; <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" /> &ndash;&gt;-->
-<!--                                </td>-->
-                                <div class="col-4">
-                                <td width="25%" style="text-align:right">
-                                    <div>
-                                    Net Total (
-                                    <span t-field="o.currency_id"/>
-                                    ) :
+                            <!--                                    <span t-esc="o.amount_tax / o.exchange_rate" />-->
+                            <!--                                    <br/>-->
+                            <!--                                    <span t-esc="o.amount_tax / o.exchange_rate + o.get_net_amount_report()" />-->
+                            <!--                                    &lt;!&ndash; <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" /> &ndash;&gt;-->
+                            <!--                                </td>-->
+                            <div class="col-4">
+                                <td width="25%" style="text-align:right;padding:2px;">
+                                    <div style="font-size:10px;line-height:0.5">
+                                        Net Total (
+                                        <span t-field="o.currency_id"/>
+                                        ) :
                                         <span t-esc="'%.2f'%(o.amount_untaxed)"/>
                                     </div>
-                                    <br/>
-                                   <div>
-                                    Tax Amount :
+
+                                    <div style="font-size:10px;line-height:0.5">
+                                        Tax Amount :
                                         <span t-esc="'%.2f'%(o.amount_tax)"/>
                                     </div>
-                                    <br/>
-                                    Grand Total (
-                                    <span t-field="o.currency_id"/>
-                                    ) :
-                                     <span t-esc="'%.2f'%(o.amount_total)"/>
+
+                                    <div style="font-size:10px;line-height:0.5">
+                                        Grand Total (
+                                        <span t-field="o.currency_id"/>
+                                        ) :
+                                        <span t-esc="'%.2f'%(o.amount_total)"/>
+                                    </div>
                                 </td>
-<!--                                <td width="5%" style="text-align:right">-->
-<!--                                    <div>-->
-<!--                                    <span t-esc="'%.2f'%(o.amount_untaxed)"/>-->
-<!--                                    </div>-->
-<!--                                <br/>-->
-<!--                                   <div>-->
-<!--                                    <span t-esc="'%.2f'%(o.amount_tax)"/>-->
-<!--                                   </div>-->
-<!--                                    <br/>-->
-<!--                                    <br/>-->
-<!--                                    <span t-esc="'%.2f'%(o.amount_total)"/>-->
-<!--                                </td>-->
-                                </div>
+                                <!--                                <td width="5%" style="text-align:right">-->
+                                <!--                                    <div>-->
+                                <!--                                    <span t-esc="'%.2f'%(o.amount_untaxed)"/>-->
+                                <!--                                    </div>-->
+                                <!--                                <br/>-->
+                                <!--                                   <div>-->
+                                <!--                                    <span t-esc="'%.2f'%(o.amount_tax)"/>-->
+                                <!--                                   </div>-->
+                                <!--                                    <br/>-->
+                                <!--                                    <br/>-->
+                                <!--                                    <span t-esc="'%.2f'%(o.amount_total)"/>-->
+                                <!--                                </td>-->
                             </div>
-<!--                            </tr>-->
-<!--                        </table>-->
+                        </div>
+                        <!--                            </tr>-->
+                        <!--                        </table>-->
                     </t>
                     <p style="page-break-after:always"></p>
                 </div>

@@ -8,8 +8,8 @@
                         <!--						<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" height="80" width="80"/>-->
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="80" width="80"
                              alt="Logo"/>
-                        <div class="company_address" style="padding-top:14px;line-height:12pt;font-family: Calibri;">
-                            <div style="font-size: 12px;">
+                        <div class="company_address" style="padding-top:14px;line-height:30px;font-family: Calibri;">
+                            <div style="font-size:11px;line-height:11px">
                                 <strong>
                                     <span style="font-size: 25px;" t-field="company.partner_id.name"/>
                                 </strong>
@@ -81,7 +81,7 @@
 
                 <!-- </div> -->
                 <t t-if="o.company_id.country_id.code != 'SG'">
-                    <div width="100%" style="border-bottom: 1px solid black;font-size=12pt">
+                    <div width="100%" style="border-bottom: 1px solid black;font-size=10px;line-height:18px">
 
                         <tr>
                             <td width="85%">
@@ -114,10 +114,10 @@
                 </t>
                 <t t-if="o.company_id.country_id.code == 'SG'">
                     <table width="100%"
-                           style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;height:30px;line-height:1.6;"
+                           style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:px;height:30px;line-height:30px;"
                            class="table table-borderless">
-                        <tr style="line-height:1.6;height:10px;">
-                            <td width="25%" class="table table-borderless" style="line-height:1.6;height:10px;">
+                        <tr style="font-size:13px;line-height:12px">
+                            <td width="25%" class="table table-borderless" style="">
                                For Tax Purpose in SGD Only
                             <br/>
                                 <br/>
@@ -135,7 +135,7 @@
                                 <!-- 1 USD = <span t-esc="'%.4f'% o.currency_conv_rate"/>
                                 <span t-field="o.company_currency_id.name"/><br/> -->
                             </td>
-                            <td width="25%" style="text-align:right;line-height:1.6;height:10px;font-size:12px;">
+                            <td width="25%" style="text-align:right;font-size:13px;line-height:12px">
                                 Net Total (SGD) :
 
                                 <br/>
@@ -145,7 +145,7 @@
                                 <br/>
                                     Grand Total (SGD) :
                             </td>
-                            <td width="5%" style="text-align:right;line-height:1.6;height:10px;">
+                            <td width="5%" style="text-align:right;font-size:13px;line-height:12px">
                                 <!-- <t t-set="ex" t-value="o.currency_conv_rate" /> -->
                                 <!-- <t t-set="ex" t-value="o.get_currency_conv_rate()" /> -->
                                 <!-- <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" />
@@ -167,7 +167,7 @@
 
 
                             </td>
-                            <td width="25%" style="text-align:right;line-height:1.6;height:10px;">
+                            <td width="25%" style="text-align:right;font-size:13px;line-height:12px">
                                 Net Total (
                                 <span t-field="o.currency_id"/>
                                 ) :
@@ -180,7 +180,7 @@
                                 <span t-field="o.currency_id"/>
                                 ) :
                             </td>
-                            <td width="5%" style="text-align:right;line-height:1.6;">
+                            <td width="5%" style="text-align:right;font-size:13px;line-height:12px">
                                     <span t-esc="'%.2f'%(o.amount_untaxed)"/>
                                     <!-- <span t-field="o.amount_untaxed" /> -->
                                 <br/>
