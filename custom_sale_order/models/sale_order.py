@@ -143,7 +143,8 @@ class SaleOrderLine(models.Model):
     def _onchange_product_id(self):
         if self.product_id.name:
             self.update({'customer_part_no':self.product_id.name,
-                         'name':self.product_id.name})
+                         'name':self.product_id.x_studio_field_mHzKJ})
+                         # 'name':self.product_id.name})
             
             
 class AccountGeneralLedgerReport(models.AbstractModel):
