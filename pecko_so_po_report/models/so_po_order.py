@@ -1,5 +1,7 @@
-# -*- coding: utf-8 -*-
+66667# -*- coding: utf-8 -*-
 from odoo import api, fields, models
+from functools import partial
+from odoo.tools.misc import formatLang
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from odoo import api, fields, models, SUPERUSER_ID, _
@@ -32,6 +34,31 @@ class SaleOrder(models.Model):
      
     attn = fields.Many2one('res.partner',string="ATTN")
     customer_po_no = fields.Char(string="Customer PO No")
+    amount_by_group = fields.Binary(string="Tax amount by group", compute='_amount_by_group',
+                                    help="type: [(name, amount, base, formated amount, formated base)]")
+
+    def _amount_by_group(self):
+        for order in self:
+            currency = order.currency_id or order.company_id.currency_id
+            fmt = partial(formatLang, self.with_context(lang=order.partner_id.lang).env, currency_obj=currency)
+            res = {}
+            for line in order.order_line:
+                price_reduce = line.price_unit * (1.0 - line.discount / 100.0)
+                taxes = line.tax_id.compute_all(price_reduce, quantity=line.product_uom_qty, product=line.product_id, partner=order.partner_shipping_id)['taxes']
+                for tax in line.tax_id:
+                    group = tax.tax_group_id
+                    res.setdefault(group, {'amount': 0.0, 'base': 0.0})
+                    for t in taxes:
+                        if t['id'] == tax.id or t['id'] in tax.children_tax_ids.ids:
+                            res[group]['amount'] += t['amount']
+                            res[group]['base'] += t['base']
+            res = sorted(res.items(), key=lambda l: l[0].sequence)
+            order.amount_by_group = [(
+                l[0].name, l[1]['amount'], l[1]['base'],
+                fmt(l[1]['amount']), fmt(l[1]['base']),
+                len(res),
+            ) for l in res]
+
 
 #  
 #     @api.multi
@@ -251,7 +278,7 @@ class PurchaseOrderLine(models.Model):
             self.taxes_id = fpos.map_tax(self.product_id.supplier_taxes_id)
 
         self._suggest_quantity()
-        self._onchange_quantity()
+        # self._onchange_quantity()
 
         return result
 

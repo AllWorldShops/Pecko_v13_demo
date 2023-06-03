@@ -15,9 +15,13 @@
     "depends": ["stock"],
     "data": [
         'security/picking_create_security.xml',
-        'views/assets.xml',
-        
+        # 'views/assets.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'picking_create_lines/static/src/js/picking_add_line_show.js',
+        ]
+    },
     
     "auto_install": False,
     "installable": True,

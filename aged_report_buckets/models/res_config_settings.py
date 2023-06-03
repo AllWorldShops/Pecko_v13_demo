@@ -4,7 +4,7 @@
 from odoo import api, fields, models
 from xmlrpc.client import boolean
 # from odoo.tools.func import default
-from odoo.addons.web_editor.models.ir_qweb import Integer
+# from odoo.addons.web_editor.models.ir_qweb import Integer
 
 
 class ResConfigSettings(models.TransientModel):

@@ -209,7 +209,7 @@
         </record>
 
                <!-- routing field addition -->
-        <record id="mrp_routing_view_form_inherit" model="ir.ui.view">
+       <!--  <record id="mrp_routing_view_form_inherit" model="ir.ui.view">
             <field name="name">mrp.routing.form.inherit</field>
             <field name="model">mrp.routing</field>
             <field name="inherit_id" ref="mrp.mrp_routing_form_view"/>
@@ -218,7 +218,7 @@
                     <field name="x_code" />
                 </xpath>
             </field>
-        </record>
+        </record> -->
 
         <!-- routing workcenter field addition -->
         <record id="mrp_routing_workcenter_view_form_inherit" model="ir.ui.view">

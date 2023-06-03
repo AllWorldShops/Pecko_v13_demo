@@ -126,5 +126,5 @@
 		<field name="view_mode">tree,form</field>
 	</record>
 
-	<menuitem id="action_sale_lines_menu_id" name="Sale Lines" action="custom_sale_order.action_sale_lines_menu" parent="sale.sale_order_menu" sequence="7"/>
+	<menuitem id="action_sale_lines_menu_id" name="Sale Lines" action="custom_sale_order.action_sale_lines_menu" parent="sale.sale_order_menu" sequence="50"/>
 </odoo>

@@ -84,7 +84,7 @@
                                 <span t-field="line.date_maturity" />
                             </td>
                             <td>
-                                <span t-field="line.analytic_account_id" />
+                                <span t-field="line.analytic_distribution" />
                             </td>
                             <td>
                                 <span t-field="line.tax_ids" />

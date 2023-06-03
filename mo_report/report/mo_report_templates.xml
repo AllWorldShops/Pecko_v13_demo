@@ -1,232 +1,254 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+    <data>
 
-		<template id="report_mo_document">
-			<t t-call="mo_report.custom_mo_external_layout">
-				<style>
-					.table1{
-					border: 1px solid black;
-					}
-					td {
-					padding-left: 4px;
-					}
+        <template id="report_mo_document">
+            <t t-call="mo_report.custom_mo_external_layout">
+                <style>
+                    .table1{
+                    border: 1px solid black;
+                    }
+                    td {
+                    padding-left: 4px;
+                    }
 
-					.table2{
-					border-top: 1px solid black;
-					border-left: 1px solid black;
-					border-right: 1px solid black;
-					}
+                    .table2{
+                    border-top: 1px solid black;
+                    border-left: 1px solid black;
+                    border-right: 1px solid black;
+                    }
 
-					.table3{
-					border-bottom: 1px solid
-					black;
-					border-left: 1px solid black;
-					border-right: 1px solid black;
-					}
-					.table4{
-					border-bottom: 1px solid black;
-					}
-					.table5{
-					border-top: 1px
-					solid black;
-					}
-					.pagebreak { page-break-before: always; } /*
-					page-break-after works, as well */
+                    .table3{
+                    border-bottom: 1px solid
+                    black;
+                    border-left: 1px solid black;
+                    border-right: 1px solid black;
+                    }
+                    .table4{
+                    border-bottom: 1px solid black;
+                    }
+                    .table5{
+                    border-top: 1px
+                    solid black;
+                    }
+                    .pagebreak { page-break-before: always; } /*
+                    page-break-after works, as well */
 
-					html *
-					{
-					font-family: Calibri;
-					}
-					thead {display:table-header-group}
+                    html *
+                    {
+                    font-family: Calibri;
+                    }
+                    thead {display:table-header-group}
                     tr {page-break-inside:avoid}
-				</style>
-				<t t-set="o"
-					t-value="o.with_context({'lang':o.company_id.partner_id.lang})" />
+                </style>
+                <t t-set="o"
+                   t-value="o.with_context({'lang':o.company_id.partner_id.lang})"/>
 
-				<div class="page" style="text-color:black">
-					<div
-						style="font-size: 20px;text-align: center;padding-top:10px;">
-						<span>
-							<strong>
-								MATERIAL LIST
-								<br />
-								(Original)
-							</strong>
-						</span>
-					</div>
-					<br />
-					<table
-						style="width: 100%;height:200px;background-color: white;line-height:20pt;">
-						<tbody>
-							<tr>
-								<td style="width:57%;background-color: white;font-size:15px;">
-									<table>
-										<tbody>
-											<tr>
-												<td>
-													<strong>Item No</strong>
-												</td>
-												<td>
-													<span style="text-align:left" t-field="o.product_id" />
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<strong>Part Number</strong>
-												</td>
-												<td>
-													<span style="text-align:left"
-														t-field="o.customer_part_no" />
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<strong>Description</strong>
-												</td>
-												<td>
-													<span style="text-align:left" t-field="o.description" />
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<strong>Project</strong>
-												</td>
-												<td>
-													<span style="text-align:left" t-field="o.project" />
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-								<td style="width:43%;background-color: white;font-size:15px;">
-									<table>
-										<tbody>
-											<tr>
-												<td>
-													<strong>Production Order No</strong>
-												</td>
-												<td>
-													<span style="text-align:left" t-field="o.name" />
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<strong>Source Document</strong>
-												</td>
-												<td>
-													<span style="text-align:left" t-field="o.origin" />
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<strong>Quantity Order</strong>
-												</td>
-												<td>
-													<span style="text-align:left" t-field="o.product_qty" />
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<strong>Schedule Date</strong>
-												</td>
-												<td>
-													<span style="text-align:left"
-														t-field="o.date_planned_start"
-														t-options='{"format": "dd/MM/yyyy"}' />
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<strong>Printing Date</strong>
-												</td>
-												<td>
-													<span
-														t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')" />
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<t t-set="product_stock_uom_qty" t-value="0" />
-					<table class="table table-condensed"
-						name="invoice_line_table"
-						style="width:100%;margin-top:-30px;text-color:black;font-size:13px;table-layout:auto;">
-						<thead style="font-size:13px">
-							<!-- <tr> <th >Storage Location</th> <th class="text-left" >Item No</th> 
-								<th class="text-left" >Part No</th> <th class="text-left" >Description</th> 
-								<th class="text-left" >Manufaturer</th> <th class="text-left" >u/m</th> <th 
-								class="text-left" rowspan="2">Qty</th> </tr> -->
-							<tr>
-								<th class="text-left" style="width:20%;color:#875A7B">Position</th>
-								<th class="text-left" style="width:20%;color:#875A7B">Storage Location</th>
-								<th class="text-left" style="width:14%;color:#875A7B">Item No</th>
-								<th class="text-left" style="width:14%;color:#875A7B">Part No</th>
-								<th class="text-left" style="width:20%;color:#875A7B">Description</th>
-								<th class="text-left" style="width:14%;color:#875A7B">Manufaturer</th>
-								<th class="text-left" style="width:7%;color:#875A7B">u/m</th>
-								<th class="text-left" style="width:7%;color:#875A7B">Qty</th>
-							</tr>
-						</thead>
-						<tbody class="invoice_tbody" style="font-size:12px">
-							<tr t-foreach="o.move_raw_ids" t-as="l">
-								<t t-if="l.product_uom_qty > 0">
-									<td style=" text-align: left;" >
-										<span t-field="l.position_no" />
-									</td>
-									<td style=" text-align: left;" >
-										<span t-field="l.storage_location_id" />
-									</td>
-									<td style=" text-align: left;">
-										<span t-field="l.product_id" />
-									</td>
-									<td style=" text-align: left;">
-										<span t-field="l.customer_part_no" />
-									</td>
-									<td style=" text-align: left;" >
-										<span t-field="l.name" />
-									</td>
-									<td style=" text-align: left;">
-										<span t-field="l.manufacturer_id" />
-									</td>
-									<td style=" text-align: left;">
-										<span t-field="l.product_uom" />
-									</td>
-									<td style=" text-align: right;">
-										<span t-field="l.product_uom_qty" />
-									</td>
-								</t>
-							</tr>
-						</tbody>
-					</table>
+                <br/>
+                <br/>
+<!--                <br/>-->
 
-					<table style='width:100%;background:transparent;'>
-						<tr
-							style='background-color: white;background:transparent !important;'>
-							<td>
-							</td>
-						</tr>
-					</table>
-					<table width="100%"
-						style="border-top: 1px solid black;border-bottom: 1px solid black;">
 
-					</table>
-					<p style="page-break-after:always"></p>
-				</div>
-			</t>
-		</template>
+                <div class="page" style="text-color:black">
+                    <br/>
+                    <div style="font-size: 20px;text-align: center;padding-top:10px;">
+                        <span>
+                            <strong>
+                                MATERIAL LIST
+                                <br/>
+                                (Original)
+                            </strong>
+                        </span>
+                    </div>
+                    <br/>
+<!--                    <br/>-->
+<!--                    <br/>-->
+                    <table
+                            style="width: 100%;height:200px;background-color: white;line-height:20pt;"
+                            class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td style="width:57%;background-color: white;font-size:15px;">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <strong>Item No</strong>
+                                                </td>
+                                                <td>
+                                                    <span style="text-align:left" t-field="o.product_id"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Part Number</strong>
+                                                </td>
+                                                <td>
+                                                    <span style="text-align:left"
+                                                          t-field="o.customer_part_no"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Description</strong>
+                                                </td>
+                                                <td>
+                                                    <span style="text-align:left" t-field="o.description"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Project</strong>
+                                                </td>
+                                                <td>
+                                                    <span style="text-align:left" t-field="o.project"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="width:43%;background-color: white;font-size:15px;">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <strong>Production Order No</strong>
+                                                </td>
+                                                <td>
+                                                    <span style="text-align:left" t-field="o.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Source Document</strong>
+                                                </td>
+                                                <td>
+                                                    <span style="text-align:left" t-field="o.origin"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Quantity Order</strong>
+                                                </td>
+                                                <td>
+                                                    <span style="text-align:left" t-field="o.product_qty"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Schedule Date</strong>
+                                                </td>
+                                                <td>
+                                                    <span style="text-align:left"
+                                                          t-field="o.date_planned_start"
+                                                          t-options='{"format": "dd/MM/yyyy"}'/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong>Printing Date</strong>
+                                                </td>
+                                                <td>
+                                                    <span
+                                                            t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <t t-set="product_stock_uom_qty" t-value="0"/>
+                    <table class="table table-borderless"
+                           name="invoice_line_table"
+                           style="width:100%;margin-top:-30px;text-color:black;font-size:13px;table-layout:auto;">
+                        <style>
 
-		<template id="report_custom_mo">
-			<t t-call="web.html_container">
-				<t t-foreach="docs" t-as="o">
-					<t t-call="mo_report.report_mo_document"
-						t-lang="o.company_id.partner_id.lang" />
-				</t>
-			</t>
-		</template>
+                            tbody tr:nth-child(odd){
+                            background-color:#f4f4f5;
+                            border-top:none;
+                            border-bottom:light;
+                            }
+                            th{font-size:13px}
+                            td{font-size:13px}
 
-	</data>
+
+                        </style>
+
+                        <thead style="font-size:13px;border-bottom:none" class="thead-light">
+
+                            <!-- <tr> <th >Storage Location</th> <th class="text-left" >Item No</th>
+                                <th class="text-left" >Part No</th> <th class="text-left" >Description</th>
+                                <th class="text-left" >Manufaturer</th> <th class="text-left" >u/m</th> <th
+                                class="text-left" rowspan="2">Qty</th> </tr> -->
+                            <tr>
+                                <th class="text-left" style="width:20%;color:#875A7B;text-align:left">Position</th>
+                                <th class="text-left" style="width:20%;color:#875A7B">Storage Location</th>
+                                <th class="text-left" style="width:14%;color:#875A7B;text-align:left">Item No</th>
+                                <th class="text-left" style="width:14%;color:#875A7B;text-align:left">Part No</th>
+                                <th class="text-left" style="width:20%;color:#875A7B;text-align:left">Description</th>
+                                <th class="text-left" style="width:14%;color:#875A7B">Manufacturer</th>
+                                <th class="text-left" style="width:7%;color:#875A7B">uom</th>
+                                <th class="text-left" style="width:7%;color:#875A7B">Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody" style="font-size:12px">
+                            <tr t-foreach="o.move_raw_ids" t-as="l">
+                                <t t-if="l.product_uom_qty > 0">
+                                    <td style=" text-align: left;">
+                                        <span t-field="l.position_no"/>
+                                    </td>
+                                    <td style=" text-align: left;">
+                                        <span t-field="l.storage_location_id"/>
+                                    </td>
+                                    <td style=" text-align: left;">
+                                        <span t-field="l.product_id"/>
+                                    </td>
+                                    <td style=" text-align: left;">
+                                        <span t-field="l.customer_part_no"/>
+                                    </td>
+                                    <td style=" text-align: left;">
+                                        <span t-field="l.name"/>
+                                    </td>
+                                    <td style=" text-align: left;">
+                                        <span t-field="l.manufacturer_id"/>
+                                    </td>
+                                    <td style=" text-align: left;">
+                                        <span t-field="l.product_uom"/>
+                                    </td>
+                                    <td style=" text-align: right;">
+                                        <span t-field="l.product_uom_qty"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table style='width:100%;background:transparent;'>
+                        <tr
+                                style='background-color: white;background:transparent !important;'>
+                            <td>
+                            </td>
+                        </tr>
+                    </table>
+                    <table  width="100%"
+                           style="border-top: 1px solid black;border-bottom: 1px solid black;">
+
+                    </table>
+                    <p style="page-break-after:always"></p>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_custom_mo">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="mo_report.report_mo_document"
+                       t-lang="o.company_id.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+    </data>
 </odoo>

@@ -1,281 +1,293 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+    <data>
+        <template id="custom_invoice_external_layout_background">
+            <div class="header o_background_header">
+                <div class="row">
+                    <div class="col-10">
+                        <!--						<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" height="80" width="80"/>-->
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="80" width="80"
+                             alt="Logo"/>
+                        <div class="company_address" style="padding-top:14px;line-height:30px;font-family: Calibri;">
+                            <div style="font-size:11px;line-height:11px">
+                                <strong>
+                                    <span style="font-size: 25px;" t-field="company.partner_id.name"/>
+                                </strong>
+                                <br/>
+                                <!--								<span t-field="o.company_id.street" />-->
+                                <t t-if="o.company_id.street">
+                                    <span t-field="o.company_id.street"/>,
+                                    <br/>
+                                </t>
+                                <t t-if="o.company_id.street2">
+                                    <span t-field="o.company_id.street2"/>,
+                                    <br/>
+                                </t>
 
-		<template id="custom_invoice_external_layout_background">
+                                <t t-if="o.company_id.country_id.code != 'SG'">
+                                    <span t-field="o.company_id.city"/>
+                                    ,
+                                </t>
+                                <span t-field="o.company_id.state_id"/>
+                                <span t-field="o.company_id.country_id"/>
+                                -
+                                <span t-field="o.company_id.zip"/>
+                                <br/>
+                                <span>TEL :</span>
+                                <span t-field="o.company_id.phone"/>
+                                <!--								<t t-if="o.company_id.fax">-->
+                                <!--									|-->
+                                <!--									<span>FAX :</span>-->
+                                <!--									<span t-field="o.company_id.fax" />-->
+                                <!--								</t>-->
+                                <br/>
+                                <t t-if="o.company_id.country_id.code != 'SG'">
+                                    <span>E-mail:</span>
+                                    <span t-field="o.company_id.email"/>
+                                    ,
+                                </t>
+                                <span>URL:</span>
+                                <span t-field="o.company_id.website"/>
+                                <br/>
+                                <span>Company Reg No:</span>
+                                <span t-field="o.company_id.company_registry"/>
+                                <br/>
+                                <span>GST Registration:</span>
+                                <span t-field="o.company_id.vat"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="text-muted text-right">
+                            Page:
+                            <span class="page"/>
+                            of
+                            <span class="topage"/>
+                        </div>
+                        <div class="clearfix mb8"/>
+                    </div>
+                </div>
+            </div>
 
-			<div class="header o_background_header">
-				<div class="row">
-					<div class="col-10">
-						<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" height="80" width="80"/>
-						<div class="company_address" style="padding-top:14px;line-height:12pt;font-family: Calibri;">
-							<div style="font-size: 13px;">
-								<strong>
-									<span style="font-size: 25px;" t-field="company.partner_id.name" />
-								</strong>
-								<br />
-								<span t-field="o.company_id.street" />
-,
-								<t t-if="o.company_id.street1">
-									<span t-field="o.company_id.street1" />
-,
-									<br />
-									<span t-field="o.company_id.street2" />
-,
-								</t>
-								<t t-else="">
-									<span t-field="o.company_id.street2" />
-,
-								</t>
-								<br />
-								<t t-if="o.company_id.country_id.code != 'SG'">
-									<span t-field="o.company_id.city" />
-								,</t>
-								<span t-field="o.company_id.state_id" />
-								<span t-field="o.company_id.country_id" />
-								-
-								<span t-field="o.company_id.zip" />
-								<br />
-								<span>TEL :</span>
-								<span t-field="o.company_id.phone" />
-								<t t-if="o.company_id.fax">
-									|
-									<span>FAX :</span>
-									<span t-field="o.company_id.fax" />
-								</t>
-								<br />
-								<t t-if="o.company_id.country_id.code != 'SG'">
-									<span>E-mail:</span>
-									<span t-field="o.company_id.email" />
-								,</t>
-								<span>URL:</span>
-								<span t-field="o.company_id.website" />
-								<br />
-								<span>Company Reg No:</span>
-								<span t-field="o.company_id.company_registry" />
-								<br/>
-								<span>GST Registration:</span>
-								<span t-field="o.company_id.vat"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-2">
-						<div class="text-muted text-right">
-							Page:
-							<span class="page" />
-							of
-							<span class="topage" />
-						</div>
-						<div class="clearfix mb8" />
-					</div>
-				</div>
-			</div>
-
-			<div class="article o_report_layout_background" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
-				<t t-raw="0" />
-			</div>
-
-
-			<div class="footer o_background_footer" style="font-family: Calibri;font-size:12px;">
-
-				<!-- <div > -->
-
-				<!-- </div> -->
-				<t t-if="o.company_id.country_id.code != 'SG'">
-					<table width="100%" style="border-bottom: 1px solid black;">
-						<tr>
-
-							<td width="85%">
-						**This is a computer generated document. Signature is not required.**<br/>
-							1.Please remit to Pecko (M) Sdn Bhd, Swift Code: MBBEMYKL, 
-							Maybank Islamic Berhad (MYR A/C: 551100316366); 
-							Malayan Banking Berhad (USD A/C: 701105010725).
-							Swift Code: RHBBMYKL, RHB Bank Berhad (USD A/C: 60113800001626).
-							<br />
-							2.Any discrepancy noted herein must be brought to our notice
-							within 7 days in writing from the date of this invoice.
-							<br />
-							3.Title to this merchandise remains with PECKO (M) SDN BHD until
-							such time as full settlement of all sums due from you to us under
-							this invoice or otherwise is received.
-							
-						</td>
-						<td width="15%">
-
-							<div style="position:relative;top:40px;">
-								<t t-if="o.company_id.country_id.code == 'SG'">
-
-									<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)" style="width:110px;" />
-								</t>
-							</div>
-						</td>
+            <div class="article o_report_layout_background" t-att-data-oe-model="o and o._name"
+                 t-att-data-oe-id="o and o.id">
+                <t t-raw="0"/>
+            </div>
 
 
+            <div class="footer o_background_footer" style="font-family: Calibri;font-size:12px;">
 
-					</tr>
-				</table>
-			</t>
-			<t t-if="o.company_id.country_id.code == 'SG'">
-				<table width="100%" style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;">
-					<tr>
-						<td width="25%">
-								For Tax Purpose in SGD Only
-							<br />
-								1 USD =
-							<span t-esc="'%.4f'%(o.exchange_rate)" />
-								SGD
-																						<!-- <span t-field="o.company_currency_id.name" /> -->
-							<br />
-								Conversation Rate =
-							<span t-esc="'%.4f'%(o.exchange_rate)" />
-								SGD
-																						<!-- 1 USD = <span t-esc="'%.4f'% o.currency_conv_rate"/> <span t-field="o.company_currency_id.name"/><br/> -->
+                <!-- <div > -->
 
-						</td>
-						<td width="25%" style="text-align:right">
-								Net Total (SGD) :
-							<br />
-								Tax Amount :
-							<br />
-								Grand Total (SGD) :
-						</td>
-						<td width="5%" style="text-align:right">
-							<!-- <t t-set="ex" t-value="o.currency_conv_rate" /> -->
-							<!-- <t t-set="ex" t-value="o.get_currency_conv_rate()" /> -->
-							<!-- <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" />
-								<br />
-								<span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />
-								<br />
-								<span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" />
-								<br /> -->
-							<!-- <span t-esc="'%.2f'%(o.get_net_amount_report())" /> -->
-							<span t-esc="'%.2f'%(o.amount_untaxed * o.exchange_rate)" />
-							<br />
-							<span t-esc="'%.2f'%(o.amount_tax * o.exchange_rate)" />
-							<br />
-							<span t-esc="'%.2f'%((o.amount_tax * o.exchange_rate) + (o.amount_untaxed * o.exchange_rate))" />
-							<!-- <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" /> -->
-							<br />
-						</td>
-						<td width="25%" style="text-align:right">
-								Net Total (
-							<span t-field="o.currency_id" />
-								) :
-							<br />
-								Tax Amount :
-							<br />
-								Grand Total (
-							<span t-field="o.currency_id" />
-								) :
-						</td>
-						<td width="5%" style="text-align:right">
-							<span t-esc="'%.2f'%(o.amount_untaxed)" />
-							<!-- <span t-field="o.amount_untaxed" /> -->
-							<br />
-							<span t-esc="'%.2f'%(o.amount_tax)" />
-							<!-- <span t-field="o.amount_tax" /> -->
-							<br />
-							<span t-esc="'%.2f'%(o.amount_total)" />
-							<!-- <span t-field="o.amount_total" /> -->
-							<br />
-						</td>
-					</tr>
-				</table>
+                <!-- </div> -->
+                <t t-if="o.company_id.country_id.code != 'SG'">
+                    <div width="100%" style="border-bottom: 1px solid black;font-size=10px;line-height:18px">
 
-				<table width="100%" style="border-bottom: 1px solid black;position:relative; bottom:30px;">
-					<tr>
+                        <tr>
+                            <td width="85%">
+                                **This is a computer generated document. Signature is not required.**
+                                <br/>
+                                1.Please remit to Pecko (M) Sdn Bhd, Swift Code: MBBEMYKL,
+                                Maybank Islamic Berhad (MYR A/C: 551100316366);
+                                Malayan Banking Berhad (USD A/C: 701105010725).
+                                Swift Code: RHBBMYKL, RHB Bank Berhad (USD A/C: 60113800001626).
+                                <br/>
+                                2.Any discrepancy noted herein must be brought to our notice
+                                within 7 days in writing from the date of this invoice.
+                                <br/>
+                                3.Title to this merchandise remains with PECKO (M) SDN BHD until
+                                such time as full settlement of all sums due from you to us under
+                                this invoice or otherwise is received.bor
+                            </td>
+                            <td width="15%">
 
-						<td width="85%" t-if="o.company_id.id == 2">
-						**This is a computer generated document. Signature is not required.**<br/>
-							1.Please remit to Pecko Electronics Industries Pte.Ltd, Swift Code: (UOVBSGSG), 
-							United Overseas Bank (SGD A/C: 213-307-107-7); 
-							United Overseas Bank (USD A/C: 213-900-224-7).
-						<br/>
-							2.Any discrepancy noted herein must be brought to our notice
-							within 7 days in writing from the date of this invoice.
-						<br/>
-							3.Title to this merchandise remains with Pecko Electronics Industries Pte.Ltd until
-							such time as full settlement of all sums due from you to us under
-							this invoice or otherwise is received.
-							
-					</td>
-					<td width="85%" t-if="o.company_id.id == 4">
-						**This is a computer generated document. Signature is not required.**<br/>
-							1.Please remit to All World Shop Pte.Ltd, Swift Code: (UOVBSGSG), 
-							United Overseas Bank (SGD A/C: 3783029764); 
-							United Overseas Bank (USD A/C: 3789004550).
-					<br/>
-							2.Any discrepancy noted herein must be brought to our notice
-							within 7 days in writing from the date of this invoice.
-					<br/>
-							3.Title to this merchandise remains with All World Shop Pte.Ltd until
-							such time as full settlement of all sums due from you to us under
-							this invoice or otherwise is received.
-							
-				</td>
-				<td width="15%">
+                                <div style="position:relative;top:40px;">
+                                    <t t-if="o.company_id.country_id.code == 'SG'">
 
-					<div style="position:relative;top:40px;">
-						<t t-if="o.company_id.country_id.code == 'SG'">
+                                        <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
+                                             style="width:110px;"/>
+                                    </t>
+                                </div>
+                            </td>
+                        </tr>
+                    </div>
+                </t>
+                <t t-if="o.company_id.country_id.code == 'SG'">
+                    <table width="100%"
+                           style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:px;height:30px;line-height:30px;"
+                           class="table table-borderless">
+                        <tr style="font-size:13px;line-height:12px">
+                            <td width="25%" class="table table-borderless" style="">
+                               For Tax Purpose in SGD Only
+                            <br/>
+                                <br/>
+                                    1 USD =
+                                    <span t-esc="'%.4f'%(o.exchange_rate)"/>
+                                    SGD
+                                    <!-- <span t-field="o.company_currency_id.name" /> -->
+                               <br/>
+                                <br/>
+                                    Conversation Rate =
+                                    <span t-esc="'%.4f'%(o.exchange_rate)"/>
+                                    SGD
+                                <br/>
+                                <br/>
+                                <!-- 1 USD = <span t-esc="'%.4f'% o.currency_conv_rate"/>
+                                <span t-field="o.company_currency_id.name"/><br/> -->
+                            </td>
+                            <td width="25%" style="text-align:right;font-size:13px;line-height:12px">
+                                Net Total (SGD) :
 
-							<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)" style="width:110px;" />
-						</t>
-					</div>
-				</td>
+                                <br/>
+                                <br/>
+                                    Tax Amount :
+                                <br/>
+                                <br/>
+                                    Grand Total (SGD) :
+                            </td>
+                            <td width="5%" style="text-align:right;font-size:13px;line-height:12px">
+                                <!-- <t t-set="ex" t-value="o.currency_conv_rate" /> -->
+                                <!-- <t t-set="ex" t-value="o.get_currency_conv_rate()" /> -->
+                                <!-- <span t-esc="'%.2f'%(o.amount_untaxed /o.exchange_rate)" />
+                                    <br />
+                                    <span t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)" />
+                                    <br />
+                                    <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" />
+                                    <br /> -->
+                                <!-- <span t-esc="'%.2f'%(o.get_net_amount_report())" /> -->
+
+                                    <span t-esc="'%.2f'%(o.amount_untaxed * o.exchange_rate)"/>
+                                <br/>
+                                <br/>
+                                    <span t-esc="'%.2f'%(o.amount_tax * o.exchange_rate)"/>
+                               <br/>
+                                <br/>
+                                    <span t-esc="'%.2f'%((o.amount_tax * o.exchange_rate) + (o.amount_untaxed * o.exchange_rate))"/>
+                                    <!-- <span t-esc="'%.2f'%(o.amount_total /o.exchange_rate)" /> -->
 
 
+                            </td>
+                            <td width="25%" style="text-align:right;font-size:13px;line-height:12px">
+                                Net Total (
+                                <span t-field="o.currency_id"/>
+                                ) :
+                                <br/>
+                                <br/>
+                                    Tax Amount :
+                               <br/>
+                                <br/>
+                                Grand Total (
+                                <span t-field="o.currency_id"/>
+                                ) :
+                            </td>
+                            <td width="5%" style="text-align:right;font-size:13px;line-height:12px">
+                                    <span t-esc="'%.2f'%(o.amount_untaxed)"/>
+                                    <!-- <span t-field="o.amount_untaxed" /> -->
+                                <br/>
 
-				</tr>
-			</table>
-		</t>
-	<!-- <t t-if="o.company_id.country_id.code == 'SG'">
-				<table width="100%" style="border-bottom:1px solid black;border-top:1px solid black;">
-					<tr>
-				
-						
-							
-					</tr>
-				</table>
-			</t> -->
+                                    <span t-esc="'%.2f'%(o.amount_tax)"/>
+                                <br/>
+                                <!-- <span t-field="o.amount_tax" /> -->
+                                    <span t-esc="'%.2f'%(o.amount_total)"/>
+                                <br/>
+                                <!-- <span t-field="o.amount_total" /> -->
 
-		</div>
-	</template>
+                            </td>
+                        </tr>
+                    </table>
+                    <table width="100%" style="border-bottom: 1px solid black;position:relative; bottom:30px;">
+                        <tr>
+                            <td width="85%" t-if="o.company_id.id == 2">
+                                **This is a computer generated document. Signature is not required.**
+                                <br/>
+                                1.Please remit to Pecko Electronics Industries Pte.Ltd, Swift Code: (UOVBSGSG),
+                                United Overseas Bank (SGD A/C: 213-307-107-7);
+                                United Overseas Bank (USD A/C: 213-900-224-7).
+                                <br/>
+                                2.Any discrepancy noted herein must be brought to our notice
+                                within 7 days in writing from the date of this invoice.
+                                <br/>
+                                3.Title to this merchandise remains with Pecko Electronics Industries Pte.Ltd until
+                                such time as full settlement of all sums due from you to us under
+                                this invoice or otherwise is received.
 
-		<template id="custom_invoice_external_layout">
-			<!-- Multicompany -->
-			<t t-if="not o and doc">
-				<t t-set="o" t-value="doc" />
-			</t>
+                            </td>
+                            <td width="85%" t-if="o.company_id.id == 4">
+                                **This is a computer generated document. Signature is not required.**
+                                <br/>
+                                1.Please remit to All World Shop Pte.Ltd, Swift Code: (UOVBSGSG),
+                                United Overseas Bank (SGD A/C: 3783029764);
+                                United Overseas Bank (USD A/C: 3789004550).
+                                <br/>
+                                2.Any discrepancy noted herein must be brought to our notice
+                                within 7 days in writing from the date of this invoice.
+                                <br/>
+                                3.Title to this merchandise remains with All World Shop Pte.Ltd until
+                                such time as full settlement of all sums due from you to us under
+                                this invoice or otherwise is received.
+                            </td>
+                            <td width="15%">
 
-			<t t-if="o and 'company_id' in o">
-				<t t-set="company" t-value="o.company_id.sudo()" />
-			</t>
-			<t t-if="not o or not 'company_id' in o">
-				<t t-set="company" t-value="res_company" />
-			</t>
+                                <div style="position:relative;top:40px;">
+                                    <t t-if="o.company_id.country_id.code == 'SG'">
 
-			<t t-call="invoice_report.custom_invoice_external_layout_background">
-				<t t-raw="0" />
-			</t>
+                                        <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
+                                             style="width:110px;"/>
+                                    </t>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </t>
+                <!-- <t t-if="o.company_id.country_id.code == 'SG'">
+                            <table width="100%" style="border-bottom:1px solid black;border-top:1px solid black;">
+                                <tr>
+                                </tr>
+                            </table>
+                        </t> -->
 
-		</template>
+            </div>
+        </template>
+        <template id="custom_invoice_external_layout">
+            <!-- Multicompany -->
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc"/>
+            </t>
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
 
-	<record id="paperformat_invoice" model="report.paperformat">
-		<field name="name">Invoice Paperformat</field>
-		<field name="default" eval="True" />
-		<field name="format">A4</field>
-		<field name="orientation">Portrait</field>
-		<field name="margin_top">35</field>
-		<field name="margin_bottom">45</field>
-		<field name="margin_left">6</field>
-		<field name="margin_right">6</field>
-		<field name="header_line" eval="False" />
-		<field name="header_spacing">25</field>
-		<field name="dpi">90</field>
-	</record>
+            <t t-call="invoice_report.custom_invoice_external_layout_background">
+                <t t-raw="0"/>
+            </t>
+        </template>
 
-	<!-- QWeb Reports -->
-	<report id="invoice_ppts" model="account.move" string="Invoice Report" report_type="qweb-pdf" name="invoice_report.report_ppts_invoice_custom" file="invoice_report.report_ppts_invoice_custom" paperformat="paperformat_invoice" attachment="(object.state in ('draft','open','paid')) and ('INV'+(object.name or '').replace('/','')+'.pdf')" print_report_name="(object._get_report_base_filename())" />
+        <record id="paperformat_invoice" model="report.paperformat">
+            <field name="name">Invoice Paperformat</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">35</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">6</field>
+            <field name="margin_right">6</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+        </record>
 
-</data>
+        <!-- QWeb Reports -->
+        <report id="invoice_ppts" model="account.move"
+                string="Invoice Report"
+                report_type="qweb-pdf"
+                name="invoice_report.report_ppts_invoice_custom"
+                file="invoice_report.report_ppts_invoice_custom"
+                paperformat="paperformat_invoice"
+                attachment="(object.state in ('draft','open','paid')) and ('INV'+(object.name or '').replace('/','')+'.pdf')"
+                print_report_name="(object._get_report_base_filename())"/>
+
+    </data>
 </odoo>

@@ -1,183 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+    <data>
 
-		<template id="custom_do_external_layout_background">
+        <template id="custom_do_external_layout_background">
 
-			<div class="header o_background_header">
-				<div class="row">
-					<div class="col-8">
-						<div style="position:relative; top:12px;">
-						     <img t-if="company.logo"
-								t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
-						</div>
-							
-						<div class="company_address"
-							style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;font-size: 13px;">
-							<div>
-								<strong>
-									<span style="font-size: 25px;"
-										t-field="company.partner_id.name" />
-								</strong>
-								<br />
-								<span t-field="o.company_id.street" />,
-								<t t-if="o.company_id.street1">
-									<span t-field="o.company_id.street1" />,
-									<br />
-									
-									<span t-field="o.company_id.street2" />
-								</t>
-								<t t-else="">
-									<span t-field="o.company_id.street2" />,
-								</t>
-								<br />
-								<t t-if="o.company_id.country_id.code != 'SG'">
-									<span t-field="o.company_id.city" />
-								</t>
-								
-								<span t-field="o.company_id.state_id" />
-								
-								<span t-field="o.company_id.country_id" />
-								-
-								<span t-field="o.company_id.zip" />
-								<br />
-								<span>TEL :</span>
-								<span t-field="o.company_id.phone" />
-								<t t-if="o.company_id.fax">
-									|
-									<span>FAX :</span>
-									<span t-field="o.company_id.fax" />
-								</t>
-								<br />
-								<t t-if="o.company_id.country_id.code != 'SG'">
-								<span>E-mail:</span>
-								<span t-field="o.company_id.email" />
-								,</t>
-								<span>URL:</span>
-								<span t-field="o.company_id.website" />
-								<br />
-								<span>Company Reg No:</span>
-								<span t-field="o.company_id.company_registry" />
-							</div>
-						</div>
-					</div>
-					<div class="col-4">
-						<div class="text-muted text-right" style="position:relative; top:12px;">
-							Page:
-							<span class="page" />
-							of
-							<span class="topage" />
-						</div>
-						<div class="clearfix mb8" />
-					</div>
-				</div>
-			</div>
+            <t t-if="not o and doc">
+            <t t-set="o" t-value="doc"/>
+        </t>
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id.sudo()"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <div class="header o_background_header">
+            <div class="row" style="bottom:10px;top:10px">
+                <div class="col-8">
+                    <img t-if="o.company_id.logo" height="30" width="170"
+                         t-att-src="image_data_uri(o.company_id.logo)"
+                         alt="Logo"/>
+                    <!--					<img t-if="company.logo"-->
+                    <!--						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width:100px;"/>-->
+                    <div class="company_address"
+                         style="line-height:10px;font-family: Calibri;text-color:black;">
+                        <div>
+                            <strong>
+                                <span style="font-size: 22px;"
+                                      t-field="company.partner_id.name"/>
+                            </strong>
+                            <br/>
+                            <span style="font-size: 14px;" t-field="o.company_id.street"/>,
+                            <t t-if="o.company_id.street1">,
+                                <span style="font-size: 14px;" t-field="o.company_id.street1"/>,
+                                <br/>
+                                <span style="font-size: 14px;" t-field="o.company_id.street2"/>
+                            </t>
+                            <t t-else="">
+                                <span style="font-size: 14px;" t-field="o.company_id.street2"/>
+                            </t>
+                            <br/>
+                            <t t-if="o.company_id.country_id.code != 'SG'">
+                                <span style="font-size: 14px;" t-field="o.company_id.city"/>
+                                ,
+                            </t>
+                            <span style="font-size: 14px;" t-field="o.company_id.state_id"/>
 
-			<div class="article o_report_layout_background"
-				t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
-				<t t-raw="0" />
-			</div>
+                            <span style="font-size: 14px;" t-field="o.company_id.country_id"/>
+                            -
+                            <span style="font-size: 14px;" t-field="o.company_id.zip"/>
+                            <br/>
+                            <span style="font-size: 14px;">TEL :</span>
+                            <span style="font-size: 14px;" t-field="o.company_id.phone"/>
+                            <t t-if="o.company_id.fax">
+                                |
+                                <span style="font-size: 14px;">FAX :</span>
+                                <span style="font-size: 14px;" t-field="o.company_id.fax"/>
+                            </t>
+                            <br/>
+                            <t style="font-size: 14px;" t-if="o.company_id.country_id.code != 'SG'">
+                                <span style="font-size: 14px;">E-mail:</span>
+                                <span style="font-size: 14px;" t-field="o.company_id.email"/>
+                                ,
+                            </t>
+                            <span style="font-size: 14px;">URL:</span>
+                            <span style="font-size: 14px;" t-field="o.company_id.website"/>
+                            <br/>
+                            <span style="font-size: 14px;">Company Reg No:</span>
+                            <span style="font-size: 14px;" t-field="o.company_id.company_registry"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4" style="bottom:14px;">
+                    <div class="text-muted text-end"
+                         style="font-family: Calibri;text-color:black;">
+                        Page:
+                        <span class="page"/>
+                        of
+                        <span class="topage"/>
+                    </div>
+                    <div class="clearfix mb8"/>
+                </div>
+            </div>
+        </div>
 
-			<div class="footer o_background_footer"
-				style="font-family: Calibri;font-size:12px;">
-				<table width="100%" style="border-top: 1px solid black;">
-					<tr width="100%">
-						<td width="50%" style="text-align:center">
-						<t t-if="o.company_id.country_id.code != 'SG'">
-							<strong>RECEIVED IN GOOD ORDER</strong></t>
-							<br />
-							<br />
-							<br />
-						</td>
-						
-						<td width="50%" style="text-align:center">
-						<t t-if="o.company_id.country_id.code != 'SG'">
-							<strong>PECKO (M) SDN BHD.</strong></t>
-							<br />
-							<br />
-							<br />
-						</td>
-					</tr>
-					<tr width="100%">
-						<td width="50%" style="text-align:center">
-						<t t-if="o.company_id.country_id.code != 'SG'">
-							<strong>CUSTOMER'S STAMP &amp; SIGNATURE</strong></t>
-						</td>
-						<td width="50%" style="text-align:center">
-						<t t-if="o.company_id.country_id.code != 'SG'">
-							<strong>AUTHORISED SIGNATURE</strong></t>
-						</td>
-					</tr>
-				</table>
-				<table width="100%">
-					<tr>
-					  <td><t t-if="o.company_id.country_id.code == 'SG'">
-							<div style="text-align:center;">
-							<strong>
-								**This is a computer generated document. Signature is not required.**
-							</strong>
-							 </div></t>
-						   <br/>
-						  
-						   <span>
-							<strong>
-								NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
-								THEIR INTENDED USE,AND USERS ASSUME ALL <br/>RISK AND LIABILITY
-								WHATSOEVER IN CONNECTION THEREWITH
-							</strong>
-							</span>
-						</td>
-					</tr>
+            <div class="article o_report_layout_background">
+                <t t-raw="0"/>
+            </div>
 
-				</table>
-				<t t-if="o.company_id.country_id.code == 'SG'">
-						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_one)" style="position:relative; bottom:115px; left:730px; width:130px;" />
-					</t>
-				<div style="text-align:right">
-					
-					<span>user:</span>
-					<span t-esc="user.name" />
-				</div>
-			</div>
-		</template>
+            <div class="footer o_boxed_footer o_background_footer"
+                 style="font-family: Calibri;font-size:12px;border-top: 1px solid black;bottom:15px;">
+                <table width="100%" class="table table-borderless">
+                    <tr width="100%">
+                        <td width="50%" style="text-align:center">
+                            <t t-if="o.company_id.country_id.code != 'SG'">
+                                <strong>RECEIVED IN GOOD ORDER</strong>
+                            </t>
+                            <br/>
+                        </td>
+                        <td width="50%" style="text-align:center">
+                            <t t-if="o.company_id.country_id.code != 'SG'">
+                                <strong>PECKO (M) SDN BHD.</strong>
+                            </t>
+                            <br/>
+                        </td>
+                    </tr>
+                    <tr width="100%">
+                        <td width="50%" style="text-align:center">
+                            <t t-if="o.company_id.country_id.code != 'SG'">
+                                <strong>CUSTOMER'S STAMP &amp; SIGNATURE</strong>
+                            </t>
+                        </td>
+                        <td width="50%" style="text-align:center">
+                            <t t-if="o.company_id.country_id.code != 'SG'">
+                                <strong>AUTHORISED SIGNATURE</strong>
+                            </t>
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%" class="table table-borderless">
+                    <tr>
+                        <td>
+                            <t t-if="o.company_id.country_id.code == 'SG'">
+                                <div style="text-align:center;">
+                                    <strong>
+                                        **This is a computer generated document. Signature is not required.**
+                                    </strong>
+                                </div>
+                            </t>
+                            <span>
+                                <strong>
+                                    NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
+                                    THEIR INTENDED USE,AND USERS ASSUME ALL<br/>RISK AND LIABILITY
+                                    WHATSOEVER IN CONNECTION THEREWITH
+                                </strong>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <t t-if="o.company_id.country_id.code == 'SG'">
+                    <img t-if="o.company_id.logo"
+                         t-att-src="image_data_uri(o.company_id.logo)"
+                         alt="Logo"/>
+                    <!--						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_one)"-->
+                    <!--							 style="position:relative; bottom:115px; left:730px; width:130px;" />-->
+                </t>
+                <div style="text-align:right">
 
-		<template id="custom_do_external_layout">
-			<!-- Multicompany -->
-			<t t-if="not o and doc">
-				<t t-set="o" t-value="doc" />
-			</t>
+                    <span>user:</span>
+                    <span t-esc="user.name"/>
+                </div>
+            </div>
+        </template>
 
-			<t t-if="o and 'company_id' in o">
-				<t t-set="company" t-value="o.company_id.sudo()" />
-			</t>
-			<t t-if="not o or not 'company_id' in o">
-				<t t-set="company" t-value="res_company" />
-			</t>
+        <template id="custom_do_external_layout">
+            <!-- Multicompany -->
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc"/>
+            </t>
 
-			<t t-call="do_report.custom_do_external_layout_background">
-				<t t-raw="0" />
-			</t>
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
 
-		</template>
+            <t t-call="do_report.custom_do_external_layout_background">
+                <t t-raw="0"/>
+            </t>
+        </template>
 
-		<record id="paperformat_do" model="report.paperformat">
-			<field name="name">Do Paperformat</field>
-			<field name="default" eval="True" />
-			<field name="format">A4</field>
-			<field name="orientation">Portrait</field>
-			<field name="margin_top">30</field>
-			<field name="margin_bottom">41</field>
-			<field name="margin_left">6</field>
-			<field name="margin_right">6</field>
-			<field name="header_line" eval="False" />
-			<field name="header_spacing">31</field>
-			<field name="dpi">90</field>
-		</record>
+        <record id="paperformat_do" model="report.paperformat">
+            <field name="name">Do Paperformat</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">30</field>
+            <field name="margin_left">6</field>
+            <field name="margin_right">6</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
 
-		<!-- QWeb Reports -->
-		<report id="do_ppts" model="stock.picking" string="Do Report"
-			report_type="qweb-pdf" name="do_report.report_custom_do"
-			file="do_report.report_custom_do" paperformat="paperformat_do" />
+        <!-- QWeb Reports -->
+        <report id="do_ppts" model="stock.picking" string="Do Report"
+                report_type="qweb-pdf" name="do_report.report_custom_do"
+                file="do_report.report_custom_do" paperformat="paperformat_do"/>
 
-	</data>
+    </data>
 </odoo>

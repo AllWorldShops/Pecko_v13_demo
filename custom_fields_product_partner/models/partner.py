@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from odoo import models, fields, api
 import datetime
 from odoo.tools.misc import formatLang, format_date, get_lang
@@ -7,28 +5,28 @@ from odoo.tools.translate import _
 from odoo.tools import append_content_to_html, DEFAULT_SERVER_DATE_FORMAT, html2plaintext
 from odoo.exceptions import UserError
 
+
 class Partner(models.Model):
     _inherit = 'res.partner'
-    
-    activity_date_deadline = fields.Datetime('')
-    message_last_post = fields.Datetime('')
+
+    activity_date_deadline = fields.Datetime(string='Activity')
+    message_last_post = fields.Datetime(string='Message')
     commercial_partner_country_id = fields.Many2one('res.country', related='commercial_partner_id.country_id')
-    opt_out = fields.Boolean('Opt-Out', help="If opt-out is checked, this contact has refused to receive emails for mass mailing and marketing campaign." "Filter 'Available for Mass Mailing' allows users to filter the partners when performing mass mailing.")
+    opt_out = fields.Boolean('Opt Out',
+                             help="If opt-out is checked, this contact has refused to receive emails for mass mailing and marketing campaign." "Filter 'Available for Mass Mailing' allows users to filter the partners when performing mass mailing.")
     has_address = fields.Boolean(string='Is address valid', readonly=True, store=True)
-    x_studio_field_cH3lX = fields.Char('')
-    x_studio_field_cpiWw = fields.Char('')
-    x_studio_field_MTmaF = fields.Selection([('PEI', 'PEI'),('PKS', 'PKS'),('PM','PM'),('Avill','Avill')],string='Verification Status')
+    x_studio_field_cH3lX = fields.Char(string='type')
+    x_studio_field_cpiWw = fields.Char('Supplier Name')
+    x_studio_field_MTmaF = fields.Selection([('PEI', 'PEI'), ('PKS', 'PKS'), ('PM', 'PM'), ('Avill', 'Avill')],
+                                            string='Verification Status')
     incoterms = fields.Char("IncoTerm")
+
 
 
 class AccountFollowupReport(models.AbstractModel):
     _inherit = "account.followup.report"
-    
+
     def _get_columns_name(self, options):
-        """
-        Override
-        Return the name of the columns of the follow-ups report
-        """
         headers = [{},
                    {'name': _('Date'), 'class': 'date', 'style': 'text-align:center; white-space:nowrap;'},
                    {'name': _('Due Date'), 'class': 'date', 'style': 'text-align:center; white-space:nowrap;'},
@@ -37,19 +35,16 @@ class AccountFollowupReport(models.AbstractModel):
                    {'name': _('Communication'), 'style': 'text-align:right; white-space:nowrap;'},
                    {'name': _('Expected Date'), 'class': 'date', 'style': 'white-space:nowrap;'},
                    {'name': _('Excluded'), 'class': 'date', 'style': 'white-space:nowrap;'},
-                   {'name': _('Total Due'), 'class': 'number o_price_total', 'style': 'text-align:right; white-space:nowrap;'},
-                   {'name': _('Running Total'), 'class': 'number o_price_total', 'style': 'text-align:right; white-space:nowrap;'}
-                  ]
+                   {'name': _('Total Due'), 'class': 'number o_price_total',
+                    'style': 'text-align:right; white-space:nowrap;'},
+                   {'name': _('Running Total'), 'class': 'number o_price_total',
+                    'style': 'text-align:right; white-space:nowrap;'}
+                   ]
         if self.env.context.get('print_mode'):
             headers = headers[:5] + headers[7:]  # Remove the 'Expected Date' and 'Excluded' columns
         return headers
-    
-    def _get_lines(self, options, line_id=None):
 
-        """
-        Override
-        Compute and return the lines of the columns of the follow-ups report.
-        """
+    def _get_lines(self, options, line_id=None):
         # Get date format for the lang
         partner = options.get('partner_id') and self.env['res.partner'].browse(options['partner_id']) or False
         if not partner:
@@ -72,7 +67,7 @@ class AccountFollowupReport(models.AbstractModel):
             total = 0
             total_issued = 0
             sum_amt = 0
-            print("=======",aml_recs)
+            print("=======", aml_recs)
             aml_obj = self.env['account.move.line']
             for aml_sort in aml_recs:
                 aml_obj = aml_obj + aml_sort
@@ -93,7 +88,8 @@ class AccountFollowupReport(models.AbstractModel):
                 if is_overdue or is_payment:
                     total_issued += not aml.blocked and amount or 0
                 if is_overdue:
-                    date_due = {'name': date_due, 'class': 'color-red date', 'style': 'white-space:nowrap;text-align:center;color: red;'}
+                    date_due = {'name': date_due, 'class': 'color-red date',
+                                'style': 'white-space:nowrap;text-align:center;color: red;'}
                 if is_payment:
                     date_due = ''
                 move_line_name = aml.move_id.name or aml.name
@@ -102,7 +98,8 @@ class AccountFollowupReport(models.AbstractModel):
                 amount = formatLang(self.env, amount, currency_obj=currency)
                 # sum_amt = formatLang(self.env, sum_amt, currency_obj=currency)
                 line_num += 1
-                expected_pay_date = format_date(self.env, aml.expected_pay_date, lang_code=lang_code) if aml.expected_pay_date else ''
+                expected_pay_date = format_date(self.env, aml.expected_pay_date,
+                                                lang_code=lang_code) if aml.expected_pay_date else ''
                 columns = [
                     format_date(self.env, aml.date, lang_code=lang_code),
                     date_due,
@@ -135,7 +132,8 @@ class AccountFollowupReport(models.AbstractModel):
                 'style': 'border-top-style: double',
                 'unfoldable': False,
                 'level': 3,
-                'columns': [{'name': v} for v in [''] * (4 if self.env.context.get('print_mode') else 6) + [total >= 0 and _('Total Due') or '', total_due]],
+                'columns': [{'name': v} for v in [''] * (4 if self.env.context.get('print_mode') else 6) + [
+                    total >= 0 and _('Total Due') or '', total_due]],
             })
             if total_issued > 0:
                 total_issued = formatLang(self.env, total_issued, currency_obj=currency)
@@ -146,7 +144,9 @@ class AccountFollowupReport(models.AbstractModel):
                     'class': 'total',
                     'unfoldable': False,
                     'level': 3,
-                    'columns': [{'name': v} for v in [''] * (4 if self.env.context.get('print_mode') else 6) + [_('Total Overdue'), total_issued]],
+                    'columns': [{'name': v} for v in
+                                [''] * (4 if self.env.context.get('print_mode') else 6) + [_('Total Overdue'),
+                                                                                           total_issued]],
                 })
             # Add an empty line after the total to make a space between two currencies
             line_num += 1

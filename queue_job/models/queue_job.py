@@ -1,22 +1,31 @@
-# Copyright 2013-2016 Camptocamp SA
+# Copyright 2013-2020 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-import ast
 import logging
-import re
-from collections import namedtuple
+import random
 from datetime import datetime, timedelta
 
-from odoo import _, api, exceptions, fields, models, tools
+from odoo import _, api, exceptions, fields, models
 from odoo.osv import expression
+from odoo.tools import config, html_escape
 
+from odoo.addons.base_sparse_field.models.fields import Serialized
+
+from ..delay import Graph
+from ..exception import JobError
 from ..fields import JobSerialized
-from ..job import DONE, PENDING, STATES, Job
+from ..job import (
+    CANCELLED,
+    DONE,
+    FAILED,
+    PENDING,
+    STARTED,
+    STATES,
+    WAIT_DEPENDENCIES,
+    Job,
+)
 
 _logger = logging.getLogger(__name__)
-
-
-regex_job_function_name = re.compile(r"^<([0-9a-z_\.]+)>\.([0-9a-zA-Z_]+)$")
 
 
 class QueueJob(models.Model):
@@ -52,6 +61,12 @@ class QueueJob(models.Model):
     )
 
     uuid = fields.Char(string="UUID", readonly=True, index=True, required=True)
+    graph_uuid = fields.Char(
+        string="Graph UUID",
+        readonly=True,
+        index=True,
+        help="Single shared identifier of a Graph. Empty for a single job.",
+    )
     user_id = fields.Many2one(comodel_name="res.users", string="User ID")
     company_id = fields.Many2one(
         comodel_name="res.company", string="Company", index=True
@@ -64,8 +79,14 @@ class QueueJob(models.Model):
     # actions), can be removed (replaced by "records") in 14.0
     record_ids = JobSerialized(compute="_compute_record_ids", base_type=list)
     records = JobSerialized(
-        string="Record(s)", readonly=True, base_type=models.BaseModel,
+        string="Record(s)",
+        readonly=True,
+        base_type=models.BaseModel,
     )
+    dependencies = Serialized(readonly=True)
+    # dependency graph as expected by the field widget
+    dependency_graph = Serialized(compute="_compute_dependency_graph")
+    graph_jobs_count = fields.Integer(compute="_compute_graph_jobs_count")
     args = JobSerialized(readonly=True, base_type=tuple)
     kwargs = JobSerialized(readonly=True, base_type=dict)
     func_string = fields.Char(string="Task", readonly=True)
@@ -86,6 +107,7 @@ class QueueJob(models.Model):
         group_operator="avg",
         help="Time required to execute this job in seconds. Average when grouped.",
     )
+    date_cancelled = fields.Datetime(readonly=True)
 
     eta = fields.Datetime(string="Execute only after")
     retry = fields.Integer(string="Current try")
@@ -96,9 +118,11 @@ class QueueJob(models.Model):
         "Retries are infinite when empty.",
     )
     # FIXME the name of this field is very confusing
-    channel_method_name = fields.Char(readonly=True)
+    channel_method_name = fields.Char(string="Complete Method Name", readonly=True)
     job_function_id = fields.Many2one(
-        comodel_name="queue.job.function", string="Job Function", readonly=True,
+        comodel_name="queue.job.function",
+        string="Job Function",
+        readonly=True,
     )
 
     channel = fields.Char(index=True)
@@ -122,6 +146,97 @@ class QueueJob(models.Model):
     def _compute_record_ids(self):
         for record in self:
             record.record_ids = record.records.ids
+
+    @api.depends("dependencies")
+    def _compute_dependency_graph(self):
+        jobs_groups = self.env["queue.job"].read_group(
+            [
+                (
+                    "graph_uuid",
+                    "in",
+                    [uuid for uuid in self.mapped("graph_uuid") if uuid],
+                )
+            ],
+            ["graph_uuid", "ids:array_agg(id)"],
+            ["graph_uuid"],
+        )
+        ids_per_graph_uuid = {
+            group["graph_uuid"]: group["ids"] for group in jobs_groups
+        }
+        for record in self:
+            if not record.graph_uuid:
+                record.dependency_graph = {}
+                continue
+
+            graph_jobs = self.browse(ids_per_graph_uuid.get(record.graph_uuid) or [])
+            if not graph_jobs:
+                record.dependency_graph = {}
+                continue
+
+            graph_ids = {graph_job.uuid: graph_job.id for graph_job in graph_jobs}
+            graph_jobs_by_ids = {graph_job.id: graph_job for graph_job in graph_jobs}
+
+            graph = Graph()
+            for graph_job in graph_jobs:
+                graph.add_vertex(graph_job.id)
+                for parent_uuid in graph_job.dependencies["depends_on"]:
+                    parent_id = graph_ids.get(parent_uuid)
+                    if not parent_id:
+                        continue
+                    graph.add_edge(parent_id, graph_job.id)
+                for child_uuid in graph_job.dependencies["reverse_depends_on"]:
+                    child_id = graph_ids.get(child_uuid)
+                    if not child_id:
+                        continue
+                    graph.add_edge(graph_job.id, child_id)
+
+            record.dependency_graph = {
+                # list of ids
+                "nodes": [
+                    graph_jobs_by_ids[graph_id]._dependency_graph_vis_node()
+                    for graph_id in graph.vertices()
+                ],
+                # list of tuples (from, to)
+                "edges": graph.edges(),
+            }
+
+    def _dependency_graph_vis_node(self):
+        """Return the node as expected by the JobDirectedGraph widget"""
+        default = ("#D2E5FF", "#2B7CE9")
+        colors = {
+            DONE: ("#C2FABC", "#4AD63A"),
+            FAILED: ("#FB7E81", "#FA0A10"),
+            STARTED: ("#FFFF00", "#FFA500"),
+        }
+        return {
+            "id": self.id,
+            "title": "<strong>%s</strong><br/>%s"
+            % (
+                html_escape(self.display_name),
+                html_escape(self.func_string),
+            ),
+            "color": colors.get(self.state, default)[0],
+            "border": colors.get(self.state, default)[1],
+            "shadow": True,
+        }
+
+    def _compute_graph_jobs_count(self):
+        jobs_groups = self.env["queue.job"].read_group(
+            [
+                (
+                    "graph_uuid",
+                    "in",
+                    [uuid for uuid in self.mapped("graph_uuid") if uuid],
+                )
+            ],
+            ["graph_uuid"],
+            ["graph_uuid"],
+        )
+        count_per_graph_uuid = {
+            group["graph_uuid"]: group["graph_uuid_count"] for group in jobs_groups
+        }
+        for record in self:
+            record.graph_jobs_count = count_per_graph_uuid.get(record.graph_uuid) or 0
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -177,6 +292,23 @@ class QueueJob(models.Model):
             raise exceptions.UserError(_("No action available for this job"))
         return action
 
+    def open_graph_jobs(self):
+        """Return action that opens all jobs of the same graph"""
+        self.ensure_one()
+        jobs = self.env["queue.job"].search([("graph_uuid", "=", self.graph_uuid)])
+
+        action = self.env["ir.actions.act_window"]._for_xml_id(
+            "queue_job.action_queue_job"
+        )
+        action.update(
+            {
+                "name": _("Jobs for graph %s") % (self.graph_uuid),
+                "context": {},
+                "domain": [("id", "in", jobs.ids)],
+            }
+        )
+        return action
+
     def _change_job_state(self, state, result=None):
         """Change the state of the `Job` object
 
@@ -187,19 +319,31 @@ class QueueJob(models.Model):
             job_ = Job.load(record.env, record.uuid)
             if state == DONE:
                 job_.set_done(result=result)
+                job_.store()
+                record.env["queue.job"].flush_model()
+                job_.enqueue_waiting()
             elif state == PENDING:
                 job_.set_pending(result=result)
+                job_.store()
+            elif state == CANCELLED:
+                job_.set_cancelled(result=result)
+                job_.store()
             else:
                 raise ValueError("State not supported: %s" % state)
-            job_.store()
 
     def button_done(self):
         result = _("Manually set to done by %s") % self.env.user.name
         self._change_job_state(DONE, result=result)
         return True
 
+    def button_cancelled(self):
+        result = _("Cancelled by %s") % self.env.user.name
+        self._change_job_state(CANCELLED, result=result)
+        return True
+
     def requeue(self):
-        self._change_job_state(PENDING)
+        jobs_to_requeue = self.filtered(lambda job_: job_.state != WAIT_DEPENDENCIES)
+        jobs_to_requeue._change_job_state(PENDING)
         return True
 
     def _message_post_on_failure(self):
@@ -212,7 +356,7 @@ class QueueJob(models.Model):
             record.message_subscribe(partner_ids=users.mapped("partner_id").ids)
             msg = record._message_failed_job()
             if msg:
-                record.message_post(body=msg, subtype="queue_job.mt_job_failed")
+                record.message_post(body=msg, subtype_xmlid="queue_job.mt_job_failed")
 
     def _subscribe_users_domain(self):
         """Subscribe all users having the 'Queue Job Manager' group"""
@@ -257,14 +401,17 @@ class QueueJob(models.Model):
             while True:
                 jobs = self.search(
                     [
+                        "|",
                         ("date_done", "<=", deadline),
+                        ("date_cancelled", "<=", deadline),
                         ("channel", "=", channel.complete_name),
                     ],
                     limit=1000,
                 )
                 if jobs:
                     jobs.unlink()
-                    self.env.cr.commit()  # pylint: disable=E8102
+                    if not config["test_enable"]:
+                        self.env.cr.commit()  # pylint: disable=E8102
                 else:
                     break
         return True
@@ -351,381 +498,7 @@ class QueueJob(models.Model):
             )
         return action
 
-    def _test_job(self):
+    def _test_job(self, failure_rate=0):
         _logger.info("Running test job.")
-
-
-class RequeueJob(models.TransientModel):
-    _name = "queue.requeue.job"
-    _description = "Wizard to requeue a selection of jobs"
-
-    def _default_job_ids(self):
-        res = False
-        context = self.env.context
-        if context.get("active_model") == "queue.job" and context.get("active_ids"):
-            res = context["active_ids"]
-        return res
-
-    job_ids = fields.Many2many(
-        comodel_name="queue.job", string="Jobs", default=lambda r: r._default_job_ids()
-    )
-
-    def requeue(self):
-        jobs = self.job_ids
-        jobs.requeue()
-        return {"type": "ir.actions.act_window_close"}
-
-
-class SetJobsToDone(models.TransientModel):
-    _inherit = "queue.requeue.job"
-    _name = "queue.jobs.to.done"
-    _description = "Set all selected jobs to done"
-
-    def set_done(self):
-        jobs = self.job_ids
-        jobs.button_done()
-        return {"type": "ir.actions.act_window_close"}
-
-
-class JobChannel(models.Model):
-    _name = "queue.job.channel"
-    _description = "Job Channels"
-
-    name = fields.Char()
-    complete_name = fields.Char(
-        compute="_compute_complete_name", store=True, readonly=True
-    )
-    parent_id = fields.Many2one(
-        comodel_name="queue.job.channel", string="Parent Channel", ondelete="restrict"
-    )
-    job_function_ids = fields.One2many(
-        comodel_name="queue.job.function",
-        inverse_name="channel_id",
-        string="Job Functions",
-    )
-    removal_interval = fields.Integer(
-        default=lambda self: self.env["queue.job"]._removal_interval, required=True
-    )
-
-    _sql_constraints = [
-        ("name_uniq", "unique(complete_name)", "Channel complete name must be unique")
-    ]
-
-    @api.depends("name", "parent_id.complete_name")
-    def _compute_complete_name(self):
-        for record in self:
-            if not record.name:
-                complete_name = ""  # new record
-            elif record.parent_id:
-                complete_name = ".".join([record.parent_id.complete_name, record.name])
-            else:
-                complete_name = record.name
-            record.complete_name = complete_name
-
-    @api.constrains("parent_id", "name")
-    def parent_required(self):
-        for record in self:
-            if record.name != "root" and not record.parent_id:
-                raise exceptions.ValidationError(_("Parent channel required."))
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = self.browse()
-        if self.env.context.get("install_mode"):
-            # installing a module that creates a channel: rebinds the channel
-            # to an existing one (likely we already had the channel created by
-            # the @job decorator previously)
-            new_vals_list = []
-            for vals in vals_list:
-                name = vals.get("name")
-                parent_id = vals.get("parent_id")
-                if name and parent_id:
-                    existing = self.search(
-                        [("name", "=", name), ("parent_id", "=", parent_id)]
-                    )
-                    if existing:
-                        if not existing.get_metadata()[0].get("noupdate"):
-                            existing.write(vals)
-                        records |= existing
-                        continue
-                new_vals_list.append(vals)
-            vals_list = new_vals_list
-        records |= super().create(vals_list)
-        return records
-
-    def write(self, values):
-        for channel in self:
-            if (
-                not self.env.context.get("install_mode")
-                and channel.name == "root"
-                and ("name" in values or "parent_id" in values)
-            ):
-                raise exceptions.UserError(_("Cannot change the root channel"))
-        return super(JobChannel, self).write(values)
-
-    def unlink(self):
-        for channel in self:
-            if channel.name == "root":
-                raise exceptions.UserError(_("Cannot remove the root channel"))
-        return super(JobChannel, self).unlink()
-
-    def name_get(self):
-        result = []
-        for record in self:
-            result.append((record.id, record.complete_name))
-        return result
-
-
-class JobFunction(models.Model):
-    _name = "queue.job.function"
-    _description = "Job Functions"
-    _log_access = False
-
-    JobConfig = namedtuple(
-        "JobConfig",
-        "channel "
-        "retry_pattern "
-        "related_action_enable "
-        "related_action_func_name "
-        "related_action_kwargs "
-        "job_function_id ",
-    )
-
-    def _default_channel(self):
-        return self.env.ref("queue_job.channel_root")
-
-    name = fields.Char(
-        compute="_compute_name", inverse="_inverse_name", index=True, store=True,
-    )
-
-    # model and method should be required, but the required flag doesn't
-    # let a chance to _inverse_name to be executed
-    model_id = fields.Many2one(
-        comodel_name="ir.model", string="Model", ondelete="cascade"
-    )
-    method = fields.Char()
-
-    channel_id = fields.Many2one(
-        comodel_name="queue.job.channel",
-        string="Channel",
-        required=True,
-        default=lambda r: r._default_channel(),
-    )
-    channel = fields.Char(related="channel_id.complete_name", store=True, readonly=True)
-    retry_pattern = JobSerialized(string="Retry Pattern (serialized)", base_type=dict)
-    edit_retry_pattern = fields.Text(
-        string="Retry Pattern",
-        compute="_compute_edit_retry_pattern",
-        inverse="_inverse_edit_retry_pattern",
-        help="Pattern expressing from the count of retries on retryable errors,"
-        " the number of of seconds to postpone the next execution.\n"
-        "Example: {1: 10, 5: 20, 10: 30, 15: 300}.\n"
-        "See the module description for details.",
-    )
-    related_action = JobSerialized(string="Related Action (serialized)", base_type=dict)
-    edit_related_action = fields.Text(
-        string="Related Action",
-        compute="_compute_edit_related_action",
-        inverse="_inverse_edit_related_action",
-        help="The action when the button *Related Action* is used on a job. "
-        "The default action is to open the view of the record related "
-        "to the job. Configured as a dictionary with optional keys: "
-        "enable, func_name, kwargs.\n"
-        "See the module description for details.",
-    )
-
-    @api.depends("model_id.model", "method")
-    def _compute_name(self):
-        for record in self:
-            if not (record.model_id and record.method):
-                record.name = ""
-                continue
-            record.name = self.job_function_name(record.model_id.model, record.method)
-
-    def _inverse_name(self):
-        groups = regex_job_function_name.match(self.name)
-        if not groups:
-            raise exceptions.UserError(_("Invalid job function: {}").format(self.name))
-        model_name = groups[1]
-        method = groups[2]
-        model = self.env["ir.model"].search([("model", "=", model_name)], limit=1)
-        if not model:
-            raise exceptions.UserError(_("Model {} not found").format(model_name))
-        self.model_id = model.id
-        self.method = method
-
-    @api.depends("retry_pattern")
-    def _compute_edit_retry_pattern(self):
-        for record in self:
-            retry_pattern = record._parse_retry_pattern()
-            record.edit_retry_pattern = str(retry_pattern)
-
-    def _inverse_edit_retry_pattern(self):
-        try:
-            self.retry_pattern = ast.literal_eval(self.edit_retry_pattern or "{}")
-        except (ValueError, TypeError):
-            raise exceptions.UserError(self._retry_pattern_format_error_message())
-
-    @api.depends("related_action")
-    def _compute_edit_related_action(self):
-        for record in self:
-            record.edit_related_action = str(record.related_action)
-
-    def _inverse_edit_related_action(self):
-        try:
-            self.related_action = ast.literal_eval(self.edit_related_action or "{}")
-        except (ValueError, TypeError):
-            raise exceptions.UserError(self._related_action_format_error_message())
-
-    @staticmethod
-    def job_function_name(model_name, method_name):
-        return "<{}>.{}".format(model_name, method_name)
-
-    # TODO deprecated by :job-no-decorator:
-    def _find_or_create_channel(self, channel_path):
-        channel_model = self.env["queue.job.channel"]
-        parts = channel_path.split(".")
-        parts.reverse()
-        channel_name = parts.pop()
-        assert channel_name == "root", "A channel path starts with 'root'"
-        # get the root channel
-        channel = channel_model.search([("name", "=", channel_name)])
-        while parts:
-            channel_name = parts.pop()
-            parent_channel = channel
-            channel = channel_model.search(
-                [("name", "=", channel_name), ("parent_id", "=", parent_channel.id)],
-                limit=1,
-            )
-            if not channel:
-                channel = channel_model.create(
-                    {"name": channel_name, "parent_id": parent_channel.id}
-                )
-        return channel
-
-    def job_default_config(self):
-        return self.JobConfig(
-            channel="root",
-            retry_pattern={},
-            related_action_enable=True,
-            related_action_func_name=None,
-            related_action_kwargs={},
-            job_function_id=None,
-        )
-
-    def _parse_retry_pattern(self):
-        try:
-            # as json can't have integers as keys and the field is stored
-            # as json, convert back to int
-            retry_pattern = {
-                int(try_count): postpone_seconds
-                for try_count, postpone_seconds in self.retry_pattern.items()
-            }
-        except ValueError:
-            _logger.error(
-                "Invalid retry pattern for job function %s,"
-                " keys could not be parsed as integers, fallback"
-                " to the default retry pattern.",
-                self.name,
-            )
-            retry_pattern = {}
-        return retry_pattern
-
-    @tools.ormcache("name")
-    def job_config(self, name):
-        config = self.search([("name", "=", name)], limit=1)
-        if not config:
-            return self.job_default_config()
-        retry_pattern = config._parse_retry_pattern()
-        return self.JobConfig(
-            channel=config.channel,
-            retry_pattern=retry_pattern,
-            related_action_enable=config.related_action.get("enable", True),
-            related_action_func_name=config.related_action.get("func_name"),
-            related_action_kwargs=config.related_action.get("kwargs"),
-            job_function_id=config.id,
-        )
-
-    def _retry_pattern_format_error_message(self):
-        return _(
-            "Unexpected format of Retry Pattern for {}.\n"
-            "Example of valid format:\n"
-            "{{1: 300, 5: 600, 10: 1200, 15: 3000}}"
-        ).format(self.name)
-
-    @api.constrains("retry_pattern")
-    def _check_retry_pattern(self):
-        for record in self:
-            retry_pattern = record.retry_pattern
-            if not retry_pattern:
-                continue
-
-            all_values = list(retry_pattern) + list(retry_pattern.values())
-            for value in all_values:
-                try:
-                    int(value)
-                except ValueError:
-                    raise exceptions.UserError(
-                        record._retry_pattern_format_error_message()
-                    )
-
-    def _related_action_format_error_message(self):
-        return _(
-            "Unexpected format of Related Action for {}.\n"
-            "Example of valid format:\n"
-            '{{"enable": True, "func_name": "related_action_foo",'
-            ' "kwargs" {{"limit": 10}}}}'
-        ).format(self.name)
-
-    @api.constrains("related_action")
-    def _check_related_action(self):
-        valid_keys = ("enable", "func_name", "kwargs")
-        for record in self:
-            related_action = record.related_action
-            if not related_action:
-                continue
-
-            if any(key not in valid_keys for key in related_action):
-                raise exceptions.UserError(
-                    record._related_action_format_error_message()
-                )
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = self.browse()
-        if self.env.context.get("install_mode"):
-            # installing a module that creates a job function: rebinds the record
-            # to an existing one (likely we already had the job function created by
-            # the @job decorator previously)
-            new_vals_list = []
-            for vals in vals_list:
-                name = vals.get("name")
-                if name:
-                    existing = self.search([("name", "=", name)], limit=1)
-                    if existing:
-                        if not existing.get_metadata()[0].get("noupdate"):
-                            existing.write(vals)
-                        records |= existing
-                        continue
-                new_vals_list.append(vals)
-            vals_list = new_vals_list
-        records |= super().create(vals_list)
-        self.clear_caches()
-        return records
-
-    def write(self, values):
-        res = super().write(values)
-        self.clear_caches()
-        return res
-
-    def unlink(self):
-        res = super().unlink()
-        self.clear_caches()
-        return res
-
-    # TODO deprecated by :job-no-decorator:
-    def _register_job(self, model, job_method):
-        func_name = self.job_function_name(model._name, job_method.__name__)
-        if not self.search_count([("name", "=", func_name)]):
-            channel = self._find_or_create_channel(job_method.default_channel)
-            self.create({"name": func_name, "channel_id": channel.id})
+        if random.random() <= failure_rate:
+            raise JobError("Job failed")

@@ -143,12 +143,13 @@ class SaleOrderLine(models.Model):
     def _onchange_product_id(self):
         if self.product_id.name:
             self.update({'customer_part_no':self.product_id.name,
-                         'name':self.product_id.name})
+                         'name':self.product_id.x_studio_field_mHzKJ})
+                         # 'name':self.product_id.name})
             
             
 class AccountGeneralLedgerReport(models.AbstractModel):
-    _inherit = "account.general.ledger"
-    
+    _inherit = "account.aged.partner.balance.report.handler"
+
     @api.model
     def _get_account_total_line(self, options, account, amount_currency, debit, credit, balance):
         return {

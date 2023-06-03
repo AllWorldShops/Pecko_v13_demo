@@ -22,8 +22,8 @@ except ImportError:
 from collections import namedtuple
 from email.message import Message
 from lxml import etree
-from werkzeug import url_encode
-from werkzeug import urls
+# from werkzeug import url_encode
+# from werkzeug import urls
 
 from odoo import _, api, exceptions, fields, models, tools, registry, SUPERUSER_ID
 from odoo.osv import expression

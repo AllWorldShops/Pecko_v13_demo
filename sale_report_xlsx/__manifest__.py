@@ -7,7 +7,6 @@
     'category': 'Stock',
     'website': 'https://www.pptssolutions.com',
     'license': 'LGPL-3',
-
     'depends': [
         'sale','base',
     ],

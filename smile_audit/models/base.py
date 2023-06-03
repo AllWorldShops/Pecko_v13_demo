@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-# (C) 2020 Smile (<http://www.smile.fr>)
+# (C) 2021 Smile (<https://www.smile.eu>)
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 
-import datetime
 
 from odoo import api, fields, models
-from odoo.tools.safe_eval import safe_eval
+from odoo.tools.safe_eval import datetime, safe_eval
 
 
 class Base(models.AbstractModel):
@@ -78,7 +77,7 @@ class Base(models.AbstractModel):
     @api.model
     def recompute(self, fnames=None, records=None):
         if self._name not in self._context.get('do_not_recompute_for', []):
-            super(Base, self).recompute(fnames, records)
+            super(Base, self).flush_model(fnames)
 
     def concat(self, *args):
         records = super(Base, self).concat(*args)

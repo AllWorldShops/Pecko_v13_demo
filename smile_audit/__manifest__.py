@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# (C) 2020 Smile (<http://www.smile.fr>)
+# (C) 2021 Smile (<https://www.smile.eu>)
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 
 {
@@ -9,6 +9,8 @@
     "category": "Tools",
     "author": "Smile",
     "license": 'LGPL-3',
+    "website": "https://www.smile.eu/",
+    "summary": "Track every user operation",
     "description": """
 This module lets administrator track every user operation on
 all the objects of the system

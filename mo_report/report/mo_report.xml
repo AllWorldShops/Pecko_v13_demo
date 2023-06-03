@@ -2,23 +2,26 @@
 <odoo>
 	<data>
 
-		<template id="custom_mo_external_layout_background">
+ 		<template id="custom_mo_external_layout_background">
 			<div class="header o_background_header">
 				<div class="row">
 					<div class="col-8">
-						<img t-if="company.logo"
-							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />
+<!--						<img t-if="company.logo"-->
+<!--							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />-->
+						<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
 						<div class="company_address"
-							style="padding-top:14px;line-height:14px;font-family: Calibri;text-color:black;">
-							<div>
+							style="padding-top:14px;line-height:0.2px;font-family: Calibri;text-color:black;font-size:13px">
+							<div >
+
 								<strong>
-									<span style="font-size: 25px;"
+									<span style="font-size: 22px;"
 										t-field="company.partner_id.name" />
 								</strong>
 								<br />
-								<span t-field="o.company_id.street" />
-								<t t-if="o.company_id.street1">
-									<span t-field="o.company_id.street1" />
+								<span t-field="o.company_id.street"  />
+
+								<t t-if="o.company_id.street">
+									<span t-field="o.company_id.street" />
 									,
 									<br />
 									<span t-field="o.company_id.street2" />
@@ -37,11 +40,13 @@
 								<br />
 								<span>TEL :</span>
 								<span t-field="o.company_id.phone" />
-								<t t-if="o.company_id.fax">
-									|
-									<span>FAX :</span>
-									<span t-field="o.company_id.fax" />
-								</t>
+
+<!--								<t t-if="o.company_id.fax">-->
+<!--									|-->
+<!--									<span>FAX :</span>-->
+<!--									<span t-field="o.company_id.fax" />-->
+<!--								</t>-->
+
 								<br />
 								<span>E-mail:</span>
 								<span t-field="o.company_id.email" />
@@ -140,12 +145,12 @@
 			<field name="default" eval="True" />
 			<field name="format">A4</field>
 			<field name="orientation">Portrait</field>
-			<field name="margin_top">35</field>
-			<field name="margin_bottom">20</field>
+			<field name="margin_top">48</field>
+			<field name="margin_bottom">50</field>
 			<field name="margin_left">6</field>
 			<field name="margin_right">6</field>
 			<field name="header_line" eval="False" />
-			<field name="header_spacing">30</field>
+			<field name="header_spacing">45</field>
 			<field name="dpi">90</field>
 		</record>
 

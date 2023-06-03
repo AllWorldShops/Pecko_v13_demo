@@ -3,7 +3,7 @@
 {
     "name": "Stock MTS+MTO Rule",
     "summary": "Add a MTS+MTO route",
-    "version": "13.0.1.3.0",
+    "version": "16.0.1.0.0",
     "development_status": "Mature",
     "category": "Warehouse",
     "website": "https://github.com/OCA/stock-logistics-warehouse",
@@ -11,6 +11,6 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "depends": ["stock"],
+    "depends": ["stock","purchase_stock"],
     "data": ["data/stock_data.xml", "view/pull_rule.xml", "view/warehouse.xml"],
 }

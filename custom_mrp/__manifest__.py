@@ -2,7 +2,7 @@
 
 {
     'name': 'Custom MRP',
-    'version': '12.0',
+    'version': '16.0',
     'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
     'category': 'Manufacturing',
@@ -13,7 +13,7 @@
         'views/mrp_line.xml',
         'views/decimal_data.xml',
         'views/res_config_view.xml',
-        'report/bom_structure.xml',
+        # 'report/bom_structure.xml',
     ],
     'installable': True,
     'application': True,

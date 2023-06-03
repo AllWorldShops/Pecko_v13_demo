@@ -73,7 +73,7 @@ class WizardWizards(models.TransientModel):
             ('partner_id', '=', partnerid), 
             ('invoice_date', '<=', str(end_date)),
             ('invoice_date', '>=', str(start_date)),
-            ('type', '=', 'out_invoice'),
+            ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel')
              ])
         for invoice in invoice_ids:
@@ -217,38 +217,4 @@ class WizardWizards(models.TransientModel):
                 'res_id': self.id,
                 'target': 'new',
         }
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
