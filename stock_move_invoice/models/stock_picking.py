@@ -32,8 +32,8 @@ class StockPicking(models.Model):
     invoice_created = fields.Boolean()
     invoice_status = fields.Selection(related='sale_id.invoice_status', string='Invoice Status', store=True, readonly=True)
 
-    def action_done(self):
-        res = super(StockPicking, self).action_done()
+    def _action_done(self):
+        res = super(StockPicking, self)._action_done()
         for picking_id in self:
             # print(picking_id.state, "picking_id.state")
             if picking_id.state == 'done' and picking_id.picking_type_id.code == 'outgoing' and picking_id.sale_id:
