@@ -53,7 +53,7 @@ class AcmoveInherit(models.Model):
                     else line.quantity_done,
                     'price_unit': line.purchase_line_id.price_unit if line.purchase_line_id
                     else line.product_id.standard_price,
-                    'account_id': False,
+                    'account_id': line.product_id.categ_id.property_stock_account_input_categ_id.id or False,
                     'name':line.product_id.name,
                     'tax_ids': line.purchase_line_id.taxes_id.ids if line.purchase_line_id else False,
                     'product_uom_id': line.purchase_line_id.product_uom.id if line.purchase_line_id
@@ -69,10 +69,10 @@ class AcmoveInherit(models.Model):
                 else:
                     rec.picking_ids = [(4, x, None) for x in id_list]
                     self.invoice_line_ids = receipt_lines
-                    self.invoice_line_ids._onchange_mark_recompute_taxes()
+                    # self.invoice_line_ids._onchange_mark_recompute_taxes()
                     rec._onchange_currency()
                 for i_line in rec.invoice_line_ids:
-                    i_line.account_id = i_line._get_computed_account()
+                    # i_line.account_id = i_line._get_computed_account()
                     # i_line._onchange_mark_recompute_taxes()
                     i_line.name = i_line.product_id.default_code or ''
                 
