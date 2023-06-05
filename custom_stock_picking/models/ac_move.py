@@ -33,11 +33,11 @@ class AcmoveInherit(models.Model):
         id_list = []
         if self.receipts_id:
             receipt_lines = []
-            account_id = self.env['account.account'].sudo().search([('deprecated', '=', False),
-                                                                    ('user_type_id.type', 'not in',
-                                                                     ['receivable', 'payable']),
-                                                                    ('company_id','=',self.company_id.id)
-                                                                    ],limit=1)
+            # account_id = self.env['account.account'].sudo().search([('deprecated', '=', False),
+            #                                                         ('user_type', 'not in',
+            #                                                          ['receivable', 'payable']),
+            #                                                         ('company_id','=',self.company_id.id)
+            #                                                         ],limit=1)
             for line in self.receipts_id.move_ids_without_package:
                 product_price_unit = line.purchase_line_id.price_unit
                 if currency and currency != company_currency:
