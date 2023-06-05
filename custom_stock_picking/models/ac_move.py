@@ -70,7 +70,7 @@ class AcmoveInherit(models.Model):
                     rec.picking_ids = [(4, x, None) for x in id_list]
                     self.invoice_line_ids = receipt_lines
                     # self.invoice_line_ids._onchange_mark_recompute_taxes()
-                    rec._onchange_currency()
+                    # rec._onchange_currency()
                 for i_line in rec.invoice_line_ids:
                     # i_line.account_id = i_line._get_computed_account()
                     # i_line._onchange_mark_recompute_taxes()
