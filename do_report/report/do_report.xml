@@ -138,8 +138,9 @@
                     </tr>
                 </table>
                 <t t-if="o.company_id.country_id.code == 'SG'">
-                    <img t-if="o.company_id.logo"
-                         t-att-src="image_data_uri(o.company_id.logo)"
+                    <img t-if="o.company_id.logo_one"
+                         t-att-src="image_data_uri(o.company_id.logo_one)"
+                         style="position:relative; bottom:115px; left:730px; width:130px;"
                          alt="Logo"/>
                     <!--						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_one)"-->
                     <!--							 style="position:relative; bottom:115px; left:730px; width:130px;" />-->
