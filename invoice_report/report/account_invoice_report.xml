@@ -106,7 +106,7 @@
 
                                         <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
                                              style="width:110px;"/> -->
-                                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo_three)" style="width:110px;"
+                                        <img t-if="o.company_id.logo_three" t-att-src="image_data_uri(o.company_id.logo_three)" style="width:110px;"
                              alt="Logo"/>
                                     </t>
                                 </div>
@@ -235,7 +235,7 @@
 
                                         <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
                                              style="width:110px;"/> -->
-                                        <img t-if="company.logo_three" t-att-src="image_data_uri(company.logo_three)" style="width:110px;"
+                                        <img t-if="o.company_id.logo_three" t-att-src="image_data_uri(o.company_id.logo_three)" style="width:110px;"
                              alt="Logo"/>
                                     </t>
                                 </div>
