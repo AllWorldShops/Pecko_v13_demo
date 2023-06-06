@@ -144,7 +144,7 @@
                 </table>
                 <t t-if="o.company_id.country_id.code == 'SG'">
                     <img t-if="o.company_id.logo_one" t-att-src="image_data_uri(o.company_id.logo_one)"
-                         style="position:relative; bottom:130px; left:730px; width:130px;" alt="Logo"/>
+                         style="position:relative; bottom:130px; left:730px; width:135px;" alt="Logo"/>
 <!--                    						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_one)"-->
 <!--                    							 style="position:relative; bottom:115px; left:730px; width:130px;" />-->
                 </t>
@@ -180,7 +180,7 @@
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">40</field>
-            <field name="margin_bottom">30</field>
+            <field name="margin_bottom">35</field>
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>
