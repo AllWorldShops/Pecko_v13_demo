@@ -47,7 +47,7 @@
                 <br/>
                 <br/>
                 <div class="page">
-                    <div style="font-size:20px;text-align:center;padding-top:14px;">
+                    <div style="font-size:20px;text-align:center;padding-top:120px;">
                         <!-- <span ><strong> <t t-if="o.type == 'out_invoice'"> Tax Invoice </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span> -->
                         <br></br>
 
