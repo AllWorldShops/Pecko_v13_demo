@@ -16,9 +16,17 @@
         <div class="header o_background_header">
             <div class="row" style="bottom:10px;top:10px">
                 <div class="col-8">
+                    <t t-if="o.company_id.country_id.code == 'SG'">
                     <img t-if="o.company_id.logo" height="30" width="170"
                          t-att-src="image_data_uri(o.company_id.logo)"
                          alt="Logo"/>
+                    </t>
+                    <t t-else="">
+                        <img t-if="o.company_id.logo" height="80" width="170"
+                         t-att-src="image_data_uri(o.company_id.logo)"
+                         alt="Logo"/>
+                    </t>
+
                     <!--					<img t-if="company.logo"-->
                     <!--						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width:100px;"/>-->
                     <div class="company_address"
@@ -88,7 +96,7 @@
             </div>
 
             <div class="footer o_boxed_footer o_background_footer"
-                 style="font-family: Calibri;font-size:12px;border-top: 1px solid black;bottom:15px;">
+                 style="font-family: Calibri;font-size:12px;border-top: 1px solid black;bottom:20px;">
                 <table width="100%" class="table table-borderless">
                     <tr width="100%">
                         <td width="50%" style="text-align:center">
@@ -138,12 +146,10 @@
                     </tr>
                 </table>
                 <t t-if="o.company_id.country_id.code == 'SG'">
-                    <img t-if="o.company_id.logo_one"
-                         t-att-src="image_data_uri(o.company_id.logo_one)"
-                         style="position:relative; bottom:115px; left:730px; width:130px;"
-                         alt="Logo"/>
-                    <!--						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_one)"-->
-                    <!--							 style="position:relative; bottom:115px; left:730px; width:130px;" />-->
+                    <img t-if="o.company_id.logo_one" t-att-src="image_data_uri(o.company_id.logo_one)"
+                         style="position:relative; bottom:130px; left:730px; width:130px;" alt="Logo"/>
+<!--                    						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_one)"-->
+<!--                    							 style="position:relative; bottom:115px; left:730px; width:130px;" />-->
                 </t>
                 <div style="text-align:right">
 
@@ -181,7 +187,7 @@
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">35</field>
+            <field name="header_spacing">40</field>
             <field name="dpi">90</field>
         </record>
 
