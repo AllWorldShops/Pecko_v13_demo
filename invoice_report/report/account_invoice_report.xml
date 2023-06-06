@@ -6,7 +6,7 @@
                 <div class="row" style="bottom:10px;top:10px">
                     <div class="col-10">
                         <!--						<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" height="80" width="80"/>-->
-                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="80" width="80"
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="80" width="100"
                              alt="Logo"/>
                         <div class="company_address" style="line-height:10px;font-family: Calibri;">
                             <div style="font-size:11px;line-height:11px">
@@ -302,7 +302,7 @@
             <field name="default" eval="True"/>
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
-            <field name="margin_top">15</field>
+            <field name="margin_top">25</field>
             <field name="margin_bottom">45</field>
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
