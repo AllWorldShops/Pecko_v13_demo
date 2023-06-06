@@ -3,7 +3,6 @@
     <data>
 
         <template id="custom_do_external_layout_background">
-
             <t t-if="not o and doc">
             <t t-set="o" t-value="doc"/>
         </t>
@@ -17,14 +16,12 @@
             <div class="row" style="bottom:10px;top:10px">
                 <div class="col-8">
                     <t t-if="o.company_id.country_id.code == 'SG'">
-                    <img t-if="o.company_id.logo" height="30" width="170"
-                         t-att-src="image_data_uri(o.company_id.logo)"
-                         alt="Logo"/>
+                    <img t-if="o.company_id.logo" height="80" width="170"
+                         t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
                     </t>
                     <t t-else="">
-                        <img t-if="o.company_id.logo" height="80" width="170"
-                         t-att-src="image_data_uri(o.company_id.logo)"
-                         alt="Logo"/>
+                        <img t-if="o.company_id.logo" height="40" width="170"
+                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
                     </t>
 
                     <!--					<img t-if="company.logo"-->
