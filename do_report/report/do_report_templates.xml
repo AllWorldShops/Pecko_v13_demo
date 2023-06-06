@@ -4,7 +4,6 @@
 
         <template id="report_do_document">
             <t t-call="do_report.custom_do_external_layout">
-
                 <style>
                     .table1{
                     border: 1px solid black;
@@ -56,17 +55,16 @@
                  <br></br>
 
                 <div class="page" style="text-color:black;">
-                    <br/>
-                    <div style="position:relative;top:55px;">
+                    <div>
                         <t t-if="o.company_id.country_id.code == 'SG'">
-                            <div style="font-size: 20px;text-align: center;padding-top:15px;">
+                            <div style="font-size: 20px;text-align: center;padding-top:30px;">
                                 <span>
                                     <strong>Delivery Order</strong>
                                 </span>
                             </div>
                         </t>
                         <t t-else="">
-                            <div style="font-size: 20px;text-align: center;padding-top:15px;position:relative;bottom:25px;">
+                            <div style="font-size: 20px;text-align: center;padding-top:30px;">
                                 <span>
                                     <strong>Delivery Order</strong>
                                 </span>
@@ -88,15 +86,21 @@
                                         <span t-field="o.partner_id.street"/>
                                         <span t-field="o.partner_id.street2"/>
                                         <br/>
-                                        <span t-field="o.partner_id.city"/>
-                                        <span t-field="o.partner_id.state_id"/>
-                                        <br/>
-                                        <span t-field="o.partner_id.country_id"/>
-                                        <span t-field="o.partner_id.zip"/>
-                                        <br/>
-                                        Phone:
-                                        <span t-field="o.partner_id.phone"/>
-                                        <br/>
+                                        <t t-if="o.partner_id.city">
+                                            <span t-field="o.partner_id.city"/>
+                                            <span t-field="o.partner_id.state_id"/><br/>
+                                        </t>
+
+                                        <t t-if="o.partner_id.country_id">
+                                            <span t-field="o.partner_id.country_id"/>
+                                            <span t-field="o.partner_id.zip"/><br/>
+                                        </t>
+
+                                        <t t-if="o.partner_id.phone">
+                                            Phone:
+                                            <span t-field="o.partner_id.phone"/>
+                                            <br/>
+                                        </t>
                                         <t t-if="o.company_id.country_id.code != 'SG'">
                                             Email:
                                             <span t-field="o.partner_id.email"/>
@@ -115,19 +119,25 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
+
                                                         <span t-field="o.partner_id.name"/>
                                                         <br/>
                                                         <span t-field="o.partner_id.street"/>
                                                         <br/>
                                                         <span t-field="o.partner_id.street2"/>
                                                         <br/>
-                                                        <span t-field="o.partner_id.city"/>
-                                                        <br/>
-                                                        <span t-field="o.partner_id.state_id"/>
-                                                        <br/>
-                                                        <span t-field="o.partner_id.zip"/>
-                                                        <br/>
-                                                        <span t-field="o.partner_id.country_id"/>
+                                                        <t t-if="o.partner_id.city">
+                                                            <span t-field="o.partner_id.city"/><br/>
+                                                        </t>
+                                                        <t t-if="o.partner_id.state_id">
+                                                        <span t-field="o.partner_id.state_id"/><br/>
+                                                        </t>
+                                                        <t t-if="o.partner_id.zip">
+                                                        <span t-field="o.partner_id.zip"/><br/>
+                                                        </t>
+                                                        <t t-if="o.partner_id.country_id">
+                                                        <span t-field="o.partner_id.country_id"/><br/>
+                                                        </t>
                                                     </td>
                                                 </tr>
                                                 <tr>
