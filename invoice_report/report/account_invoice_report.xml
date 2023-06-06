@@ -258,7 +258,7 @@
                             </td>
                             <td width="15%">
 
-                                <div style="position:relative;top:40px;">
+                                <div style="position:relative;top:50px;">
                                     <t t-if="o.company_id.country_id.code == 'SG'">
 
                                         <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
