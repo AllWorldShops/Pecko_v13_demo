@@ -5,7 +5,7 @@
             <div class="header o_background_header">
                 <div class="row" style="bottom:10px;top:10px">
                     <div class="col-10">
-                        <!--						<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" height="80" width="80"/>-->
+                        <!--                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" height="80" width="80"/>-->
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="80" width="100"
                              alt="Logo"/>
                         <div class="company_address" style="line-height:10px;font-family: Calibri;">
@@ -14,7 +14,7 @@
                                     <span style="font-size: 25px;" t-field="company.partner_id.name"/>
                                 </strong>
                                 <br/>
-                                <!--								<span t-field="o.company_id.street" />-->
+                                <!--                                <span t-field="o.company_id.street" />-->
                                 <t t-if="o.company_id.street">
                                     <span t-field="o.company_id.street"/>,
                                     <br/>
@@ -35,11 +35,11 @@
                                 <br/>
                                 <span>TEL :</span>
                                 <span t-field="o.company_id.phone"/>
-                                <!--								<t t-if="o.company_id.fax">-->
-                                <!--									|-->
-                                <!--									<span>FAX :</span>-->
-                                <!--									<span t-field="o.company_id.fax" />-->
-                                <!--								</t>-->
+                                <!--                                <t t-if="o.company_id.fax">-->
+                                <!--                                    |-->
+                                <!--                                    <span>FAX :</span>-->
+                                <!--                                    <span t-field="o.company_id.fax" />-->
+                                <!--                                </t>-->
                                 <br/>
                                 <t t-if="o.company_id.country_id.code != 'SG'">
                                     <span>E-mail:</span>
@@ -114,14 +114,14 @@
                         </tr>
                     </div>
                 </t>
-                 <table style='width:100%;background:transparent;'>
+                 <!-- <table style='width:100%;background:transparent;'>
                         <tr
                                 style='background-color: white;background:transparent !important;'>
                             <td>
                             </td>
                         </tr>
                     </table>
-                <style>
+                <style> -->
 <!--table, td, tr {-->
 <!--  height:80px;-->
 <!--}-->
@@ -254,7 +254,7 @@
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">25</field>
-            <field name="margin_bottom">60</field>
+            <field name="margin_bottom">70</field>
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>
