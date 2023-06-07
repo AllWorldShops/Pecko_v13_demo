@@ -47,7 +47,7 @@
                 <br/>
                 <br/>
                 <div class="page">
-                    <div style="font-size:20px;text-align:center;padding-top:120px;">
+                    <div style="font-size:20px;text-align:center;padding-top:80px;">
                         <!-- <span ><strong> <t t-if="o.type == 'out_invoice'"> Tax Invoice </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span> -->
                         <br></br>
 
@@ -137,7 +137,7 @@
                     <div class="row">
                         <div class="col-7">
                         </div>
-                        <div class="col-5" style="font-size:10px">
+                        <div class="col-5" style="font-size:12px">
                             <span style="background-color: #f4f4f5;">
 
                                 <strong>
@@ -150,7 +150,7 @@
                                     </t>
                                 </strong>
 
-                                <span style="padding-left:56px;" t-field="o.name"/>
+                                <span style="padding-left:55px;" t-field="o.name"/>
                             </span>
 
 
@@ -161,18 +161,9 @@
                             <tr >
                                 <td>
                                     <strong>Date</strong>
-                                    <span style="padding-left:90px;" t-field="o.invoice_date"
+                                    <span style="padding-left:93px;" t-field="o.invoice_date"
                                           t-options='{"format": "dd/MM/yyyy"}'/>
                                 </td>
-                            </tr>
-                            <br/>
-                            <tr>
-                                <span style="background-color: #f4f4f5;">
-                                    <strong>Payment Terms</strong>
-
-                                    <span style="padding-left:38px;background-color: #f4f4f5;"
-                                          t-field="o.invoice_payment_term_id.name"/>
-                                </span>
                             </tr>
                             <br/>
                             <tr>
@@ -186,7 +177,7 @@
                             <tr>
                                 <span style="background-color: #f4f4f5;">
                                     <strong>Cust P.O</strong>
-                                    <span style="padding-left:70px;" t-field="o.customer_po_no" />
+                                    <span style="padding-left:67px;" t-field="o.customer_po_no" />
                                 </span>
                             </tr>
                             <br/>
@@ -201,14 +192,14 @@
 
 
                             <!--                                                    <td style="height:5px;">-->
-                            <!--													<t t-if="isinstance(o.do_name, str)">-->
-                            <!--														<t t-set="string_to_output"-->
-                            <!--															t-value="o.do_name.split(',')" />-->
-                            <!--														<t t-foreach="string_to_output" t-as="string_line">-->
-                            <!--															<span t-esc="string_line" />-->
-                            <!--															<br />-->
-                            <!--														</t>-->
-                            <!--													</t>-->
+                            <!--                                                    <t t-if="isinstance(o.do_name, str)">-->
+                            <!--                                                        <t t-set="string_to_output"-->
+                            <!--                                                            t-value="o.do_name.split(',')" />-->
+                            <!--                                                        <t t-foreach="string_to_output" t-as="string_line">-->
+                            <!--                                                            <span t-esc="string_line" />-->
+                            <!--                                                            <br />-->
+                            <!--                                                        </t>-->
+                            <!--                                                    </t>-->
 
 
                             <!-- <span t-field="o.do_name" /> -->
@@ -308,7 +299,7 @@
                     </table>
                     <t t-if="o.company_id.country_id.code != 'SG'">
                         <table width="100%"
-                           style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;height:50px"
+                           style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;height:15px"
                            class="table table-borderless">
                              <tr style="height:5px;">
                                  <td width="25%"> For Tax Purpose in MYR Only</td>
@@ -331,7 +322,7 @@
                                  <td width="15%"> </td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td  width="5%" style="text-align:right;">:</td>
-                                 <td width="15%"> <span style="text-align:right;" t-esc="o.amount_tax / o.exchange_rate"/></td>
+                                 <td width="15%"> <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/></td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td  width="5%" style="text-align:right;">:</td>
                                  <td width="15%" style="text-align:right;"><span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/></td>

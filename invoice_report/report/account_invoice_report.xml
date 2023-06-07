@@ -5,7 +5,7 @@
             <div class="header o_background_header">
                 <div class="row" style="bottom:10px;top:10px">
                     <div class="col-10">
-                        <!--						<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" height="80" width="80"/>-->
+                        <!--                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" height="80" width="80"/>-->
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="80" width="100"
                              alt="Logo"/>
                         <div class="company_address" style="line-height:10px;font-family: Calibri;">
@@ -14,7 +14,7 @@
                                     <span style="font-size: 25px;" t-field="company.partner_id.name"/>
                                 </strong>
                                 <br/>
-                                <!--								<span t-field="o.company_id.street" />-->
+                                <!--                                <span t-field="o.company_id.street" />-->
                                 <t t-if="o.company_id.street">
                                     <span t-field="o.company_id.street"/>,
                                     <br/>
@@ -35,11 +35,11 @@
                                 <br/>
                                 <span>TEL :</span>
                                 <span t-field="o.company_id.phone"/>
-                                <!--								<t t-if="o.company_id.fax">-->
-                                <!--									|-->
-                                <!--									<span>FAX :</span>-->
-                                <!--									<span t-field="o.company_id.fax" />-->
-                                <!--								</t>-->
+                                <!--                                <t t-if="o.company_id.fax">-->
+                                <!--                                    |-->
+                                <!--                                    <span>FAX :</span>-->
+                                <!--                                    <span t-field="o.company_id.fax" />-->
+                                <!--                                </t>-->
                                 <br/>
                                 <t t-if="o.company_id.country_id.code != 'SG'">
                                     <span>E-mail:</span>
@@ -130,7 +130,7 @@
 
                     <t t-if="o.company_id.country_id.code == 'SG'">
                          <table width="100%"
-                           style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:px;height:50px"
+                           style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:px;height:15px"
                            class="table table-borderless">
                              <tr style="height:5px;">
                                  <td width="25%"> For Tax Purpose in SGD Only</td>
@@ -153,7 +153,7 @@
                                  <td width="15%"> </td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td  width="5%" style="text-align:right;">:</td>
-                                 <td width="15%"> <span style="text-align:right;" t-esc="o.amount_tax / o.exchange_rate"/></td>
+                                 <td width="15%"> <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/></td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td  width="5%" style="text-align:right;">:</td>
                                  <td width="15%" style="text-align:right;"><span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/></td>
@@ -254,7 +254,7 @@
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">25</field>
-            <field name="margin_bottom">60</field>
+            <field name="margin_bottom">70</field>
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>
