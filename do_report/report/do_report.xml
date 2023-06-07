@@ -13,6 +13,7 @@
             <t t-set="company" t-value="res_company"/>
         </t>
         <div class="header o_background_header">
+            <br/>
             <div class="row" style="bottom:10px;top:10px">
                 <div class="col-8">
                     <t t-if="o.company_id.country_id.code == 'SG'">
@@ -130,7 +131,7 @@
                                     <strong>
                                         **This is a computer generated document. Signature is not required.**
                                     </strong>
-                                </div>
+                                </div><br/>
                             </t>
                             <span>
                                 <strong>
@@ -149,9 +150,10 @@
 <!--                    							 style="position:relative; bottom:115px; left:730px; width:130px;" />-->
                 </t>
                 <div style="text-align:right">
-
-                    <span>user:</span>
-                    <span t-esc="user.name"/>
+                    <t t-if="o.company_id.country_id.code != 'SG'">
+                        <span>user:</span>
+                        <span t-esc="user.name"/>
+                    </t>
                 </div>
             </div>
         </template>
@@ -179,12 +181,12 @@
             <field name="default" eval="True"/>
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
-            <field name="margin_top">40</field>
+            <field name="margin_top">45</field>
             <field name="margin_bottom">35</field>
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">40</field>
+            <field name="header_spacing">45</field>
             <field name="dpi">90</field>
         </record>
 
