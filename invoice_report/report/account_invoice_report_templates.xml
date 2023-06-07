@@ -150,7 +150,7 @@
                                     </t>
                                 </strong>
 
-                                <span style="padding-left:56px;" t-field="o.name"/>
+                                <span style="padding-left:55px;" t-field="o.name"/>
                             </span>
 
 
@@ -161,18 +161,9 @@
                             <tr >
                                 <td>
                                     <strong>Date</strong>
-                                    <span style="padding-left:90px;" t-field="o.invoice_date"
+                                    <span style="padding-left:93px;" t-field="o.invoice_date"
                                           t-options='{"format": "dd/MM/yyyy"}'/>
                                 </td>
-                            </tr>
-                            <br/>
-                            <tr>
-                                <span style="background-color: #f4f4f5;">
-                                    <strong>Payment Terms</strong>
-
-                                    <span style="padding-left:38px;background-color: #f4f4f5;"
-                                          t-field="o.invoice_payment_term_id.name"/>
-                                </span>
                             </tr>
                             <br/>
                             <tr>
@@ -186,7 +177,7 @@
                             <tr>
                                 <span style="background-color: #f4f4f5;">
                                     <strong>Cust P.O</strong>
-                                    <span style="padding-left:70px;" t-field="o.customer_po_no" />
+                                    <span style="padding-left:67px;" t-field="o.customer_po_no" />
                                 </span>
                             </tr>
                             <br/>
@@ -331,7 +322,7 @@
                                  <td width="15%"> </td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td  width="5%" style="text-align:right;">:</td>
-                                 <td width="15%"> <span style="text-align:right;" t-esc="o.amount_tax / o.exchange_rate"/></td>
+                                 <td width="15%"> <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/></td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td  width="5%" style="text-align:right;">:</td>
                                  <td width="15%" style="text-align:right;"><span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/></td>

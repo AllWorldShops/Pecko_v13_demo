@@ -114,14 +114,14 @@
                         </tr>
                     </div>
                 </t>
-                 <!-- <table style='width:100%;background:transparent;'>
+                 <table style='width:100%;background:transparent;'>
                         <tr
                                 style='background-color: white;background:transparent !important;'>
                             <td>
                             </td>
                         </tr>
-                    </table> -->
-                <style> 
+                    </table>
+                <style>
 <!--table, td, tr {-->
 <!--  height:80px;-->
 <!--}-->
@@ -153,7 +153,7 @@
                                  <td width="15%"> </td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td  width="5%" style="text-align:right;">:</td>
-                                 <td width="15%"> <span style="text-align:right;" t-esc="o.amount_tax / o.exchange_rate"/></td>
+                                 <td width="15%"> <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/></td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td  width="5%" style="text-align:right;">:</td>
                                  <td width="15%" style="text-align:right;"><span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/></td>
