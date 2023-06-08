@@ -313,7 +313,7 @@
                                 <td width="15%" style="text-align:right;">Net Total (MYR)</td>
                                 <td width="" style="text-align:right;">:</td>
                                 <td width="15%">
-                                    <span t-esc="o.get_net_amount_report()"/>
+                                    <span t-esc="'%.2f'%(o.get_net_amount_report())"/>
                                 </td>
                                 <td width="15%" style="text-align:right;">Net Total (
                                     <span t-field="o.currency_id"/>
@@ -332,11 +332,11 @@
                                 <td width="3.3%"></td>
                                 <td width="15%"></td>
                                 <td width="15%" style="text-align:right;">Tax Amount</td>
-                                <td width="5%" style="text-align:right;">:</td>
+                                <td width="3" style="text-align:right;">:</td>
                                 <td width="15%">
-                                    <span style="padding-left:23px" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/>
+                                    <span style="padding-left:3px" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/>
                                 </td>
-                                <td width="15%" style="text-align:right;">Tax Amount</td>
+                                <td width="16%" style="text-align:right;">Tax Amount</td>
                                 <td width="1%" style="text-align:left;">:</td>
                                 <td width="15%" style="text-align:right;">
                                     <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/>
@@ -351,7 +351,7 @@
                                 <td width="15%" style="text-align:right;">Grand Total (MYR)</td>
                                 <td width="3%" style="text-align:right;">:</td>
                                 <td width="15%">
-                                    <span  style="padding-left:4px" t-esc="o.amount_tax / o.exchange_rate + o.get_net_amount_report()"/>
+                                    <span  style="padding-left:3px" t-esc="'%.2f'%((o.amount_tax / o.exchange_rate) + o.get_net_amount_report())" />
                                 </td>
                                 <td width="16%" style="text-align:right;">Grand Total (
                                     <span t-field="o.currency_id"/>
