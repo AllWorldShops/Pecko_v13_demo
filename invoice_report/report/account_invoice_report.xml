@@ -142,7 +142,7 @@
                                  <td width="15%" style="text-align:right;">  Net Total (
                                         <span t-field="o.currency_id"/>
                                         ) </td>
-                                 <td width="5%" style="text-align:right;">:</td>
+                                 <td width="1%" style="text-align:left;">:</td>
                                  <td width="15%" style="text-align:right;"> <span t-esc="'%.2f'%(o.amount_untaxed)"/></td>
                              </tr>
                               <tr style="height:5px;" >
@@ -153,9 +153,9 @@
                                  <td width="15%"> </td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td  width="5%" style="text-align:right;">:</td>
-                                 <td width="15%"> <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/></td>
+                                 <td width="15%"> <span style="padding:11px" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/></td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
-                                 <td  width="5%" style="text-align:right;">:</td>
+                                 <td width="1%" style="text-align:left;">:</td>
                                  <td width="15%" style="text-align:right;"><span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/></td>
                              </tr>
                               <tr style="height:5px">
@@ -169,7 +169,7 @@
                                  <td width="15%" style="text-align:right;"> Grand Total (
                                         <span t-field="o.currency_id"/>
                                         ) </td>
-                                 <td width="5%" style="text-align:right;">:</td>
+                                  <td width="1%" style="text-align:left;">:</td>
                                  <td width="15%" style="text-align:right;"> <span t-esc="'%.2f'%(o.amount_total)"/></td>
                              </tr>
                          </table>
