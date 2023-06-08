@@ -138,7 +138,7 @@
                                  <td width="10%"> </td>
                                  <td width="15%" style="text-align:right;"> Net Total (SGD) </td>
                                  <td width="" style="text-align:right;">:</td>
-                                 <td width="15%"><span t-esc="o.get_net_amount_report()"/></td>
+                                 <td width="15%"><span t-esc="'%.2f'%(o.amount_untaxed * o.exchange_rate)"/></td>
                                  <td width="15%" style="text-align:right;">  Net Total (
                                         <span t-field="o.currency_id"/>
                                         ) </td>
@@ -153,7 +153,7 @@
                                  <td width="15%"> </td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td  width="5%" style="text-align:right;">:</td>
-                                 <td width="15%"> <span style="padding:11px" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/></td>
+                                 <td width="15%"> <span style="padding:8px" t-esc="'%.2f'%(o.amount_tax * o.exchange_rate)"/></td>
                                  <td width="15%" style="text-align:right;">Tax Amount </td>
                                  <td width="1%" style="text-align:left;">:</td>
                                  <td width="15%" style="text-align:right;"><span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/></td>
@@ -165,7 +165,7 @@
                                  <td width="15%"> </td>
                                  <td width="15%" style="text-align:right;">Grand Total (SGD) </td>
                                  <td width="5%" style="text-align:right;">:</td>
-                                 <td width="15%"> <span t-esc="o.amount_tax / o.exchange_rate + o.get_net_amount_report()"/></td>
+                                 <td width="15%"> <span t-esc="'%.2f'%((o.amount_tax * o.exchange_rate) + (o.amount_untaxed * o.exchange_rate))"/></td>
                                  <td width="15%" style="text-align:right;"> Grand Total (
                                         <span t-field="o.currency_id"/>
                                         ) </td>
