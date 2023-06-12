@@ -182,6 +182,8 @@ class StockRule(models.Model):
             supplier = False
             if procurement.values.get('supplierinfo_id'):
                 supplier = procurement.values['supplierinfo_id']
+            elif procurement.values.get('orderpoint_id') and procurement.values['orderpoint_id'].supplier_id:
+                supplier = procurement.values['orderpoint_id'].supplier_id
             else:
                 supplier = procurement.product_id.with_company(procurement.company_id.id)._select_seller(
                     partner_id=procurement.values.get("supplierinfo_name"),
@@ -265,7 +267,7 @@ class StockRule(models.Model):
                     vals = self._update_purchase_order_line(procurement.product_id,
                         procurement.product_qty, procurement.product_uom, company_id,
                         procurement.values, po_line)
-                    po_line.write(vals)
+                    po_line.sudo().write(vals)
                 else:
                     if float_compare(procurement.product_qty, 0, precision_rounding=procurement.product_uom.rounding) <= 0:
                         # If procurement contains negative quantity, don't create a new line that would contain negative qty
