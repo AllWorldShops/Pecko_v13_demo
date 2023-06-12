@@ -9,6 +9,7 @@ from collections import defaultdict
 from odoo import api, fields, models, SUPERUSER_ID, _
 from odoo.tools import groupby
 from dateutil.relativedelta import relativedelta
+from odoo.addons.stock.models.stock_rule import ProcurementException
 
 
 class StockRule(models.Model):
