@@ -9,8 +9,9 @@ from datetime import timedelta
 
 
 class AccountPartnerLedgerReportInh(models.AbstractModel):
-    _inherit = "account.partner.ledger"
-    
+    _inherit = "account.partner.ledger.report.handler"
+
+
     # filter_date = {'mode': 'range', 'filter': 'this_year'}
     # filter_all_entries = False
     # filter_unfold_all = False
@@ -20,7 +21,6 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     # ]
     # filter_unreconciled = False
     # filter_partner = True
-
     @api.model
     def _get_templates(self):
         templates = super(AccountPartnerLedgerReportInh, self)._get_templates()
@@ -63,10 +63,10 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     def _get_options_sum_balance(self, options):
         ''' Create options with the 'strict_range' enabled on the filter_date.
         The resulting dates domain will be:
-        [
-            ('date' <= options['date_to']),
-            ('date' >= options['date_from'])
-        ]
+        # [
+        #     ('date' <= options['date_to']),
+        #     ('date' >= options['date_from'])
+        # ]
         :param options: The report options.
         :return:        A copy of the options.
         '''
@@ -97,137 +97,192 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     ####################################################
 
     @api.model
-    def _get_query_sums(self, options, expanded_partner=None):
-        ''' Construct a query retrieving all the aggregated sums to build the report. It includes:
-        - sums for all accounts.
+    def _get_query_sums(self, options):
+        """ Construct a query retrieving all the aggregated sums to build the report. It includes:
+        - sums for all partners.
         - sums for the initial balances.
-        - sums for the unaffected earnings.
-        - sums for the tax declaration.
         :param options:             The report options.
-        :param expanded_partner:    An optional account.account record that must be specified when expanding a line
-                                    with of without the load more.
         :return:                    (query, params)
-        '''
+        """
         params = []
         queries = []
-
-        if expanded_partner:
-            domain = [('partner_id', '=', expanded_partner.id)]
-        else:
-            domain = []
+        report = self.env.ref('account_reports.partner_ledger_report')
 
         # Create the currency table.
-        ct_query = self._get_query_currency_table(options)
-
-        # Get sums for all partners.
-        # period: [('date' <= options['date_to']), ('date' >= options['date_from'])]
-        new_options = self._get_options_sum_balance(options)
-        tables, where_clause, where_params = self._query_get(new_options, domain=domain)
-        params += where_params
-        queries.append('''
-            SELECT
-                account_move_line.partner_id        AS groupby,
-                'sum'                               AS key,
-                SUM(ROUND(account_move_line.debit * currency_table.rate, currency_table.precision))   AS debit,
-                SUM(ROUND(account_move_line.credit * currency_table.rate, currency_table.precision))  AS credit,
-                SUM(ROUND(account_move_line.balance * currency_table.rate, currency_table.precision)) AS balance
-            FROM %s
-            LEFT JOIN %s ON currency_table.company_id = account_move_line.company_id
-            WHERE %s
-            GROUP BY account_move_line.partner_id
-        ''' % (tables, ct_query, where_clause))
-
-        # Get sums for the initial balance.
-        # period: [('date' <= options['date_from'] - 1)]
-        new_options = self._get_options_initial_balance(options)
-        tables, where_clause, where_params = self._query_get(new_options, domain=domain)
-        params += where_params
-        queries.append('''
-            SELECT
-                account_move_line.partner_id        AS groupby,
-                'initial_balance'                   AS key,
-                SUM(ROUND(account_move_line.debit * currency_table.rate, currency_table.precision))   AS debit,
-                SUM(ROUND(account_move_line.credit * currency_table.rate, currency_table.precision))  AS credit,
-                SUM(ROUND(account_move_line.balance * currency_table.rate, currency_table.precision)) AS balance
-            FROM %s
-            LEFT JOIN %s ON currency_table.company_id = account_move_line.company_id
-            WHERE %s
-            GROUP BY account_move_line.partner_id
-        ''' % (tables, ct_query, where_clause))
+        ct_query = self.env['res.currency']._get_query_currency_table(options)
+        for column_group_key, column_group_options in report._split_options_per_column_group(options).items():
+            tables, where_clause, where_params = report._query_get(column_group_options, 'normal')
+            params.append(column_group_key)
+            params += where_params
+            queries.append(f"""
+                SELECT
+                    account_move_line.partner_id                                                          AS groupby,
+                    %s                                                                                    AS column_group_key,
+                    SUM(ROUND(account_move_line.debit * currency_table.rate, currency_table.precision))   AS debit,
+                    SUM(ROUND(account_move_line.credit * currency_table.rate, currency_table.precision))  AS credit,
+                    SUM(ROUND(account_move_line.balance * currency_table.rate, currency_table.precision)) AS balance
+                FROM {tables}
+                LEFT JOIN {ct_query} ON currency_table.company_id = account_move_line.company_id
+                WHERE {where_clause}
+                GROUP BY account_move_line.partner_id
+            """)
 
         return ' UNION ALL '.join(queries), params
 
-    @api.model
-    def _get_query_amls(self, options, expanded_partner=None, offset=None, limit=None):
-        ''' Construct a query retrieving the account.move.lines when expanding a report line with or without the load
-        more.
-        :param options:             The report options.
-        :param expanded_partner:    The res.partner record corresponding to the expanded line.
-        :param offset:              The offset of the query (used by the load more).
-        :param limit:               The limit of the query (used by the load more).
-        :return:                    (query, params)
-        '''
-        unfold_all = options.get('unfold_all') or (self._context.get('print_mode') and not options['unfolded_lines'])
+    def _get_aml_values(self, options, partner_ids, offset=0, limit=None):
+        rslt = {partner_id: [] for partner_id in partner_ids}
 
-        # Get sums for the account move lines.
-        # period: [('date' <= options['date_to']), ('date', '>=', options['date_from'])]
-        if expanded_partner:
-            domain = [('partner_id', '=', expanded_partner.id)]
-        elif unfold_all:
-            domain = []
-        elif options['unfolded_lines']:
-            domain = [('partner_id', 'in', [int(line[8:]) for line in options['unfolded_lines']])]
+        partner_ids_wo_none = [x for x in partner_ids if x]
+        directly_linked_aml_partner_clauses = []
+        directly_linked_aml_partner_params = []
+        indirectly_linked_aml_partner_params = []
+        indirectly_linked_aml_partner_clause = 'aml_with_partner.partner_id IS NOT NULL'
+        if None in partner_ids:
+            directly_linked_aml_partner_clauses.append('account_move.partner_id IS NULL')
+        if partner_ids_wo_none:
+            directly_linked_aml_partner_clauses.append('account_move.partner_id IN %s')
+            directly_linked_aml_partner_params.append(tuple(partner_ids_wo_none))
+            indirectly_linked_aml_partner_clause = 'aml_with_partner.partner_id IN %s'
+            indirectly_linked_aml_partner_params.append(tuple(partner_ids_wo_none))
+        directly_linked_aml_partner_clause = '(' + ' OR '.join(directly_linked_aml_partner_clauses) + ')'
 
-        new_options = self._get_options_sum_balance(options)
-        tables, where_clause, where_params = self._query_get(new_options, domain=domain)
-        ct_query = self._get_query_currency_table(options)
+        ct_query = self.env['res.currency']._get_query_currency_table(options)
+        queries = []
+        all_params = []
+        lang = self.env.lang or get_lang(self.env).code
+        journal_name = f"COALESCE(journal.name->>'{lang}', journal.name->>'en_US')" if \
+            self.pool['account.journal'].name.translate else 'journal.name'
+        account_name = f"COALESCE(account.name->>'{lang}', account.name->>'en_US')" if \
+            self.pool['account.account'].name.translate else 'account.name'
+        report = self.env.ref('account_reports.partner_ledger_report')
+        for column_group_key, group_options in report._split_options_per_column_group(options).items():
+            tables, where_clause, where_params = report._query_get(group_options, 'strict_range')
 
-        query = '''
-            SELECT
-                account_move_line.id,
-                account_move_line.date,
-                account_move_line.date_maturity,
-                account_move_line.name,
-                account_move_line.ref,
-                account_move_line.company_id,
-                account_move_line.account_id,             
-                account_move_line.payment_id,
-                account_move_line.partner_id,
-                account_move_line.currency_id,
-                account_move_line.amount_currency,
-                ROUND(account_move_line.debit * currency_table.rate, currency_table.precision)   AS debit,
-                ROUND(account_move_line.credit * currency_table.rate, currency_table.precision)  AS credit,
-                ROUND(account_move_line.balance * currency_table.rate, currency_table.precision) AS balance,
-                account_move_line__move_id.name         AS move_name,
-                company.currency_id                     AS company_currency_id,
-                partner.name                            AS partner_name,
-                account_move_line__move_id.type         AS move_type,
-                account_move_line__move_id.customer_po_no         AS customer_po_no,
-                account.code                            AS account_code,
-                account.name                            AS account_name,
-                journal.code                            AS journal_code,
-                journal.name                            AS journal_name,
-                full_rec.name                           AS full_rec_name
-            FROM account_move_line
-            LEFT JOIN account_move account_move_line__move_id ON account_move_line__move_id.id = account_move_line.move_id
-            LEFT JOIN %s ON currency_table.company_id = account_move_line.company_id
-            LEFT JOIN res_company company               ON company.id = account_move_line.company_id
-            LEFT JOIN res_partner partner               ON partner.id = account_move_line.partner_id
-            LEFT JOIN account_account account           ON account.id = account_move_line.account_id
-            LEFT JOIN account_journal journal           ON journal.id = account_move_line.journal_id
-            LEFT JOIN account_full_reconcile full_rec   ON full_rec.id = account_move_line.full_reconcile_id
-            WHERE %s
-            ORDER BY account_move_line.id
-        ''' % (ct_query, where_clause)
+            all_params += [
+                column_group_key,
+                *where_params,
+                *directly_linked_aml_partner_params,
+                column_group_key,
+                *indirectly_linked_aml_partner_params,
+                *where_params,
+                group_options['date']['date_from'],
+                group_options['date']['date_to'],
+            ]
+
+            # For the move lines directly linked to this partner
+            queries.append(f'''
+                SELECT
+                    account_move_line.id,
+                    account_move_line.date,
+                    account_move_line.date_maturity,
+                    account_move_line.name,
+                    account_move_line.ref,
+                    account_move_line.company_id,
+                    account_move_line.account_id,
+                    account_move_line.payment_id,
+                    account_move_line.partner_id,
+                    account_move_line.currency_id,
+                    account_move_line.amount_currency,
+                    account_move_line.matching_number,
+                    ROUND(account_move_line.debit * currency_table.rate, currency_table.precision)   AS debit,
+                    ROUND(account_move_line.credit * currency_table.rate, currency_table.precision)  AS credit,
+                    ROUND(account_move_line.balance * currency_table.rate, currency_table.precision) AS balance,
+                    account_move.name AS move_name,
+                    account_move.customer_po_no                                                      AS customer_po_no,
+                    account_move.move_type                                                           AS move_type,
+                    account.code                                                                     AS account_code,
+                    {account_name}                                                                   AS account_name,
+                    journal.code                                                                     AS journal_code,
+                    {journal_name}                                                                   AS journal_name,
+                    %s                                                                               AS column_group_key,
+                    'directly_linked_aml'                                                            AS key
+                FROM {tables}
+                JOIN account_move ON account_move.id = account_move_line.move_id
+                LEFT JOIN {ct_query} ON currency_table.company_id = account_move_line.company_id
+                LEFT JOIN res_company company               ON company.id = account_move_line.company_id
+                LEFT JOIN res_partner partner               ON partner.id = account_move_line.partner_id
+                LEFT JOIN account_account account           ON account.id = account_move_line.account_id
+                LEFT JOIN account_journal journal           ON journal.id = account_move_line.journal_id
+                WHERE {where_clause} AND {directly_linked_aml_partner_clause}
+                ORDER BY account_move_line.date, account_move_line.id
+            ''')
+
+            # For the move lines linked to no partner, but reconciled with this partner. They will appear in grey in the report
+            queries.append(f'''
+                SELECT
+                    account_move_line.id,
+                    account_move_line.date,
+                    account_move_line.date_maturity,
+                    account_move_line.name,
+                    account_move_line.ref,
+                    account_move_line.company_id,
+                    account_move_line.account_id,
+                    account_move_line.payment_id,
+                    aml_with_partner.partner_id,
+                    account_move_line.currency_id,
+                    account_move_line.amount_currency,
+                    account_move_line.matching_number,
+                    CASE WHEN aml_with_partner.balance > 0 THEN 0 ELSE partial.amount END               AS debit,
+                    CASE WHEN aml_with_partner.balance < 0 THEN 0 ELSE partial.amount END               AS credit,
+                    CASE WHEN aml_with_partner.balance > 0 THEN -partial.amount ELSE partial.amount END AS balance,
+                    account_move.name AS move_name,
+                    account_move.customer_po_no AS customer_po_no,
+                    account_move.move_type AS move_type,
+                    account.code AS account_code,
+                    {account_name}                                                                      AS account_name,
+                    journal.code                                                                        AS journal_code,
+                    {journal_name}                                                                      AS journal_name,
+                    %s                                                                                  AS column_group_key,
+                    'indirectly_linked_aml'                                                             AS key
+                FROM {tables},
+                    account_partial_reconcile partial,
+                    account_move,
+                    account_move_line aml_with_partner,
+                    account_journal journal,
+                    account_account account
+                WHERE
+                    (account_move_line.id = partial.debit_move_id OR account_move_line.id = partial.credit_move_id)
+                    AND account_move_line.partner_id IS NULL
+                    AND account_move.id = account_move_line.move_id
+                    AND (aml_with_partner.id = partial.debit_move_id OR aml_with_partner.id = partial.credit_move_id)
+                    AND {indirectly_linked_aml_partner_clause}
+                    AND journal.id = account_move_line.journal_id
+                    AND account.id = account_move_line.account_id
+                    AND {where_clause}
+                    AND partial.max_date BETWEEN %s AND %s
+                ORDER BY account_move_line.date, account_move_line.id
+            ''')
+
+        query = '(' + ') UNION ALL ('.join(queries) + ')'
 
         if offset:
             query += ' OFFSET %s '
-            where_params.append(offset)
+            all_params.append(offset)
+
         if limit:
             query += ' LIMIT %s '
-            where_params.append(limit)
+            all_params.append(limit)
 
-        return query, where_params
+        self._cr.execute(query, all_params)
+        for aml_result in self._cr.dictfetchall():
+            if aml_result['key'] == 'indirectly_linked_aml':
+
+                # Append the line to the partner found through the reconciliation.
+                if aml_result['partner_id'] in rslt:
+                    rslt[aml_result['partner_id']].append(aml_result)
+
+                # Balance it with an additional line in the Unknown Partner section but having reversed amounts.
+                if None in rslt:
+                    rslt[None].append({
+                        **aml_result,
+                        'debit': aml_result['credit'],
+                        'credit': aml_result['debit'],
+                        'balance': -aml_result['balance'],
+                    })
+            else:
+                rslt[aml_result['partner_id']].append(aml_result)
+
+        return rslt
 
     @api.model
     def _do_query(self, options, expanded_partner=None):
@@ -236,7 +291,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
             - partner is a res.parter record.
             - fetched_values is a dictionary containing:
                 - sum:                              {'debit': float, 'credit': float, 'balance': float}
-                - (optional) initial_balance:       {'debit': float, 'credit': float, 'balance': float}
+                # - (optional) initial_balance:       {'debit': float, 'credit': float, 'balance': float}
                 - (optional) lines:                 [line_vals_1, line_vals_2, ...]
         :param options:             The report options.
         :param expanded_account:    An optional account.account record that must be specified when expanding a line
@@ -266,7 +321,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
         # Fetch the lines of unfolded accounts.
         unfold_all = options.get('unfold_all') or (self._context.get('print_mode') and not options['unfolded_lines'])
         if expanded_partner or unfold_all or options['unfolded_lines']:
-            query, params = self._get_query_amls(options, expanded_partner=expanded_partner)
+            query, params = self._get_aml_values(options, expanded_partner=expanded_partner)
             self._cr.execute(query, params)
             for res in self._cr.dictfetchall():
                 if res['partner_id'] not in groupby_partners:
@@ -292,7 +347,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     ####################################################
 
     @api.model
-    def _get_report_line_partner(self, options, partner, initial_balance, debit, credit, balance):
+    def _get_report_line_partner(self, options, partner, initial_balance,debit, credit, balance):
         company_currency = self.env.company.currency_id
         unfold_all = self._context.get('print_mode') and not options.get('unfolded_lines')
 
@@ -316,46 +371,155 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
             'colspan': 7,
         }
 
-    @api.model
-    def _get_report_line_move_line(self, options, partner, aml, cumulated_init_balance, cumulated_balance):
-        if aml['payment_id']:
+    def _get_report_line_move_line(self, options, aml_query_result, partner_line_id, init_bal_by_col_group, level_shift=0):
+        if aml_query_result['payment_id']:
             caret_type = 'account.payment'
-        elif aml['move_type'] in ('in_refund', 'in_invoice', 'in_receipt'):
-            caret_type = 'account.invoice.in'
-        elif aml['move_type'] in ('out_refund', 'out_invoice', 'out_receipt'):
-            caret_type = 'account.invoice.out'
         else:
-            caret_type = 'account.move'
+            caret_type = 'account.move.line'
 
-        date_maturity = aml['date_maturity'] and format_date(self.env, fields.Date.from_string(aml['date_maturity']))
-        columns = [
-            {'name': aml['journal_code']},
-            {'name': aml['account_code']},
-            {'name': aml['customer_po_no'] or ''},
-            {'name': self._format_aml_name(aml['name'], aml['ref'], aml['move_name'])},
-            {'name': date_maturity or '', 'class': 'date'},
-            {'name': aml['full_rec_name'] or ''},
-            {'name': self.format_value(cumulated_init_balance), 'class': 'number'},
-            {'name': self.format_value(aml['debit'], blank_if_zero=True), 'class': 'number'},
-            {'name': self.format_value(aml['credit'], blank_if_zero=True), 'class': 'number'},
-        ]
-        if self.user_has_groups('base.group_multi_currency'):
-            if aml['currency_id']:
-                currency = self.env['res.currency'].browse(aml['currency_id'])
-                formatted_amount = self.format_value(aml['amount_currency'], currency=currency, blank_if_zero=True)
-                columns.append({'name': formatted_amount, 'class': 'number'})
+        columns = []
+        report = self.env['account.report']
+        for column in options['columns']:
+            col_expr_label = column['expression_label']
+            if col_expr_label == 'ref':
+                col_value = report._format_aml_name(aml_query_result['name'], aml_query_result['ref'], aml_query_result['move_name'])
             else:
-                columns.append({'name': ''})
-        columns.append({'name': self.format_value(cumulated_balance), 'class': 'number'})
+                col_value = aml_query_result[col_expr_label] if column['column_group_key'] == aml_query_result['column_group_key'] else None
+
+            if col_value is None:
+                columns.append({})
+            else:
+                col_class = 'number'
+
+                if col_expr_label == 'date_maturity':
+                    formatted_value = format_date(self.env, fields.Date.from_string(col_value))
+                    col_class = 'date'
+                elif col_expr_label == 'amount_currency':
+                    currency = self.env['res.currency'].browse(aml_query_result['currency_id'])
+                    formatted_value = report.format_value(col_value, currency=currency, figure_type=column['figure_type'])
+                elif col_expr_label == 'balance':
+                    col_value += init_bal_by_col_group[column['column_group_key']]
+                    formatted_value = report.format_value(col_value, figure_type=column['figure_type'], blank_if_zero=column['blank_if_zero'])
+                else:
+                    if col_expr_label == 'ref':
+                        col_class = 'o_account_report_line_ellipsis'
+                    elif col_expr_label not in ('debit', 'credit'):
+                        col_class = ''
+                    formatted_value = report.format_value(col_value, figure_type=column['figure_type'])
+
+                columns.append({
+                    'name': formatted_value,
+                    'no_format': col_value,
+                    'class': col_class,
+                })
+
         return {
-            'id': aml['id'],
-            'parent_id': 'partner_%s' % partner.id,
-            'name': format_date(self.env, aml['date']),
-            'class': 'date',
+            'id': report._get_generic_line_id('account.move.line', aml_query_result['id'], parent_line_id=partner_line_id),
+            'parent_id': partner_line_id,
+            'name': format_date(self.env, aml_query_result['date']),
+            'class': 'text-muted' if aml_query_result['key'] == 'indirectly_linked_aml' else 'text',  # do not format as date to prevent text centering
             'columns': columns,
             'caret_options': caret_type,
-            'level': 4,
+            'level': 4 + level_shift,
         }
+        
+
+    # def _get_report_line_move_line(self, options, aml_query_result, partner_line_id, init_bal_by_col_group):
+    #     if aml_query_result['payment_id']:
+    #         caret_type = 'account.payment'
+    #     else:
+    #         caret_type = 'account.move.line'
+
+    #     columns = []
+    #     report = self.env['account.report']
+    #     for column in options['columns']:
+    #         col_expr_label = column['expression_label']
+    #         if col_expr_label == 'ref':
+    #             col_value = report._format_aml_name(aml_query_result['name'], aml_query_result['ref'], aml_query_result['move_name'])
+    #         else:
+    #             col_value = aml_query_result[col_expr_label] if column['column_group_key'] == aml_query_result['column_group_key'] else None
+
+    #         if col_value is None:
+    #             columns.append({})
+    #         else:
+    #             col_class = 'number'
+
+    #             if col_expr_label == 'date_maturity':
+    #                 formatted_value = format_date(self.env, fields.Date.from_string(col_value))
+    #                 col_class = 'date'
+    #             elif col_expr_label == 'amount_currency':
+    #                 currency = self.env['res.currency'].browse(aml_query_result['currency_id'])
+    #                 formatted_value = report.format_value(col_value, currency=currency, figure_type=column['figure_type'])
+    #             elif col_expr_label == 'balance':
+    #                 col_value += init_bal_by_col_group[column['column_group_key']]
+    #                 formatted_value = report.format_value(col_value, figure_type=column['figure_type'], blank_if_zero=column['blank_if_zero'])
+    #             else:
+    #                 if col_expr_label == 'ref':
+    #                     col_class = 'o_account_report_line_ellipsis'
+    #                 elif col_expr_label not in ('debit', 'credit'):
+    #                     col_class = ''
+    #                 formatted_value = report.format_value(col_value, figure_type=column['figure_type'])
+
+    #             columns.append({
+    #                 'name': formatted_value,
+    #                 'no_format': col_value,
+    #                 'class': col_class,
+    #             })
+
+    #     return {
+    #         'id': report._get_generic_line_id('account.move.line', aml_query_result['id'], parent_line_id=partner_line_id),
+    #         'parent_id': partner_line_id,
+    #         'name': format_date(self.env, aml_query_result['date']),
+    #         'class': 'text-muted' if aml_query_result['key'] == 'indirectly_linked_aml' else 'text',  # do not format as date to prevent text centering
+    #         'columns': columns,
+    #         'caret_options': caret_type,
+    #         'level': 2,
+    #     }
+
+    # @api.model
+    # def _get_report_line_move_line(self, options, aml_query_result, partner_line_id, init_bal_by_col_group):
+        
+    #     report = self.env['account.report']
+    #     if aml_query_result['payment_id']:
+    #         caret_type = 'account.payment'
+    #     elif aml_query_result['move_type'] in ('in_refund', 'in_invoice', 'in_receipt'):
+    #         caret_type = 'account.invoice.in'
+    #     elif aml_query_result['move_type'] in ('out_refund', 'out_invoice', 'out_receipt'):
+    #         caret_type = 'account.invoice.out'
+    #     else:
+    #         caret_type = 'account.move'
+
+    #     date_maturity = aml_query_result['date_maturity'] and format_date(self.env, fields.Date.from_string(aml_query_result['date_maturity']))
+    #     columns = [
+    #         {'name': aml_query_result['journal_code']},
+    #         {'name': aml_query_result['account_code']},
+    #         {'name': aml_query_result['customer_po_no'] or ''},
+    #         {'name': report._format_aml_name(aml_query_result['name'], aml_query_result['ref'], aml_query_result['move_name'])},
+    #         {'name': date_maturity or '', 'class': 'date'},
+    #         # {'name': aml['full_rec_name'] or ''},
+    #         # {'name': report.format_value(cumulated_init_balance), 'class': 'number'},
+    #         {'name': report.format_value(aml_query_result['debit'], blank_if_zero=True), 'class': 'number'},
+    #         {'name': report.format_value(aml_query_result['credit'], blank_if_zero=True), 'class': 'number'},
+    #     ]
+    #     print('columns----------',columns)
+    #     if self.user_has_groups('base.group_multi_currency'):
+    #         report = self.env['account.report']
+    #         if aml_query_result['currency_id']:
+    #             currency = report.env['res.currency'].browse(aml_query_result['currency_id'])
+    #             formatted_amount = report.format_value(aml_query_result['amount_currency'], currency=currency, blank_if_zero=True)
+    #             columns.append({'name': formatted_amount, 'class': 'number'})
+    #         else:
+    #             columns.append({'name': ''})
+    #     # columns.append({'name': report.format_value(cumulated_balance), 'class': 'number'})
+    #     return {
+    #         'id': report._get_generic_line_id('account.move.line', aml_query_result['id'], parent_line_id=partner_line_id),
+    #         'parent_id': partner_line_id,
+    #         'name': format_date(self.env, aml_query_result['date']),
+    #         'class': 'date',
+    #         'columns': columns,
+    #         'caret_options': caret_type,
+    #         'level': 4,
+    #     }
 
     @api.model
     def _get_report_line_load_more(self, options, partner, offset, remaining, progress):
@@ -371,23 +535,50 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
             'columns': [{}],
         }
 
-    @api.model
-    def _get_report_line_total(self, options, initial_balance, debit, credit, balance):
-        columns = [
-            {'name': self.format_value(initial_balance), 'class': 'number'},
-            {'name': self.format_value(debit), 'class': 'number'},
-            {'name': self.format_value(credit), 'class': 'number'},
-        ]
-        if self.user_has_groups('base.group_multi_currency'):
-            columns.append({'name': ''})
-        columns.append({'name': self.format_value(balance), 'class': 'number'})
+    # @api.model
+    # def _get_report_line_total(self, options, totals_by_column_group):
+    #     report = self.env['account.report']
+    #     columns = [
+    #         {'name': report.format_value(balance), 'class': 'number'},
+    #         {'name': report.format_value(debit), 'class': 'number'},
+    #         {'name': report.format_value(credit), 'class': 'number'},
+    #     ]
+    #     if self.user_has_groups('base.group_multi_currency'):
+    #         columns.append({'name': ''})
+    #     columns.append({'name': report.format_value(balance), 'class': 'number'})
+    #     return {
+    #         'id': 'partner_ledger_total_%s' % self.env.company.id,
+    #         'name': _('Total'),
+    #         'class': 'total',
+    #         'level': 1,
+    #         'columns': columns,
+    #         'colspan': 7,
+    #     }
+
+    def _get_report_line_total(self, options, totals_by_column_group):
+        column_values = []
+        report = self.env['account.report']
+        for column in options['columns']:
+            col_expr_label = column['expression_label']
+            value = totals_by_column_group[column['column_group_key']].get(column['expression_label'])
+
+            if col_expr_label in {'debit', 'credit', 'balance'}:
+                formatted_value = report.format_value(value, figure_type=column['figure_type'], blank_if_zero=False)
+            else:
+                formatted_value = report.format_value(value, figure_type=column['figure_type']) if value else None
+
+            column_values.append({
+                'name': formatted_value,
+                'no_format': value,
+                'class': 'number'
+            })
+
         return {
-            'id': 'partner_ledger_total_%s' % self.env.company.id,
+            'id': report._get_generic_line_id(None, None, markup='total'),
             'name': _('Total'),
             'class': 'total',
             'level': 1,
-            'columns': columns,
-            'colspan': 7,
+            'columns': column_values,
         }
 
     @api.model
@@ -431,14 +622,14 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
                 load_more_remaining = len(amls)
                 load_more_counter = self._context.get('print_mode') and load_more_remaining or self.MAX_LINES
 
-                for aml in amls:
+                for aml_query_result in amls:
                     # Don't show more line than load_more_counter.
                     if load_more_counter == 0:
                         break
 
-                    cumulated_init_balance = cumulated_balance
-                    cumulated_balance += aml['balance']
-                    lines.append(self._get_report_line_move_line(options, partner, aml, cumulated_init_balance, cumulated_balance))
+                    # cumulated_init_balance = cumulated_balance
+                    # cumulated_balance += aml['balance']
+                    # lines.append(self._get_report_line_move_line(options, partner, aml, cumulated_init_balance, cumulated_balance))
 
                     load_more_remaining -= 1
                     load_more_counter -= 1
@@ -477,18 +668,18 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
         load_more_counter = self.MAX_LINES
 
         # Fetch the next batch of lines.
-        amls_query, amls_params = self._get_query_amls(options, expanded_partner=expanded_partner, offset=offset, limit=load_more_counter)
+        amls_query, amls_params = self._get_aml_values(options, expanded_partner=expanded_partner, offset=offset, limit=load_more_counter)
         self._cr.execute(amls_query, amls_params)
-        for aml in self._cr.dictfetchall():
+        for aml_query_result in self._cr.dictfetchall():
             # Don't show more line than load_more_counter.
             if load_more_counter == 0:
                 break
 
-            cumulated_init_balance = progress
-            progress += aml['balance']
+            # cumulated_init_balance = progress
+            # progress += aml['balance']
 
             # account.move.line record line.
-            lines.append(self._get_report_line_move_line(options, expanded_partner, aml, cumulated_init_balance, progress))
+            # lines.append(self._get_report_line_move_line(options, expanded_partner, aml, cumulated_init_balance, progress))
 
             offset += 1
             load_more_remaining -= 1
@@ -541,10 +732,10 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     @api.model
     def _get_report_name(self):
         return _('Partner Ledger')
-    
-    
-    
-    
+
+
+
+
     # @api.model
     # def _get_query_amls(self, options, expanded_partner=None, offset=None, limit=None):
     #     ''' Construct a query retrieving the account.move.lines when expanding a report line with or without the load
@@ -556,7 +747,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     #     :return:                    (query, params)
     #     '''
     #     unfold_all = options.get('unfold_all') or (self._context.get('print_mode') and not options['unfolded_lines'])
-
+    #
     #     # Get sums for the account move lines.
     #     # period: [('date' <= options['date_to']), ('date', '>=', options['date_from'])]
     #     if expanded_partner:
@@ -565,11 +756,11 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     #         domain = []
     #     elif options['unfolded_lines']:
     #         domain = [('partner_id', 'in', [int(line[8:]) for line in options['unfolded_lines']])]
-
+    #
     #     new_options = self._get_options_sum_balance(options)
     #     tables, where_clause, where_params = self._query_get(new_options, domain=domain)
     #     ct_query = self._get_query_currency_table(options)
-
+    #
     #     query = '''
     #         SELECT
     #             account_move_line.id,
@@ -578,7 +769,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     #             account_move_line.name,
     #             account_move_line.ref,
     #             account_move_line.company_id,
-    #             account_move_line.account_id,             
+    #             account_move_line.account_id,
     #             account_move_line.payment_id,
     #             account_move_line.partner_id,
     #             account_move_line.currency_id,
@@ -607,16 +798,16 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     #         WHERE %s
     #         ORDER BY account_move_line.id
     #     ''' % (ct_query, where_clause)
-
+    #
     #     if offset:
     #         query += ' OFFSET %s '
     #         where_params.append(offset)
     #     if limit:
     #         query += ' LIMIT %s '
     #         where_params.append(limit)
-
+    #
     #     return query, where_params
-
+    #
     # @api.model
     # def _get_report_line_move_line(self, options, partner, aml, cumulated_init_balance, cumulated_balance):
     #     if aml['payment_id']:
@@ -627,7 +818,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     #         caret_type = 'account.invoice.out'
     #     else:
     #         caret_type = 'account.move'
-
+    #
     #     date_maturity = aml['date_maturity'] and format_date(self.env, fields.Date.from_string(aml['date_maturity']))
     #     columns = [
     #         {'name': aml['journal_code']},
@@ -657,7 +848,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     #         'caret_options': caret_type,
     #         'level': 4,
     #     }
-        
+
     # @api.model
     # def _get_report_line_partner(self, options, partner, initial_balance, debit, credit, balance):
     #     company_currency = self.env.company.currency_id
@@ -682,11 +873,11 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     #         'unfolded': 'partner_%s' % partner.id in options['unfolded_lines'] or unfold_all,
     #         'colspan': 6,
     #     }
-        
+
     # @api.model
     # def _get_report_line_total(self, options, initial_balance, debit, credit, balance):
     #     columns = [
-    #         # {'name': ' ', 'class': 'number'},
+    #         {'name': ' ', 'class': 'number'},
     #         {'name': self.format_value(initial_balance), 'class': 'number'},
     #         {'name': self.format_value(debit), 'class': 'number'},
     #         {'name': self.format_value(credit), 'class': 'number'},
@@ -702,7 +893,7 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     #         'columns': columns,
     #         'colspan': 7,
     #     }
-    
+    #
     # def _get_columns_name(self, options):
     #     columns = [
     #         {},
@@ -715,10 +906,13 @@ class AccountPartnerLedgerReportInh(models.AbstractModel):
     #         {'name': _('Initial Balance'), 'class': 'number'},
     #         {'name': _('Debit'), 'class': 'number'},
     #         {'name': _('Credit'), 'class': 'number'}]
-
+    #
     #     if self.user_has_groups('base.group_multi_currency'):
     #         columns.append({'name': _('Amount Currency'), 'class': 'number'})
-
+    #
     #     columns.append({'name': _('Balance'), 'class': 'number'})
-
+    #
     #     return columns
+
+
+

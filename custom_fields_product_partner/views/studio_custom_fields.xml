@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
+
+        <record model="ir.ui.view" id="customer_statements_form_view_inherited">
+            <field name="name">customer.statements.followup.inherited</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account_followup.customer_statements_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet/field[2]/tree/field[@name='invoice_origin']" position="after">
+                        <field name="customer_po_no"/>
+                </xpath>
+            </field>
+        </record>
+
         <!-- Studio fields for product.template -->
         <record id="studio_inherit_product_form" model="ir.ui.view">
             <field name="name">product.template.form.inherit</field>

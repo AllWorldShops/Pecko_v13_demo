@@ -21,6 +21,14 @@ class Partner(models.Model):
                                             string='Verification Status')
     incoterms = fields.Char("IncoTerm")
 
+class AccountMoveLine(models.Model):
+    _name = "account.move.line"
+    _inherit = "account.move.line"
+    _description = "Journal Item"
+
+    customer_po_no = fields.Char(
+        related='move_id.customer_po_no', store=True, copy=False,
+    )
 
 
 class AccountFollowupReport(models.AbstractModel):
