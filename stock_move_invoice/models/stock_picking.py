@@ -80,6 +80,7 @@ class StockPicking(models.Model):
                     invoice['picking_id'] = picking_id.id
                     invoice['customer_po_no'] = picking_id.customer_po_no
                     invoice['do_name'] = picking_id.name
+                    invoice['move_type'] = 'out_invoice'
                     # invoice['invoice_origin'] = picking_id.sale_id.name,
                     invoice['invoice_line_ids'] = invoice_line_list
                     invoices = self.env['account.move'].create(invoice)
