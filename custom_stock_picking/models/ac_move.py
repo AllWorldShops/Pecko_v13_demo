@@ -43,24 +43,48 @@ class AcmoveInherit(models.Model):
                 if currency and currency != company_currency:
                     product_price_unit = company_currency._convert(line.purchase_line_id.price_unit, currency,
                                                                    company, date)
-                val = {
+                # val = {
+                #     'product_id':line.product_id.id,
+                #     'customer_part_no' : line.product_id.name,
+                #     'name' : line.product_id.default_code,
+                #     # 'quantity':line.purchase_line_id.qty_received if line.purchase_line_id else line.quantity_done,
+                #     'quantity': line.quantity_done / line.purchase_line_id.product_uom.factor_inv
+                #     if line.purchase_line_id and line.product_uom.id != line.purchase_line_id.product_uom.id
+                #     else line.quantity_done,
+                #     'price_unit': line.purchase_line_id.price_unit if line.purchase_line_id
+                #     else line.product_id.standard_price,
+                #     'account_id': line.product_id.categ_id.property_stock_account_input_categ_id.id or False,
+                #     'name':line.product_id.name,
+                #     'tax_ids': line.purchase_line_id.taxes_id.ids if line.purchase_line_id else False,
+                #     'product_uom_id': line.purchase_line_id.product_uom.id if line.purchase_line_id
+                #     else line.product_uom.id,
+                #     # 'st_move_id': line.id,
+                # }
+
+            #     for line in po_lines.filtered(lambda l: not l.display_type):
+            #     self.invoice_line_ids += self.env['account.move.line'].new(
+            #     line._prepare_account_move_line(self)
+            # )   
+                # for line in po_lines.filtered(lambda l: not l.display_type):
+                self.invoice_line_ids += self.env['account.move.line'].new({
+                    'position_no':line.position_no,
                     'product_id':line.product_id.id,
-                    'customer_part_no' : line.product_id.name,
+                    'customer_part_no': line.product_id.name,
+                    'manufacturer_id': line.manufacturer_id.id,
                     'name' : line.product_id.default_code,
                     # 'quantity':line.purchase_line_id.qty_received if line.purchase_line_id else line.quantity_done,
-                    'quantity': line.quantity_done / line.purchase_line_id.product_uom.factor_inv
-                    if line.purchase_line_id and line.product_uom.id != line.purchase_line_id.product_uom.id
-                    else line.quantity_done,
-                    'price_unit': line.purchase_line_id.price_unit if line.purchase_line_id
-                    else line.product_id.standard_price,
+                    'quantity': line.quantity_done / line.purchase_line_id.product_uom.factor_inv if line.purchase_line_id and line.product_uom.id != line.purchase_line_id.product_uom.id else line.quantity_done,
+                    'price_unit': line.purchase_line_id.price_unit if line.purchase_line_id else line.product_id.standard_price,
                     'account_id': line.product_id.categ_id.property_stock_account_input_categ_id.id or False,
                     'name':line.product_id.name,
                     'tax_ids': line.purchase_line_id.taxes_id.ids if line.purchase_line_id else False,
-                    'product_uom_id': line.purchase_line_id.product_uom.id if line.purchase_line_id
-                    else line.product_uom.id,
+                    'product_uom_id': line.purchase_line_id.product_uom.id if line.purchase_line_id else line.product_uom.id,
                     # 'st_move_id': line.id,
                 }
-                receipt_lines.append((0, 0, val))
+            )
+
+
+            #     receipt_lines.append((0, 0, val))
             id_list.append(self.receipts_id.id)
 
             for rec in self:
@@ -68,7 +92,7 @@ class AcmoveInherit(models.Model):
                     pass
                 else:
                     rec.picking_ids = [(4, x, None) for x in id_list]
-                    self.invoice_line_ids = receipt_lines
+                    # self.invoice_line_ids = receipt_lines
                     # self.invoice_line_ids._onchange_mark_recompute_taxes()
                     # rec._onchange_currency()
                 for i_line in rec.invoice_line_ids:
