@@ -56,7 +56,8 @@ class StockPicking(models.Model):
         from the picking"""
         for picking_id in self:
             if picking_id.invoice_status not in ['invoiced', 'no']:
-
+                journal_id = False
+                journal_id = self.env['account.journal'].search([('type','=','sale'),('name','=','Sales'),('company_id','=',picking_id.company_id.id)],limit=1).id
                 invoice_line_list = []
                 if picking_id.move_line_ids_without_package:
                     for move_line in picking_id.move_line_ids_without_package:
@@ -80,7 +81,7 @@ class StockPicking(models.Model):
                     invoice['picking_id'] = picking_id.id
                     invoice['customer_po_no'] = picking_id.customer_po_no
                     invoice['do_name'] = picking_id.name
-                    invoice['move_type'] = 'out_invoice'
+                    invoice['journal_id'] = journal_id
                     # invoice['invoice_origin'] = picking_id.sale_id.name,
                     invoice['invoice_line_ids'] = invoice_line_list
                     invoices = self.env['account.move'].create(invoice)
