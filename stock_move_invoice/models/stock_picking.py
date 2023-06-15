@@ -40,6 +40,44 @@ class StockPicking(models.Model):
                 picking_id.create_invoice()
             if picking_id.state == 'done' and picking_id.picking_type_id.code == 'incoming' and 'Return' in str(picking_id.origin) and picking_id.sale_id:
                 picking_id.create_customer_credit()
+
+            # Detrack API starts
+            if picking_id.state == 'done' and picking_id.picking_type_id.code == 'outgoing' and picking_id.sale_id and picking_id.company_id.country_id.code in ['SG', 'MY']:
+                url = self.env['url.config'].search([('code', '=', 'DO'),('active', '=', True)], limit=1)
+                if url:
+                    headers = {'Content-Type': 'application/json', 'X-API-KEY': '2fe3ddf50048acc2231e184f230750ab59dcb9474bbaba6b'}
+                    street1 = (picking_id.partner_id.street + ", " if picking_id.partner_id.street else "")
+                    street2 = (picking_id.partner_id.street2  if picking_id.partner_id.street2 else "")
+                    city = (picking_id.partner_id.city +  ", " if picking_id.partner_id.city else "")
+                    state = (picking_id.partner_id.state_id.name + ", " if picking_id.partner_id.state_id else "")
+                    country = (picking_id.partner_id.country_id.name  if picking_id.partner_id.country_id else "")
+                    delivery_address = picking_id.partner_id.name + ", \n" + street1 + street2 + "\n" + city + state + country
+                    driver = str(picking_id.driver_id.name) if picking_id.driver_id else ""
+                    move_items = []
+                    for line in picking_id.move_line_ids_without_package:
+                        move_items.append({
+                            'sku' : line.product_id.default_code,
+                            'description': str(line.part_no),
+                            'quantity': str(line.qty_done),
+                        })
+                    data = {
+                        "data": {
+                            "type": "Delivery",
+                            "do_number": picking_id.name,
+                            "date": str(picking_id.date_done.date()),
+                            "address": delivery_address,
+                            'assign_to': driver,
+                            "items": move_items
+                            }
+                        }
+                    data_json = json.dumps(data)
+                    url = str(url.name)
+                    try:
+                        r = requests.post(url=url, headers=headers, data=data_json)
+                    except Exception as e:
+                        _logger.info("---------Exception Occured ---------: %s", str(e))
+            # Detramck API ends
+
         return res
 
     def _compute_invoice_count(self):
