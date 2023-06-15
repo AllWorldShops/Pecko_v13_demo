@@ -14,6 +14,7 @@ class StockPickingInherit(models.Model):
     pod_date = fields.Datetime("POD Date/Time")
     pod_image = fields.Binary(string="POD")
 
+    # This functionality code moved to stock_move_invoice module
     def action_done(self):
         res = super(StockPickingInherit, self).action_done()
         # for picking_id in self:
