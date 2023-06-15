@@ -19,9 +19,8 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from odoo import fields, models, _
-from odoo.exceptions import UserError
 from odoo import fields, models, api, _
+from odoo.exceptions import UserError
 import requests
 import json
 import logging
