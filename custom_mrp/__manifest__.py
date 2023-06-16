@@ -30,4 +30,8 @@
 
         ]
     },
-    
+    #     'qweb': [
+    #         '/custom_mrp/static/src/components/inherit_bom_overview_table/mrp_inherit_bom_overview_table.xml',
+    # ],
+
+}
