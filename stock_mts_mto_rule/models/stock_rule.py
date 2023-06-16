@@ -44,6 +44,7 @@ class StockRule(models.Model):
 
     def get_mto_qty_to_order(self, product, product_qty, product_uom, values):
         self.ensure_one()
+        print('product------name-------',product.name)
         precision = self.env["decimal.precision"].precision_get(
             "Product Unit of Measure"
         )
@@ -63,14 +64,18 @@ class StockRule(models.Model):
                 ss = product.seller_ids[0] if product.seller_ids else ''
                 print('sssssssssss',ss)
                 if ss:
-                    print('sssssssssss',ss.min_qty)
-                    print('product_qty + qty_available',product_qty + qty_available)
-                    if product_qty + qty_available <= ss.min_qty:
-                        print('1111111111111')
-                        qty = ss.min_qty
-                    
+                    if ss.company_id.id == self.env.company.id:
+
+                        print('sssssssssss',ss.min_qty)
+                        print('product_qty + qty_available',product_qty + qty_available)
+                        if product_qty + qty_available <= ss.min_qty:
+                            print('1111111111111')
+                            qty = ss.min_qty
+                        
+                        else:
+                            print('222222222222')
+                            qty = product_qty - qty_available
                     else:
-                        print('222222222222')
                         qty = product_qty - qty_available
                 else:
                     print('222222222222')
@@ -84,25 +89,28 @@ class StockRule(models.Model):
             # print('sssssssssss',ss.min_qty)
             print('product_qty + qty_available',product_qty + qty_available)
             if ss:
-                if qty_available >= 0:
-                    if product_qty + qty_available <= ss.min_qty:
-                        print('1111111111111')
-                        qty = ss.min_qty
-                    else:
-                        ss_qty = (product_qty + qty_available) / 100
-                        if ss_qty > 0:
-                            import math
-                            qty = math.ceil(ss_qty) * ss.min_qty
+                if ss.company_id.id == self.env.company.id:
+                    if qty_available >= 0:
+                        if product_qty + qty_available <= ss.min_qty:
+                            print('1111111111111')
+                            qty = ss.min_qty
                         else:
-                            qty = ss.min_qty * product_qty + qty_available
-                    
-                else:
-                    print('222222222222')
-                    if product_qty - qty_available > ss.min_qty:
-                        return ss.min_qty
-                    
+                            ss_qty = (product_qty + qty_available) / 100
+                            if ss_qty > 0:
+                                import math
+                                qty = math.ceil(ss_qty) * ss.min_qty
+                            else:
+                                qty = ss.min_qty * product_qty + qty_available
+                        
                     else:
-                        qty = 0
+                        print('222222222222')
+                        if product_qty - qty_available > ss.min_qty:
+                            return ss.min_qty
+                        
+                        else:
+                            qty = 0
+                else:
+                    qty = product_qty - qty_available
                 return qty
             else:
                 return product_qty - qty_available
