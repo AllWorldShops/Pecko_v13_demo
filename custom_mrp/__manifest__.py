@@ -15,7 +15,7 @@
         'views/res_config_view.xml',
         # 'report/bom_structure.xml',
         'report/custom_mrp_inherit.xml',
-        # 'views/asset.xml',
+
 
 
     ],
@@ -23,10 +23,10 @@
     'application': True,
     'auto_install': False,
     "assets": {
-        "web.assets_backend": [
+        "web.assets_frontend": [
            # "custom_mrp/static/src/js/custom_mrp.js"
-'custom_mrp/static/src/components/inherit_bom_overview_table/mrp_inherit_bom_overview_table.xml',
-'custom_mrp/static/src/components/inherit_bom_overview_table/mrp_custom_base.xml',
+        'custom_mrp/static/src/components/inherit_bom_overview_table/mrp_inherit_bom_overview_table.xml',
+        'custom_mrp/static/src/components/inherit_bom_overview_table/mrp_custom_base.xml',
 
         ]
     },
