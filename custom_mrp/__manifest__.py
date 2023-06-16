@@ -23,15 +23,11 @@
     'application': True,
     'auto_install': False,
     "assets": {
-        "web.assets_frontend": [
+        "web.assets_backend": [
            # "custom_mrp/static/src/js/custom_mrp.js"
         'custom_mrp/static/src/components/inherit_bom_overview_table/mrp_inherit_bom_overview_table.xml',
         'custom_mrp/static/src/components/inherit_bom_overview_table/mrp_custom_base.xml',
 
         ]
     },
-    #     'qweb': [
-    #         '/custom_mrp/static/src/components/inherit_bom_overview_table/mrp_inherit_bom_overview_table.xml',
-    # ],
-
-}
+    
