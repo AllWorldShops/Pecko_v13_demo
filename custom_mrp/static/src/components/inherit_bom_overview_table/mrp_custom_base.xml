@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <tr t-inherit="mrp.BomOverviewLine" t-inherit-mode="extension">
+         <xpath expr="//td[@name='td_mrp_bom']" position="before">
+          <td t-if='data.position_no' t-attf-class="td_mrp_bom">
+            <span t-esc="data.position_no"/>
+        </td>
+             <td t-attf-class="td_mrp_bom" t-else=""> </td>
+         </xpath>
+         <xpath expr="//td[@name='td_mrp_bom']" position="after">
+          <td t-if='data.part_no' t-attf-class="td_mrp_bom">
+            <span t-esc="data.part_no"/>
+        </td>
+             <td t-attf-class="td_mrp_bom" t-else=""> </td>
+          <td t-if='data.description' t-attf-class="td_mrp_bom">
+            <span t-esc="data.description"/>
+        </td>
+             <td t-attf-class="td_mrp_bom" t-else=""> </td>
+          <td t-if='data.manufacturer' t-attf-class="td_mrp_bom">
+            <span t-esc="data.manufacturer"/>
+        </td>
+             <td t-attf-class="td_mrp_bom" t-else=""> </td>
+         </xpath>
+    </tr>
+  </templates>
