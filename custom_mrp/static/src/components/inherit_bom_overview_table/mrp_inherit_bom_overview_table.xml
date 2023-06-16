@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-inherit="mrp.BomOverviewTable" t-inherit-mode="extension">
+    <xpath expr="//table[@class='o_mrp_bom_expandable table']" position="replace">
+             <table class="o_mrp_bom_expandable table">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Position</th>
+                                    <th name="th_mrp_bom_h">Product</th>
+                                    <th class="text-left">Part No</th>
+                                    <th class="text-left">Description</th>
+                                    <th class="text-left">Manufacturer</th>
+                                    <th t-attf-class="{{ showUom ? 'text-center' : 'text-end' }}"
+                                        t-attf-colspan="{{ showUom ? 2 : 1 }}">Quantity</th>
+                                    <th t-if="showAvailabilities" class="text-end">Ready to Produce</th>
+                                    <th t-if="showAvailabilities" class="text-end" title="Availabilities on products.">Free to Use / On Hand</th>
+                                    <th t-if="showAvailabilities" class="text-center"
+                                        title="Reception time estimation.">Availability</th>
+                                    <th t-if="showLeadTimes" class="text-end" title="Resupply lead time.">Lead Time</th>
+                                    <th>Route</th>
+                                    <th t-if="showCosts" class="text-end"
+                                        title="This is the cost based on the BoM of the product. It is computed by summing the costs of the components and operations needed to build the product.">BoM Cost</th>
+                                    <th t-if="showCosts" class="text-end"
+                                        title="This is the cost defined on the product.">Product Cost</th>
+                                    <th t-if="showAttachments" class="text-center"
+                                        title="Files attached to the product.">Attachments</th>
+                                </tr>
+                            </thead>
+                 <tbody>
+                                <BomOverviewLine
+                                        showOptions="props.showOptions"
+                                        currentWarehouseId="props.currentWarehouseId"
+                                        data="data"
+                                        precision="props.precision"
+                                />
+
+                     <BomOverviewComponentsBlock
+                             showOptions="props.showOptions"
+                             currentWarehouseId="props.currentWarehouseId"
+                             data="data"
+                             precision="props.precision"
+                             changeFolded.bind="props.changeFolded"/>
+                            </tbody>
+                 <tfoot t-if="showCosts">
+                                <tr>
+                                    <td/>
+                                    <td name="td_mrp_bom_f" class="text-end">
+                                        <span t-if="!!data.byproducts &amp;&amp; data.byproducts.length > 0"
+                                              t-esc="data.name"/>
+                                    </td>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                    <td class="text-end"><strong>Unit Cost</strong></td>
+                                    <td t-if="showUom"/>
+                                    <td t-if="showAvailabilities"/>
+                                    <td t-if="showAvailabilities"/>
+                                    <td t-if="showAvailabilities"/>
+                                    <td t-if="showLeadTimes"/>
+                                    <td/>
+                                    <td class="text-end" t-esc="formatMonetary(data.bom_cost / data.quantity)"/>
+                                    <td class="text-end" t-esc="formatMonetary(data.prod_cost / data.quantity)"/>
+                                    <td t-if="showAttachments"/>
+                                </tr>
+                     <t t-if="data.byproducts &amp;&amp; data.byproducts.length > 0" t-foreach="data.byproducts"
+                        t-as="byproduct" t-key="byproduct.id">
+                                    <tr>
+                                        <td/>
+                                        <td name="td_mrp_bom_b" class="text-end" t-esc="byproduct.name"/>
+
+                                        <td class="text-end"><strong>Unit Cost</strong></td>
+                                        <td t-if="showUom"/>
+                                        <td t-if="showAvailabilities"/>
+                                        <td t-if="showAvailabilities"/>
+                                        <td t-if="showAvailabilities"/>
+                                        <td t-if="showLeadTimes"/>
+                                        <td/>
+                                        <td class="text-end"
+                                            t-esc="formatMonetary(byproduct.bom_cost / byproduct.quantity)"/>
+                                        <td class="text-end"
+                                            t-esc="formatMonetary(byproduct.prod_cost / byproduct.quantity)"/>
+                                        <td t-if="showAttachments"/>
+                                    </tr>
+                                </t>
+                            </tfoot>
+                        </table>
+    </xpath>
+    </t>
+</templates>
+
+
+
+
+

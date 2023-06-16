@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-<!--    <template id="report_bom_structure_custom" inherit_id="mrp.report_mrp_bom">-->
-    <template id="report_bom_structure_custom" inherit_id="mrp.action_report_mrp_bom">
+    <template id="report_bom_structure_custom" inherit_id="mrp.report_mrp_bom">
+<!--    <template id="report_bom_structure_custom" inherit_id="mrp.action_report_mrp_bom">-->
         <xpath expr="//table[@class='o_mrp_bom_expandable table']" position="replace">
             <table width="100%" class="o_mrp_bom_expandable">
                 <thead>

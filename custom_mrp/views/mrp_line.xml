@@ -9,6 +9,8 @@
 				<field name="manufacturer_id"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
 				<field name="customer_part_no"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
 				<field name="description"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
+				<field name="origin" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
+<!--				<field name="is_mark_as_done"/>-->
 			</xpath>
 			<xpath expr="//field[@name='user_id']" position="after">
 				<field name="store_start_date" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
