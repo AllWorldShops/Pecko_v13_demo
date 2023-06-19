@@ -140,18 +140,17 @@
                         <div class="col-5" style="font-size:12px">
                             <span style="background-color: #f4f4f5;">
 
-                                <strong>
-                                    <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">
-                                        Invoice No.
+                                <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">
+                                        <strong> Invoice No.</strong>
                                         <span style="padding-left:55px;" t-field="o.name"/>
                                     </t>
-                                    <t t-if="o.journal_id.name == 'Debit Note'">DN No.
+                                <t t-if="o.journal_id.name == 'Debit Note'"><strong>DN No.</strong>
+                                         <span style="padding-left:78px;" t-field="o.name"/>
                                      </t>
                                     <t t-if="o.move_type == 'out_invoice'"></t>
-                                    <t t-if="o.move_type == 'out_refund'">CN No.
+                                <t t-if="o.move_type == 'out_refund'"> <strong>CN No.</strong>
                                          <span style="padding-left:78px;" t-field="o.name"/>
                                     </t>
-                                </strong>
 
 
                             </span>
