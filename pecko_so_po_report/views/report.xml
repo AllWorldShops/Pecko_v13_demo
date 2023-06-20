@@ -108,7 +108,7 @@
             </table>
             <t t-if="o.company_id.country_id.code == 'SG'">
                 <img t-if="o.company_id.logo"
-                     t-att-src="image_data_uri(o.company_id.logo)"
+                     t-att-src="image_data_uri(o.company_id.logo_four)"
                      alt="Logo"/>
                 <!--						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_four)" style="position:relative; bottom:54px; left:730px; width:130px;" />-->
             </t>
@@ -134,10 +134,18 @@
         <div class="header o_background_header">
             <div class="row" style="position:relative;bottom:1px;top:1px">
                 <div class="col-8">
-<!--                    <img t-if="company.logo" -->
-<!--                         t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />-->
-                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="30" width="170"
-                             alt="Logo"/>
+                    <!--                    <img t-if="company.logo" -->
+                    <!--                         t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />-->
+                    <!--                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="30" width="170"-->
+                    <!--                             alt="Logo"/>-->
+                    <t t-if="o.company_id.country_id.code == 'SG'">
+                        <img t-if="o.company_id.logo" height="80" width="170"
+                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                    </t>
+                    <t t-else="">
+                        <img t-if="o.company_id.logo" height="40" width="170"
+                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                    </t>
                     <div class="company_address"
                          style="line-height:5px;font-size: 10px;font-family: Calibri;ftext-color:black;">
                         <div>
@@ -207,49 +215,87 @@
             <t t-raw="0"/>
         </div>
 
-        <div class="footer o_boxed_footer o_background_footer" style="border-top-style: none;">
-            <table class="table table-borderless"
-                   style="font-family: Calibri;text-color:black;font-size:12px;">
-                <tbody>
-                    <tr>
-                        <td width="63%" style="position:relative;bottom:11px;">
-                            <span style="text-align:center;">
-                                **This is a computer generated document. Signature is not required.**
-                            </span>
-                            <br/>
-                            <span>NOTE :</span>
-                            <br/>
-                            <span>- PLEASE
-                                SIGN &amp; REPLY BY EMAIL TO ACKNOWLEDGE ACCEPTANCE OF ORDER
-                                <br/>
-                                SCHEDULE.
-                                <br/>
-                                - ALL ITEMS MUST BE RoHS COMPLIANCE AND MUST ACCOMPANY WITH
-                                CERTIFICATE
-                                <br/>
-                                OF COMPLIANCE (COC).
-                                <br/>
-                                - ANY PRODUCTS SUBJECT TO End-Of-Life (EOL) NEED TO BE INFORM 12 MONTH
-                                AHEAD.
-                            </span>
-                        </td>
-                        <!-- <td> -->
+        <!--        <div class="footer o_boxed_footer o_background_footer" style="border-top-style: none;">-->
+        <!--            <table class="table table-borderless"-->
+        <!--                   style="font-family: Calibri;text-color:black;font-size:12px;">-->
+        <!--                <tbody>-->
+        <!--                    <tr>-->
+        <!--                        <td width="63%" style="position:relative;bottom:11px;">-->
+        <!--                            <span style="text-align:center;">-->
+        <!--                                **This is a computer generated document. Signature is not required.**-->
+        <!--                            </span>-->
+        <!--                            <br/>-->
+        <!--                            <span>NOTE :</span>-->
+        <!--                            <br/>-->
+        <!--                            <span>- PLEASE-->
+        <!--                                SIGN &amp; REPLY BY EMAIL TO ACKNOWLEDGE ACCEPTANCE OF ORDER-->
+        <!--                                <br/>-->
+        <!--                                SCHEDULE.-->
+        <!--                                <br/>-->
+        <!--                                - ALL ITEMS MUST BE RoHS COMPLIANCE AND MUST ACCOMPANY WITH-->
+        <!--                                CERTIFICATE-->
+        <!--                                <br/>-->
+        <!--                                OF COMPLIANCE (COC).-->
+        <!--                                <br/>-->
+        <!--                                - ANY PRODUCTS SUBJECT TO End-Of-Life (EOL) NEED TO BE INFORM 12 MONTH-->
+        <!--                                AHEAD.-->
+        <!--                            </span>-->
+        <!--                        </td>-->
+        <!--                        &lt;!&ndash; <td> &ndash;&gt;-->
 
-                        <!-- </td> -->
-                        <td width="30%" style="text-align:center;position:relative;bottom:11px;">
-                            <span>------------------------------------------</span>
-                            <br/>
-                            <span>Supplier's Acceptance &amp; Confirmation</span>
-                            <t t-if="o.company_id.country_id.code == 'SG'">
-                                <img t-if="o.company_id.logo"
-                                     t-att-src="image_data_uri(o.company_id.logo)"
-                                     alt="Logo"/>
-                                <!--					              <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_two)" style="width:100px;position:relative;bottom:12px;" />-->
-                            </t>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <!--                        &lt;!&ndash; </td> &ndash;&gt;-->
+        <!--                        <td width="30%" style="text-align:center;position:relative;bottom:11px;">-->
+        <!--                            <span>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</span>-->
+        <!--                            <br/>-->
+        <!--                            <span>Supplier's Acceptance &amp; Confirmation</span>-->
+        <!--                            <t t-if="o.company_id.country_id.code == 'SG'">-->
+        <!--                                <img t-if="o.company_id.logo"-->
+        <!--                                     t-att-src="image_data_uri(o.company_id.logo)"-->
+        <!--                                     alt="Logo"/>-->
+        <!--                                &lt;!&ndash;					              <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_two)" style="width:100px;position:relative;bottom:12px;" />&ndash;&gt;-->
+        <!--                            </t>-->
+        <!--                        </td>-->
+        <!--                    </tr>-->
+        <!--                </tbody>-->
+        <!--            </table>-->
+        <!--        </div>-->
+
+        <div class="footer o_boxed_footer o_background_footer"
+             style="font-family: Calibri;font-size:12px;bottom:20px;border-top-style: none;">
+            <div class="row">
+                <div class="col-9">
+                    <span style="text-align:center;">
+                        **This is a computer generated document. Signature is not required.**
+                    </span>
+                    <br/>
+                    <span>NOTE :</span>
+                    <br/>
+                    <span>- PLEASE
+                        SIGN &amp; REPLY BY EMAIL TO ACKNOWLEDGE ACCEPTANCE OF ORDER
+                        <br/>
+                        SCHEDULE.
+                        <br/>
+                        - ALL ITEMS MUST BE RoHS COMPLIANCE AND MUST ACCOMPANY WITH
+                        CERTIFICATE
+                        <br/>
+                        OF COMPLIANCE (COC).
+                        <br/>
+                        - ANY PRODUCTS SUBJECT TO End-Of-Life (EOL) NEED TO BE INFORM 12 MONTH
+                        AHEAD.
+                    </span>
+                </div>
+                <div class="col-3" style="text-align:center;position:relative;">
+                    <span>------------------------------------------</span>
+                    <br/>
+                    <span>Supplier's Acceptance &amp; Confirmation</span>
+                    <div style="text-align:center;">
+                        <t t-if="o.company_id.country_id.code == 'SG'">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_two)" alt="Logo"
+                                 style="width:100px;position:relative;"/>
+                        </t>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- <div class="footer o_background_footer"
                 style="font-family: Calibri;font-size:12px;">
@@ -333,23 +379,23 @@
                                 </div>
 
 
-<!--                                <span style="background-color: none;">-->
-<!--                                    <strong>CUSTOMER PO NO</strong>-->
-<!--                                    <span style="text-align:left" t-field="doc.customer_po_no"/>-->
-<!--                                </span>-->
-<!--                                <br/>-->
-<!--                                <span style="background-color: #f4f4f5;">-->
-<!--                                    <strong>DATE ORDER</strong>-->
-<!--                                    <span style="text-align:left"-->
-<!--                                          t-field="doc.date_order"-->
-<!--                                          t-options='{"format":"dd/MM/yyyy"}'/>-->
-<!--                                </span>-->
-<!--                                <br/>-->
-<!--                                <span style="background-color: none;">-->
-<!--                                    <strong>PAYMENT TERM</strong>-->
-<!--                                    <span style="text-align:left"-->
-<!--                                          t-field="doc.payment_term_id.name"/>-->
-<!--                                </span>-->
+                                <!--                                <span style="background-color: none;">-->
+                                <!--                                    <strong>CUSTOMER PO NO</strong>-->
+                                <!--                                    <span style="text-align:left" t-field="doc.customer_po_no"/>-->
+                                <!--                                </span>-->
+                                <!--                                <br/>-->
+                                <!--                                <span style="background-color: #f4f4f5;">-->
+                                <!--                                    <strong>DATE ORDER</strong>-->
+                                <!--                                    <span style="text-align:left"-->
+                                <!--                                          t-field="doc.date_order"-->
+                                <!--                                          t-options='{"format":"dd/MM/yyyy"}'/>-->
+                                <!--                                </span>-->
+                                <!--                                <br/>-->
+                                <!--                                <span style="background-color: none;">-->
+                                <!--                                    <strong>PAYMENT TERM</strong>-->
+                                <!--                                    <span style="text-align:left"-->
+                                <!--                                          t-field="doc.payment_term_id.name"/>-->
+                                <!--                                </span>-->
 
                             </div>
                         </div>
@@ -581,7 +627,8 @@
                                 <div class="col-8"/>
                                 <div
                                         t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
-                                    <table class="table table-sm table-borderless" style="border-top:1px solid #dddddd;">
+                                    <table class="table table-sm table-borderless"
+                                           style="border-top:1px solid #dddddd;">
 
                                         <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
                                             <tr style="border-bottom:1px solid #dddddd;">
@@ -615,7 +662,8 @@
                                                 </t>
                                             </tr>
                                         </t>
-                                        <tr class="border-black text-end" style="text-align: right;border-top:1px solid #dddddd;">
+                                        <tr class="border-black text-end"
+                                            style="text-align: right;border-top:1px solid #dddddd;">
                                             <td style="font-size:13px">
                                                 <strong>
                                                     Total(
@@ -650,10 +698,24 @@
             <t t-call="pecko_so_po_report.external_layout_po_report">
                 <div style="position:relative;top:50px;">
                     <div class="page" style="font-family: Calibri;text-color:black;">
+                        <t t-if="o.company_id.country_id.code == 'SG'">
+                            <div style="font-size: 20px;text-align: center;padding-top:40px;">
+                                <span>
+                                    <strong>PURCHASE ORDER</strong>
+                                </span>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div style="font-size: 20px;text-align: center;padding-top:8px;">
+                                <span>
+                                    <strong>PURCHASE ORDER</strong>
+                                </span>
+                            </div>
+                        </t>
 
-                        <p align="center">
-                            <strong>PURCHASE ORDER</strong>
-                        </p>
+                        <!--                        <p align="center">-->
+                        <!--                            <strong>PURCHASE ORDER</strong>-->
+                        <!--                        </p>-->
                         <div width="100%">
                             <div style="float:left;font-size:13px">
                                 <span>
@@ -799,8 +861,8 @@
                                             <td class="text-right" style="background-color: #f4f4f5;">
                                                 <span t-field="line.price_unit"/>
                                             </td>
-                                            <t t-if="o.amount_tax>0" style="background-color: #f4f4f5;">
-                                                <td>
+                                            <t t-if="o.amount_tax>0">
+                                                <td style="background-color: #f4f4f5;">
                                                     <span t-esc="line.taxes_id.code"/>
                                                 </td>
                                             </t>
