@@ -40,17 +40,11 @@
 
                     thead { display: table-header-group }
                     tr { page-break-inside: avoid }
-
                 </style>
                 <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
-                <br/>
-                <br/>
-                <br/>
                 <div class="page">
-                    <div style="font-size:20px;text-align:center;padding-top:80px;">
+                    <div style="font-size:20px;text-align:center;">
                         <!-- <span ><strong> <t t-if="o.type == 'out_invoice'"> Tax Invoice </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span> -->
-                        <br></br>
-
                         <span>
                             <strong>
                                 <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">Tax
