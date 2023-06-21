@@ -51,62 +51,14 @@ class StockRule(models.Model):
         product_location = product.with_context(location=src_location_id)
         virtual_available = product_location.virtual_available
         qty_available = product.uom_id._compute_quantity(virtual_available, product_uom)
-        print('qty_available',qty_available)
         if float_compare(qty_available, 0.0, precision_digits=precision) > 0:
-            print('@@@@@@@@@@')
             if (
                 float_compare(qty_available, product_qty, precision_digits=precision)
                 >= 0
             ):
                 return 0.0
             else:
-                ss = product.seller_ids[0] if product.seller_ids else ''
-                print('sssssssssss',ss)
-                if ss:
-                    print('sssssssssss',ss.min_qty)
-                    print('product_qty + qty_available',product_qty + qty_available)
-                    if product_qty + qty_available <= ss.min_qty:
-                        print('1111111111111')
-                        qty = ss.min_qty
-                    
-                    else:
-                        print('222222222222')
-                        qty = product_qty - qty_available
-                else:
-                    print('222222222222')
-                    qty = product_qty - qty_available
-                return qty
-
-        else:
-            print('################')
-            ss = product.seller_ids[0] if product.seller_ids else ''
-            print('sssssssssss',ss)
-            # print('sssssssssss',ss.min_qty)
-            print('product_qty + qty_available',product_qty + qty_available)
-            if ss:
-                if qty_available >= 0:
-                    if product_qty + qty_available <= ss.min_qty:
-                        print('1111111111111')
-                        qty = ss.min_qty
-                    else:
-                        ss_qty = (product_qty + qty_available) / 100
-                        if ss_qty > 0:
-                            import math
-                            qty = math.ceil(ss_qty) * ss.min_qty
-                        else:
-                            qty = ss.min_qty * product_qty + qty_available
-                    
-                else:
-                    print('222222222222')
-                    if product_qty - qty_available > ss.min_qty:
-                        return ss.min_qty
-                    
-                    else:
-                        qty = 0
-                return qty
-            else:
                 return product_qty - qty_available
-
         return product_qty
 
     def _run_split_procurement(self, procurements):
@@ -114,8 +66,6 @@ class StockRule(models.Model):
             "Product Unit of Measure"
         )
         for procurement, rule in procurements:
-            print('procurements',procurements)
-            print('procurement.product_qty',procurement.product_qty)
             domain = self.env["procurement.group"]._get_moves_to_assign_domain(
                 procurement.company_id.id
             )
@@ -125,9 +75,7 @@ class StockRule(models.Model):
                 procurement.product_uom,
                 procurement.values,
             )
-            print('needed_qty',needed_qty)
             if float_is_zero(needed_qty, precision_digits=precision):
-                print('aaaaaaaaaaaaaaaa')
                 getattr(self.env["stock.rule"], "_run_%s" % rule.mts_rule_id.action)(
                     [(procurement, rule.mts_rule_id)]
                 )
@@ -137,13 +85,10 @@ class StockRule(models.Model):
                 )
                 == 0.0
             ):
-                print('bbbbbbbbbbbbbbbbb')
-                print('bbbbbbbbbbbbbbbbb',rule.mto_rule_id.action)
                 getattr(self.env["stock.rule"], "_run_%s" % rule.mto_rule_id.action)(
                     [(procurement, rule.mto_rule_id)]
                 )
             else:
-                print('ccccccccccccccccc')
                 mts_qty = procurement.product_qty - needed_qty
                 mts_procurement = procurement._replace(product_qty=mts_qty)
                 getattr(self.env["stock.rule"], "_run_%s" % rule.mts_rule_id.action)(
@@ -165,7 +110,6 @@ class StockRule(models.Model):
                 getattr(self.env["stock.rule"], "_run_%s" % rule.mto_rule_id.action)(
                     [(mto_procurement, rule.mto_rule_id)]
                 )
-        
         return True
 
 
