@@ -272,7 +272,7 @@ class MailMail(models.Model):
                         'Error without exception. Probably due do concurrent access update of notification records. Please see with an administrator.')
                     notifs.sudo().write({
                         'notification_status': 'exception',
-                        'failure_type': 'UNKNOWN',
+                        'failure_type': 'unknown',
                         'failure_reason': notif_msg,
                     })
                     # `test_mail_bounce_during_send`, force immediate update to obtain the lock.
