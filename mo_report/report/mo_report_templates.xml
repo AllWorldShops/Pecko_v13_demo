@@ -44,14 +44,14 @@
                 <t t-set="o"
                    t-value="o.with_context({'lang':o.company_id.partner_id.lang})"/>
 
-                <br/>
-                <br/>
+<!--                <br/>-->
+<!--                <br/>-->
 <!--                <br/>-->
 
 
                 <div class="page" style="text-color:black">
                     <br/>
-                    <div style="font-size: 20px;text-align: center;padding-top:10px;">
+                    <div style="font-size: 20px;text-align: center;">
                         <span>
                             <strong>
                                 MATERIAL LIST

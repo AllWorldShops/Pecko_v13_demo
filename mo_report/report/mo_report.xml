@@ -8,9 +8,11 @@
 					<div class="col-8">
 <!--						<img t-if="company.logo"-->
 <!--							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />-->
-						<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+						<img t-if="o.company_id.logo" height="60" width="120"
+                                 t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+<!--						<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>-->
 						<div class="company_address"
-							style="padding-top:14px;line-height:0.2px;font-family: Calibri;text-color:black;font-size:13px">
+							style="line-height:0.2px;font-family: Calibri;text-color:black;font-size:13px">
 							<div >
 
 								<strong>

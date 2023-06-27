@@ -13,9 +13,21 @@
         <div class="header o_background_header">
             <div class="row" style="bottom:1px;top:1px">
                 <div class="col-8" style="bottom:14px;">
-                    <img t-if="o.company_id.logo" height="21" width="89"
-                         t-att-src="image_data_uri(o.company_id.logo)"
+                    <img t-if="o.company_id.logo" height="60" width="100" t-att-src="image_data_uri(o.company_id.logo)"
                          alt="Logo"/>
+                    <!--                    <t t-if="o.company_id.country_id.code == 'SG'">-->
+
+                    <!--                        <img t-if="o.company_id.logo" height="80" width="100"-->
+                    <!--                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
+
+                    <!--                    </t>-->
+                    <!--                    <t t-else="">-->
+                    <!--                        <img t-if="o.company_id.logo" height="40" width="170"-->
+                    <!--                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
+                    <!--                    </t>-->
+                    <!--                    <img t-if="o.company_id.logo" height="21" width="89"-->
+                    <!--                         t-att-src="image_data_uri(o.company_id.logo)"-->
+                    <!--                         alt="Logo"/>-->
                     <!--					<img t-if="company.logo"-->
                     <!--						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width:100px;"/>-->
                     <div class="company_address"
@@ -107,9 +119,8 @@
 
             </table>
             <t t-if="o.company_id.country_id.code == 'SG'">
-                <img t-if="o.company_id.logo"
-                     t-att-src="image_data_uri(o.company_id.logo_four)"
-                     alt="Logo"/>
+                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_four)" alt="Logo"
+                     style="position:relative; bottom:54px; left:730px; width:130px;"/>
                 <!--						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_four)" style="position:relative; bottom:54px; left:730px; width:130px;" />-->
             </t>
             <div style="text-align:right">
@@ -132,20 +143,20 @@
             <t t-set="company" t-value="res_company"/>
         </t>
         <div class="header o_background_header">
-            <div class="row" style="position:relative;bottom:1px;top:1px">
+            <div class="row" style="bottom:1px;top:1px">
                 <div class="col-8">
-                    <!--                    <img t-if="company.logo" -->
-                    <!--                         t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />-->
-                    <!--                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="30" width="170"-->
-                    <!--                             alt="Logo"/>-->
-                    <t t-if="o.company_id.country_id.code == 'SG'">
-                        <img t-if="o.company_id.logo" height="80" width="170"
-                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
-                    </t>
-                    <t t-else="">
-                        <img t-if="o.company_id.logo" height="40" width="170"
-                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
-                    </t>
+                    <img t-if="o.company_id.logo" height="60" width="100" t-att-src="image_data_uri(o.company_id.logo)"
+                         alt="Logo"/>
+                    <!--                    <t t-if="o.company_id.country_id.code == 'SG'">-->
+
+                    <!--                        <img t-if="o.company_id.logo" height="100" width="170"-->
+                    <!--                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
+
+                    <!--                    </t>-->
+                    <!--                    <t t-else="">-->
+                    <!--                        <img t-if="o.company_id.logo" height="40" width="170"-->
+                    <!--                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
+                    <!--                    </t>-->
                     <div class="company_address"
                          style="line-height:5px;font-size: 10px;font-family: Calibri;ftext-color:black;">
                         <div>
@@ -207,58 +218,11 @@
                     <div class="clearfix mb8"/>
                 </div>
             </div>
-            <br/>
-            <br/>
         </div>
 
         <div class="article o_report_layout_background">
             <t t-raw="0"/>
         </div>
-
-        <!--        <div class="footer o_boxed_footer o_background_footer" style="border-top-style: none;">-->
-        <!--            <table class="table table-borderless"-->
-        <!--                   style="font-family: Calibri;text-color:black;font-size:12px;">-->
-        <!--                <tbody>-->
-        <!--                    <tr>-->
-        <!--                        <td width="63%" style="position:relative;bottom:11px;">-->
-        <!--                            <span style="text-align:center;">-->
-        <!--                                **This is a computer generated document. Signature is not required.**-->
-        <!--                            </span>-->
-        <!--                            <br/>-->
-        <!--                            <span>NOTE :</span>-->
-        <!--                            <br/>-->
-        <!--                            <span>- PLEASE-->
-        <!--                                SIGN &amp; REPLY BY EMAIL TO ACKNOWLEDGE ACCEPTANCE OF ORDER-->
-        <!--                                <br/>-->
-        <!--                                SCHEDULE.-->
-        <!--                                <br/>-->
-        <!--                                - ALL ITEMS MUST BE RoHS COMPLIANCE AND MUST ACCOMPANY WITH-->
-        <!--                                CERTIFICATE-->
-        <!--                                <br/>-->
-        <!--                                OF COMPLIANCE (COC).-->
-        <!--                                <br/>-->
-        <!--                                - ANY PRODUCTS SUBJECT TO End-Of-Life (EOL) NEED TO BE INFORM 12 MONTH-->
-        <!--                                AHEAD.-->
-        <!--                            </span>-->
-        <!--                        </td>-->
-        <!--                        &lt;!&ndash; <td> &ndash;&gt;-->
-
-        <!--                        &lt;!&ndash; </td> &ndash;&gt;-->
-        <!--                        <td width="30%" style="text-align:center;position:relative;bottom:11px;">-->
-        <!--                            <span>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</span>-->
-        <!--                            <br/>-->
-        <!--                            <span>Supplier's Acceptance &amp; Confirmation</span>-->
-        <!--                            <t t-if="o.company_id.country_id.code == 'SG'">-->
-        <!--                                <img t-if="o.company_id.logo"-->
-        <!--                                     t-att-src="image_data_uri(o.company_id.logo)"-->
-        <!--                                     alt="Logo"/>-->
-        <!--                                &lt;!&ndash;					              <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_two)" style="width:100px;position:relative;bottom:12px;" />&ndash;&gt;-->
-        <!--                            </t>-->
-        <!--                        </td>-->
-        <!--                    </tr>-->
-        <!--                </tbody>-->
-        <!--            </table>-->
-        <!--        </div>-->
 
         <div class="footer o_boxed_footer o_background_footer"
              style="font-family: Calibri;font-size:12px;bottom:20px;border-top-style: none;">
@@ -297,10 +261,6 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="footer o_background_footer"
-                style="font-family: Calibri;font-size:12px;">
-
-                </div> -->
 
     </template>
 
@@ -311,13 +271,28 @@
                position="replace">
             <t t-call="pecko_so_po_report.external_layout_so_report">
                 <div class="page" style="font-family: Calibri;text-color:black;">
-                    <div style="position:relative;top:30px;">
+                    <div style="position:relative;">
+                        <div style="font-size: 20px;text-align: center;">
+                            <span>
+                                <strong>SALES ORDER</strong>
+                            </span>
+                        </div>
                         <br/>
-                        <br/>
-                        <p align="center">
-                            <strong>SALES ORDER</strong>
-                        </p>
-                        <br/>
+                        <!--                        <t t-if="doc.company_id.country_id.code == 'SG'">-->
+                        <!--                            <div style="font-size: 20px;text-align: center;padding-top:10px;">-->
+                        <!--                                <span>-->
+                        <!--                                    <strong>SALES ORDER</strong>-->
+                        <!--                                </span>-->
+                        <!--                            </div>-->
+                        <!--                        </t>-->
+                        <!--                        <t t-else="">-->
+                        <!--                            <div style="font-size: 20px;text-align: center;padding-bottom:10px;">-->
+                        <!--                                <span>-->
+                        <!--                                    <strong>SALES ORDER</strong>-->
+                        <!--                                </span>-->
+                        <!--                            </div>-->
+                        <!--                        </t>-->
+                        <!--                        <br/>-->
                         <div class="row" style="font-size:13px">
                             <div class="col-6">
                                 <strong>
@@ -377,138 +352,10 @@
                                               t-field="doc.payment_term_id.name"/>
                                     </div>
                                 </div>
-
-
-                                <!--                                <span style="background-color: none;">-->
-                                <!--                                    <strong>CUSTOMER PO NO</strong>-->
-                                <!--                                    <span style="text-align:left" t-field="doc.customer_po_no"/>-->
-                                <!--                                </span>-->
-                                <!--                                <br/>-->
-                                <!--                                <span style="background-color: #f4f4f5;">-->
-                                <!--                                    <strong>DATE ORDER</strong>-->
-                                <!--                                    <span style="text-align:left"-->
-                                <!--                                          t-field="doc.date_order"-->
-                                <!--                                          t-options='{"format":"dd/MM/yyyy"}'/>-->
-                                <!--                                </span>-->
-                                <!--                                <br/>-->
-                                <!--                                <span style="background-color: none;">-->
-                                <!--                                    <strong>PAYMENT TERM</strong>-->
-                                <!--                                    <span style="text-align:left"-->
-                                <!--                                          t-field="doc.payment_term_id.name"/>-->
-                                <!--                                </span>-->
-
                             </div>
                         </div>
                         <br/>
                         <br/>
-
-                        <!--                        <table class="table table-borderless"-->
-                        <!--                               style="width: 100%;height:120px;background-color: white;-->
-                        <!--						line-height:12pt;position:relative;bottom:20px;">-->
-                        <!--                            <tbody>-->
-                        <!--                                <tr>-->
-                        <!--                                    <td style="width:55%;background-color: white;">-->
-                        <!--                                        <strong>-->
-                        <!--                                            <span t-field="doc.partner_id.name"/>-->
-                        <!--                                        </strong>-->
-                        <!--                                        <br/>-->
-                        <!--                                        <span t-field="doc.partner_id.street"/>-->
-                        <!--                                        <span t-field="doc.partner_id.street2"/>-->
-                        <!--                                        <br/>-->
-                        <!--                                        <span t-field="doc.partner_id.city"/>-->
-                        <!--                                        <span t-field="doc.partner_id.state_id"/>-->
-                        <!--                                        <br/>-->
-                        <!--                                        <span t-field="doc.partner_id.country_id"/>-->
-                        <!--                                        <span t-field="doc.partner_id.zip"/>-->
-                        <!--                                        <br/>-->
-                        <!--                                        Phone:-->
-                        <!--                                        <span t-field="doc.partner_id.phone"/>-->
-                        <!--                                        <br/>-->
-
-                        <!--                                        Email:-->
-                        <!--                                        <span style="word-break: break-all;" t-field="doc.partner_id.email"/>-->
-
-                        <!--                                    </td>-->
-                        <!--                                    <td style="width:45%;background-color: white;">-->
-                        <!--                                        <table class="table table-borderless">-->
-                        <!--                                            <tbody>-->
-                        <!--                                                <tr width="45%">-->
-                        <!--                                                    <td>-->
-                        <!--                                                        <span style="background-color: #f4f4f5;">-->
-                        <!--                                                            <strong>SALES ORDER NO</strong>-->
-                        <!--                                                        </span>-->
-                        <!--                                                        <br/>-->
-                        <!--                                                        <span>-->
-                        <!--                                                            <strong>CUSTOMER PO NO</strong>-->
-                        <!--                                                        </span>-->
-                        <!--                                                        <br/>-->
-                        <!--                                                        <span style="background-color: #f4f4f5;">-->
-                        <!--                                                            <strong>DATE ORDER</strong>-->
-                        <!--                                                        </span>-->
-                        <!--                                                        <br/>-->
-                        <!--                                                        <span style="background-color: none;">-->
-                        <!--                                                            <strong>PAYMENT TERM</strong>-->
-                        <!--                                                        </span>-->
-                        <!--                                                        <br/>-->
-                        <!--                                                    </td>-->
-                        <!--                                                    <td>-->
-                        <!--                                                        <span style="text-align:left" t-field="doc.name"/>-->
-                        <!--                                                        <br/>-->
-                        <!--                                                        <span style="text-align:left" t-field="doc.customer_po_no"/>-->
-                        <!--                                                        <br/>-->
-                        <!--                                                        <span style="text-align:left"-->
-                        <!--                                                              t-field="doc.date_order"-->
-                        <!--                                                              t-options='{"format":"dd/MM/yyyy"}'/>-->
-                        <!--                                                        <br/>-->
-                        <!--                                                        <span style="text-align:left"-->
-                        <!--                                                              t-field="doc.payment_term_id.name"/>-->
-                        <!--                                                        <br/>-->
-                        <!--                                                    </td>-->
-                        <!--                                                </tr>-->
-
-
-                        <!--                                                <tr width="45%" style="line-height:16px">-->
-                        <!--                                                    <td width="15%">-->
-                        <!--                                                        <strong>SALES ORDER NO</strong>-->
-                        <!--                                                    </td>-->
-                        <!--                                                    <td width="20%">-->
-                        <!--                                                        <span style="text-align:left" t-field="doc.name"/>-->
-                        <!--                                                    </td>-->
-                        <!--                                                </tr>-->
-                        <!--                                                <tr width="45%">-->
-                        <!--                                                    <td width="15%">-->
-                        <!--                                                        <strong>CUSTOMER PO NO</strong>-->
-                        <!--                                                    </td>-->
-                        <!--                                                    <td width="20%">-->
-                        <!--                                                        <span style="text-align:left"-->
-                        <!--                                                              t-field="doc.customer_po_no"/>-->
-                        <!--                                                    </td>-->
-                        <!--                                                </tr>-->
-                        <!--                                                <tr width="45%">-->
-                        <!--                                                    <td width="15%">-->
-                        <!--                                                        <strong>DATE ORDER</strong>-->
-                        <!--                                                    </td>-->
-                        <!--                                                    <td width="20%">-->
-                        <!--                                                        <span style="text-align:left"-->
-                        <!--                                                              t-field="doc.date_order"-->
-                        <!--                                                              t-options='{"format":"dd/MM/yyyy"}'/>-->
-                        <!--                                                    </td>-->
-                        <!--                                                </tr>-->
-                        <!--                                                <tr width="45%">-->
-                        <!--                                                    <td width="15%">-->
-                        <!--                                                        <strong>PAYMENT TERM</strong>-->
-                        <!--                                                    </td>-->
-                        <!--                                                    <td width="20%">-->
-                        <!--                                                        <span style="text-align:left"-->
-                        <!--                                                              t-field="doc.payment_term_id.name"/>-->
-                        <!--                                                    </td>-->
-                        <!--                                                </tr>-->
-                        <!--                                            </tbody>-->
-                        <!--                                        </table>-->
-                        <!--                                    </td>-->
-                        <!--                                </tr>-->
-                        <!--                            </tbody>-->
-                        <!--                        </table>-->
                         <table class="table table-sm table-borderless" style="table-layout:fixed;">
                             <style>
                                 tbody tr:nth-child(odd){
@@ -689,33 +536,34 @@
         </xpath>
     </template>
 
-
     <template id="inherit_report_purchaseorder_document"
               inherit_id="purchase.report_purchaseorder_document">
 
         <xpath expr="//t[@t-call='web.external_layout']"
                position="replace">
             <t t-call="pecko_so_po_report.external_layout_po_report">
-                <div style="position:relative;top:50px;">
+                <div style="position:relative;top:30px;">
                     <div class="page" style="font-family: Calibri;text-color:black;">
-                        <t t-if="o.company_id.country_id.code == 'SG'">
-                            <div style="font-size: 20px;text-align: center;padding-top:40px;">
-                                <span>
-                                    <strong>PURCHASE ORDER</strong>
-                                </span>
-                            </div>
-                        </t>
-                        <t t-else="">
-                            <div style="font-size: 20px;text-align: center;padding-top:8px;">
-                                <span>
-                                    <strong>PURCHASE ORDER</strong>
-                                </span>
-                            </div>
-                        </t>
-
-                        <!--                        <p align="center">-->
-                        <!--                            <strong>PURCHASE ORDER</strong>-->
-                        <!--                        </p>-->
+                        <div style="font-size: 20px;text-align: center;">
+                            <span>
+                                <strong>PURCHASE ORDER</strong>
+                            </span>
+                        </div>
+                        <br/>
+                        <!--                        <t t-if="o.company_id.country_id.code == 'SG'">-->
+                        <!--                            <div style="font-size: 20px;text-align: center;padding-top:40px;">-->
+                        <!--                                <span>-->
+                        <!--                                    <strong>PURCHASE ORDER</strong>-->
+                        <!--                                </span>-->
+                        <!--                            </div>-->
+                        <!--                        </t>-->
+                        <!--                        <t t-else="">-->
+                        <!--                            <div style="font-size: 20px;text-align: center;padding-top:8px;">-->
+                        <!--                                <span>-->
+                        <!--                                    <strong>PURCHASE ORDER</strong>-->
+                        <!--                                </span>-->
+                        <!--                            </div>-->
+                        <!--                        </t>-->
                         <div width="100%">
                             <div style="float:left;font-size:13px">
                                 <span>
@@ -782,11 +630,8 @@
 
                         <table class="table table-sm table-borderless"
                                style="margin-top:170px;table-layout:fixed;border-bottom-style: none;">
-                            <!--						<style> -->
-                            <!--							body { background: #222; } -->
-                            <!--						</style>-->
+
                             <style>
-                                <!--							td{ background-color: #e9ecef; }-->
                                 th{font-size:13px}
                                 td{font-size:13px}
                             </style>
@@ -832,11 +677,7 @@
                                         <t t-if="not line.display_type">
                                             <td style="background-color: #f4f4f5;">
                                                 <span t-field="line.line_no"/>
-                                                <!-- <span t-esc="i" /> -->
                                             </td>
-                                            <!-- <td>
-                                                <span t-esc="i" />
-                                            </td> -->
                                             <td style="background-color: #f4f4f5;">
                                                 <span t-field="line.product_id"/>
                                             </td>
@@ -967,15 +808,61 @@
                     <br/>
                     <br/>
                     <br/>
-
-
-                    <!-- <div>
-
-                    </div> -->
                 </div>
-
             </t>
         </xpath>
     </template>
+
+    <record id="paperformat_so" model="report.paperformat">
+        <field name="name">SO Paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">48</field>
+        <field name="margin_bottom">32</field>
+        <field name="margin_left">6</field>
+        <field name="margin_right">6</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">45</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="paperformat_po" model="report.paperformat">
+        <field name="name">PO Paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">47</field>
+        <field name="margin_bottom">32</field>
+        <field name="margin_left">6</field>
+        <field name="margin_right">6</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">45</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="sale.action_report_saleorder" model="ir.actions.report">
+        <field name="name">Quotation / Order</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sale.report_saleorder</field>
+        <field name="report_file">sale.report_saleorder</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)</field>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="pecko_so_po_report.paperformat_so"/>
+    </record>
+
+    <record id="purchase.action_report_purchase_order" model="ir.actions.report">
+        <field name="name">Purchase Order</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">purchase.report_purchaseorder</field>
+        <field name="report_file">purchase.report_purchaseorder</field>
+        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or 'Purchase Order - %s' % (object.name))</field>
+        <field name="binding_model_id" ref="model_purchase_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="pecko_so_po_report.paperformat_po"/>
+    </record>
 
 </odoo>
