@@ -833,9 +833,7 @@
         <field name="report_name">sale.report_saleorder</field>
         <field name="report_file">sale.report_saleorder</field>
         <field name="binding_model_id" ref="model_sale_order"/>
-        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or
-            'Order - %s' % (object.name)
-        </field>
+        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name) </field>
         <field name="binding_type">report</field>
         <field name="paperformat_id" ref="pecko_so_po_report.paperformat_so"/>
     </record>
