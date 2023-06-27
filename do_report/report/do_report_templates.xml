@@ -52,24 +52,30 @@
                     tr {page-break-inside:avoid}
                 </style>
                 <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
-                 <br></br>
+                <br></br>
 
                 <div class="page" style="text-color:black;">
                     <div>
-                        <t t-if="o.company_id.country_id.code == 'SG'">
-                            <div style="font-size: 20px;text-align: center;padding-top:40px;">
-                                <span>
-                                    <strong>Delivery Order</strong>
-                                </span>
-                            </div>
-                        </t>
-                        <t t-else="">
-                            <div style="font-size: 20px;text-align: center;padding-top:8px;">
-                                <span>
-                                    <strong>Delivery Order</strong>
-                                </span>
-                            </div>
-                        </t>
+                        <div style="font-size: 20px;text-align: center;">
+                            <span>
+                                <strong>Delivery Order</strong>
+                            </span>
+                        </div>
+
+                        <!--                        <t t-if="o.company_id.country_id.code == 'SG'">-->
+                        <!--                            <div style="font-size: 20px;text-align: center;padding-top:40px;">-->
+                        <!--                                <span>-->
+                        <!--                                    <strong>Delivery Order</strong>-->
+                        <!--                                </span>-->
+                        <!--                            </div>-->
+                        <!--                        </t>-->
+                        <!--                        <t t-else="">-->
+                        <!--                            <div style="font-size: 20px;text-align: center;padding-top:8px;">-->
+                        <!--                                <span>-->
+                        <!--                                    <strong>Delivery Order</strong>-->
+                        <!--                                </span>-->
+                        <!--                            </div>-->
+                        <!--                        </t>-->
                         <table style="width: 100%;height:120px;background-color: white;line-height:12pt;"
                                class="table-borderless">
                             <tbody>
@@ -88,12 +94,14 @@
                                         <br/>
                                         <t t-if="o.partner_id.city">
                                             <span t-field="o.partner_id.city"/>
-                                            <span t-field="o.partner_id.state_id"/><br/>
+                                            <span t-field="o.partner_id.state_id"/>
+                                            <br/>
                                         </t>
 
                                         <t t-if="o.partner_id.country_id">
                                             <span t-field="o.partner_id.country_id"/>
-                                            <span t-field="o.partner_id.zip"/><br/>
+                                            <span t-field="o.partner_id.zip"/>
+                                            <br/>
                                         </t>
 
                                         <t t-if="o.partner_id.phone">
@@ -127,16 +135,20 @@
                                                         <span t-field="o.partner_id.street2"/>
                                                         <br/>
                                                         <t t-if="o.partner_id.city">
-                                                            <span t-field="o.partner_id.city"/><br/>
+                                                            <span t-field="o.partner_id.city"/>
+                                                            <br/>
                                                         </t>
                                                         <t t-if="o.partner_id.state_id">
-                                                        <span t-field="o.partner_id.state_id"/><br/>
+                                                            <span t-field="o.partner_id.state_id"/>
+                                                            <br/>
                                                         </t>
                                                         <t t-if="o.partner_id.zip">
-                                                        <span t-field="o.partner_id.zip"/><br/>
+                                                            <span t-field="o.partner_id.zip"/>
+                                                            <br/>
                                                         </t>
                                                         <t t-if="o.partner_id.country_id">
-                                                        <span t-field="o.partner_id.country_id"/><br/>
+                                                            <span t-field="o.partner_id.country_id"/>
+                                                            <br/>
                                                         </t>
                                                     </td>
                                                 </tr>

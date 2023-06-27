@@ -809,7 +809,6 @@
                     <br/>
                     <br/>
                 </div>
-
             </t>
         </xpath>
     </template>
@@ -833,12 +832,12 @@
         <field name="default" eval="True"/>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">45</field>
+        <field name="margin_top">47</field>
         <field name="margin_bottom">32</field>
         <field name="margin_left">6</field>
         <field name="margin_right">6</field>
         <field name="header_line" eval="False"/>
-        <field name="header_spacing">40</field>
+        <field name="header_spacing">45</field>
         <field name="dpi">90</field>
     </record>
 
