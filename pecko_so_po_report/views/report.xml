@@ -13,23 +13,8 @@
         <div class="header o_background_header">
             <div class="row" style="bottom:1px;top:1px">
                 <div class="col-8" style="bottom:14px;">
-                    <img t-if="o.company_id.logo" height="60" width="100" t-att-src="image_data_uri(o.company_id.logo)"
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
                          alt="Logo"/>
-                    <!--                    <t t-if="o.company_id.country_id.code == 'SG'">-->
-
-                    <!--                        <img t-if="o.company_id.logo" height="80" width="100"-->
-                    <!--                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
-
-                    <!--                    </t>-->
-                    <!--                    <t t-else="">-->
-                    <!--                        <img t-if="o.company_id.logo" height="40" width="170"-->
-                    <!--                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
-                    <!--                    </t>-->
-                    <!--                    <img t-if="o.company_id.logo" height="21" width="89"-->
-                    <!--                         t-att-src="image_data_uri(o.company_id.logo)"-->
-                    <!--                         alt="Logo"/>-->
-                    <!--					<img t-if="company.logo"-->
-                    <!--						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width:100px;"/>-->
                     <div class="company_address"
                          style="line-height:10px;font-family: Calibri;text-color:black;">
                         <div>
@@ -121,7 +106,6 @@
             <t t-if="o.company_id.country_id.code == 'SG'">
                 <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_four)" alt="Logo"
                      style="position:relative; bottom:54px; left:730px; width:130px;"/>
-                <!--						<img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_four)" style="position:relative; bottom:54px; left:730px; width:130px;" />-->
             </t>
             <div style="text-align:right">
 
@@ -145,18 +129,7 @@
         <div class="header o_background_header">
             <div class="row" style="bottom:1px;top:1px">
                 <div class="col-8">
-                    <img t-if="o.company_id.logo" height="60" width="100" t-att-src="image_data_uri(o.company_id.logo)"
-                         alt="Logo"/>
-                    <!--                    <t t-if="o.company_id.country_id.code == 'SG'">-->
-
-                    <!--                        <img t-if="o.company_id.logo" height="100" width="170"-->
-                    <!--                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
-
-                    <!--                    </t>-->
-                    <!--                    <t t-else="">-->
-                    <!--                        <img t-if="o.company_id.logo" height="40" width="170"-->
-                    <!--                             t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
-                    <!--                    </t>-->
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
                     <div class="company_address"
                          style="line-height:5px;font-size: 10px;font-family: Calibri;ftext-color:black;">
                         <div>
@@ -278,21 +251,6 @@
                             </span>
                         </div>
                         <br/>
-                        <!--                        <t t-if="doc.company_id.country_id.code == 'SG'">-->
-                        <!--                            <div style="font-size: 20px;text-align: center;padding-top:10px;">-->
-                        <!--                                <span>-->
-                        <!--                                    <strong>SALES ORDER</strong>-->
-                        <!--                                </span>-->
-                        <!--                            </div>-->
-                        <!--                        </t>-->
-                        <!--                        <t t-else="">-->
-                        <!--                            <div style="font-size: 20px;text-align: center;padding-bottom:10px;">-->
-                        <!--                                <span>-->
-                        <!--                                    <strong>SALES ORDER</strong>-->
-                        <!--                                </span>-->
-                        <!--                            </div>-->
-                        <!--                        </t>-->
-                        <!--                        <br/>-->
                         <div class="row" style="font-size:13px">
                             <div class="col-6">
                                 <strong>
@@ -409,12 +367,10 @@
                                             t-att-class="'bg-200 font-weight-bold' if line.display_type == 'line_section' else 'font-italic' if line.display_type == 'line_note' else ''">
                                         <t t-if="not line.display_type">
                                             <td>
-                                                <!-- <span t-esc="i" /> -->
                                                 <span t-field="line.line_no"/>
                                             </td>
                                             <td>
                                                 <span t-field="line.product_id.default_code"/>
-                                                <!-- <span t-field="line.customer_part_no" /> -->
                                             </td>
 
                                             <td>
@@ -550,20 +506,6 @@
                             </span>
                         </div>
                         <br/>
-                        <!--                        <t t-if="o.company_id.country_id.code == 'SG'">-->
-                        <!--                            <div style="font-size: 20px;text-align: center;padding-top:40px;">-->
-                        <!--                                <span>-->
-                        <!--                                    <strong>PURCHASE ORDER</strong>-->
-                        <!--                                </span>-->
-                        <!--                            </div>-->
-                        <!--                        </t>-->
-                        <!--                        <t t-else="">-->
-                        <!--                            <div style="font-size: 20px;text-align: center;padding-top:8px;">-->
-                        <!--                                <span>-->
-                        <!--                                    <strong>PURCHASE ORDER</strong>-->
-                        <!--                                </span>-->
-                        <!--                            </div>-->
-                        <!--                        </t>-->
                         <div width="100%">
                             <div style="float:left;font-size:13px">
                                 <span>
@@ -588,7 +530,6 @@
                                     <t t-esc="o.partner_id.country_id.name"/>
                                     <t t-esc="o.partner_id.zip"/>
                                 </span>
-                                <!--<span>Tel : <t t-esc="o.partner_id.phone"/> FAX : <t t-esc="o.partner_id.fax"/></span> -->
                                 <br/>
                                 <br/>
                                 <span>
@@ -832,12 +773,12 @@
         <field name="default" eval="True"/>
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>
-        <field name="margin_top">47</field>
+        <field name="margin_top">45</field>
         <field name="margin_bottom">32</field>
         <field name="margin_left">6</field>
         <field name="margin_right">6</field>
         <field name="header_line" eval="False"/>
-        <field name="header_spacing">45</field>
+        <field name="header_spacing">42</field>
         <field name="dpi">90</field>
     </record>
 

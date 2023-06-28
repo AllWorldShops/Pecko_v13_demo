@@ -16,19 +16,7 @@
                 <br/>
                 <div class="row" style="bottom:10px;top:5px">
                     <div class="col-8">
-                        <img t-if="o.company_id.logo" height="60" width="100"
-                                 t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
-<!--                        <t t-if="o.company_id.country_id.code == 'SG'">-->
-<!--                            <img t-if="o.company_id.logo" height="80" width="170"-->
-<!--                                 t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
-<!--                        </t>-->
-<!--                        <t t-else="">-->
-<!--                            <img t-if="o.company_id.logo" height="40" width="170"-->
-<!--                                 t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
-<!--                        </t>-->
-
-                        <!--					<img t-if="company.logo"-->
-                        <!--						t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width:100px;"/>-->
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
                         <div class="company_address"
                              style="line-height:10px;font-family: Calibri;text-color:black;">
                             <div>
