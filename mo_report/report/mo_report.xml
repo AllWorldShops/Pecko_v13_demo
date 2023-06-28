@@ -6,11 +6,7 @@
 			<div class="header o_background_header">
 				<div class="row">
 					<div class="col-8">
-<!--						<img t-if="company.logo"-->
-<!--							t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" />-->
-						<img t-if="o.company_id.logo" height="60" width="120"
-                                 t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
-<!--						<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>-->
+						<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
 						<div class="company_address"
 							style="line-height:0.2px;font-family: Calibri;text-color:black;font-size:13px">
 							<div >
@@ -42,13 +38,6 @@
 								<br />
 								<span>TEL :</span>
 								<span t-field="o.company_id.phone" />
-
-<!--								<t t-if="o.company_id.fax">-->
-<!--									|-->
-<!--									<span>FAX :</span>-->
-<!--									<span t-field="o.company_id.fax" />-->
-<!--								</t>-->
-
 								<br />
 								<span>E-mail:</span>
 								<span t-field="o.company_id.email" />
@@ -76,51 +65,6 @@
 				t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
 				<t t-raw="0" />
 			</div>
-
-			<!-- <div class="footer o_background_footer"
-				style="font-family: Calibri;font-size:12px;">
-				<table width="100%" style="border-top: 1px solid black;">
-					<tr width="100%">
-						<td width="50%" style="text-align:center">
-							<strong>RECEIVED IN GOOD ORDER</strong>
-							<br />
-							<br />
-							<br />
-						</td>
-						<td width="50%" style="text-align:center">
-							<strong>PECKO (M) SDN BHD.</strong>
-							<br />
-							<br />
-							<br />
-						</td>
-					</tr>
-					<tr width="100%">
-						<td width="50%" style="text-align:center">
-							<strong>CUSTOMER'S STAMP &amp; SIGNATURE</strong>
-						</td>
-						<td width="50%" style="text-align:center">
-							<strong>AUTHORISED SIGNATURE</strong>
-						</td>
-					</tr>
-				</table>
-				<table width="100%">
-					<tr>
-						<td>
-							<strong>
-								NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE
-								PRODUCT FOR THEIR
-								INTENDED USE,AND USERS ASSUME ALL RISK AND
-								LIABILITY WHATSOEVER
-								IN CONNECTION THEREWITH
-							</strong>
-						</td>
-					</tr>
-				</table>
-				<div style="text-align:right">
-					<span>user:</span>
-					<span t-esc="user.name" />
-				</div>
-			</div> -->
 		</template>
 
 		<template id="custom_mo_external_layout">
