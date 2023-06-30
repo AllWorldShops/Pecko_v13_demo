@@ -9,7 +9,6 @@
     'description': """Payment Receipt Report""",
     'depends': ['account', 'account_followup'],
     'data': [
-        # 'report/payment_receipt_report_templates.xml',
         'report/report_payment_templates.xml'
     ],
     'installable': True,
