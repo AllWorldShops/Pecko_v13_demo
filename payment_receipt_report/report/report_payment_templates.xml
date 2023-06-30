@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-6" t-if="o.payment_method_id">
                             Payment Method:
-                            <span t-field="o.payment_method_id.name"/>
+                            <span t-field="o.journal_id.name"/>
                         </div>
                     </div>
                     <div class="row">
