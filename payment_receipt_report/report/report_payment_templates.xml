@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="account.report_payment_receipt_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <div class="page">
+                <h3>
+                    <strong>Payment Receipt:
+                        <span t-field="o.name"/>
+                    </strong>
+                </h3>
+                <div class="mb-4 mt-3">
+                    <div class="row">
+                        <div class="col-6" t-if="o.date">
+                            Payment Date:
+                            <span t-field="o.date"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6" t-if="o.partner_type">
+                            <t t-if="o.partner_type == 'customer'">
+                                Customer:
+                            </t>
+                            <t t-if="o.partner_type == 'supplier'">
+                                Vendor:
+                            </t>
+                            <span t-field="o.partner_id"/>
+                        </div>
+                        <div class="col-6" t-if="o.payment_method_id">
+                            Payment Method:
+                            <span t-field="o.payment_method_id.name"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6" t-if="o.amount">
+                            Payment Amount:
+                            <span t-field="o.amount"
+                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                        </div>
+                        <div class="col-6" t-if="o.ref">
+                            Memo:
+                            <span t-field="o.ref"/>
+                        </div>
+                    </div>
+                </div>
+
+                <t t-set="partials" t-value="o.move_id._get_reconciled_invoices_partials()[0]"/>
+                <t t-set="invoices" t-value="{partial[2].move_id for partial in partials}"/>
+                <!-- Check if invoices include different currencies -->
+                <t t-foreach="invoices" t-as="inv">
+                    <t t-if="any(inv.currency_id != par[2].currency_id for par in inv._get_reconciled_invoices_partials()[0])"
+                       t-set="otherCurrency" t-value="True"/>
+                </t>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span>Invoice Date</span>
+                            </th>
+                            <th>
+                                <span>Invoice Number</span>
+                            </th>
+                            <th>
+                                <span>Reference</span>
+                            </th>
+                            <th>
+                                <span>Original Amount</span>
+                            </th>
+                            <!-- Add a column if there are different currencies -->
+                            <th t-if="otherCurrency" class="text-end">
+                                <span>Amount In Currency</span>
+                            </th>
+                            <th class="text-end">
+                                <span>Amount</span>
+                            </th>
+                            <th class="text-end">
+                                <span>Balance</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="i" t-value="0"/>
+                        <t t-set="j" t-value="0"/>
+                        <t t-set="k" t-value="0"/>
+
+                        <t t-foreach="invoices" t-as="inv">
+                            <t t-if="inv.move_type != 'entry'">
+
+                                <!-- MOVE -->
+                                <t>
+                                    <tr>
+                                        <td>
+                                            <span t-field="inv.invoice_date"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="inv.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="inv.ref"/>
+                                        </td>
+
+                                        <td class="text-right">
+                                            <span t-field="inv.amount_total"/>
+                                            <span t-set="i" t-value="i+inv.amount_total"/>
+                                            <span t-set="currency" t-value="inv.currency_id.name"/>
+                                        </td>
+                                        <td t-if="otherCurrency"/>
+                                        <td class="text-right">
+                                            <span t-esc="(inv.amount_total-inv.amount_residual)"
+                                                  t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                            <span t-set="j" t-value="j+(inv.amount_total-inv.amount_residual)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="inv.amount_residual"/>
+                                            <span t-set="k" t-value="k+inv.amount_residual"/>
+                                        </td>
+
+                                    </tr>
+
+                                </t>
+
+                            </t>
+
+                        </t>
+                    </tbody>
+                    <tr>
+                        <td colspan="3" style="text-align: right;border-top:1px solid black;">
+                            <strong>Total:</strong>
+                        </td>
+                        <td t-if="o.currency_id.position == 'after'"
+                            style="text-align: right;border-top:1px solid black;">
+                            <strong>
+                                <span t-esc="i " t-options='{"widget": "float", "precision": 2}'/>
+                            </strong>
+                            <span t-esc="o.currency_id.symbol"/>
+                        </td>
+                        <td t-if="o.currency_id.position == 'after'"
+                            style="text-align: right;border-top:1px solid black;">
+                            <strong>
+                                <span t-esc="j " t-options='{"widget": "float", "precision": 2}'/>
+                            </strong>
+                            <span t-esc="o.currency_id.symbol"/>
+                        </td>
+                        <td t-if="o.currency_id.position == 'after'"
+                            style="text-align: right;border-top:1px solid black;">
+                            <strong>
+                                <span t-esc="k " t-options='{"widget": "float", "precision": 2}'/>
+                            </strong>
+                            <span t-esc="o.currency_id.symbol"/>
+                        </td>
+                        <td t-if="o.currency_id.position == 'before'"
+                            style="text-align: right;border-top:1px solid black;">
+                            <span t-esc="o.currency_id.symbol"/>
+                            <strong>
+                                <span t-esc="i " t-options='{"widget": "float", "precision": 2}'/>
+                            </strong>
+                        </td>
+                        <td t-if="o.currency_id.position == 'before'"
+                            style="text-align: right;border-top:1px solid black;">
+                            <span t-esc="o.currency_id.symbol"/>
+                            <strong>
+                                <span t-esc="j " t-options='{"widget": "float", "precision": 2}'/>
+                            </strong>
+                        </td>
+                        <td t-if="o.currency_id.position == 'before'"
+                            style="text-align: right;border-top:1px solid black;">
+                            <span t-esc="o.currency_id.symbol"/>
+                            <strong>
+                                <span t-esc="k" t-options='{"widget": "float", "precision": 2}'/>
+                            </strong>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_payment_receipt">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="o.partner_id.lang or o.company_id.partner_id.lang"/>
+                <t t-call="account.report_payment_receipt_document" t-lang="lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>
