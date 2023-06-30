@@ -70,10 +70,10 @@
                             <!-- <th t-if="otherCurrency" class="text-end">
                                 <span>Amount In Currency</span>
                             </th> -->
-                            <th class="text-end">
+                            <th>
                                 <span>Amount</span>
                             </th>
-                            <th class="text-end">
+                            <th>
                                 <span>Balance</span>
                             </th>
                         </tr>
