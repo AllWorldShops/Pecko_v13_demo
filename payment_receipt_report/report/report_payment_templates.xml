@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-6" t-if="o.payment_method_id">
                             Payment Method:
-                            <span t-field="o.payment_method_id.name"/>
+                            <span t-field="o.journal_id.name"/>
                         </div>
                     </div>
                     <div class="row">
@@ -67,9 +67,9 @@
                                 <span>Original Amount</span>
                             </th>
                             <!-- Add a column if there are different currencies -->
-                            <th t-if="otherCurrency" class="text-end">
+                            <!-- <th t-if="otherCurrency" class="text-end">
                                 <span>Amount In Currency</span>
-                            </th>
+                            </th> -->
                             <th class="text-end">
                                 <span>Amount</span>
                             </th>
@@ -99,18 +99,18 @@
                                             <span t-field="inv.ref"/>
                                         </td>
 
-                                        <td class="text-right">
+                                        <td style="text-align: right;">
                                             <span t-field="inv.amount_total"/>
                                             <span t-set="i" t-value="i+inv.amount_total"/>
                                             <span t-set="currency" t-value="inv.currency_id.name"/>
                                         </td>
-                                        <td t-if="otherCurrency"/>
-                                        <td class="text-right">
+                                        <!-- <td t-if="otherCurrency"/> -->
+                                        <td style="text-align: right;">
                                             <span t-esc="(inv.amount_total-inv.amount_residual)"
                                                   t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
                                             <span t-set="j" t-value="j+(inv.amount_total-inv.amount_residual)"/>
                                         </td>
-                                        <td class="text-right">
+                                        <td style="text-align: right;">
                                             <span t-field="inv.amount_residual"/>
                                             <span t-set="k" t-value="k+inv.amount_residual"/>
                                         </td>
