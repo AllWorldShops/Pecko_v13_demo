@@ -316,7 +316,11 @@ class MailMail(models.Model):
                         processing_pid = None
                     except AssertionError as error:
                         if str(error) == IrMailServer.NO_VALID_RECIPIENT:
-                            failure_type = "RECIPIENT"
+                            # if we have a list of void emails for email_list -> email missing, otherwise generic email failure
+                            if not email.get('email_to') and failure_type != "mail_email_invalid":
+                                failure_type = "mail_email_missing"
+                            else:
+                                failure_type = "mail_email_invalid"
                             # No valid recipient found for this particular
                             # mail item -> ignore error to avoid blocking
                             # delivery to next recipients, if any. If this is
