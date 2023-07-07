@@ -190,7 +190,7 @@
                                 <span style="background-color: #f4f4f5;">
                                     <t t-if="o.move_type == 'out_refund'">
                                         <strong>Payment Reference</strong>
-                                        <span style="padding-left:8px;" t-field="o.payment_reference"/>
+                                        <span style="padding-left:7px;" t-field="o.payment_reference"/>
                                     </t>
                                     <t t-else=""/>
                                 </span>
