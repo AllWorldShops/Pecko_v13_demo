@@ -186,6 +186,7 @@
                                     </span>
                                 </td>
                             </tr>
+                            <br/>
                             <tr>
                                 <span style="background-color: #f4f4f5;">
                                     <t t-if="o.move_type == 'out_refund'">
