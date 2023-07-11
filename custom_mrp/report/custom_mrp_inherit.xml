@@ -192,6 +192,7 @@
 
 
         <record id="paperformat_mrp_bom" model="report.paperformat">
+            <field name="name">BOM A4</field>
             <field name="default" eval="True"/>
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
