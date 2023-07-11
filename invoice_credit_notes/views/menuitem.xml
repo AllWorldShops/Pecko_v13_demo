@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="credit_notes_sub_menu_account"
+              name="Invoice/Credit Notes"
+              action="credit_invoice_notes_state"
+              parent="account.menu_finance_receivables"
+              sequence="40"/>
+</odoo>
