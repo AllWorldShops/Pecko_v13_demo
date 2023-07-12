@@ -6,10 +6,10 @@
             <div class="header o_background_header">
        <div class="row">
 				<div class="col-8">
-					 <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="80" width="100"
+					 <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
                              alt="Logo"/>
 					<div class="company_address"
-						style="padding-top:14px;line-height:16px;font-family: Calibri;text-color:black;">
+						style="line-height:10px;font-family: Calibri;text-color:black;">
 						<div>
 							<strong>
 								<span style="font-size: 25px;"
@@ -189,19 +189,17 @@
                 </tr>
          </t>
         </template>
-
-
         <record id="paperformat_mrp_bom" model="report.paperformat">
-            <field name="name">BOM A4</field>
+             <field name="name">BoM Structure</field>
             <field name="default" eval="True"/>
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
-            <field name="margin_top">60</field>
+            <field name="margin_top">55</field>
             <field name="margin_bottom">70</field>
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">60</field>
+            <field name="header_spacing">45</field>
             <field name="dpi">90</field>
         </record>
         <report id="action_report_bom_structure_overview" model="mrp.bom"
