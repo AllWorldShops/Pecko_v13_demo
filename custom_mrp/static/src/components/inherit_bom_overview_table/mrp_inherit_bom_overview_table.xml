@@ -6,25 +6,19 @@
              <table class="o_mrp_bom_expandable table">
                             <thead>
                                 <tr>
-                                    <th class="text-left">Position</th>
-                                    <th name="th_mrp_bom_h">Product</th>
-                                    <th class="text-left">Part No</th>
-                                    <th class="text-left">Description</th>
-                                    <th class="text-left">Manufacturer</th>
-                                    <th t-attf-class="{{ showUom ? 'text-center' : 'text-end' }}"
+                                    <th class="text-center">Position</th>
+                                    <th name="th_mrp_bom_h" class="text-center">Product</th>
+                                    <th class="text-center">Part No</th>
+                                    <th class="text-center">Description</th>
+                                    <th class="text-center">Manufacturer</th>
+                                    <th class="text-center">BOM</th>
+                                    <th class="text-center" t-attf-class="{{ showUom ? 'text-center' : 'text-end' }}"
                                         t-attf-colspan="{{ showUom ? 2 : 1 }}">Quantity</th>
-                                    <th t-if="showAvailabilities" class="text-end">Ready to Produce</th>
-                                    <th t-if="showAvailabilities" class="text-end" title="Availabilities on products.">Free to Use / On Hand</th>
-                                    <th t-if="showAvailabilities" class="text-center"
-                                        title="Reception time estimation.">Availability</th>
-                                    <th t-if="showLeadTimes" class="text-end" title="Resupply lead time.">Lead Time</th>
-                                    <th>Route</th>
-                                    <th t-if="showCosts" class="text-end"
-                                        title="This is the cost based on the BoM of the product. It is computed by summing the costs of the components and operations needed to build the product.">BoM Cost</th>
-                                    <th t-if="showCosts" class="text-end"
+                                    <th class="text-center" groups="uom.group_uom">Unit of Measure</th>
+                                     <th t-if="showCosts" class="text-center"
                                         title="This is the cost defined on the product.">Product Cost</th>
-                                    <th t-if="showAttachments" class="text-center"
-                                        title="Files attached to the product.">Attachments</th>
+                                    <th t-if="showCosts" class="text-center"
+                                        title="This is the cost based on the BoM of the product. It is computed by summing the costs of the components and operations needed to build the product.">BoM Cost</th>
                                 </tr>
                             </thead>
                  <tbody>
@@ -49,9 +43,7 @@
                                         <span t-if="!!data.byproducts &amp;&amp; data.byproducts.length > 0"
                                               t-esc="data.name"/>
                                     </td>
-                                    <td/>
-                                    <td/>
-                                    <td/>
+
                                     <td class="text-end"><strong>Unit Cost</strong></td>
                                     <td t-if="showUom"/>
                                     <td t-if="showAvailabilities"/>
@@ -59,8 +51,8 @@
                                     <td t-if="showAvailabilities"/>
                                     <td t-if="showLeadTimes"/>
                                     <td/>
-                                    <td class="text-end" t-esc="formatMonetary(data.bom_cost / data.quantity)"/>
                                     <td class="text-end" t-esc="formatMonetary(data.prod_cost / data.quantity)"/>
+                                    <td class="text-end" t-esc="formatMonetary(data.bom_cost / data.quantity)"/>
                                     <td t-if="showAttachments"/>
                                 </tr>
                      <t t-if="data.byproducts &amp;&amp; data.byproducts.length > 0" t-foreach="data.byproducts"
@@ -77,9 +69,9 @@
                                         <td t-if="showLeadTimes"/>
                                         <td/>
                                         <td class="text-end"
-                                            t-esc="formatMonetary(byproduct.bom_cost / byproduct.quantity)"/>
-                                        <td class="text-end"
                                             t-esc="formatMonetary(byproduct.prod_cost / byproduct.quantity)"/>
+                                        <td class="text-end"
+                                            t-esc="formatMonetary(byproduct.bom_cost / byproduct.quantity)"/>
                                         <td t-if="showAttachments"/>
                                     </tr>
                                 </t>
