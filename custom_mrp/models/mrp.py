@@ -22,6 +22,7 @@ class MrpProduction(models.Model):
     manufacturer_id = fields.Many2one('product.manufacturer', string='Manufacturer Name')
     customer_part_no = fields.Char(string='Part Number')
     description = fields.Char(string='Description')
+    transfer_done_flag = fields.Boolean(string='Transfer Done Flag',compute='_compute_boolean_txt' )
     project = fields.Char(string='Project')
     project = fields.Char(string='Project', related='product_tmpl_id.project', store=True)
     start_date = fields.Date('Start Date P2')
@@ -34,6 +35,21 @@ class MrpProduction(models.Model):
     store_start_date = fields.Date("Store Start Date")
     confirm_cancel = fields.Boolean(compute='_compute_confirm_cancel')
 
+    def _compute_boolean_txt(self):
+        res = self.env['stock.picking'].search([('id', 'in', self.picking_ids.ids),('picking_type_id.name','!=','Store Finished Product')])
+        count = 0
+        done_count = 0
+        for rec in res:
+            count += 1
+            if rec.state == 'done':
+                done_count += 1
+        if count == done_count:
+            self.transfer_done_flag = True
+        else:
+            self.transfer_done_flag = False
+
+
+
     def _compute_reserved(self):
         # reserved_qty = []
         wo_flag = self.env['ir.config_parameter'].sudo().get_param(
@@ -45,6 +61,10 @@ class MrpProduction(models.Model):
                     lambda l: l.reserved_availability == 0 and l.product_uom_qty != 0)
                 if reserved_qty and rec.state not in ['draft', 'done']:
                     rec.reserved_check = True
+
+
+
+
 
     @api.onchange('product_id')
     def onchange_responsible(self):

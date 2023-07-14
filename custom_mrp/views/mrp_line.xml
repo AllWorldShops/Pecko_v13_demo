@@ -10,7 +10,7 @@
 				<field name="customer_part_no"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
 				<field name="description"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
 				<field name="origin" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-<!--				<field name="is_mark_as_done"/>-->
+				<field name="transfer_done_flag"/>
 			</xpath>
 			<xpath expr="//field[@name='user_id']" position="after">
 				<field name="store_start_date" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
@@ -23,21 +23,23 @@
 			<!--			i commented below 3 (t)-->
 
 <!--			<xpath expr="//sheet/div[@name='button_box']/button[2]" position="attributes">-->
-<!--				<attribute name="attrs">{'invisible': ['|',('workorder_count', '=', 0),('reserved_check', '=', True)]}</attribute>-->
+<!--				<attribute name="attrs">{'invisible':('flag','!=',True) ['|',('delivery_count', '=', 0),('reserved_check', '=', True)]}</attribute>-->
 <!--			</xpath>-->
 
-
-<!--			<xpath expr="//form/header/button[6]" position="attributes">-->
-<!--				<attribute name="attrs">{'invisible': ['|', '|', '|', '|', ('state', '=', 'to_close'), ('is_locked', '=', False), ('reservation_state', '!=', 'assigned'), ('routing_id', '!=', False),('reserved_availability', '=', True)]}</attribute>-->
-<!--			</xpath>-->
-
-<!--			<xpath expr="//form/header/button[7]" position="attributes">-->
-<!--				<attribute name="attrs">{'invisible': ['|', '|', '|','|', ('state', '=', 'to_close'), ('is_locked', '=', False), ('reservation_state', 'not in', ('confirmed', 'waiting')), ('routing_id', '!=', False), ('reserved_availability', '=', True)]}</attribute>-->
-<!--			</xpath>-->
-
-<!--			<xpath expr="//form/sheet/group/group/div/div/button" position="replace">-->
-
-<!--			</xpath>-->
+			<xpath expr="//form/header/button[3]" position="replace">
+				<button name="button_mark_done"
+                        attrs="{'invisible': [ '|', ('transfer_done_flag','!=',True), '|',  ('state', '!=', 'to_close') ,   '|', ('move_raw_ids', '=', []), '&amp;', '|',   ('state', 'not in', ('confirmed', 'progress')),      ('qty_producing', '!=', 0), ('state', '!=', 'to_close')]}"
+						string="Mark as Done" type="object" class="oe_highlight" data-hotkey="g"/>
+			</xpath>
+<!--            <xpath expr="//form/header/button[6]" position="attributes">-->
+<!--                <button name="button_mark_done"-->
+<!--                        attrs="{'invisible': [   '|',  ('state', '!=', 'to_close') ,   '|', ('move_raw_ids', '=', []), '&amp;', '|',   ('state', 'not in', ('confirmed', 'progress')),      ('qty_producing', '!=', 0), ('state', '!=', 'to_close')]}"-->
+<!--                        string="Mark as Done" type="object" class="oe_highlight" data-hotkey="g"/>-->
+<!--            </xpath>-->
+            <xpath expr="//form/header/button[2]" position="attributes">
+				<button name="button_mark_done" attrs="{'invisible': ['|',  ('state', '!=', 'to_close') ,'|', '|', ('state', 'in', ('draft', 'cancel', 'done', 'to_close')), ('qty_producing', '=', 0), ('move_raw_ids', '=', [])]}"
+						string="Validate" type="object" class="oe_highlight" data-hotkey="g"/>
+            </xpath>
 
 			<xpath expr="//field[@name='user_id']" position="after">
 				<field name="customer_po_no"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
@@ -161,7 +163,7 @@
 				<field name="item_text" />
 				<field name="manufacturer_id"/>
 			</xpath>
-			<!-- 
+			<!--
 	        <xpath expr="//field[@name='mobile']" position="attributes">
 				<attribute name="required">True</attribute>
 			</xpath> -->
