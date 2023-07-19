@@ -35,6 +35,16 @@ class MrpProduction(models.Model):
     store_start_date = fields.Date("Store Start Date")
     confirm_cancel = fields.Boolean(compute='_compute_confirm_cancel')
 
+    # def _compute_boolean_txt(self):
+    #     res = self.env['stock.picking'].search([('id', 'in', self.picking_ids.ids),('state','!=','done')])
+    #     print(res,"6666666666666666666666666")
+    #     for rec in res:
+    #         print(rec,"555555555555555555555555")
+    #         if rec:
+    #             self.flag = True
+    #         else:
+    #             self.flag = False
+
     def _compute_boolean_txt(self):
         res = self.env['stock.picking'].search([('id', 'in', self.picking_ids.ids),('picking_type_id.name','!=','Store Finished Product')])
         count = 0
@@ -329,6 +339,7 @@ class ReportBomStructureInherit(models.AbstractModel):
             'bom': bom,
             'bom_id': bom and bom.id or False,
             'bom_code': bom and bom.code or False,
+            'product_name': bom.product_tmpl_id.x_studio_field_qr3ai,
             'type': 'bom',
             'quantity': current_quantity,
             'quantity_available': quantities_info.get('free_qty', 0),
@@ -449,6 +460,7 @@ class ReportBomStructureInherit(models.AbstractModel):
             'type': 'component',
             'index': index,
             'bom_id': False,
+            'product_name':bom_line.product_id.x_studio_field_qr3ai,
             'product': bom_line.product_id,
             'product_id': bom_line.product_id.id,
             'position_no': bom_line.x_studio_field_c9hp1,
@@ -494,6 +506,7 @@ class ReportBomStructureInherit(models.AbstractModel):
                 'bom_id': bom_line['bom_id'],
                 'name': bom_line['name'],
                 'type': bom_line['type'],
+                'product_name': bom_line['product_name']  if 'product_name' in bom_line else '',
                 'description': bom_line['description']  if 'description' in bom_line else '',
                 'position_no': bom_line['position_no']  if 'position_no' in bom_line else '',
                 'part_no': bom_line['part_no']  if 'part_no' in bom_line else '',

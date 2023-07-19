@@ -2,76 +2,92 @@
 <odoo>
     <data>
         <template id="mrp.report_mrp_bom">
-              <t t-set="company" t-value="res_company"/>
-            <div class="header o_background_header">
-       <div class="row">
-				<div class="col-8">
-					 <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
-                             alt="Logo"/>
-					<div class="company_address"
-						style="line-height:10px;font-family: Calibri;text-color:black;">
-						<div>
-							<strong>
-								<span style="font-size: 25px;"
-									t-field="company.partner_id.name" />
-							</strong>
-							<br />
-							<span t-field="company.street" />,
-							<t t-if="company.street1">,
-								<span t-field="company.street1" />,
-								<br />
-								<span t-field="company.street2" />
-							</t>
-							<t t-else="">
-								<span t-field="company.street2" />
-							</t>
-							<br />
-							<t t-if="company.country_id.code != 'SG'">
-							<span t-field="company.city" />
-							,</t>
-							<span t-field="company.state_id" />
-					       <span t-field="company.country_id" />
-							-
-							<span t-field="company.zip" />
-							<br />
-							<span>TEL :</span>
-							<span t-field="company.phone" />
-							<t t-if="company.fax">
-								|
-								<span>FAX :</span>
-								<span t-field="company.fax" />
-							</t>
-							<br />
-							<t t-if="company.country_id.code != 'SG'">
-								<span>E-mail:</span>
-								<span t-field="company.email" />
-							,</t>
-							<span>URL:</span>
-							<span t-field="company.website" />
-							<br />
-							<span>Company Reg No:</span>
-							<span t-field="company.company_registry" />
-						</div>
-					</div>
-				</div>
-                </div>
-       </div>
 
-            <div class="o_mrp_bom_report_page container py-3 py-lg-5 px-0 bg-view">
-            <div t-if="data.get('lines')">
-                <div class="px-3 mb-5">
-                    <h1>BoM Structure &amp; Cost</h1>
-                    <h3 t-esc="data['name']"/>
-                    <hr t-if="data['bom_code']"/>
-                    <h6 t-if="data['bom_code']">Reference: <t t-esc="data['bom_code']"/></h6>
+            <t t-set="company" t-value="res_company"/>
+            <div class="header o_background_header">
+                <div class="row">
+                    <div class="col-8">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                             alt="Logo"/>
+                        <div class="company_address"
+                             style="line-height:10px;font-family: Calibri;text-color:black;">
+                            <div>
+                                <strong>
+                                    <span style="font-size: 25px;"
+                                          t-field="company.partner_id.name"/>
+                                </strong>
+                                <br/>
+                                <span t-field="company.street"/>,
+                                <t t-if="company.street1">,
+                                    <span t-field="company.street1"/>,
+                                    <br/>
+                                    <span t-field="company.street2"/>
+                                </t>
+                                <t t-else="">Node:
+
+                                    <span t-field="company.street2"/>
+                                </t>
+                                <br/>
+                                <t t-if="company.country_id.code != 'SG'">
+                                    <span t-field="company.city"/>
+                                    ,
+                                </t>
+                                <span t-field="company.state_id"/>
+                                <span t-field="company.country_id"/>
+                                -
+                                <span t-field="company.zip"/>
+                                <br/>
+                                <span>TEL :</span>
+                                <span t-field="company.phone"/>
+                                <t t-if="company.fax">
+                                    |
+                                    <span>FAX :</span>
+                                    <span t-field="company.fax"/>
+                                </t>
+                                <br/>
+                                <t t-if="company.country_id.code != 'SG'">
+                                    <span>E-mail:</span>
+                                    <span t-field="company.email"/>
+                                    ,
+                                </t>
+                                <span>URL:</span>
+                                <span t-field="company.website"/>
+                                <br/>
+                                <span>Company Reg No:</span>
+                                <span t-field="company.company_registry"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <t t-set="currency" t-value="data['currency']"/>
-                <table class="o_mrp_bom_expandable table">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Position</th>
-                            <th name="th_mrp_bom_h">Product</th>
-                           <th class="text-center">Part No</th>
+             <div class="row">
+                        <div class="col-6">
+                            <h1>BoM Structure</h1>
+                            <h3 t-esc="data['name']"/>
+                            <hr t-if="data['bom_code']"/>
+                            <h6 t-if="data['bom_code']">Reference:
+                                <t t-esc="data['bom_code']"/>
+                            </h6>
+                        </div>
+                 <div>
+                     <br/>
+                     <br/>
+                     <strong style=" font-size:20px;">Customer Po No:</strong>
+                     <strong style=" font-size:20px;">
+                         <span t-esc="data['product_name']"/>
+                     </strong>
+                 </div>
+             </div>
+            </div>
+
+           <div class="table_bom_structure">
+                <div t-if="data.get('lines')">
+                    <t t-set="currency" t-value="data['currency']"/>
+                    <table class="o_mrp_bom_expandable table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Position</th>
+                                <th name="th_mrp_bom_h">Product</th>
+                                <th class="text-center">Part No</th>
                                 <th class="text-center">Description</th>
                                 <th class="text-center">Manufacturer</th>
                                 <th class="text-center">BOM</th>
@@ -79,70 +95,81 @@
                                 <th class="text-center" groups="uom.group_uom">Unit of Measure</th>
                                 <th t-if="data['show_costs']" class="text-center">Product Cost</th>
                                 <th t-if="data['show_costs']" class="text-center">BoM Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td/>
-                            <td name="td_mrp_bom" t-esc="data['name']"/>
-                             <td/>
-                                <td/>
-                                <td/>
-                               <td>
-                                <span t-if="data['route_name']"><t t-esc="data['route_name']"/>: </span>
-                                <span t-esc="data['route_detail']"/>
-                            </td>
-                            <td class="text-end" t-esc="data['quantity']" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
-                            <td class="text-start" groups="uom.group_uom" t-esc="data['uom_name']"/>
-                            <td t-if="data['show_costs']" class="text-end" t-esc="data['prod_cost']" t-options='{"widget": "monetary", "display_currency": currency}'/>
-                            <td t-if="data['show_costs']" class="text-end" t-esc="data['bom_cost']" t-options='{"widget": "monetary", "display_currency": currency}'/>
-                        </tr>
-                        <t t-call="mrp.report_mrp_bom_pdf_line"/>
-                        <tr t-if="data['show_costs']">
-                            <td name="td_mrp_bom_f" class="text-end">
-                                <span t-if="data['byproducts']" t-esc="data['name']"/>
-                            </td>
-                            <td class="text-end"><strong>Unit Cost</strong></td>
-                            <td class="text-start" groups="uom.group_uom" t-esc="data['uom_name']"/>
-                            <td t-if="data['show_availabilities']"/>
-                            <td t-if="data['show_availabilities']"/>
-                            <td t-if="data['show_availabilities']"/>
-                            <td t-if="data['show_lead_times']"/>
-                            <td/>
-                                                        <td class="text-end" t-esc="data['prod_cost']/data['quantity']" t-options='{"widget": "monetary", "display_currency": currency}'/>
-
-                            <td class="text-end" t-esc="data['bom_cost'] / data['quantity']" t-options='{"widget": "monetary", "display_currency": currency}'/>
-                        </tr>
-                        <t t-if="data['show_costs'] and data['byproducts']" t-foreach="data['byproducts']" t-as="byproduct">
+                            </tr>
+                        </thead>
+                        <tbody>
                             <tr>
-                                <td name="td_mrp_bom_byproducts_f" class="text-end" t-esc="byproduct['name']"/>
-                                <td class="text-end"><strong>Unit Cost</strong></td>
-                                <td class="text-start" groups="uom.group_uom" t-esc="byproduct['uom_name']"/>
+                                <td/>
+                                <td name="td_mrp_bom" t-esc="data['name']"/>
+                                <td/>
+                                <td/>
+                                <td/>
+                                <td>
+                                    <span t-if="data['route_name']"><t t-esc="data['route_name']"/>:
+                                    </span>
+                                    <span t-esc="data['route_detail']"/>
+                                </td>
+                                <td class="text-end" t-esc="data['quantity']"
+                                    t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
+                                <td class="text-start" groups="uom.group_uom" t-esc="data['uom_name']"/>
+                                <td t-if="data['show_costs']" class="text-end" t-esc="data['prod_cost']"
+                                    t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                <td t-if="data['show_costs']" class="text-end" t-esc="data['bom_cost']"
+                                    t-options='{"widget": "monetary", "display_currency": currency}'/>
+                            </tr>
+                            <t t-call="mrp.report_mrp_bom_pdf_line"/>
+                            <tr t-if="data['show_costs']">
+                                <td name="td_mrp_bom_f" class="text-end">
+                                    <span t-if="data['byproducts']" t-esc="data['name']"/>
+                                </td>
+                                <td class="text-end">
+                                    <strong>Unit Cost</strong>
+                                </td>
+                                <td class="text-start" groups="uom.group_uom" t-esc="data['uom_name']"/>
                                 <td t-if="data['show_availabilities']"/>
                                 <td t-if="data['show_availabilities']"/>
                                 <td t-if="data['show_availabilities']"/>
                                 <td t-if="data['show_lead_times']"/>
                                 <td/>
-                                <td class="text-end" t-esc="byproduct['prod_cost'] / byproduct['quantity']"
+                                <td class="text-end" t-esc="data['prod_cost']/data['quantity']"
                                     t-options='{"widget": "monetary", "display_currency": currency}'/>
-                                <td class="text-end" t-esc="byproduct['bom_cost'] / byproduct['quantity']"
+                                <td class="text-end" t-esc="data['bom_cost'] / data['quantity']"
                                     t-options='{"widget": "monetary", "display_currency": currency}'/>
                             </tr>
-                        </t>
-                    </tbody>
-                </table>
-            </div>
-            <div t-else="" class="d-flex align-items-center justify-content-center h-50">
-                <h4 class="text-muted">No data available.</h4>
-            </div>
-        </div>
+                            <t t-if="data['show_costs'] and data['byproducts']" t-foreach="data['byproducts']"
+                               t-as="byproduct">
+                                <tr>
+                                    <td name="td_mrp_bom_byproducts_f" class="text-end" t-esc="byproduct['name']"/>
+                                    <td class="text-end">
+                                        <strong>Unit Cost</strong>
+                                    </td>
+                                    <td class="text-start" groups="uom.group_uom" t-esc="byproduct['uom_name']"/>
+                                    <td t-if="data['show_availabilities']"/>
+                                    <td t-if="data['show_availabilities']"/>
+                                    <td t-if="data['show_availabilities']"/>
+                                    <td t-if="data['show_lead_times']"/>
+                                    <td/>
+                                    <td class="text-end" t-esc="byproduct['prod_cost'] / byproduct['quantity']"
+                                        t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                    <td class="text-end" t-esc="byproduct['bom_cost'] / byproduct['quantity']"
+                                        t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                <div t-else="" class="d-flex align-items-center justify-content-center h-50">
+                    <h4 class="text-muted">No data available.</h4>
+                </div>
+
+           </div>
+
         </template>
-         <template id="mrp.report_mrp_bom_pdf_line">
-      <t t-set="currency" t-value="data['currency']"/>
+        <template id="mrp.report_mrp_bom_pdf_line">
+            <t t-set="currency" t-value="data['currency']"/>
             <t t-foreach="data['lines']" t-as="l">
                 <tr t-if="l['visible'] and (l['type'] != 'operation' or data['show_operations'])">
-
-                  <td name="td_mrp_cod">
+                    <td name="td_mrp_cod">
                         <t t-if="l.get('position_no', False) is not False">
                             <span t-esc="l['position_no']"/>
                         </t>
@@ -187,28 +214,41 @@
                         t-attf-class="text-end {{ '' if l['type'] == 'component' else '' }}"
                         t-esc="l['bom_cost']" t-options='{"widget": "monetary", "display_currency": currency}'/>
                 </tr>
-         </t>
+                <div class="footer">
+                    <div class="row">
+                        <div class="col">
+                            <div class="text-center">
+                                Page:
+                                <span class="page"/>
+                                of
+                                <span class="topage"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
         </template>
-        <record id="paperformat_mrp_bom" model="report.paperformat">
-             <field name="name">BoM Structure</field>
-            <field name="default" eval="True"/>
-            <field name="format">A4</field>
-            <field name="orientation">Portrait</field>
-            <field name="margin_top">55</field>
-            <field name="margin_bottom">70</field>
-            <field name="margin_left">6</field>
-            <field name="margin_right">6</field>
-            <field name="header_line" eval="False"/>
-            <field name="header_spacing">45</field>
-            <field name="dpi">90</field>
-        </record>
-        <report id="action_report_bom_structure_overview" model="mrp.bom"
-                string="BoM Structure"
-                report_type="qweb-pdf"
-                name="mrp.report_bom_structure"
-                file="mrp.report_bom_structure"
-                paperformat="paperformat_mrp_bom"
-                print_report_name="'Bom Overview - %s' % object.display_name"/>
+
+<!--        <record id="paperformat_mrp_bom" model="report.paperformat">-->
+<!--            <field name="name">BoM Structure</field>-->
+<!--            <field name="default" eval="True"/>-->
+<!--            <field name="format">A4</field>-->
+<!--            <field name="orientation">Portrait</field>-->
+<!--            <field name="margin_top">55</field>-->
+<!--            <field name="margin_bottom">70</field>-->
+<!--            <field name="margin_left">6</field>-->
+<!--            <field name="margin_right">6</field>-->
+<!--            <field name="header_line" eval="False"/>-->
+<!--            <field name="header_spacing">45</field>-->
+<!--            <field name="dpi">90</field>-->
+<!--        </record>-->
+<!--        <report id="action_report_bom_structure_overview" model="mrp.bom"-->
+<!--                string="BoM Structure"-->
+<!--                report_type="qweb-pdf"-->
+<!--                name="mrp.report_bom_structure"-->
+<!--                file="mrp.report_bom_structure"-->
+<!--                paperformat="paperformat_mrp_bom"-->
+<!--                print_report_name="'Bom Overview - %s' % object.display_name"/>-->
 
     </data>
 </odoo>
