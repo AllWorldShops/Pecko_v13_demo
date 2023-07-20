@@ -229,26 +229,26 @@
             </t>
         </template>
 
-<!--        <record id="paperformat_mrp_bom" model="report.paperformat">-->
-<!--            <field name="name">BoM Structure</field>-->
-<!--            <field name="default" eval="True"/>-->
-<!--            <field name="format">A4</field>-->
-<!--            <field name="orientation">Portrait</field>-->
-<!--            <field name="margin_top">55</field>-->
-<!--            <field name="margin_bottom">70</field>-->
-<!--            <field name="margin_left">6</field>-->
-<!--            <field name="margin_right">6</field>-->
-<!--            <field name="header_line" eval="False"/>-->
-<!--            <field name="header_spacing">45</field>-->
-<!--            <field name="dpi">90</field>-->
-<!--        </record>-->
-<!--        <report id="action_report_bom_structure_overview" model="mrp.bom"-->
-<!--                string="BoM Structure"-->
-<!--                report_type="qweb-pdf"-->
-<!--                name="mrp.report_bom_structure"-->
-<!--                file="mrp.report_bom_structure"-->
-<!--                paperformat="paperformat_mrp_bom"-->
-<!--                print_report_name="'Bom Overview - %s' % object.display_name"/>-->
+        <record id="paperformat_mrp_bom" model="report.paperformat">
+            <field name="name">BoM Structure</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">60</field>
+            <field name="margin_bottom">70</field>
+            <field name="margin_left">6</field>
+            <field name="margin_right">6</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">47</field>
+            <field name="dpi">90</field>
+        </record>
+        <report id="action_report_bom_structure_overview" model="mrp.bom"
+                string="BoM Structure"
+                report_type="qweb-pdf"
+                name="mrp.report_bom_structure"
+                file="mrp.report_bom_structure"
+                paperformat="paperformat_mrp_bom"
+                print_report_name="'Bom Overview - %s' % object.display_name"/>
 
     </data>
 </odoo>
