@@ -153,6 +153,52 @@ class PurchaseOrderLine(models.Model):
     back_order_qty = fields.Float(string='Pending Qty', compute='_compute_back_order_qty', store=True)
     line_no = fields.Integer(string='Position', default=False)
     old_po_no = fields.Char(string="Old PO Number", related="order_id.old_po_no")
+
+    @api.model
+    def _prepare_purchase_order_line(self, product_id, product_qty, product_uom, company_id, supplier, po):
+        partner = supplier.partner_id
+        uom_po_qty = product_uom._compute_quantity(product_qty, product_id.uom_po_id, rounding_method='HALF-UP')
+        # _select_seller is used if the supplier have different price depending
+        # the quantities ordered.
+        seller = product_id.with_company(company_id)._select_seller(
+            partner_id=partner,
+            quantity=uom_po_qty,
+            date=po.date_order and po.date_order.date(),
+            uom_id=product_id.uom_po_id)
+        product_taxes = product_id.supplier_taxes_id.filtered(lambda x: x.company_id.id == company_id.id)
+        taxes = po.fiscal_position_id.map_tax(product_taxes)
+
+        # price_unit = self.env['account.tax']._fix_tax_included_price_company(
+        #     seller.price, product_taxes, taxes, company_id) if seller.price else 0.0
+
+        # Working unit price change for base code and change the variable seller replace supplier(21/07/23)
+        price_unit = self.env['account.tax']._fix_tax_included_price_company(
+            supplier.price, product_taxes, taxes, company_id) if supplier.price > 0 else 0.0
+
+        if price_unit and seller and po.currency_id and seller.currency_id != po.currency_id:
+            price_unit = seller.currency_id._convert(
+                price_unit, po.currency_id, po.company_id, po.date_order or fields.Date.today())
+
+        product_lang = product_id.with_prefetch().with_context(
+            lang=partner.lang,
+            partner_id=partner.id,
+        )
+        name = product_lang.with_context(seller_id=seller.id).display_name
+        if product_lang.description_purchase:
+            name += '\n' + product_lang.description_purchase
+
+        date_planned = self.order_id.date_planned or self._get_date_planned(seller, po=po)
+
+        return {
+            'name': name,
+            'product_qty': uom_po_qty,
+            'product_id': product_id.id,
+            'product_uom': product_id.uom_po_id.id,
+            'price_unit': price_unit,
+            'date_planned': date_planned,
+            'taxes_id': [(6, 0, taxes.ids)],
+            'order_id': po.id,
+        }
     
     @api.depends('product_qty','qty_received')
     def _compute_back_order_qty(self):
@@ -316,11 +362,7 @@ class MailMail(models.Model):
                         processing_pid = None
                     except AssertionError as error:
                         if str(error) == IrMailServer.NO_VALID_RECIPIENT:
-                            # if we have a list of void emails for email_list -> email missing, otherwise generic email failure
-                            if not email.get('email_to') and failure_type != "mail_email_invalid":
-                                failure_type = "mail_email_missing"
-                            else:
-                                failure_type = "mail_email_invalid"
+                            failure_type = "RECIPIENT"
                             # No valid recipient found for this particular
                             # mail item -> ignore error to avoid blocking
                             # delivery to next recipients, if any. If this is
