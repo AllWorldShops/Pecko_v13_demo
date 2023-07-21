@@ -205,7 +205,7 @@ class WizardWizards(models.TransientModel):
             
         fp = BytesIO()
         workbook.save(fp)
-        self.write({'file_name': base64.encodestring(fp.getvalue()), 'move_data':file_name})
+        self.write({'file_name': base64.encodebytes(fp.getvalue()), 'move_data':file_name})
         fp.close()
             
         return {
