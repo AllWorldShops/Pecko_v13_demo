@@ -35,30 +35,6 @@
             <span t-esc="data.manufacturer"/>
         </td>
              <td t-attf-class="td_mrp_bom" t-else=""> </td>
-<!--        <td t-if="showAvailabilities" class="text-end">-->
-<!--            <t t-if="data.hasOwnProperty('producible_qty')" t-esc="data.producible_qty"/>-->
-<!--        </td>-->
-<!--        <td t-if="showAvailabilities" class="text-end">-->
-<!--            <t t-if="hasQuantity">-->
-<!--                <t t-esc="formatFloat(data.quantity_available, {'digits': [false, precision]})"/> /-->
-<!--                <t t-esc="formatFloat(data.quantity_on_hand, {'digits': [false, precision]})"/>-->
-<!--            </t>-->
-<!--        </td>-->
-<!--        <td t-if="showAvailabilities" class="text-center">-->
-<!--            <t t-if="data.hasOwnProperty('availability_state')">-->
-<!--                <span t-attf-class="{{availabilityColorClass}}" t-esc="data.availability_display"/>-->
-<!--                <a href="#" role="button" t-on-click.prevent="goToForecast" title="Forecast Report" t-attf-class="fa fa-fw fa-area-chart o_mrp_bom_forecast ms-1 {{availabilityColorClass}}"/>-->
-<!--            </t>-->
-<!--        </td>-->
-<!--        <td t-if="showLeadTimes" class="text-end">-->
-<!--            <span t-if="hasLeadTime"><t t-esc="data.lead_time"/> Days</span>-->
-<!--        </td>-->
-        <td class="text-center">
-            <div t-if="data.route_name">
-                <span><t t-esc="data.route_name"/>: </span>
-                <a href="#" t-on-click.prevent="() => this.goToRoute(data.route_type)" t-esc="data.route_detail"/>
-            </div>
-        </td>
         <td/>
         <td class="text-center">
             <t t-if="data.type == 'operation'" t-esc="formatFloatTime(data.quantity)"/>

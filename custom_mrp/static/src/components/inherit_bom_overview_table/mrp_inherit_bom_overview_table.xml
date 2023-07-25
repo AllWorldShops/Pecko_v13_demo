@@ -10,7 +10,6 @@
                                     <th class="text-center">Part No</th>
                                     <th class="text-center">Description</th>
                                     <th class="text-center">Manufacturer</th>
-                                    <th class="text-center">BOM</th>
                                     <th class="text-center" t-attf-class="{{ showUom ? 'text-center' : 'text-end' }}"
                                         t-attf-colspan="{{ showUom ? 2 : 1 }}">Quantity</th>
                                     <th class="text-center" groups="uom.group_uom">Unit of Measure</th>
