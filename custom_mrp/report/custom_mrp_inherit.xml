@@ -123,6 +123,7 @@
                 </div>
             </div>
         </template>
+
         <template id="mrp.report_mrp_bom_pdf_line">
             <t t-set="currency" t-value="data['currency']"/>
             <t t-foreach="data['lines']" t-as="l">
@@ -173,9 +174,7 @@
                     </div>
                 </div>
             </div>
-
         </template>
-
 
         <record id="paperformat_mrp_bom" model="report.paperformat">
             <field name="name">BoM Structure</field>
@@ -187,7 +186,7 @@
             <field name="margin_left">7</field>
             <field name="margin_right">7</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">31</field>
+            <field name="header_spacing">27</field>
             <field name="dpi">90</field>
         </record>
         <report id="action_report_bom_structure_overview" model="mrp.bom"
