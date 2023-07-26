@@ -35,15 +35,7 @@ class MrpProduction(models.Model):
     store_start_date = fields.Date("Store Start Date")
     confirm_cancel = fields.Boolean(compute='_compute_confirm_cancel')
 
-    # def _compute_boolean_txt(self):
-    #     res = self.env['stock.picking'].search([('id', 'in', self.picking_ids.ids),('state','!=','done')])
-    #     print(res,"6666666666666666666666666")
-    #     for rec in res:
-    #         print(rec,"555555555555555555555555")
-    #         if rec:
-    #             self.flag = True
-    #         else:
-    #             self.flag = False
+
 
     def _compute_boolean_txt(self):
         res = self.env['stock.picking'].search([('id', 'in', self.picking_ids.ids),('picking_type_id.name','!=','Store Finished Product')])
@@ -333,13 +325,19 @@ class ReportBomStructureInherit(models.AbstractModel):
         if not ignore_stock:
             # Useless to compute quantities_info if it's not going to be used later on
             quantities_info = self._get_quantities_info(product, bom.product_uom_id, parent_bom, product_info)
-
+        workorder_list = []
+        for line in bom.operation_ids:
+            workorder_list.append({'name':line.name,
+                                   'workcenter':line.workcenter_id.name,
+                                   'note':line.note,
+                                   })
         bom_report_line = {
             'index': index,
             'bom': bom,
             'bom_id': bom and bom.id or False,
             'bom_code': bom and bom.code or False,
-            'product_name': bom.product_tmpl_id.x_studio_field_qr3ai,
+            'product_discription': bom.product_tmpl_id.x_studio_field_mHzKJ,
+            'product_part_no': bom.product_tmpl_id.x_studio_field_qr3ai,
             'type': 'bom',
             'quantity': current_quantity,
             'quantity_available': quantities_info.get('free_qty', 0),
@@ -367,6 +365,7 @@ class ReportBomStructureInherit(models.AbstractModel):
             'attachment_ids': attachment_ids,
             'phantom_bom': bom.type == 'phantom',
             'parent_id': parent_bom and parent_bom.id or False,
+            'workorder_ids' : workorder_list
         }
 
         if not is_minimized:
