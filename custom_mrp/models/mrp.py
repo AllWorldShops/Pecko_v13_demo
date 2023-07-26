@@ -35,15 +35,7 @@ class MrpProduction(models.Model):
     store_start_date = fields.Date("Store Start Date")
     confirm_cancel = fields.Boolean(compute='_compute_confirm_cancel')
 
-    # def _compute_boolean_txt(self):
-    #     res = self.env['stock.picking'].search([('id', 'in', self.picking_ids.ids),('state','!=','done')])
-    #     print(res,"6666666666666666666666666")
-    #     for rec in res:
-    #         print(rec,"555555555555555555555555")
-    #         if rec:
-    #             self.flag = True
-    #         else:
-    #             self.flag = False
+
 
     def _compute_boolean_txt(self):
         res = self.env['stock.picking'].search([('id', 'in', self.picking_ids.ids),('picking_type_id.name','!=','Store Finished Product')])

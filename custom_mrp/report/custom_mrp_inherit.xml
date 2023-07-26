@@ -11,6 +11,14 @@
                                  alt="Logo"/>
                         </div>
                     </div>
+                     <div class="company_address" style="line-height:10px;font-family: Calibri;text-color:black;">
+                            <div>
+                                <strong>
+                                    <span style="font-size: 25px;"
+                                          t-field="company.partner_id.name"/>
+                                </strong>
+                            </div>
+                           </div>
                     <div class="row">
                         <div class="col-3">
                             <h1>BoM Structure</h1>
@@ -30,7 +38,7 @@
                                 <span t-esc="data['product_part_no']"/>
                             </strong>
                         </div>
-                        <div class="col-6">
+                        <div class="col-8">
                             <strong style=" font-size:18px; ">Discription:</strong>
                             <strong style=" font-size:18px; ">
                                 <span t-esc="data['product_discription']"/>
@@ -38,7 +46,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="table_bom_structure">
                     <div t-if="data.get('lines')">
                         <t t-set="currency" t-value="data['currency']"/>
@@ -120,12 +127,12 @@
             <t t-set="currency" t-value="data['currency']"/>
             <t t-foreach="data['lines']" t-as="l">
                 <tr t-if="l['visible'] and (l['type'] != 'operation' )">
-                    <td name="td_mrp_cod" width="5%">
+                    <td name="td_mrp_cod" >
                         <t t-if="l.get('position_no', False) is not False">
                             <span t-esc="l['position_no']"/>
                         </t>
                     </td>
-                    <td name="td_mrp_code" width="25%">
+                    <td name="td_mrp_code" width="23%">
                         <span t-attf-style="margin-left: {{ str(l['level'] * 20) }}px"/>
                         <span t-esc="l['name']"/>
                     </td>
@@ -134,12 +141,12 @@
                             <span t-esc="l['part_no']"/>
                         </t>
                     </td>
-                    <td name="td_mrp_cod" width="25%">
+                    <td name="td_mrp_cod" width="28%">
                         <t t-if="l.get('description', False) is not False">
                             <span t-esc="l['description']"/>
                         </t>
                     </td>
-                    <td name="td_mrp_cod" width="20%">
+                    <td name="td_mrp_cod" width="25%">
                         <t t-if="l.get('manufacturer', False) is not False">
                             <span t-esc="l['manufacturer']"/>
                         </t>
@@ -175,12 +182,12 @@
             <field name="default" eval="True"/>
             <field name="format">A4</field>
             <field name="orientation">Landscape</field>
-            <field name="margin_top">40</field>
+            <field name="margin_top">45</field>
             <field name="margin_bottom">20</field>
             <field name="margin_left">7</field>
             <field name="margin_right">7</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">24</field>
+            <field name="header_spacing">31</field>
             <field name="dpi">90</field>
         </record>
         <report id="action_report_bom_structure_overview" model="mrp.bom"
