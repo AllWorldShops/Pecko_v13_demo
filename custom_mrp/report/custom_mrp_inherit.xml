@@ -25,7 +25,7 @@
                         <strong style="font-size: 35px;">BoM Structure</strong>
                     </div>
                 </div>
-                <div class="row"  style="padding-left:3px">
+                <div class="row" style="padding-left:3px">
                     <div class="col-3">
                         <h3 t-esc="data['name']"/>
                         <hr t-if="data['bom_code']"/>
@@ -34,14 +34,14 @@
                         </h6>
                     </div>
                     <div class="col-5">
-                        <strong style=" font-size:18px;">Customer Part No:</strong>
-                        <strong style=" font-size:18px; ">
+                        <strong style=" font-size:20px;">Customer Part No:</strong>
+                        <strong style=" font-size:20px; ">
                             <span t-esc="data['product_part_no']"/>
                         </strong>
                     </div>
                     <div class="col-8">
-                        <strong style=" font-size:18px; ">Discription:</strong>
-                        <strong style=" font-size:18px; ">
+                        <strong style=" font-size:20px; ">Discription:</strong>
+                        <strong style=" font-size:20px; ">
                             <span t-esc="data['product_discription']"/>
                         </strong>
                     </div>
@@ -153,7 +153,7 @@
                             <span t-esc="l['manufacturer']"/>
                         </t>
                     </td>
-                    <td class="text-start" name="td_mrp_cod">
+                    <td class="text-end" name="td_mrp_cod">
                         <t t-if="l['type'] == 'operation'" t-esc="l['quantity']" t-options='{"widget": "float_time"}'/>
                         <t t-else="" t-esc="l['quantity']"
                            t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
@@ -165,12 +165,20 @@
             </t>
             <div class="footer">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-4">
+                    </div>
+                    <div class="col-4" style="font-size:22px">
                         <div class="text-center">
                             Page:
                             <span class="page"/>
                             of
                             <span class="topage"/>
+                        </div>
+                    </div>
+                    <div class="col" >
+                        <div class="text-right" style="padding-left:340px ">
+                            <strong style=" font-size:22px;">Printed on:</strong>
+                      <span style=" font-size:22px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
                         </div>
                     </div>
                 </div>
