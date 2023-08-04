@@ -15,25 +15,26 @@ class PurchaseorderLine(models.Model):
         # customised by PPTS 
         # Purpose:- The quantity of purchase order should be based on minimum quantity in Vendor/Supplier under 'products'.
         ###############################################################################################
+        print(product_qty, "product_qty+++++++", product_id, "ppoppoppopo",product_uom )
         if supplier.min_qty > 0:
             qty = product_uom._compute_quantity(product_qty, product_id.uom_po_id)
-            print(qty, "qtyqty")
+            print(qty, "qty--------------------------------")
             if qty > supplier.min_qty:
                 sub_qty = (qty // supplier.min_qty) + 1
                 if qty == supplier.min_qty or supplier.min_qty <= 1:
                     pass
                 else:
-                    print(sub_qty, "sub_qty-------", supplier.min_qty)
                     product_qty = supplier.min_qty * sub_qty
+                    print(product_qty, "product_qtyproduct_qty1112")
                     if product_uom != product_id.uom_po_id:
                         product_uom = product_id.uom_po_id
 
-            else:
+            if qty < supplier.min_qty:
                 qty = product_uom._compute_quantity(supplier.min_qty, product_id.uom_po_id)
                 product_qty = qty
+                print(product_qty, "product_qtyproduct_qty--------")
                 if product_uom != product_id.uom_po_id:
                     product_uom = product_id.uom_po_id
-        
             
         ###############################################################################################
 

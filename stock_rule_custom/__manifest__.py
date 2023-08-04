@@ -8,7 +8,7 @@
     'description': """ This module has customizations for the stock rule. """,
     "author": "PPTS [India] Pvt.Ltd.",
     'website': 'www.pptssolutions.com',
-    'depends': ['base','stock'],
+    'depends': ['base','stock', 'purchase_stock'],
     # 'data': [
     # ],
     'demo': [ ],
