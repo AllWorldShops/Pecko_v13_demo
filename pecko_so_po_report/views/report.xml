@@ -552,8 +552,14 @@
                                 <span>
                                     DATE :
                                     <strong>
-                                        <span t-field="o.date_order"
-                                              t-options='{"format": "dd-MMM-yyyy"}'/>
+                                        <t t-if="o.state in ('draft','sent')">
+                                            <span t-field="o.date_order"
+                                                  t-options='{"format": "dd-MMM-yyyy"}'/>
+                                        </t>
+                                        <t t-if="o.state in ('purchase','done')">
+                                            <span t-field="o.date_approve"
+                                                  t-options='{"format": "dd-MMM-yyyy"}'/>
+                                        </t>
                                     </strong>
                                 </span>
                                 <br/>
