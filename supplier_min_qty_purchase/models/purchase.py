@@ -25,7 +25,7 @@ class PurchaseorderLine(models.Model):
                     product_qty = supplier.min_qty * sub_qty
                     
             else:
-                # qty = product_uom._compute_quantity(supplier.min_qty, product_id.uom_po_id)
+                qty = product_uom._compute_quantity(supplier.min_qty, product_id.uom_po_id)
                 product_qty = qty
         
             if product_uom != product_id.uom_po_id:
