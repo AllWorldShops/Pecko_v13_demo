@@ -20,7 +20,7 @@ class PurchaseorderLine(models.Model):
             qty = product_uom._compute_quantity(product_qty, product_id.uom_po_id)
             print(qty, "qty--------------------------------")
             if qty > supplier.min_qty:
-                sub_qty = (qty // supplier.min_qty) + 1
+                sub_qty = (qty // supplier.min_qty)
                 if qty == supplier.min_qty or supplier.min_qty <= 1:
                     pass
                 else:
