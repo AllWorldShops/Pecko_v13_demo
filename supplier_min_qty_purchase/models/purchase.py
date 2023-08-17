@@ -11,16 +11,15 @@ class PurchaseorderLine(models.Model):
     @api.model
     def _prepare_purchase_order_line_from_procurement(self, product_id, product_qty, product_uom, company_id, values, po):
         line_description = ''
-        
+        print(product_uom.name, "product_uomppppppp")
         if values.get('product_description_variants'):
             line_description = values['product_description_variants']
         supplier = values.get('supplier')
-
         # customised by PPTS 
         # Purpose:- The quantity of purchase order should be based on minimum quantity in Vendor/Supplier under 'products'.
         ###############################################################################################
         if supplier.min_qty > 0:
-            qty = product_uom._compute_quantity(product_qty, product_id.uom_po_id)
+            qty = round(product_uom._compute_quantity(product_qty, product_id.uom_po_id), 2)
             if qty > supplier.min_qty:
                 sub_qty = (qty // supplier.min_qty) if self.is_multiple(qty, supplier.min_qty) else (qty // supplier.min_qty) + 1
                 if qty == supplier.min_qty or supplier.min_qty <= 1:
@@ -29,14 +28,13 @@ class PurchaseorderLine(models.Model):
                     product_qty = supplier.min_qty * sub_qty
                     if product_uom != product_id.uom_po_id:
                         product_uom = product_id.uom_po_id
-
             if qty < supplier.min_qty:
-                qty = product_uom._compute_quantity(supplier.min_qty, product_id.uom_po_id)
-                product_qty = qty
+                # qty = 
+                product_qty = supplier.min_qty
                 if product_uom != product_id.uom_po_id:
                     product_uom = product_id.uom_po_id
-        ###############################################################################################
 
+        ###############################################################################################
         res = self._prepare_purchase_order_line(product_id, product_qty, product_uom, company_id, supplier, po)
         # We need to keep the vendor name set in _prepare_purchase_order_line. To avoid redundancy
         # in the line name, we add the line_description only if different from the product name.
