@@ -4,7 +4,7 @@
         <template id="mrp.report_mrp_bom">
             <t t-set="company" t-value="res_company"/>
             <div class="header o_background_header">
-                <div class="row" style="padding-left:2px">
+                <div class="row" style="padding-left:1.5px">
                     <div class="col-8">
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
                              alt="Logo"/>
@@ -15,17 +15,17 @@
                      style="text-start;padding-left:3px;font-family: Calibri;text-color:black;">
                     <div class="col-8">
                         <strong>
-                            <span style="font-size: 25px;"
+                            <span style="font-size: 25px;papadding-left:3.6px"
                                   t-field="company.partner_id.name"/>
                         </strong>
                     </div>
                 </div>
-                <div class="row" style="padding-left:2px">
+                <div class="row" style="padding-left:2.9px">
                     <div class="col-8">
                         <strong style="font-size: 35px;">BoM Structure</strong>
                     </div>
                 </div>
-                <div class="row" style="padding-left:3px">
+                <div class="row" style="padding-left:4.2px">
                     <div class="col-3">
                         <h3 t-esc="data['name']"/>
                         <hr t-if="data['bom_code']"/>
@@ -40,7 +40,7 @@
                         </strong>
                     </div>
                     <div class="col-8">
-                        <strong style=" font-size:20px; ">Discription:</strong>
+                        <strong style=" font-size:20px; ">Description:</strong>
                         <strong style=" font-size:20px; ">
                             <span t-esc="data['product_discription']"/>
                         </strong>
@@ -95,16 +95,16 @@
                             </t>
                         </tbody>
                     </table>
-                    <table class="o_mrp_bom_expandable table">
+                    <table class="o_mrp_bom_expandable table" >
                         <thead>
-                            <tr>
-                                <th class="text-center">Operation</th>
-                                <th class="text-center">Work Center</th>
-                                <th class="text-center">Operation Text</th>
+                            <tr >
+                                <th class="text-center" width="20%">Operation</th>
+                                <th class="text-center" width="20%">Work Center</th>
+                                <th class="text-center" width="60%">Operation Text</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr t-foreach="data['workorder_ids']" t-as="line">
+                            <tr t-foreach="data['workorder_ids']" t-as="line" >
                                 <td>
                                     <span t-esc="line['name']"></span>
                                 </td>
@@ -195,7 +195,7 @@
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">27</field>
+            <field name="header_spacing">32</field>
             <field name="dpi">90</field>
         </record>
         <report id="action_report_bom_structure_overview" model="mrp.bom"
