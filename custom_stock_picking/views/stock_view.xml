@@ -52,9 +52,9 @@
 					<field name="position_no" />	
 			</xpath>
 
-			<xpath expr="//field[@name='move_ids_without_package']/tree" position="attributes">
+			<!-- <xpath expr="//field[@name='move_ids_without_package']/tree" position="attributes">
 				<attribute name="create">false</attribute>
-			</xpath>
+			</xpath> -->
 
 			<xpath expr="//field[@name='move_line_nosuggest_ids']" position="inside">
 			<tree editable="0">
