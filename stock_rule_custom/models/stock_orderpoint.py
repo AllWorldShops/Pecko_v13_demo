@@ -9,6 +9,11 @@ from odoo.tools import float_compare, split_every
 class StockOrderpoint(models.Model):
     _inherit = 'stock.warehouse.orderpoint'
 
+    def _get_orderpoint_procurement_date(self):
+        # sale = self.env['sale.order.line'].search([('')])
+        # print(datetime.combine(self.product_id.deadline_date, time.min), "spospodpsodsdsdsd")
+        return datetime.combine(self.product_id.deadline_date, time.min)
+        
     def _get_orderpoint_action(self):
         """Create manual orderpoints for missing product in each warehouses. It also removes
         orderpoints that have been replenish. In order to do it:
