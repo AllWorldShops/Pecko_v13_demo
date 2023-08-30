@@ -4,6 +4,7 @@
 from odoo import api, fields, models, SUPERUSER_ID, _
 from collections import defaultdict
 from odoo.tools import float_compare, split_every
+from datetime import datetime, time
 
 
 class StockOrderpoint(models.Model):
