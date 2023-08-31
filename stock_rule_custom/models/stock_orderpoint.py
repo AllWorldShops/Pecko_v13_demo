@@ -5,6 +5,8 @@ from odoo import api, fields, models, SUPERUSER_ID, _
 from collections import defaultdict
 from odoo.tools import float_compare, split_every
 from datetime import datetime, time
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class StockOrderpoint(models.Model):
@@ -13,7 +15,9 @@ class StockOrderpoint(models.Model):
     def _get_orderpoint_procurement_date(self):
         # sale = self.env['sale.order.line'].search([('')])
         # print(datetime.combine(self.product_id.deadline_date, time.min), "spospodpsodsdsdsd")
-        return datetime.combine(self.product_id.deadline_date, time.min)
+        _logger.info("Order Point-------%s " % self.id)
+        _logger.info("Deadline date time: %s------------Lead date time : %s" % (self.product_id.deadline_date, self.lead_days_date))
+        return datetime.combine(self.lead_days_date, time.min)
         
     def _get_orderpoint_action(self):
         """Create manual orderpoints for missing product in each warehouses. It also removes
@@ -61,8 +65,6 @@ class StockOrderpoint(models.Model):
                 location=loc.id,
 ############# "to_date" is commented out by PPTS to avoid Forcasted quantity based on lead time.#################
                 # to_date=today + relativedelta.relativedelta(days=days)
-
-
             ).read(['virtual_available'])
             for qty in qties:
                 if float_compare(qty['virtual_available'], 0, precision_rounding=product.uom_id.rounding) < 0:
