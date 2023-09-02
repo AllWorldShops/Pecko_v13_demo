@@ -12,12 +12,23 @@ _logger = logging.getLogger(__name__)
 class StockOrderpoint(models.Model):
     _inherit = 'stock.warehouse.orderpoint'
 
+    # deadline_date = fields.Date('Deadline Date')
+
     def _get_orderpoint_procurement_date(self):
+        Move = self.env['stock.move'].with_context(active_test=False)
+        domain_move_out_todo = [('product_id', '=', self.product_id.id),('state', 'in', ('waiting', 'confirmed', 'assigned', 'partially_available'))]
+        # print(moves_in_res, "moves_in_resmoves_in_res--------------")
+        # print([s.id for s in Move.search(domain_move_out_todo)], "domain_move_out_todo============")
+        out_moves = Move.search(domain_move_out_todo)
+        _logger.info("out_movesout_moves-------%s " % str(out_moves))
+        deadline_date = False
+        if out_moves:
+            deadline_date = min(out_moves.mapped('date'), default=fields.Datetime.now())
         # sale = self.env['sale.order.line'].search([('')])
-        # print(datetime.combine(self.product_id.deadline_date, time.min), "spospodpsodsdsdsd")
-        _logger.info("Order Point-------%s " % self.id)
-        _logger.info("Deadline date time: %s------------Lead date time : %s" % (self.product_id.deadline_date, self.lead_days_date))
-        return datetime.combine(self.lead_days_date, time.min)
+        _logger.info("-----------Order Point-------%s " % self.id)
+        _logger.info("Deadline date time: %s------------Lead date time : %s" % (deadline_date, self.lead_days_date))
+        # return datetime.combine(self.lead_days_date, time.min)
+        return deadline_date if deadline_date else datetime.combine(self.lead_days_date, time.min)
         
     def _get_orderpoint_action(self):
         """Create manual orderpoints for missing product in each warehouses. It also removes

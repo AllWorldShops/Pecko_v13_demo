@@ -49,7 +49,7 @@
             	<field name="manufacturer_id"/>
             	<field name="storage_location_id"/>
                 <field name="project"/>
-                <field name="deadline_date" invisible="1"/>
+                <!-- <field name="deadline_date" invisible="1"/> -->
             </xpath> 
 
             <group name="group_general" position="inside">
