@@ -229,8 +229,8 @@ class StockRule(models.Model):
                         days=procurement.values['supplier'].delay)
                     if fields.Date.to_date(order_date_planned) < fields.Date.to_date(po.date_order):
                         po.date_order = order_date_planned
-                    if fields.Date.to_date(order_date_planned) <= fields.Date.to_date(fields.Date.now()):
-                        po.date_order = fields.Date.now()
+                    if fields.Date.to_date(order_date_planned) <= fields.Date.to_date(fields.Datetime.now()):
+                        po.date_order = fields.Datetime.now()
             self.env['purchase.order.line'].sudo().create(po_line_values)
 
     # PPTS using this function for MO schedule date changes requested by Suresh on 12.05.2023 starts
