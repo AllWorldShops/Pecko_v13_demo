@@ -34,8 +34,7 @@
                     <div class="row">
                         <div class="col-6" t-if="o.amount">
                             Payment Amount:
-                            <span t-field="o.amount"
-                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                            <span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                         </div>
                         <div class="col-6" t-if="o.ref">
                             Memo:
@@ -48,8 +47,7 @@
                 <t t-set="invoices" t-value="{partial[2].move_id for partial in partials}"/>
                 <!-- Check if invoices include different currencies -->
                 <t t-foreach="invoices" t-as="inv">
-                    <t t-if="any(inv.currency_id != par[2].currency_id for par in inv._get_reconciled_invoices_partials()[0])"
-                       t-set="otherCurrency" t-value="True"/>
+                    <t t-if="any(inv.currency_id != par[2].currency_id for par in inv._get_reconciled_invoices_partials()[0])" t-set="otherCurrency" t-value="True"/>
                 </t>
                 <table class="table table-sm">
                     <thead>
@@ -65,6 +63,9 @@
                             </th>
                             <th>
                                 <span>Original Amount</span>
+                            </th>
+                            <th>
+                                <span>Credit Note/Refund</span>
                             </th>
                             <!-- Add a column if there are different currencies -->
                             <!-- <th t-if="otherCurrency" class="text-end">
@@ -82,94 +83,122 @@
                         <t t-set="i" t-value="0"/>
                         <t t-set="j" t-value="0"/>
                         <t t-set="k" t-value="0"/>
+                        <t t-set="r" t-value="0"/>
 
                         <t t-foreach="invoices" t-as="inv">
+                            <!-- <t t-set="payment" t-value="inv[2].move_id"/> -->
+                            <!-- <t t-set="inv._get_reconciled_invoices_partials()[0]" t-as="par"/> -->
+                            <t t-set="credit_refund" t-value="0"/>
+                            <t t-foreach="inv._get_reconciled_invoices_partials()[0]" t-as="par">
+                                <t t-set="payment" t-value="par[2].move_id"/>
+                                <t t-set="amountPayment" t-value="-payment.amount_total"/>
+                                <t t-if="payment.move_type in ('out_refund', 'in_refund')">
+                                    <t t-set="credit_refund" t-value="credit_refund + (par[1])"/>
+                                </t>
+
+                                <!-- <t t-set="currencyPayment" t-value="payment.currency_id"/>
+                                    <t t-set="currencyInvoice" t-value="inv.currency_id"/> -->
+                                <!-- Fill the column "Amount In Currency" only if necessary -->
+                                <!-- <td t-if="otherCurrency" class="text-end"><span t-if="currencyPayment != currencyInvoice" t-esc="amountPayment" t-options="{'widget': 'monetary', 'display_currency': currencyPayment}"/></td> -->
+                                <!-- <td class="text-end"><span t-esc="amountInvoice" t-options="{'widget': 'monetary', 'display_currency': currencyInvoice}"/></td> -->
+                            </t>
+
                             <t t-if="inv.move_type != 'entry'">
 
                                 <!-- MOVE -->
-                                <t>
-                                    <tr>
-                                        <td>
-                                            <span t-field="inv.invoice_date"/>
-                                        </td>
-                                        <td>
-                                            <span t-field="inv.name"/>
-                                        </td>
-                                        <td>
-                                            <span t-field="inv.ref"/>
-                                        </td>
+                                <tr>
+                                    <td>
+                                        <span t-field="inv.invoice_date"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="inv.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="inv.ref"/>
+                                    </td>
 
-                                        <td style="text-align: right;">
-                                            <span t-field="inv.amount_total"/>
-                                            <span t-set="i" t-value="i+inv.amount_total"/>
-                                            <span t-set="currency" t-value="inv.currency_id.name"/>
-                                        </td>
-                                        <!-- <td t-if="otherCurrency"/> -->
-                                        <td style="text-align: right;">
-                                            <span t-esc="(inv.amount_total-inv.amount_residual)"
-                                                  t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
-                                            <span t-set="j" t-value="j+(inv.amount_total-inv.amount_residual)"/>
-                                        </td>
-                                        <td style="text-align: right;">
-                                            <span t-field="inv.amount_residual"/>
-                                            <span t-set="k" t-value="k+inv.amount_residual"/>
-                                        </td>
+                                    <td style="text-align: right;">
+                                        <span t-field="inv.amount_total"/>
+                                        <span t-set="i" t-value="i+inv.amount_total"/>
+                                        <span t-set="currency" t-value="inv.currency_id.name"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <span t-esc="credit_refund" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                        <span t-set="r" t-value="r+credit_refund"/>
+                                    </td>
 
-                                    </tr>
+                                    <!-- <td t-if="otherCurrency"/> -->
+                                    <td style="text-align: right;">
+                                        <span t-esc="(inv.amount_total-inv.amount_residual) - credit_refund" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                        <span t-set="j" t-value="j+(inv.amount_total-inv.amount_residual) - credit_refund"/>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <span t-field="inv.amount_residual"/>
+                                        <span t-set="k" t-value="k+inv.amount_residual"/>
+                                    </td>
 
-                                </t>
-
+                                </tr>
                             </t>
-
                         </t>
                     </tbody>
-                    <tr>
+
+                    <tr t-if="inv">
                         <td colspan="3" style="text-align: right;border-top:1px solid black;">
                             <strong>Total:</strong>
                         </td>
-                        <td t-if="o.currency_id.position == 'after'"
-                            style="text-align: right;border-top:1px solid black;">
+                        <td t-if="inv.currency_id.position == 'after'" style="text-align: right;border-top:1px solid black;">
                             <strong>
                                 <span t-esc="i " t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
-                            <span t-esc="o.currency_id.symbol"/>
+                            <span t-esc="inv.currency_id.symbol"/>
                         </td>
-                        <td t-if="o.currency_id.position == 'after'"
-                            style="text-align: right;border-top:1px solid black;">
+                        <td t-if="inv.currency_id.position == 'after'" style="text-align: right;border-top:1px solid black;">
+                            <strong>
+                                <span t-esc="r " t-options='{"widget": "float", "precision": 2}'/>
+                            </strong>
+                            <span t-esc="inv.currency_id.symbol"/>
+                        </td>
+                        <td t-if="inv.currency_id.position == 'after'" style="text-align: right;border-top:1px solid black;">
                             <strong>
                                 <span t-esc="j " t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
-                            <span t-esc="o.currency_id.symbol"/>
+                            <span t-esc="inv.currency_id.symbol"/>
                         </td>
-                        <td t-if="o.currency_id.position == 'after'"
-                            style="text-align: right;border-top:1px solid black;">
+                        <td t-if="inv.currency_id.position == 'after'" style="text-align: right;border-top:1px solid black;">
                             <strong>
                                 <span t-esc="k " t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
-                            <span t-esc="o.currency_id.symbol"/>
+                            <span t-esc="inv.currency_id.symbol"/>
                         </td>
-                        <td t-if="o.currency_id.position == 'before'"
-                            style="text-align: right;border-top:1px solid black;">
-                            <span t-esc="o.currency_id.symbol"/>
+
+
+                        <td t-if="inv.currency_id.position == 'before'" style="text-align: right;border-top:1px solid black;">
+                            <span t-esc="inv.currency_id.symbol"/>
                             <strong>
                                 <span t-esc="i " t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                         </td>
-                        <td t-if="o.currency_id.position == 'before'"
-                            style="text-align: right;border-top:1px solid black;">
-                            <span t-esc="o.currency_id.symbol"/>
+                        <td t-if="inv.currency_id.position == 'before'" style="text-align: right;border-top:1px solid black;">
+                            <span t-esc="inv.currency_id.symbol"/>
+                            <strong>
+                                <span t-esc="r" t-options='{"widget": "float", "precision": 2}'/>
+                            </strong>
+                        </td>
+                        <td t-if="inv.currency_id.position == 'before'" style="text-align: right;border-top:1px solid black;">
+                            <span t-esc="inv.currency_id.symbol"/>
                             <strong>
                                 <span t-esc="j " t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                         </td>
-                        <td t-if="o.currency_id.position == 'before'"
-                            style="text-align: right;border-top:1px solid black;">
-                            <span t-esc="o.currency_id.symbol"/>
+                        <td t-if="inv.currency_id.position == 'before'" style="text-align: right;border-top:1px solid black;">
+                            <span t-esc="inv.currency_id.symbol"/>
                             <strong>
                                 <span t-esc="k" t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                         </td>
+
                     </tr>
+
                 </table>
             </div>
         </t>
