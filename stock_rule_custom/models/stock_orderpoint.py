@@ -6,7 +6,7 @@ from collections import defaultdict
 from odoo.tools import float_compare, split_every
 from datetime import datetime, time
 import logging
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 class StockOrderpoint(models.Model):
     _inherit = 'stock.warehouse.orderpoint'
