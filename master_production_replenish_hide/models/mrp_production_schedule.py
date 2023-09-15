@@ -6,6 +6,11 @@ from odoo.tools.date_utils import add, subtract
 from odoo.tools.float_utils import float_round
 from odoo.osv.expression import OR, AND
 from collections import OrderedDict
+import locale
+locale.setlocale(locale.LC_ALL, '')
+
+
+
 
 
 class MrpProductionSchedule(models.Model):
@@ -139,10 +144,10 @@ class MrpProductionSchedule(models.Model):
                 quantity_check = self.env['stock.quant'].search(
                     [('location_id', 'in', loc.ids), ('product_id', '=', product.id)])
                 for qty in quantity_check:
-                    quantity_total += quantity_check.quantity
-            forecast_values['onhand_quantity'] = quantity_total
-            forecast_values['mpn_supplier_no'] = production_schedule.product_id.x_studio_field_qr3ai
-
+                    quantity_total += qty.quantity
+            rounded_value = round(quantity_total, 4)
+            forecast_values['onhand_quantity'] = f'{rounded_value:n}'
+            forecast_values['mpn_supplier_no'] =  production_schedule.product_id.x_studio_field_qr3ai
 
             if production_schedule in self:
                 # The state is computed after all because it needs the final
@@ -159,5 +164,3 @@ class MrpProductionSchedule(models.Model):
                     forecast['indirect_demand_qty'] != 0 for forecast in production_schedule_state['forecast_ids'])
                 production_schedule_state['has_indirect_demand'] = has_indirect_demand
         return [p for p in production_schedule_states if p['id'] in self.ids]
-
-
