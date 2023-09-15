@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="master_production_stock_location_form_view">
+        <field name="name">master.production.stock.location.form.view</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='favicon']" position="after">
+                <field name="location_ids" widget="many2many_tags"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
