@@ -19,6 +19,11 @@
 				<!-- <field name="reserved" invisible="1"/> -->
 				<field name="reserved_check" invisible="1"/>
 			</xpath>
+			<xpath expr="//form/sheet/notebook/page[2]" position="replace">
+			<page string="Work Orders" name="operations" groups="mrp.group_mrp_routings" attrs="{'invisible': [('transfer_done_flag','!=',True)]}">
+				<field name="workorder_ids" attrs="{'readonly': ['|', ('state', '=', 'cancel'), '&amp;', ('state', '=', 'done'), ('is_locked', '=', True)]}" context="{'tree_view_ref': 'mrp.mrp_production_workorder_tree_editable_view', 'default_product_uom_id': product_uom_id, 'from_manufacturing_order': True}"/>
+			</page>
+		</xpath>
 
 			<!--			i commented below 3 (t)-->
 
@@ -36,8 +41,8 @@
 <!--                        attrs="{'invisible': [   '|',  ('state', '!=', 'to_close') ,   '|', ('move_raw_ids', '=', []), '&amp;', '|',   ('state', 'not in', ('confirmed', 'progress')),      ('qty_producing', '!=', 0), ('state', '!=', 'to_close')]}"-->
 <!--                        string="Mark as Done" type="object" class="oe_highlight" data-hotkey="g"/>-->
 <!--            </xpath>-->
-            <xpath expr="//form/header/button[2]" position="attributes">
-				<button name="button_mark_done" attrs="{'invisible': ['|',  ('state', '!=', 'to_close') ,'|', '|', ('state', 'in', ('draft', 'cancel', 'done', 'to_close')), ('qty_producing', '=', 0), ('move_raw_ids', '=', [])]}"
+            <xpath expr="//form/header/button[2]" position="replace">
+				<button name="button_mark_done" attrs="{'invisible': ['|', ('transfer_done_flag','!=',True), '|',  ('state', '!=', 'to_close') ,'|', '|', ('state', 'in', ('draft', 'cancel', 'done', 'to_close')), ('qty_producing', '=', 0), ('move_raw_ids', '=', [])]}"
 						string="Validate" type="object" class="oe_highlight" data-hotkey="g"/>
             </xpath>
 
