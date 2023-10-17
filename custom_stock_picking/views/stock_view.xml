@@ -5,7 +5,11 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
-		
+			
+			<xpath expr="//field[@name='quantity_done']" position="attributes">
+				<attribute name="attrs">{'column_invisible': ['|',('parent.picking_type_code', 'in',['outgoing']),('parent.state', '=', 'draft'), ('parent.immediate_transfer', '=', False)]}</attribute>
+			</xpath>
+			
             <xpath expr="//field[@name='origin']" position="after">
                 <field name="carrier"/>
                 <field name="customer_po_no" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
