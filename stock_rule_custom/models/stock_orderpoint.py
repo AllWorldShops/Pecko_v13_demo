@@ -13,8 +13,8 @@ class StockOrderpoint(models.Model):
 
     def _get_orderpoint_procurement_date(self):
         Move = self.env['stock.move'].with_context(active_test=False)
+        _logger.info("-----------Product_Id-------%s " % self.product_id.id)
         domain_move_out_todo = [('product_id', '=', self.product_id.id), ('sale_line_id', '!=', None),('state', 'in', ('waiting', 'confirmed', 'assigned', 'partially_available'))]
-        # print(moves_in_res, "moves_in_resmoves_in_res--------------")
         # print([s.id for s in Move.search(domain_move_out_todo)], "domain_move_out_todo============")
         out_moves = Move.search(domain_move_out_todo)
         _logger.info("out_movesout_moves-------%s " % str(out_moves))
@@ -32,6 +32,7 @@ class StockOrderpoint(models.Model):
                 lead_date = date_now
         else:
             lead_date = datetime.combine(self.lead_days_date, time.min)
+        _logger.info("++++++++++Deadline date time: %s------------Lead date time : %s" % (deadline_date, self.lead_days_date))
         return lead_date
 
     def _get_orderpoint_action(self):
