@@ -5,9 +5,16 @@
             <t t-set="o" t-value="o.with_context(lang=lang)"/>
             <div class="page">
                 <h3>
+                    <t t-if="o.partner_type == 'customer'">
                     <strong>Payment Receipt:
                         <span t-field="o.name"/>
                     </strong>
+                    </t>
+                     <t t-else="o.partner_type == 'supplier'">
+                    <strong>Payment Voucher:
+                        <span t-field="o.name"/>
+                    </strong>
+                    </t>
                 </h3>
                 <div class="mb-4 mt-3">
                     <div class="row">
