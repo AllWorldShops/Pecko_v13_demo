@@ -69,6 +69,7 @@ class StockMoveLine(models.Model):
     
     part_no = fields.Char('Customer / Manufacturer Part no', related="product_id.name")
     position_no = fields.Integer(string="Position", compute="_compute_position_no")
+    product_uom_qty = fields.Float(string="Demand Qty", related="move_id.product_uom_qty")
 
     def _compute_position_no(self):
         for line in self:
