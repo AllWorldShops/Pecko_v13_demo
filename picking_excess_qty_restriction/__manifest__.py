@@ -8,7 +8,7 @@
     'summary': 'This module does not allow users to validate excess quantity which is more than the demand',
     'description': """This module does not allow users to validate excess quantity which is more than the demand""",
     'depends': ['base','stock','sale'],
-    'data': ['views/quantity_done.xml'],
+    'data': ['views/stock_picking.xml'],
     'installable': True,
     'auto-install': False,
     'license': 'LGPL-3',
