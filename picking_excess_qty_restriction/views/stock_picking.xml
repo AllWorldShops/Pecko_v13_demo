@@ -14,7 +14,7 @@
                     <div class="o_setting_right_pane">
                         <label for="excess_quantity_allow"/>
                         <div class="text-muted">
-                            Do Excess Quantity Not Allow
+                            Picking Excess Quantity Not Allow
                         </div>
                         <div class="content-group">
                             <div class="mt8">
