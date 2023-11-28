@@ -179,24 +179,24 @@ class StockQuant(models.Model):
             # Find the existing log record
             log_record = self.env['log.activity'].search([('model_id', '=', model_id.id), ('record_id', '=', self.id), ('field_name', '=', 'reserved_quantity')], limit=1)
             # Update the existing log record or create a new one if not found
-            if log_record:
-                log_record.write({
-                    'previous_value': self.reserved_quantity,
-                    'current_value': values['reserved_quantity'],
-                    'updated_at': datetime.now(),
-                })
-            else:
-                self.env['log.activity'].create({
-                    'model_id': model_id.id,
-                    'user_id': self.env.user.id,
-                    'company_id': self.env.company.id,
-                    'updated_at': datetime.now(),
-                    'field_name': 'reserved_quantity',
-                    'previous_value': self.reserved_quantity,
-                    'current_value': values['reserved_quantity'],
-                    'record_id': str(self.id),
-                    'record_ref': self.product_id.display_name
-                })
+            # if log_record:
+            #     log_record.write({
+            #         'previous_value': self.reserved_quantity,
+            #         'current_value': values['reserved_quantity'],
+            #         'updated_at': datetime.now(),
+            #     })
+            # else:
+            self.env['log.activity'].create({
+                'model_id': model_id.id,
+                'user_id': self.env.user.id,
+                'company_id': self.env.company.id,
+                'updated_at': datetime.now(),
+                'field_name': 'reserved_quantity',
+                'previous_value': self.reserved_quantity,
+                'current_value': values['reserved_quantity'],
+                'record_id': str(self.id),
+                'record_ref': self.product_id.display_name
+            })
 
         return super(StockQuant, self).write(values)
         
