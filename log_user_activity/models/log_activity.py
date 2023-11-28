@@ -7,6 +7,7 @@ class LogActivity(models.Model):
     name = fields.Char('Name')
     model_id = fields.Many2one('ir.model', string="Model")
     user_id = fields.Many2one('res.users', string="Updated By")
+    company_id = fields.Many2one('res.company', string="Company")
     updated_at = fields.Datetime("Updated at")
     field_name = fields.Char('Field Name')
     previous_value = fields.Float('Previous Value')
@@ -17,11 +18,37 @@ class LogActivity(models.Model):
 class StockMoveLine(models.Model):
     _inherit = 'stock.move.line'
 
+    @api.model_create_multi
+    def create(self, vals):
+        model_id = self.env['ir.model']._get(str(self._name))
+        # print(vals['reserved_uom_qty'] > 0, "vals['reserved_uom_qty'] > 0++++++++++++++")
+        log = False
+        if vals and 'reserved_uom_qty' in vals[0]:
+            log = self.env['log.activity'].create({
+                    'model_id': model_id.id,
+                    'user_id': self.env.user.id,
+                    'company_id': self.env.company.id,
+                    'updated_at': datetime.now(),
+                    'field_name': 'reserved_uom_qty',
+                    'previous_value': self.reserved_uom_qty,
+                    'current_value': vals[0]['reserved_uom_qty'],
+                    # 'record_id': str(self.id),
+                    # 'record_ref': self.reference
+                })
+
+        res = super(StockMoveLine, self).create(vals)
+        if log:
+            log.write({
+                'record_id': str(res.id),
+                'record_ref': res.reference
+            })
+        return res
+
     def write(self, values):
         model_id = self.env['ir.model']._get(str(self._name))
-        if 'reserved_uom_qty' in values:
+        if 'reserved_uom_qty' in values and values['reserved_uom_qty']:
             # Find the existing log record
-            log_record = self.env['log.activity'].search([('model_id', '=', model_id.id), ('record_id', '=', self.id), ('field_name', '=', 'reserved_qty')], limit=1)
+            # log_record = self.env['log.activity'].search([('model_id', '=', model_id.id), ('record_id', '=', self.id), ('field_name', '=', 'reserved_qty')], limit=1)
 
             # Update the existing log record or create a new one if not found
             # if log_record:
@@ -34,6 +61,7 @@ class StockMoveLine(models.Model):
             self.env['log.activity'].create({
                 'model_id': model_id.id,
                 'user_id': self.env.user.id,
+                'company_id': self.env.company.id,
                 'updated_at': datetime.now(),
                 'field_name': 'reserved_uom_qty',
                 'previous_value': self.reserved_uom_qty,
@@ -85,14 +113,38 @@ class StockMoveLine(models.Model):
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
+    @api.model_create_multi
+    def create(self, vals):
+        model_id = self.env['ir.model']._get(str(self._name))
+        log = False
+        if vals and 'forecast_availability' in vals[0]:
+            log = self.env['log.activity'].create({
+                    'model_id': model_id.id,
+                    'user_id': self.env.user.id,
+                    'company_id': self.env.company.id,
+                    'updated_at': datetime.now(),
+                    'field_name': 'forecast_availability',
+                    'previous_value': self.forecast_availability,
+                    'current_value': vals[0]['forecast_availability'],
+                    # 'record_id': str(self.id),
+                    # 'record_ref': self.reference
+                })
+
+        res = super(StockMove, self).create(vals)
+        if log:
+            log.write({
+                'record_id': str(res.id),
+                'record_ref': res.reference
+            })
+        return res
+
     def write(self, values):
         model_id = self.env['ir.model']._get(str(self._name))
-
         if "forecast_availability" in values:
             # Find the existing log record
-            log_record = self.env['log.activity'].search([('model_id', '=', model_id.id), ('record_id', '=', self.id), ('field_name', '=', 'reserved_availability')], limit=1)
+            # log_record = self.env['log.activity'].search([('model_id', '=', model_id.id), ('record_id', '=', self.id), ('field_name', '=', 'reserved_availability')], limit=1)
 
-            # Update the existing log record or create a new one if not found
+            # # Update the existing log record or create a new one if not found
             # if log_record:
             #     log_record.write({
             #         'previous_value': self.reserved_availability,
@@ -104,6 +156,7 @@ class StockMove(models.Model):
             self.env['log.activity'].create({
                 'model_id': model_id.id,
                 'user_id': self.env.user.id,
+                'company_id': self.env.company.id,
                 'updated_at': datetime.now(),
                 'field_name': 'forecast_availability',
                 'previous_value': self.forecast_availability,
@@ -113,6 +166,8 @@ class StockMove(models.Model):
             })
 
         return super(StockMove, self).write(values)
+    
+    
     
 
 class StockQuant(models.Model):
@@ -124,23 +179,24 @@ class StockQuant(models.Model):
             # Find the existing log record
             log_record = self.env['log.activity'].search([('model_id', '=', model_id.id), ('record_id', '=', self.id), ('field_name', '=', 'reserved_quantity')], limit=1)
             # Update the existing log record or create a new one if not found
-            # if log_record:
-            #     log_record.write({
-            #         'previous_value': self.reserved_quantity,
-            #         'current_value': values['reserved_quantity'],
-            #         'updated_at': datetime.now(),
-            #     })
-            # else:
-            self.env['log.activity'].create({
-                'model_id': model_id.id,
-                'user_id': self.env.user.id,
-                'updated_at': datetime.now(),
-                'field_name': 'reserved_quantity',
-                'previous_value': self.reserved_quantity,
-                'current_value': values['reserved_quantity'],
-                'record_id': str(self.id),
-                'record_ref': self.product_id.display_name
-            })
+            if log_record:
+                log_record.write({
+                    'previous_value': self.reserved_quantity,
+                    'current_value': values['reserved_quantity'],
+                    'updated_at': datetime.now(),
+                })
+            else:
+                self.env['log.activity'].create({
+                    'model_id': model_id.id,
+                    'user_id': self.env.user.id,
+                    'company_id': self.env.company.id,
+                    'updated_at': datetime.now(),
+                    'field_name': 'reserved_quantity',
+                    'previous_value': self.reserved_quantity,
+                    'current_value': values['reserved_quantity'],
+                    'record_id': str(self.id),
+                    'record_ref': self.product_id.display_name
+                })
 
         return super(StockQuant, self).write(values)
         
