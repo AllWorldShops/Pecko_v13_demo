@@ -186,6 +186,7 @@ class StockQuant(models.Model):
             #         'updated_at': datetime.now(),
             #     })
             # else:
+            
             self.env['log.activity'].create({
                 'model_id': model_id.id,
                 'user_id': self.env.user.id,
