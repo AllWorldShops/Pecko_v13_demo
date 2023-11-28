@@ -19,7 +19,7 @@ class StockMoveLine(models.Model):
 
     def write(self, values):
         model_id = self.env['ir.model']._get(str(self._name))
-        if 'reserved_qty' in values:
+        if 'reserved_uom_qty' in values:
             # Find the existing log record
             log_record = self.env['log.activity'].search([('model_id', '=', model_id.id), ('record_id', '=', self.id), ('field_name', '=', 'reserved_qty')], limit=1)
 
@@ -35,9 +35,9 @@ class StockMoveLine(models.Model):
                 'model_id': model_id.id,
                 'user_id': self.env.user.id,
                 'updated_at': datetime.now(),
-                'field_name': 'reserved_qty',
-                'previous_value': self.reserved_qty,
-                'current_value': values['reserved_qty'],
+                'field_name': 'reserved_uom_qty',
+                'previous_value': self.reserved_uom_qty,
+                'current_value': values['reserved_uom_qty'],
                 'record_id': str(self.id),
                 'record_ref': self.reference
             })
@@ -88,7 +88,7 @@ class StockMove(models.Model):
     def write(self, values):
         model_id = self.env['ir.model']._get(str(self._name))
 
-        if "reserved_availability" in values:
+        if "forecast_availability" in values:
             # Find the existing log record
             log_record = self.env['log.activity'].search([('model_id', '=', model_id.id), ('record_id', '=', self.id), ('field_name', '=', 'reserved_availability')], limit=1)
 
@@ -105,9 +105,9 @@ class StockMove(models.Model):
                 'model_id': model_id.id,
                 'user_id': self.env.user.id,
                 'updated_at': datetime.now(),
-                'field_name': 'reserved_availability',
-                'previous_value': self.reserved_availability,
-                'current_value': values['reserved_availability'],
+                'field_name': 'forecast_availability',
+                'previous_value': self.forecast_availability,
+                'current_value': values['forecast_availability'],
                 'record_id': str(self.id),
                 'record_ref': self.reference
             })
