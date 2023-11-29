@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- stock.move.line inherit form view -->
+    <record id="log_activity_view_tree" model="ir.ui.view">
+        <field name="name">log.activity.tree</field>
+        <field name="model">log.activity</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0">
+                <field name="model_id" />
+                <field name="user_id" />
+                <field name="company_id" />
+                <field name="updated_at" />
+                <field name="previous_value" />
+                <field name="current_value" />
+                <field name="record_id" />
+                <field name="record_ref" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_log_activity_tree">
+            <field name="name">Stock Log Activity</field>
+            <field name="res_model">log.activity</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree</field>
+            <!-- <field name="context">{'search_default_active': True, 'active_test': False}</field> -->
+        </record>
+
+    <menuitem id="menu_log_activity" action="action_log_activity_tree" parent="base.menu_administration" name="Stock Log Activity" sequence="100"/>
+</odoo>
