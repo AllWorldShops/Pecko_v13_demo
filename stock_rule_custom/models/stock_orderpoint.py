@@ -151,7 +151,8 @@ class StockOrderpoint(models.Model):
 
         # "to_date" commented out by PPTS to avoid Forcasted quantity based on lead time.
         return {
-            'location': self.location_id.id,
+            'location': False,
+            # 'location': self.location_id.id,
             # 'to_date': datetime.combine(self.lead_days_date + relativedelta.relativedelta(days=visibility_days), time.max)
         }
     
