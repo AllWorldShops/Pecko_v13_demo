@@ -51,7 +51,14 @@ class MrpProduction(models.Model):
         else:
             self.transfer_done_flag = False
 
+        wo_flag = self.env['ir.config_parameter'].sudo().get_param(
+            'custom_mrp.workorder_flag')
 
+        if wo_flag:
+            reserved_qty = self.move_raw_ids.filtered(
+                lambda l: l.reserved_availability != 0 and l.product_uom_qty != 0)
+            if reserved_qty and self.state not in ['draft', 'done']:
+                self.transfer_done_flag = True
 
     def _compute_reserved(self):
         # reserved_qty = []
