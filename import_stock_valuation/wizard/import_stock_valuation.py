@@ -18,7 +18,7 @@ class ImportStockValuation(models.TransientModel):
             if row:
                 create_date = row['Date']
                 stock_move = self.env['stock.move'].search([('reference', '=', row['Reference'])])
-                product = self.env['product.product'].search([('name', '=', row['Product'])])
+                product = self.env['product.product'].search([('default_code', '=', row['Product'])])
                 if product:
                     product_id = product
                 quantity = row['Done']
