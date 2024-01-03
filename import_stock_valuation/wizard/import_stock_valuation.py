@@ -17,7 +17,7 @@ class ImportStockValuation(models.TransientModel):
         for row in csv_reader:
             if row:
                 create_date = row['Date']
-                stock_move = self.env['stock.move'].search([('reference', '=', row['Reference'])])
+                stock_move = self.env['stock.move'].search([('reference', '=', row['Reference'])],limit=1)
                 product = self.env['product.product'].search([('default_code', '=', row['Product'])])
                 if product:
                     product_id = product
