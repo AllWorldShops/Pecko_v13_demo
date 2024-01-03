@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="import_stock_valuation_view_form" model="ir.ui.view">
+            <field name="name">import.stock.valuation.form</field>
+            <field name="model">import.stock.valuation</field>
+            <field name="arch" type="xml">
+                <form string="Import Stock Valuation">
+                    <group>
+                        <field name="file"/>
+                    </group>
+                    <footer>
+                        <button name="import_stock_valuation_data" string="Upload" type="object"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="import_stock_valuation_action" model="ir.actions.act_window">
+            <field name="name">Import Stock Valuation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.stock.valuation</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="import_stock_valuation_view_form"/>
+            <field name="target">new</field>
+            <field name="context">{
+                'dialog_size' : 'medium',
+            }</field>
+        </record>
+
+
+            <menuitem id="import_stock_valuation_menu" name="Import" sequence="1" parent="stock.menu_stock_config_settings">
+                <menuitem id="import_stock_valuation_layer_menu" name="Import Stock Valuation" sequence="1"
+                          action="import_stock_valuation_action" />
+            </menuitem>
+
+
+</odoo>
