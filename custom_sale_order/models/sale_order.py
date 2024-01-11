@@ -28,6 +28,7 @@ class SaleOrder(models.Model):
 
     attn = fields.Many2one('res.partner',string="ATTN")
     customer_po_no = fields.Char(string="Customer PO No")
+    customer_po_date = fields.Date(string="Customer PO Date")
     origin = fields.Char(string='Order Ref No', help="Reference of the document that generated this sales order request.")
     effective_date = fields.Date("Effective Date", compute='_compute_effective_date', store=True, help="Completion date of the first delivery order.")
      

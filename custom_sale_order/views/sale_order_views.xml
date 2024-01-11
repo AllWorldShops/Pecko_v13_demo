@@ -54,6 +54,7 @@
 			</xpath>
 			<xpath expr="//field[@name='payment_term_id']" position="after">
 				<field name="customer_po_no" />
+				<field name="customer_po_date" />
 				<field name="origin" />
 			</xpath>
 
