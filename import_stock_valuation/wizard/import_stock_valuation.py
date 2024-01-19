@@ -27,7 +27,7 @@ class ImportStockValuation(models.TransientModel):
                 unit_cost = product_id.standard_price
                 value = float(unit_cost) * float(quantity)
                 stock_valuation = self.env['stock.valuation.layer'].create({
-                    'create_date': create_date,
+                    # 'create_date': create_date,
                     'stock_move_id': stock_move.id or False,
                     'product_id': product_id.id or False,
                     'company_id': company_id.id or False,
@@ -36,4 +36,9 @@ class ImportStockValuation(models.TransientModel):
                     'value': value
 
                 })
+
+                self.env.cr.execute(
+                    'UPDATE stock_valuation_layer SET create_date = %s WHERE id=%s',
+                    (create_date,stock_valuation.id,)
+                )
 
