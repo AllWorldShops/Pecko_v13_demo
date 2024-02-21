@@ -12,6 +12,7 @@ _logger = logging.getLogger(__name__)
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
     
+    
     def action_update_storage_loc(self):
         stock_moves = self.env['stock.move'].sudo().search([
             ('storage_location_id', '=', False),('raw_material_production_id.state', '!=', 'cancel'),
