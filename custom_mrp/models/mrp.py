@@ -17,8 +17,8 @@ class MrpProduction(models.Model):
         stock_moves = self.env['stock.move'].sudo().search([
             ('storage_location_id', '=', False),('raw_material_production_id.state', '!=', 'cancel'),
             ('raw_material_production_id', '!=', False)
-        ] ,limit=5000)
-        _logger.info("Number of stock moves found: %s", len(stock_moves))
+        ] ,limit=1000)
+        _logger.info("------------------Number of stock moves found: %s--------------------", len(stock_moves))
 
         for move in stock_moves:
             if move.product_id.product_tmpl_id.storage_location_id:
