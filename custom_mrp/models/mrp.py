@@ -12,13 +12,14 @@ _logger = logging.getLogger(__name__)
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
     
-    
+    @api.model
     def action_update_storage_loc(self):
         stock_moves = self.env['stock.move'].sudo().search([
             ('storage_location_id', '=', False),('raw_material_production_id.state', '!=', 'cancel'),
             ('raw_material_production_id', '!=', False)
         ] ,limit=1000)
-        _logger.info("------------------Number of stock moves found: %s--------------------", len(stock_moves))
+        _logger.info("------------------Number of stock moves found: %s--------------------", str(len(stock_moves)))
+        
 
         for move in stock_moves:
             if move.product_id.product_tmpl_id.storage_location_id:
