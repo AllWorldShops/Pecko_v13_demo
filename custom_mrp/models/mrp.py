@@ -19,7 +19,6 @@ class MrpProduction(models.Model):
             ('raw_material_production_id', '!=', False)
         ] ,limit=1000)
         _logger.info("------------------Number of stock moves found: %s--------------------", str(len(stock_moves)))
-        
         for move in stock_moves:
             if move.product_id.product_tmpl_id.storage_location_id:
                 move.sudo().update({
