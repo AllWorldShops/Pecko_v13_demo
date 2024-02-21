@@ -11,6 +11,19 @@ _logger = logging.getLogger(__name__)
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
+    
+    def action_update_storage_loc(self):
+        stock_moves = self.env['stock.move'].sudo().search([
+            ('storage_location_id', '=', False),('raw_material_production_id.state', '!=', 'cancel'),
+            ('raw_material_production_id', '!=', False)
+        ] ,limit=5000)
+        _logger.info("Number of stock moves found: %s", len(stock_moves))
+
+        for move in stock_moves:
+            if move.product_id.product_tmpl_id.storage_location_id:
+                move.sudo().update({
+                'storage_location_id': move.product_id.product_tmpl_id.storage_location_id
+            })
 
     def _action_cancel_orders(self):
         mrp = self.sudo().search([('order_seq', 'ilike', 'C-'), ('state', '!=', 'cancel')], limit=1000)
