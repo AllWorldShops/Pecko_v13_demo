@@ -267,7 +267,7 @@ class PurchaseOrderLine(models.Model):
 #         self.name = product_lang.display_name
 #         if product_lang.description_purchase:
 #             self.name += '\n' + product_lang.description_purchase
-        self.name = product_lang.product_tmpl_id.x_studio_field_mHzKJ
+        self.name = product_lang.product_tmpl_id.x_studio_field_mHzKJ if product_lang.product_tmpl_id.x_studio_field_mHzKJ else '' 
         self.customer_part_no = self.product_id.name
         
         fpos = self.order_id.fiscal_position_id
@@ -287,7 +287,7 @@ class PurchaseOrderLine(models.Model):
         if vals['product_id']:
             product_id = self.env['product.product'].search([('id','=',vals['product_id'])])
             vals['customer_part_no'] = product_id.name
-            vals['name'] = product_id.product_tmpl_id.x_studio_field_mHzKJ
+            vals['name'] = product_id.product_tmpl_id.x_studio_field_mHzKJ if product_id.product_tmpl_id.x_studio_field_mHzKJ else ''
         return super(PurchaseOrderLine, self).create(vals)
     
 class AccountTax(models.Model):
