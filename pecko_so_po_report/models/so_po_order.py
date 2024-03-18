@@ -24,7 +24,7 @@ class Product(models.Model):
 #         name = self.display_name
 #         if self.description_sale:
 #             name += '\n' + self.description_sale
-        name=''
+        name=' '
         if self.product_tmpl_id.x_studio_field_mHzKJ:
             name = self.product_tmpl_id.x_studio_field_mHzKJ
         return name
@@ -225,7 +225,7 @@ class PurchaseOrder(models.Model):
     attn = fields.Many2one('res.partner',string="ATTN")
     
 #     @api.multi
-    def button_confirm(self):
+    def button_confirm(self): 
         res = super(PurchaseOrder, self).button_confirm()
         for rec in self:
             rec.picking_ids.write({'attn': self.attn.id})
@@ -267,7 +267,7 @@ class PurchaseOrderLine(models.Model):
 #         self.name = product_lang.display_name
 #         if product_lang.description_purchase:
 #             self.name += '\n' + product_lang.description_purchase
-        self.name = product_lang.product_tmpl_id.x_studio_field_mHzKJ
+        self.name = product_lang.product_tmpl_id.x_studio_field_mHzKJ if product_lang.product_tmpl_id.x_studio_field_mHzKJ else ' ' 
         self.customer_part_no = self.product_id.name
         
         fpos = self.order_id.fiscal_position_id
@@ -287,7 +287,7 @@ class PurchaseOrderLine(models.Model):
         if vals['product_id']:
             product_id = self.env['product.product'].search([('id','=',vals['product_id'])])
             vals['customer_part_no'] = product_id.name
-            vals['name'] = product_id.product_tmpl_id.x_studio_field_mHzKJ
+            vals['name'] = product_id.product_tmpl_id.x_studio_field_mHzKJ if product_id.product_tmpl_id.x_studio_field_mHzKJ else ' '
         return super(PurchaseOrderLine, self).create(vals)
     
 class AccountTax(models.Model):
