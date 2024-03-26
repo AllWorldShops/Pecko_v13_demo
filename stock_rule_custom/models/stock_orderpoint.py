@@ -10,6 +10,8 @@ _logger = logging.getLogger(__name__)
 
 class StockOrderpoint(models.Model):
     _inherit = 'stock.warehouse.orderpoint'
+    
+    test_updated = fields.Boolean('Test Updated') 
 
     def _get_orderpoint_procurement_date(self):
         Move = self.env['stock.move'].with_context(active_test=False)
@@ -185,7 +187,7 @@ class StockOrderpoint(models.Model):
                 orderpoint.qty_on_hand = products_qty[orderpoint.product_id.id]['qty_available']
                 orderpoint.qty_forecast = products_qty[orderpoint.product_id.id]['virtual_available'] + products_qty_in_progress[orderpoint.id]
 
-    @api.depends('qty_multiple', 'qty_forecast', 'product_min_qty', 'product_max_qty', 'visibility_days')
+    @api.depends('qty_multiple', 'qty_forecast', 'product_min_qty', 'product_max_qty', 'visibility_days', 'test_updated')
     def _compute_qty_to_order(self):
         for orderpoint in self:
             if not orderpoint.product_id or not orderpoint.location_id:
