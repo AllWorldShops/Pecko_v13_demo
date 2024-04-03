@@ -29,7 +29,6 @@ class AgedReceivable(models.AbstractModel):
             for v in [_("JRNL"), _("Account"), _("Reference"), _("Not due on: %s") % format_date(self.env, options['date']['date_to']),'Conversion',
                       _(str(fts) + "-" + str(fte) +' Days'),'Conversion', _(str(ss) + "-" + str(se) +' Days'),'Conversion', _(str(ts) + "-" + str(te) +' Days'),'Conversion', _(str(fs) + "-" + str(fe) +' Days'),'Conversion', _("Older"),'Conversion', _("Total"),'Conversion']
         ]
-
         return columns
 
     @api.model
