@@ -11,8 +11,6 @@ _logger = logging.getLogger(__name__)
 class StockOrderpoint(models.Model):
     _inherit = 'stock.warehouse.orderpoint'
     
-    test_updated = fields.Boolean('Test Updated') 
-
     def _get_orderpoint_procurement_date(self):
         Move = self.env['stock.move'].with_context(active_test=False)
         domain_move_out_todo = [('product_id', '=', self.product_id.id), ('sale_line_id', '!=', None),('state', 'in', ('waiting', 'confirmed', 'assigned', 'partially_available'))]
