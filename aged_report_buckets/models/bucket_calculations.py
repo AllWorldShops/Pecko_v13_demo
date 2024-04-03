@@ -8,6 +8,7 @@ from datetime import datetime
 class AgedReceivable(models.AbstractModel):
     _inherit = 'account.aged.partner.balance.report.handler'
 
+
     def _get_columns_name(self, options):
         columns = [{}]
         if not self._context.get('days'):
