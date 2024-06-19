@@ -15,8 +15,7 @@
         'views/res_config_settings_views.xml',
         'wizard/bucket_days_wizard.xml'
     ],
-    'images': [ 
-        
+    'images': [         
     ],
     'installable': True,
     'auto_install': False,
