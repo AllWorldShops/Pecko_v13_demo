@@ -38,6 +38,7 @@ class MrpProduction(models.Model):
     description = fields.Char(string='Description')
     transfer_done_flag = fields.Boolean(string='Transfer Done Flag',compute='_compute_boolean_txt' )
     project = fields.Char(string='Project')
+    
     # project = fields.Char(string='Project', related='product_tmpl_id.project', store=True)
     start_date = fields.Date('Start Date P2')
     start_date_one = fields.Date('Start Date P1')
