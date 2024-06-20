@@ -27,7 +27,7 @@ class AccountMoveLine(models.Model):
     _description = "Journal Item"
 
     customer_po_no = fields.Char(
-        related='move_id.customer_po_no', store=True, copy=False,
+        # related='move_id.customer_po_no', store=True, copy=False,
     )
 
 
