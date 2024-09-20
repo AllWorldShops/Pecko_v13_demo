@@ -1,0 +1,283 @@
+<odoo>
+
+
+        <template id="report_printrfq_document">
+
+
+
+            <t t-call="pecko_so_po_report.external_layout_so_report">
+                <div class="page" style="font-family: Calibri;text-color:black;">
+                    <div style="position:relative;">
+                        <div style="font-size: 20px;text-align: center;">
+                            <span>
+                                <strong>RFQ</strong>
+                            </span>
+                        </div>
+                        <br/>
+                        <div class="row" style="font-size:13px">
+                            <div class="col-6">
+                                <strong>
+                                    <span t-field="doc.partner_id.name"/>
+                                </strong>
+                                <br/>
+                                <span t-field="doc.partner_id.street"/>
+                                <span t-field="doc.partner_id.street2"/>
+                                <br/>
+                                <span t-field="doc.partner_id.city"/>
+                                <span t-field="doc.partner_id.state_id"/>
+                                <br/>
+                                <span t-field="doc.partner_id.country_id"/>
+                                <span t-field="doc.partner_id.zip"/>
+                                <br/>
+                                Phone:
+                                <span t-field="doc.partner_id.phone"/>
+                                <br/>
+
+                                Email:
+                                <span style="word-break: break-all;" t-field="doc.partner_id.email"/>
+                            </div>
+                            <div class="col-1"/>
+                            <div class="col-5">
+                                <div class="row" style="background-color: #f4f4f5;">
+                                    <div class="col-6">
+                                        <strong>RFQ NO</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <span style="text-align:left" t-field="doc.name"/>
+                                    </div>
+                                </div>
+                                <div class="row" style="background-color: none;">
+                                    <div class="col-6">
+                                        <strong>CUSTOMER PO NO</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <span style="text-align:left" t-field="doc.customer_po_no"/>
+                                    </div>
+                                </div>
+                                <div class="row" style="background-color: #f4f4f5;">
+                                    <div class="col-6">
+                                        <strong>DATE ORDER</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <span style="text-align:left"
+                                              t-field="doc.date_order"
+                                              t-options='{"format":"dd/MM/yyyy"}'/>
+                                    </div>
+                                </div>
+                                <div class="row" style="background-color: none;">
+                                    <div class="col-6">
+                                        <strong>PAYMENT TERM</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <span style="text-align:left"
+                                              t-field="doc.payment_term_id.name"/>
+                                    </div>
+                                </div>
+                                <div class="row" style="background-color: none;">
+                                    <div class="col-6">
+                                        <strong>Order Ref No:</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <span style="text-align:left" t-field="doc.origin"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <table class="table table-sm table-borderless" style="table-layout:fixed;">
+                            <style>
+                                tbody tr:nth-child(odd){
+                                background-color: #f4f4f5;
+                                }
+                                th{font-size:13px}
+                                td{font-size:13px}
+                            </style>
+                            <thead>
+                                <tr
+                                        style="border-top:1px solid black;border-bottom:1px solid black;">
+                                    <t t-set="colspan" t-value="5"/>
+                                    <th class="text-left" style="width:4%;color:#875A7B">NO</th>
+                                    <th class="text-left" style="width:20%;color:#875A7B">PECKO PART NUMBER</th>
+                                    <th class="text-left" style="width:15%;color:#875A7B">PART NUMBER</th>
+                                    <th class="text-left" style="width:15%;color:#875A7B">DESCRIPTION</th>
+                                    <th class="text-center" style="width:10%;color:#875A7B">QUANTITY</th>
+                                    <th class="text-center" style="width:13%;color:#875A7B">NEED DATE</th>
+                                    <th class="text-right" style="width:8%;color:#875A7B">PRICE</th>
+                                    <th t-if="display_discount" class="text-right" style="width:10%;color:#875A7B"
+                                        groups="sale.group_discount_per_so_line">
+                                        <span>DISC.(%)</span>
+                                        <t t-set="colspan" t-value="colspan+1"/>
+                                    </th>
+                                    <t t-if="doc.amount_tax>0">
+                                        <th class="text-end;col-lg-6" style="width:10%;color:#875A7B;align:right">
+                                            TAXES
+                                        </th>
+                                    </t>
+                                    <th class="text-end" style="width:15%;color:#875A7B">
+                                        <t groups="account.group_show_line_subtotals_tax_excluded">AMOUNT</t>
+                                        <t groups="account.group_show_line_subtotals_tax_included">TOTAL</t>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="sale_tbody">
+
+                                <t t-set="current_subtotal" t-value="0"/>
+                                <t t-set="i" t-value="1"/>
+
+                                <t t-foreach="doc.order_line" t-as="line">
+
+                                    <t t-set="current_subtotal"
+                                       t-value="current_subtotal + line.price_subtotal"
+                                       groups="account.group_show_line_subtotals_tax_excluded"/>
+                                    <t t-set="current_subtotal"
+                                       t-value="current_subtotal + line.price_total"
+                                       groups="account.group_show_line_subtotals_tax_included"/>
+
+                                    <tr
+                                            t-att-class="'bg-200 font-weight-bold' if line.display_type == 'line_section' else 'font-italic' if line.display_type == 'line_note' else ''">
+                                        <t t-if="not line.display_type">
+                                            <td>
+                                                <span t-field="line.line_no"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.product_id.default_code"/>
+                                            </td>
+
+                                            <td>
+                                                <span t-field="line.customer_part_no"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.product_uom_qty"/>
+                                                <span t-field="line.product_uom"/>
+                                            </td>
+
+                                            <td class="text-center">
+                                                <span t-field="line.requested_date_line"
+                                                      t-options='{"format":"dd-MMM-yyyy"}'/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="line.price_unit"/>
+                                            </td>
+                                            <td t-if="display_discount" class="text-right"
+                                                groups="sale.group_discount_per_so_line">
+                                                <span t-field="line.discount"/>
+                                            </td>
+                                            <t t-if="doc.amount_tax>0">
+                                                <td class="text-right">
+                                                    <span t-esc="line.tax_id.code"/>
+                                                </td>
+                                            </t>
+                                            <td class="text-end">
+                                                <span t-field="line.price_subtotal"
+                                                      groups="account.group_show_line_subtotals_tax_excluded"/>
+                                                <span t-field="line.price_total"
+                                                      groups="account.group_show_line_subtotals_tax_included"/>
+                                            </td>
+                                        </t>
+                                        <t t-if="line.display_type == 'line_section'">
+                                            <td t-att-colspan="colspan">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <t t-set="current_section" t-value="line"/>
+                                            <t t-set="current_subtotal" t-value="0"/>
+                                        </t>
+                                        <t t-if="line.display_type == 'line_note'">
+                                            <td t-att-colspan="colspan">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <t t-set="i" t-value="i+1"/>
+
+                                </t>
+                            </tbody>
+                        </table>
+                        <div class="clearfix">
+                            <div class="row" name="total">
+                                <div class="col-8"/>
+                                <div
+                                        t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                                    <table class="table table-sm table-borderless"
+                                           style="border-top:1px solid #dddddd;">
+
+                                        <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
+                                            <tr style="border-bottom:1px solid #dddddd;">
+
+                                                <t
+                                                        t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
+
+                                                    <td class="text-end">
+                                                        <span t-esc="amount_by_group[0]"/>
+                                                        <span>
+                                                            &amp;nbsp;
+                                                            <span>on</span>
+                                                            &amp;nbsp;
+                                                            <t t-esc="amount_by_group[2]"
+                                                               t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                        </span>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <span t-esc="amount_by_group[1]"
+                                                              t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                    </td>
+                                                </t>
+                                                <t t-else="">
+                                                    <td class="text-end">
+                                                        <span t-esc="amount_by_group[0]"/>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <span t-esc="amount_by_group[1]"
+                                                              t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                        </t>
+                                        <tr class="border-black text-end"
+                                            style="text-align: right;border-top:1px solid #dddddd;">
+                                            <td style="font-size:13px">
+                                                <strong>
+                                                    Total(
+                                                    <span t-field="doc.pricelist_id.currency_id"/>
+                                                    ):
+                                                </strong>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-field="doc.amount_total"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+
+                    </div>
+
+                </div>
+            </t>
+
+    </template>
+
+
+
+
+
+
+
+
+    <template id="pecko_so_po_report.report_print_rfq_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="pecko_so_po_report.report_printrfq_document"
+                   t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>

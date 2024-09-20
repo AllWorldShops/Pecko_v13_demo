@@ -11,6 +11,8 @@
     'data': [
         'views/so_po_order_view.xml',
         'views/report.xml',
+        'reports/reports.xml',
+      'reports/print_rfq_report.xml',
     ],
     'installable': True,
     'auto_install': False,

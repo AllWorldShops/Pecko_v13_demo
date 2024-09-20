@@ -1,0 +1,40 @@
+<odoo>
+    <data>
+
+         <record id="paperformat_print_rfq" model="report.paperformat">
+        <field name="name">SO Paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">48</field>
+        <field name="margin_bottom">32</field>
+        <field name="margin_left">6</field>
+        <field name="margin_right">6</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">45</field>
+        <field name="dpi">90</field>
+    </record>
+
+<!--        <record id="action_report_rfq" model="ir.actions.report">-->
+<!--        <field name="name">Print RFQ</field>-->
+<!--        <field name="model">sale.order</field>-->
+<!--        <field name="report_type">qweb-pdf</field>-->
+<!--&lt;!&ndash;        <field name="report_name">sale.report_saleorder</field>&ndash;&gt;-->
+<!--&lt;!&ndash;        <field name="report_file">sale.report_saleorder</field>&ndash;&gt;-->
+<!--        <field name="binding_model_id" ref="model_sale_order"/>-->
+<!--&lt;!&ndash;        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)</field>&ndash;&gt;-->
+<!--        <field name="binding_type">report</field>-->
+<!--        <field name="paperformat_id" ref="paperformat_print_rfq"/>-->
+<!--    </record>-->
+
+        <report
+                id="pecko_so_po_report.action_report_rfq"
+                string="Print RFQ"
+                model="sale.order"
+                report_type="qweb-pdf"
+                paperformat="pecko_so_po_report.paperformat_print_rfq"
+                file="pecko_so_po_report.report_print_rfq_document"
+                name="pecko_so_po_report.report_print_rfq_document"
+                print_report_name="object.name + '_RFQ'"/>
+    </data>>
+</odoo>
