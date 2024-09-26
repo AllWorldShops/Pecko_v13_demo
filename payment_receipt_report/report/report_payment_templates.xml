@@ -206,9 +206,10 @@
 
                     </tr>
                 </table>
+                <br/>
                 <t t-if="o.company_id.country_id.code != 'SG'">
                     <t t-if="o.partner_type!= 'customer'">
-                        <div>
+                        <div style="font-family: Calibri;">
                             <span t-if="o.partner_id.comment" t-field="o.partner_id.comment"/>
                         </div>
                     </t>
