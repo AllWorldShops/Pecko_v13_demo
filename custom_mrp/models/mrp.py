@@ -501,6 +501,7 @@ class ReportBomStructureInherit(models.AbstractModel):
             'uom': bom_line.product_uom_id,
             'uom_name': bom_line.product_uom_id.name,
             'prod_cost': rounded_price,
+            'prod_cost_unit':bom_line.product_id.standard_price,
             'bom_cost': rounded_price,
             'route_type': route_info.get('route_type', ''),
             'route_name': route_info.get('route_name', ''),
@@ -538,6 +539,7 @@ class ReportBomStructureInherit(models.AbstractModel):
                 'producible_qty': bom_line.get('producible_qty', False),
                 'uom': bom_line['uom_name'],
                 'prod_cost': bom_line['prod_cost'],
+                'prod_cost_unit': bom_line['prod_cost_unit'],
                 'bom_cost': bom_line['bom_cost'],
                 'route_name': bom_line['route_name'],
                 'route_detail': bom_line['route_detail'],
@@ -580,6 +582,7 @@ class ReportBomStructureInherit(models.AbstractModel):
                 'uom': False,
                 'quantity': data['byproducts_total'],
                 'bom_cost': data['byproducts_cost'],
+                'prod_cost_unit': data['prod_cost_unit'],
                 'level': level,
                 'visible': parent_unfolded,
             })
@@ -592,6 +595,7 @@ class ReportBomStructureInherit(models.AbstractModel):
                     'uom': byproduct['uom_name'],
                     'prod_cost': byproduct['prod_cost'],
                     'bom_cost': byproduct['bom_cost'],
+                    'prod_cost_unit': byproduct['prod_cost_unit'],
                     'level': level + 1,
                     'visible': byproducts_unfolded,
                 })

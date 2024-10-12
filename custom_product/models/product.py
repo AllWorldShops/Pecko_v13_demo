@@ -18,6 +18,8 @@ class ProductTemplate(models.Model):
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured")
     country_origin = fields.Char("Country of Origin")
     item_text = fields.Char("Item Text")
+    customer_part_number = fields.Char('Customer Part Number')
+
     standard_price = fields.Float(
         'Cost', compute='_compute_standard_price',
         inverse='_set_standard_price', search='_search_standard_price',
@@ -40,6 +42,7 @@ class ProductProduct(models.Model):
     production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured", related='product_tmpl_id.production_type')
     country_origin = fields.Char("Country of Origin", related='product_tmpl_id.country_origin', readonly=False)
     item_text = fields.Char("Item Text", related='product_tmpl_id.item_text')
+    customer_part_number = fields.Char('Customer Part Number')
     standard_price = fields.Float(
         'Cost', company_dependent=True,
         digits='Cost Price',

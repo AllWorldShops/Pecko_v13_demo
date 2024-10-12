@@ -93,31 +93,36 @@
 		</field>
 	</record>
 
-	<record id="view_sales_order_line_filter_inherit" model="ir.ui.view">
-		<field name="name">sale.order.line.select.inherit</field>
-		<field name="model">sale.order.line</field>
-		<field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
-		<field name="arch" type="xml">
-			<xpath expr="//search/field[@name='salesman_id']" position="after">
-				<field name="customer_po_no" />
-			</xpath>
-			<xpath expr="//search/group" position="inside">
-				<filter string="Promised Date" name="Promised Date" context="{'group_by':'promised_date'}"/>
-			</xpath>
-		</field>
-	</record>
-	
-	<record id="view_sales_order_filter_inherit" model="ir.ui.view">
-		<field name="name">sale.order.list.inherit</field>
-		<field name="model">sale.order</field>
-		<!-- <field name="priority" eval="15"/> -->
-		<field name="inherit_id" ref="sale.view_sales_order_filter"/>
-		<field name="arch" type="xml">
-			<xpath expr="//search/field[@name='partner_id']" position="after">
-				<field name="customer_po_no" />
-			</xpath>
-		</field>
-	</record>
+    <record id="view_sales_order_line_filter_inherit" model="ir.ui.view">
+        <field name="name">sale.order.line.select.inherit</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='salesman_id']" position="after">
+                <field name="customer_po_no"/>
+            </xpath>
+            <xpath expr="//search/group" position="inside">
+                <filter string="Promised Date" name="Promised Date" context="{'group_by':'promised_date'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sales_order_filter_inherit" model="ir.ui.view">
+        <field name="name">sale.order.list.inherit</field>
+        <field name="model">sale.order</field>
+        <!-- <field name="priority" eval="15"/> -->
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='partner_id']" position="after">
+                <field name="customer_po_no"/>
+            </xpath>
+            <xpath expr="//search/field[@name='analytic_account_id']" position="after">
+
+                <field name="order_line" string="Customer Part Number "
+                       filter_domain="[('order_line.product_id.customer_part_number', 'ilike', self)]"/>
+            </xpath>
+        </field>
+    </record>
 
 	<record id="action_sale_lines_menu" model="ir.actions.act_window">
 		<field name="name">Sale Order Lines</field>
