@@ -13,7 +13,10 @@
                                     <th class="text-center" t-attf-class="{{ showUom ? 'text-center' : 'text-end' }}"
                                         t-attf-colspan="{{ showUom ? 2 : 1 }}">Quantity</th>
                                     <th class="text-center" groups="uom.group_uom">Unit of Measure</th>
-                                     <th t-if="showCosts" class="text-center"
+                                    <th t-if="showCosts" class="text-center"
+                                        title="This is the unit price defined on the product.">Unit Cost</th>
+
+                                    <th t-if="showCosts" class="text-center"
                                         title="This is the cost defined on the product.">Product Cost</th>
                                     <th t-if="showCosts" class="text-center"
                                         title="This is the cost based on the BoM of the product. It is computed by summing the costs of the components and operations needed to build the product.">BoM Cost</th>
@@ -49,6 +52,7 @@
                                     <td t-if="showAvailabilities"/>
                                     <td t-if="showLeadTimes"/>
                                     <td/>
+                                    <td class="text-end" t-esc="formatMonetary(data.prod_cost_unit / data.quantity)"/>
                                     <td class="text-end" t-esc="formatMonetary(data.prod_cost / data.quantity)"/>
                                     <td class="text-end" t-esc="formatMonetary(data.bom_cost / data.quantity)"/>
                                     <td t-if="showAttachments"/>
@@ -66,6 +70,8 @@
                                         <td t-if="showAvailabilities"/>
                                         <td t-if="showLeadTimes"/>
                                         <td/>
+                                        <td class="text-end"
+                                            t-esc="formatMonetary(byproduct.prod_cost_unit / byproduct.quantity)"/>
                                         <td class="text-end"
                                             t-esc="formatMonetary(byproduct.prod_cost / byproduct.quantity)"/>
                                         <td class="text-end"

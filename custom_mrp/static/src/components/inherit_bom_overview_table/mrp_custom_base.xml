@@ -41,6 +41,9 @@
             <t t-else="" t-esc="formatFloat(data.quantity, {'digits': [false, precision]})"/>
         </td>
         <td t-if="showUom" class="text-center" t-esc="data.uom_name"/>
+                 <td t-if="showCosts" class="text-center">
+            <span t-if="data.hasOwnProperty('prod_cost_unit')" t-esc="formatMonetary(data.prod_cost_unit)"/>
+        </td>
         <td t-if="showCosts" class="text-center">
             <span t-if="data.hasOwnProperty('prod_cost')" t-esc="formatMonetary(data.prod_cost)"/>
         </td>
