@@ -93,6 +93,7 @@
             <xpath expr="//search/field[@name='origin']" position="after">
                 <field name="customer_po_no"/>
             </xpath>
+
             <xpath expr="//search/field[@name='move_line_ids']" position="after">
                 <field name="move_line_ids" string="Customer Part Number"
                        filter_domain="[('move_line_ids.product_id.customer_part_number', 'ilike', self)]"/>
