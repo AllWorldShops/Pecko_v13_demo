@@ -18,6 +18,7 @@
             	<field name="storage_location_id" invisible="0"/>
                 <!-- <field name="new_storage_loc" /> -->
                 
+                
             </xpath>
             <page name="invoicing" position="after">
                 <page string="Malaysia" >
