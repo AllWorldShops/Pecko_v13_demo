@@ -63,16 +63,16 @@
         </field>
     </record>
 
-     <record id="view_product_product_search_extend" model="ir.ui.view">
-        <field name="name">product.product.search.extend</field>
-        <field name="model">product.product</field>
-        <field name="inherit_id" ref="product.product_search_form_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//search" position="inside">
-                <field name="customer_part_number" string="Customer Part Number"/>
-            </xpath>
-        </field>
-    </record>
+<!--     <record id="view_product_product_search_extend" model="ir.ui.view">-->
+<!--        <field name="name">product.product.search.extend</field>-->
+<!--        <field name="model">product.product</field>-->
+<!--        <field name="inherit_id" ref="product.product_search_form_view"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//search" position="inside">-->
+<!--                <field name="customer_part_number" string="Customer Part Number"/>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
 
 
