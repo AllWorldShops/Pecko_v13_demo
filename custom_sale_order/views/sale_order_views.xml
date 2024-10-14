@@ -1,97 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	<record id="view_sale_order_tree_inherited" model="ir.ui.view">
-		<field name="name">sale order tree inherited</field>
-		<field name="model">sale.order</field>
-		<field name="inherit_id" ref="sale.view_quotation_tree" />
-		<field name="arch" type="xml">
-			<field name="create_date" position="before">
-				<field name="origin" />
-			</field>
+    <record id="view_sale_order_tree_inherited" model="ir.ui.view">
+        <field name="name">sale order tree inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <field name="create_date" position="before">
+                <field name="origin"/>
+            </field>
 
-		</field>
-	</record>
-	<record id="view_sale_order_form_inherited" model="ir.ui.view">
-		<field name="name">sale order inherited</field>
-		<field name="model">sale.order</field>
-		<field name="inherit_id" ref="sale.view_order_form" />
-		<field name="arch" type="xml">
-			<xpath expr="//field[@name='client_order_ref']" position="attributes">
-				<attribute name='invisible'>1</attribute>
-			</xpath>
-			<xpath expr="//field[@name='partner_id']" position="after">
-				<field name="attn" domain="[('parent_id', '=', partner_id)]" />
-			</xpath>
-			<!-- <xpath expr="//button[@name='action_confirm']" position="after">
-				 <button name="action_update_mo" id="action_update_mo" string="Update MO" class="btn-primary" type="object" groups="base.group_no_one"/>
-			</xpath> -->
-			<xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']" position="replace">
-				<field name="product_id" string="Pecko Part Number" domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"/>
-			</xpath>
-			<xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']" position="after">
-				<field name="customer_part_no" string="Customer Part Number" />
-			</xpath>
-			<xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']" position="before">
-				<field name="line_no"/>
-			</xpath>
-			<xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='price_unit']" position="after">
-				<field name="requested_date_line"/>
-				<field name="need_date" optional="hide"/>
-				<field name="promised_date" optional="hide"/>
-			</xpath>
-			<!--	<xpath expr="//form/sheet/notebook/page/field[@name='order_line'/form/group/group[1]/field[@name='product_id']" position="replace">
-				<field name="product_id" string="Pecko Part Number"/>
-			</xpath>
-			<xpath expr="//form/sheet/notebook/page/field[@name='order_line'/form/group/group[1]/field[@name='product_id']" position="after">
-				<field name="customer_part_no" string="Customer Part Number"/>
-			</xpath>-->
-			<xpath expr="//field[@name='effective_date']" position="replace">
-			</xpath>
-			<xpath expr="//field[@name='origin']" position="after">
-				<field name="effective_date"/>
-			</xpath>
-			<xpath expr="//field[@name='origin']" position="replace">
-			</xpath>
-			<xpath expr="//field[@name='payment_term_id']" position="after">
-				<field name="customer_po_no" />
-				<field name="customer_po_date" />
-				<field name="origin" />
-			</xpath>
+        </field>
+    </record>
+    <record id="view_sale_order_form_inherited" model="ir.ui.view">
+        <field name="name">sale order inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='client_order_ref']" position="attributes">
+                <attribute name='invisible'>1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="attn" domain="[('parent_id', '=', partner_id)]"/>
+            </xpath>
+            <!-- <xpath expr="//button[@name='action_confirm']" position="after">
+                 <button name="action_update_mo" id="action_update_mo" string="Update MO" class="btn-primary" type="object" groups="base.group_no_one"/>
+            </xpath> -->
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']"
+                   position="replace">
+                <field name="product_id" string="Pecko Part Number"
+                       domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']"
+                   position="after">
+                <field name="customer_part_no" string="Customer Part Number"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']"
+                   position="before">
+                <field name="line_no"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='price_unit']"
+                   position="after">
+                <field name="requested_date_line"/>
+                <field name="need_date" optional="hide"/>
+                <field name="promised_date" optional="hide"/>
+            </xpath>
+            <!--	<xpath expr="//form/sheet/notebook/page/field[@name='order_line'/form/group/group[1]/field[@name='product_id']" position="replace">
+                <field name="product_id" string="Pecko Part Number"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line'/form/group/group[1]/field[@name='product_id']" position="after">
+                <field name="customer_part_no" string="Customer Part Number"/>
+            </xpath>-->
+            <xpath expr="//field[@name='effective_date']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="effective_date"/>
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="customer_po_no"/>
+                <field name="customer_po_date"/>
+                <field name="origin"/>
+            </xpath>
 
-		</field>
-	</record>
+        </field>
+    </record>
 
-	<record id="view_sale_order_line_inherited" model="ir.ui.view">
-		<field name="name">sale.order.line</field>
-		<field name="model">sale.order.line</field>
-		<field name="priority">2</field>
-		<field name="arch" type="xml">
-			<tree string="Sale Order Lines" default_order='order_ref desc'>
-				<field name="order_ref" string="Order Reference"/>
-				<field name="line_no" string="Position"/>
-				<field name="customer_id" string="Customer"/>
-				<field name="product_id" string="Pecko Part Number" invisible="1"/>
-				<field name="customer_part_no" string="Customer Part Number" invisible="0"/>
-				<field name="internal_ref_no"></field>
-				<field name="mo_reference" />
-				<field name="do_reference" />
-				<field name="customer_po_no" string="Customer Po No" invisible="0"/>
-				<field name="name" string="Description"/>
-				<field name="production_type" string="Purchased / Manufactured" invisible="1"/>
-				<field name="sales_person_id" string="Salesperson" optional="hide"/>
-				<field name="price_unit" string="Unit Price"/>
-				<field name="product_uom_qty" string="Qty"/>
-				<field name="qty_delivered" string="Delivered"/>
-				<field name="qty_invoiced" string="Invoiced"/>
-				<field name="back_order_qty"/>
-				<field name="product_uom" string="Unit of Measure"/>
-				<field name="requested_date_line" string="Requested Date"/>
-				<field name="need_date" />
-				<field name="promised_date"/>
-				<field name="price_subtotal" string="Subtotal"/>
-			</tree>
-		</field>
-	</record>
+    <record id="view_sale_order_line_inherited" model="ir.ui.view">
+        <field name="name">sale.order.line</field>
+        <field name="model">sale.order.line</field>
+        <field name="priority">2</field>
+        <field name="arch" type="xml">
+            <tree string="Sale Order Lines" default_order='order_ref desc'>
+                <field name="order_ref" string="Order Reference"/>
+                <field name="line_no" string="Position"/>
+                <field name="customer_id" string="Customer"/>
+                <field name="product_id" string="Pecko Part Number" invisible="1"/>
+                <field name="customer_part_no" string="Customer Part Number" invisible="0"/>
+                <field name="internal_ref_no"></field>
+                <field name="mo_reference"/>
+                <field name="do_reference"/>
+                <field name="customer_po_no" string="Customer Po No" invisible="0"/>
+                <field name="name" string="Description"/>
+                <field name="production_type" string="Purchased / Manufactured" invisible="1"/>
+                <field name="sales_person_id" string="Salesperson" optional="hide"/>
+                <field name="price_unit" string="Unit Price"/>
+                <field name="product_uom_qty" string="Qty"/>
+                <field name="qty_delivered" string="Delivered"/>
+                <field name="qty_invoiced" string="Invoiced"/>
+                <field name="back_order_qty"/>
+                <field name="product_uom" string="Unit of Measure"/>
+                <field name="requested_date_line" string="Requested Date"/>
+                <field name="need_date"/>
+                <field name="promised_date"/>
+                <field name="price_subtotal" string="Subtotal"/>
+            </tree>
+        </field>
+    </record>
 
     <record id="view_sales_order_line_filter_inherit" model="ir.ui.view">
         <field name="name">sale.order.line.select.inherit</field>
@@ -117,20 +122,20 @@
                 <field name="customer_po_no"/>
             </xpath>
             <xpath expr="//search/field[@name='analytic_account_id']" position="after">
-
                 <field name="order_line" string="Customer Part Number "
                        filter_domain="[('order_line.product_id.customer_part_number', 'ilike', self)]"/>
             </xpath>
         </field>
     </record>
 
-	<record id="action_sale_lines_menu" model="ir.actions.act_window">
-		<field name="name">Sale Order Lines</field>
-		<field name="type">ir.actions.act_window</field>
-		<field name="res_model">sale.order.line</field>
-		<field name="view_id" ref="custom_sale_order.view_sale_order_line_inherited"/>
-		<field name="view_mode">tree,form</field>
-	</record>
+    <record id="action_sale_lines_menu" model="ir.actions.act_window">
+        <field name="name">Sale Order Lines</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_id" ref="custom_sale_order.view_sale_order_line_inherited"/>
+        <field name="view_mode">tree,form</field>
+    </record>
 
-	<menuitem id="action_sale_lines_menu_id" name="Sale Lines" action="custom_sale_order.action_sale_lines_menu" parent="sale.sale_order_menu" sequence="50"/>
+    <menuitem id="action_sale_lines_menu_id" name="Sale Lines" action="custom_sale_order.action_sale_lines_menu"
+              parent="sale.sale_order_menu" sequence="50"/>
 </odoo>
