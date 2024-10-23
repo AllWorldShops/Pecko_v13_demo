@@ -525,7 +525,7 @@ class ReportBomStructureInherit(models.AbstractModel):
                 'producible_qty': bom_line.get('producible_qty', False),
                 'uom': bom_line['uom_name'],
                 'prod_cost': bom_line['prod_cost'],
-                'prod_cost_unit': bom_line['prod_cost_unit'],
+                'prod_cost_unit': bom_line['prod_cost_unit'] if 'prod_cost_unit' in bom_line else '',
                 'bom_cost': bom_line['bom_cost'],
                 'route_name': bom_line['route_name'],
                 'route_detail': bom_line['route_detail'],
