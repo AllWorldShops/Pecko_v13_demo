@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="mo_order_details_template">
+            <div class="page" style="text-color:black">
+                <div class="header o_background_header">
+                    <div class="row" style="padding-left:1.5px">
+                        <div class="col-8">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                        </div>
+                    </div>
+                    <div class="row" name="company_address"
+                         style="text-start;padding-left:3px;font-family: Calibri;text-color:black;">
+                        <div class="col-8">
+                            <strong>
+                                <span style="font-size: 25px;papadding-left:3.6px"
+                                      t-field="o.company_id.partner_id.name"/>
+                            </strong>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-left:2.9px">
+                        <div class="col-8">
+                            <strong style="font-size: 35px;">Production Overview</strong>
+                        </div>
+                    </div>
+                    <div class="row" style="font-size:20px;padding-left:3px">
+                        <div class="col-4">
+                            <strong>
+                                <span style="font-size:20px;" t-esc="o.name"/>
+                            </strong>
+                        </div>
+                        <div class="col-4">
+                            <strong>
+                                <span style=" font-size:20px;">Customer Part No:</span>
+                            </strong>
+                            <span style="font-size:20px;" t-esc="o.customer_part_no"/>
+                        </div>
+                        <div class="col-5">
+                            <strong>
+                                <span style="font-size:20px;">Description:</span>
+                            </strong>
+                            <span style="font-size:20px;" t-esc="o.product_id.default_code"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="table_bom_structure" style="page-break-after:always">
+                    <table class="table table-bordered" name="invoice_line_table"
+                           style="width:100%;color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
+                        <thead style="font-size:20px; border: 1px solid black;" class="thead-light">
+                            <tr>
+                                <th class="text-center" style="border: 1px solid black;">Position</th>
+                                <th name="th_mrp_bom_h" style="border: 1px solid black;">Product</th>
+                                <th class="text-center" width="20%" style="border: 1px solid black;">Part No</th>
+                                <th class="text-center" style="border: 1px solid black;">Description</th>
+                                <th class="text-center" style="border: 1px solid black;">Manufacturer</th>
+                                <th class="text-center" style="border: 1px solid black;">Quantity</th>
+                                <th class="text-center" groups="uom.group_uom" style="border: 1px solid black;">Unit of
+                                    Measure
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody" style="font-size:20px;">
+                            <tr>
+                                <td style="border: 1px solid black;"/>
+                                <td style="border: 1px solid black;">
+                                    <span t-field="o.product_id.display_name"/>
+                                </td>
+                                <td style="border: 1px solid black;"/>
+                                <td style="border: 1px solid black;"/>
+                                <td style="border: 1px solid black;"/>
+                                <td style="text-align: right; border: 1px solid black;">
+                                    <span t-field="o.product_qty"/>
+                                </td>
+                                <td style="text-align: left; border: 1px solid black; text-transform: uppercase;">
+                                    <span t-field="o.product_uom_id.name"/>
+                                </td>
+                            </tr>
+                            <tr t-foreach="o.move_raw_ids" t-as="l">
+                                <t t-if="l.product_id">
+                                    <td style="text-align: center; border: 1px solid black;">
+                                        <span t-field="l.position_no"/>
+                                    </td>
+                                    <td style="text-align: left; border: 1px solid black;">
+                                        <span t-field="l.product_id.name"/>
+                                    </td>
+                                    <td style="text-align: left; border: 1px solid black;">
+                                        <span t-field="l.customer_part_no"/>
+                                    </td>
+                                    <td style="text-align: left; border: 1px solid black;">
+                                        <span t-field="l.name"/>
+                                    </td>
+                                    <td style="text-align: left; border: 1px solid black;">
+                                        <span t-field="l.manufacturer_id.name"/>
+                                    </td>
+                                    <td style="text-align: right; border: 1px solid black;">
+                                        <span t-field="l.quantity_done"/>
+                                    </td>
+                                    <td style="text-align: left; border: 1px solid black;text-transform: uppercase;">
+                                        <span t-field="l.product_uom.name"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+                <div>
+                    <table class="table table-bordered" name="work_line_table"
+                           style="width:100%;text-color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
+                        <thead style="font-size:20px; border: 1px solid black;" class="thead-light">
+                            <tr>
+                                <th class="text-center" width="20%" style="border: 1px solid black;">Operation</th>
+                                <th class="text-center" width="20%" style="border: 1px solid black;">Work Center</th>
+                                <th class="text-center" width="60%" style="border: 1px solid black;">Operation Text</th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody" style="font-size:20px">
+                            <tr t-foreach="o.workorder_ids" t-as="l">
+                                <t t-if="l.name">
+                                    <td class="text-center" style="border: 1px solid black;">
+                                        <span t-field="l.name"/>
+                                    </td>
+                                    <td style="text-align: left; border: 1px solid black;">
+                                        <span t-field="l.workcenter_id.name"/>
+                                    </td>
+                                    <td style="text-align: left; border: 1px solid black;">
+                                        <span/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+        <template id="report_mo_order_details">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="mo_report.mo_order_details_template"
+                       t-lang="o.company_id.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
