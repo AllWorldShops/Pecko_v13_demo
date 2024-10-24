@@ -133,6 +133,26 @@
                     </table>
                 </div>
             </div>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-4">
+                    </div>
+                    <div class="col-4" style="font-size:22px">
+                        <div class="text-center">
+                            Page:
+                            <span class="page"/>
+                            of
+                            <span class="topage"/>
+                        </div>
+                    </div>
+                    <div class="col" >
+                        <div class="text-right" style="padding-left:340px ">
+                            <strong style=" font-size:22px;">Printed on:</strong>
+                      <span style=" font-size:22px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </template>
 
         <template id="report_mo_order_details">
