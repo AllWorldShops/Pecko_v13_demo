@@ -9,6 +9,7 @@
     'description': """Manufacture PDF Report""",
     'depends': ['stock','mrp','custom_mrp'],
     'data': [
+        'report/mo_order_details.xml',
         'report/mo_report.xml',
         'report/mo_report_templates.xml'
     ],

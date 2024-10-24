@@ -1,109 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
+    <data>
 
- 		<template id="custom_mo_external_layout_background">
-			<div class="header o_background_header">
-				<div class="row">
-					<div class="col-8">
-						<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
-						<div class="company_address"
-							style="line-height:0.2px;font-family: Calibri;text-color:black;font-size:13px">
-							<div >
+        <template id="custom_mo_external_layout_background">
+            <div class="header o_background_header">
+                <div class="row">
+                    <div class="col-8">
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                        <div class="company_address"
+                             style="line-height:0.2px;font-family: Calibri;text-color:black;font-size:13px">
+                            <div>
 
-								<strong>
-									<span style="font-size: 22px;"
-										t-field="company.partner_id.name" />
-								</strong>
-								<br />
-								<span t-field="o.company_id.street"  />
+                                <strong>
+                                    <span style="font-size: 22px;"
+                                          t-field="company.partner_id.name"/>
+                                </strong>
+                                <br/>
+                                <span t-field="o.company_id.street"/>
 
-								<t t-if="o.company_id.street">
-									<span t-field="o.company_id.street" />
-									,
-									<br />
-									<span t-field="o.company_id.street2" />
-								</t>
-								<t t-else="">
-									<span t-field="o.company_id.street2" />
-								</t>
-								<br />
-								<span t-field="o.company_id.city" />
-								,
-								<span t-field="o.company_id.state_id" />
-								,
-								<span t-field="o.company_id.country_id" />
-								-
-								<span t-field="o.company_id.zip" />
-								<br />
-								<span>TEL :</span>
-								<span t-field="o.company_id.phone" />
-								<br />
-								<span>E-mail:</span>
-								<span t-field="o.company_id.email" />
-								,
-								<span>URL:</span>
-								<span t-field="o.company_id.website" />
-								<br />
-								<span>Company Reg No:</span>
-								<span t-field="o.company_id.company_registry" />
-							</div>
-						</div>
-					</div>
-					<div class="col-4">
-						<div style="text-align:right">
-							Page:
-							<span class="page" />
-							of
-							<span class="topage" />
-						</div>
-						<div class="clearfix mb8" />
-					</div>
-				</div>
-			</div>
-			<div class="article o_report_layout_background"
-				t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
-				<t t-raw="0" />
-			</div>
-		</template>
+                                <t t-if="o.company_id.street">
+                                    <span t-field="o.company_id.street"/>
+                                    ,
+                                    <br/>
+                                    <span t-field="o.company_id.street2"/>
+                                </t>
+                                <t t-else="">
+                                    <span t-field="o.company_id.street2"/>
+                                </t>
+                                <br/>
+                                <span t-field="o.company_id.city"/>
+                                ,
+                                <span t-field="o.company_id.state_id"/>
+                                ,
+                                <span t-field="o.company_id.country_id"/>
+                                -
+                                <span t-field="o.company_id.zip"/>
+                                <br/>
+                                <span>TEL :</span>
+                                <span t-field="o.company_id.phone"/>
+                                <br/>
+                                <span>E-mail:</span>
+                                <span t-field="o.company_id.email"/>
+                                ,
+                                <span>URL:</span>
+                                <span t-field="o.company_id.website"/>
+                                <br/>
+                                <span>Company Reg No:</span>
+                                <span t-field="o.company_id.company_registry"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div style="text-align:right">
+                            Page:
+                            <span class="page"/>
+                            of
+                            <span class="topage"/>
+                        </div>
+                        <div class="clearfix mb8"/>
+                    </div>
+                </div>
+            </div>
+            <div class="article o_report_layout_background"
+                 t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                <t t-raw="0"/>
+            </div>
+        </template>
 
-		<template id="custom_mo_external_layout">
-			<!-- Multicompany -->
-			<t t-if="not o and doc">
-				<t t-set="o" t-value="doc" />
-			</t>
+        <template id="custom_mo_external_layout">
+            <!-- Multicompany -->
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc"/>
+            </t>
 
-			<t t-if="o and 'company_id' in o">
-				<t t-set="company" t-value="o.company_id.sudo()" />
-			</t>
-			<t t-if="not o or not 'company_id' in o">
-				<t t-set="company" t-value="res_company" />
-			</t>
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
 
-			<t t-call="mo_report.custom_mo_external_layout_background">
-				<t t-raw="0" />
-			</t>
+            <t t-call="mo_report.custom_mo_external_layout_background">
+                <t t-raw="0"/>
+            </t>
 
-		</template>
+        </template>
 
-		<record id="paperformat_mo" model="report.paperformat">
-			<field name="name">Mo Paperformat</field>
-			<field name="default" eval="True" />
-			<field name="format">A4</field>
-			<field name="orientation">Portrait</field>
-			<field name="margin_top">48</field>
-			<field name="margin_bottom">50</field>
-			<field name="margin_left">6</field>
-			<field name="margin_right">6</field>
-			<field name="header_line" eval="False" />
-			<field name="header_spacing">45</field>
-			<field name="dpi">90</field>
-		</record>
+        <record id="paperformat_mo" model="report.paperformat">
+            <field name="name">Mo Paperformat</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">48</field>
+            <field name="margin_bottom">50</field>
+            <field name="margin_left">6</field>
+            <field name="margin_right">6</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">45</field>
+            <field name="dpi">90</field>
+        </record>
 
-		<!-- QWeb Reports -->
-		<report id="mo_ppts" model="mrp.production" string="Mo Report"
-			report_type="qweb-pdf" name="mo_report.report_custom_mo"
-			file="mo_report.report_custom_mo" paperformat="paperformat_mo" />
+        <!-- QWeb Reports -->
+        <report id="mo_ppts" model="mrp.production" string="Mo Report"
+                report_type="qweb-pdf" name="mo_report.report_custom_mo"
+                file="mo_report.report_custom_mo" paperformat="paperformat_mo"/>
 
-	</data>
+        <!-- Manufacturing Order Details -->
+
+        <record id="paperformat_mo_order_details" model="report.paperformat">
+            <field name="name">Production Overview</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">45</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">6</field>
+            <field name="margin_right">6</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">40</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report id="action_report_mo_order_details" model="mrp.production"
+                string="Production Overview"
+                report_type="qweb-pdf"
+                name="mo_report.report_mo_order_details"
+                file="mo_report.report_mo_order_details"
+                paperformat="paperformat_mo_order_details"
+                print_report_name="'Production Overview - %s' % object.display_name"/>
+
+    </data>
 </odoo>
