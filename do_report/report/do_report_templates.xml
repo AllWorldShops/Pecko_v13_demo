@@ -294,46 +294,24 @@
                     </table>
                     <p style="page-break-after:always"></p>
                 </div>
-
-                <!--                <div class="page" style="text-color:black;">-->
-                <!--                    <table>-->
-                <!--                    <span style="font-size: 30px;">PECKO</span> &lt;!&ndash; Larger font size for "PECKO" &ndash;&gt;-->
-                <!--                    <span style="font-size: 20px;">ELECTRONICS INDUSTRIES PTE LTD</span>-->
-                <!--                    <br></br>-->
-                <!--                    <span style="font-size: 20px;">CERTIFICATE OF COMPLIANCE</span>-->
-
-                <!--                    </table>-->
-
-                <!--                    <div>-->
-                <!--                        <div style="font-size: 20px;text-align: center;">-->
-                <!--                            <span>-->
-                <!--                                <strong>Delivery Order</strong>-->
-                <!--                            </span>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-
                 <div class="page" style="color: black;font-family: Arial;">
-                    <!-- Four-column table with sample data -->
                     <table style="width: 100%; font-family: Arial;border-collapse: collapse; font-size: 12px;">
 
                         <tbody>
-
                             <tr>
-                                <td style="border: 1px solid black; border-bottom-style: hidden; padding: 25px; text-align: center;"
+                                <td style="border: 1px solid black;display: flex;border-bottom-style: hidden; padding: 15px; text-align: center;"
                                     colspan="3">
-                                    <span style="font-size: 20px;">PECKO</span>
-                                    <span style="font-size: 10px;">ELECTRONICS INDUSTRIES PTE LTD</span>
+                                    <span style="font-size: 20px;">PECKO ELECTRONICS INDUSTRIES PTE LTD</span>
                                 </td>
 
                                 <td style="border: 1px solid black;border-bottom-style: hidden; padding: 8px; text-align: left;"></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black;padding: 8px; text-align: center;"
+                                <td style="display: flex;font-size: 20px; font-weight: bold;border: 1px solid black;padding: 8px; text-align: center;"
                                     colspan="3">
                                     CERTIFICATE OF COMPLIANCE
                                 </td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: left;">QA STAMP</td>
+                                <td style="border: 1px solid black; padding: 8px; text-align: center;">QA STAMP</td>
                             </tr>
 
 
@@ -395,28 +373,18 @@
                                     N/A
                                 </td>
                                 <td style="border: 1px solid black; padding: 8px;">Qty Packed :</td>
-                                <!--                                <td style="border: 1px solid black; padding: 8px;">-->
-                                <!--                                    <t t-if="o.move_line_nosuggest_ids">-->
-                                <!--                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">-->
-                                <!--                                            <span t-esc="prod.product_id.product_uom_qty"/>-->
-                                <!--                                            <b>,</b>-->
-                                <!--                                        </t>-->
-                                <!--                                    </t>-->
-                                <!--                                    &lt;!&ndash;                                    <t t-else="">&ndash;&gt;-->
-                                <!--                                    &lt;!&ndash;                                        N/A&ndash;&gt;-->
-                                <!--                                    &lt;!&ndash;                                    </t>&ndash;&gt;-->
-                                <!--                                </td>-->
+
                                 <td style="border: 1px solid black; padding: 8px;"></td>
-                                <!--                                    <t t-if="o.move_line_nosuggest_ids">-->
-                                <!--                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">-->
-                                <!--                                            <span t-esc="prod.product_uom_qty"/>-->
-                                <!--                                            <b>,</b>-->
-                                <!--                                        </t>-->
-                                <!--                                    </t>-->
-                                <!--                                                                        <t t-else="">-->
-                                <!--                                                                            N/A-->
-                                <!--                                                                        </t>-->
-                                <!--                                </td>-->
+<!--                                    <t t-if="o.move_line_nosuggest_ids">-->
+<!--                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">-->
+<!--                                            <span t-esc="prod.product_uom_qty"/>-->
+<!--                                            <b>,</b>-->
+<!--                                        </t>-->
+<!--                                    </t>-->
+<!--                                                                        <t t-else="">-->
+<!--                                                                            N/A-->
+<!--                                                                        </t>-->
+<!--                                </td>-->
 
                             </tr>
                             <tr>
@@ -431,16 +399,16 @@
                                 <td style="border: 1px solid black; padding: 8px;">Lot Quantity :</td>
 
                                 <td style="border: 1px solid black; padding: 8px;"></td>
-                                <!--                                    <t t-if="o.move_line_nosuggest_ids">-->
-                                <!--                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">-->
-                                <!--                                            <span t-esc="prod.product_uom_qty"/>-->
-                                <!--                                            <b>,</b>-->
-                                <!--                                        </t>-->
-                                <!--                                    </t>-->
-                                <!--                                                                        <t t-else="">-->
-                                <!--                                                                            N/A-->
-                                <!--                                                                        </t>-->
-                                <!--                                </td>-->
+<!--                                    <t t-if="o.move_line_nosuggest_ids">-->
+<!--                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">-->
+<!--                                            <span t-esc="prod.product_uom_qty"/>-->
+<!--                                            <b>,</b>-->
+<!--                                        </t>-->
+<!--                                    </t>-->
+<!--                                                                        <t t-else="">-->
+<!--                                                                            N/A-->
+<!--                                                                        </t>-->
+<!--                                </td>-->
 
                                 <td style="border: 1px solid black; padding: 8px;">Sampling Size :</td>
                                 <td style="border: 1px solid black; padding: 8px;">100%</td>
@@ -530,26 +498,6 @@
                                 <td style="border: 1px solid black; padding: 8px;"></td>
                                 <td style="border: 1px solid black; padding: 8px;"></td>
                             </tr>
-                            <!--                            <tr>-->
-                            <!--                                <td style="border: 1px solid black; padding: 8px;">Continuity Test :</td>-->
-                            <!--                                <td style="border: 1px solid black; padding: 8px;"></td>-->
-                            <!--                                <td style="border: 1px solid black; padding: 8px;"></td>-->
-                            <!--                                <td style="border: 1px solid black; padding: 8px;"></td>-->
-                            <!--                            </tr>-->
-                            <!--                            <tr>-->
-                            <!--                                <td style="border: 1px solid black;border-top-style:hidden;padding: 6px; ">(If-->
-                            <!--                                    Applicable)-->
-                            <!--                                </td>-->
-                            <!--                                <td style="font-weight: bold;border: 1px solid black;border-top-style:hidden;padding-top:10px; text-align:center;">-->
-                            <!--                                    PASS-->
-                            <!--                                </td>-->
-                            <!--                                <td style="border: 1px solid black;border-top-style:hidden; padding-top:10px;padding: 8px;text-align:center;">-->
-                            <!--                                    Inspection Result :-->
-                            <!--                                </td>-->
-                            <!--                                <td style="border: 1px solid black; border-top-style:hidden;padding-top:10px;padding: 8px;text-align:center;">-->
-                            <!--                                    PASS / FAIL-->
-                            <!--                                </td>-->
-                            <!--                            </tr>-->
                             <tr>
                                 <td style="border: 1px solid black; padding: 8px;" rowspan="2">Continuity Test:<br/>(If
                                     Applicable)
@@ -563,8 +511,6 @@
                                 <td style="border: 1px solid black; padding: 8px;" rowspan="2">PASS / FAIL</td>
                             </tr>
                             <tr>
-                                <!-- Empty cells for the second row since it’s now merged with the previous row -->
-                                <!--    <td style="border: 1px solid black; padding: 8px;"></td>-->
                             </tr>
 
                             <tr>
@@ -575,12 +521,10 @@
                             </tr>
                             <tr>
                                 <td style="border: 1px solid black; padding: 8px;">Remarks : ( If any )</td>
-                                <!--                                <td style="border: 1px solid black;border-right-style:hidden; padding: 8px;"></td>-->
                                 <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="3">COUNTRY
                                     OF ORIGIN :
                                     MADE IN SINGAPORE
                                 </td>
-                                <!--                                <td style="border: 1px solid black;border-left-style:hidden; padding: 8px;"></td>-->
                             </tr>
                             <tr>
                                 <td style="font-size: 16px; border: 1px solid black; padding: 4px;text-align:center;"
@@ -621,8 +565,6 @@
                         </tbody>
                     </table>
                 </div>
-
-
             </t>
 
         </template>
@@ -638,3 +580,312 @@
 
     </data>
 </odoo>
+
+                    <!--<previuous code for my reference>-->
+
+        <!--        <template id="report_do_document">-->
+        <!--            <t t-call="do_report.custom_do_external_layout">-->
+        <!--                <style>-->
+        <!--                    .table1{-->
+        <!--                    border: 1px solid black;-->
+        <!--                    }-->
+        <!--                    .td1{-->
+        <!--                    padding-left: 4px;-->
+        <!--                    }-->
+        <!--                    .td2-->
+        <!--                    {-->
+        <!--                    padding-left: 4px;-->
+        <!--                    background-color:red;-->
+        <!--                    }-->
+        <!--                    .td3-->
+        <!--                    {-->
+        <!--                    padding-left: 4px;-->
+        <!--                    background-color:blue;-->
+        <!--                    }-->
+
+        <!--                    .table2{-->
+        <!--                    border-top: 1px solid black;-->
+        <!--                    border-left: 1px solid black;-->
+        <!--                    border-right: 1px solid black;-->
+        <!--                    }-->
+
+        <!--                    .table3{-->
+        <!--                    border-bottom: 1px solid-->
+        <!--                    black;-->
+        <!--                    border-left: 1px solid black;-->
+        <!--                    border-right: 1px solid black;-->
+        <!--                    }-->
+        <!--                    .table4{-->
+        <!--                    border-bottom: 1px solid black;-->
+        <!--                    }-->
+        <!--                    .table5{-->
+        <!--                    border-top: 1px-->
+        <!--                    solid black;-->
+        <!--                    }-->
+        <!--                    .pagebreak { page-break-before: always; } /*-->
+        <!--                    page-break-after works, as well */-->
+
+        <!--                    html *-->
+        <!--                    {-->
+        <!--                    font-family: Calibri;-->
+        <!--                    }-->
+        <!--                    thead {display:table-header-group}-->
+        <!--                    tr {page-break-inside:avoid}-->
+        <!--                </style>-->
+        <!--                <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>-->
+        <!--                <br></br>-->
+
+        <!--                <div class="page" style="text-color:black;">-->
+        <!--                    <div>-->
+        <!--                        <div style="font-size: 20px;text-align: center;">-->
+        <!--                            <span>-->
+        <!--                                <strong>Delivery Order</strong>-->
+        <!--                            </span>-->
+        <!--                        </div>-->
+
+        <!--                        &lt;!&ndash;                        <t t-if="o.company_id.country_id.code == 'SG'">&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                            <div style="font-size: 20px;text-align: center;padding-top:40px;">&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                                <span>&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                                    <strong>Delivery Order</strong>&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                                </span>&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                            </div>&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                        </t>&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                        <t t-else="">&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                            <div style="font-size: 20px;text-align: center;padding-top:8px;">&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                                <span>&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                                    <strong>Delivery Order</strong>&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                                </span>&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                            </div>&ndash;&gt;-->
+        <!--                        &lt;!&ndash;                        </t>&ndash;&gt;-->
+        <!--                        <table style="width: 100%;height:120px;background-color: white;line-height:12pt;"-->
+        <!--                               class="table-borderless">-->
+        <!--                            <tbody>-->
+        <!--                                <tr>-->
+        <!--                                    <td style="width:55%;background-color: white;font-size:13px;">-->
+        <!--                                        <strong>-->
+        <!--                                            <span style="color:#875A7B">Customer</span>-->
+        <!--                                        </strong>-->
+        <!--                                        <br/>-->
+        <!--                                        <strong>-->
+        <!--                                            <span t-field="o.partner_id.name"/>-->
+        <!--                                        </strong>-->
+        <!--                                        <br/>-->
+        <!--                                        <span t-field="o.partner_id.street"/>-->
+        <!--                                        <span t-field="o.partner_id.street2"/>-->
+        <!--                                        <br/>-->
+        <!--                                        <t t-if="o.partner_id.city">-->
+        <!--                                            <span t-field="o.partner_id.city"/>-->
+        <!--                                            <span t-field="o.partner_id.state_id"/>-->
+        <!--                                            <br/>-->
+        <!--                                        </t>-->
+
+        <!--                                        <t t-if="o.partner_id.country_id">-->
+        <!--                                            <span t-field="o.partner_id.country_id"/>-->
+        <!--                                            <span t-field="o.partner_id.zip"/>-->
+        <!--                                            <br/>-->
+        <!--                                        </t>-->
+
+        <!--                                        <t t-if="o.partner_id.phone">-->
+        <!--                                            Phone:-->
+        <!--                                            <span t-field="o.partner_id.phone"/>-->
+        <!--                                            <br/>-->
+        <!--                                        </t>-->
+        <!--                                        <t t-if="o.company_id.country_id.code != 'SG'">-->
+        <!--                                            Email:-->
+        <!--                                            <span t-field="o.partner_id.email"/>-->
+        <!--                                        </t>-->
+        <!--                                        <br/>-->
+        <!--                                        <br/>-->
+
+        <!--                                    </td>-->
+        <!--                                    <td style="width:45%;background-color: white;font-size:13px;">-->
+        <!--                                        <table style="width:100%;background-color: white;" class="table-borderless">-->
+        <!--                                            <tbody>-->
+        <!--                                                <tr>-->
+        <!--                                                    <td>-->
+        <!--                                                        <strong>Delivery Address</strong>-->
+        <!--                                                    </td>-->
+        <!--                                                </tr>-->
+        <!--                                                <tr>-->
+        <!--                                                    <td>-->
+
+        <!--                                                        <span t-field="o.partner_id.name"/>-->
+        <!--                                                        <br/>-->
+        <!--                                                        <span t-field="o.partner_id.street"/>-->
+        <!--                                                        <br/>-->
+        <!--                                                        <span t-field="o.partner_id.street2"/>-->
+        <!--                                                        <br/>-->
+        <!--                                                        <t t-if="o.partner_id.city">-->
+        <!--                                                            <span t-field="o.partner_id.city"/>-->
+        <!--                                                            <br/>-->
+        <!--                                                        </t>-->
+        <!--                                                        <t t-if="o.partner_id.state_id">-->
+        <!--                                                            <span t-field="o.partner_id.state_id"/>-->
+        <!--                                                            <br/>-->
+        <!--                                                        </t>-->
+        <!--                                                        <t t-if="o.partner_id.zip">-->
+        <!--                                                            <span t-field="o.partner_id.zip"/>-->
+        <!--                                                            <br/>-->
+        <!--                                                        </t>-->
+        <!--                                                        <t t-if="o.partner_id.country_id">-->
+        <!--                                                            <span t-field="o.partner_id.country_id"/>-->
+        <!--                                                            <br/>-->
+        <!--                                                        </t>-->
+        <!--                                                    </td>-->
+        <!--                                                </tr>-->
+        <!--                                                <tr>-->
+        <!--                                                    <td>-->
+        <!--                                                    </td>-->
+        <!--                                                </tr>-->
+        <!--                                            </tbody>-->
+        <!--                                        </table>-->
+        <!--                                        <table class="table-borderless">-->
+        <!--                                            <tbody>-->
+        <!--                                                <tr>-->
+        <!--                                                    <td>-->
+        <!--                                                        <strong>Shipment</strong>-->
+        <!--                                                    </td>-->
+        <!--                                                    <td>-->
+        <!--                                                        <span style="text-align:left" t-field="o.name"/>-->
+        <!--                                                    </td>-->
+        <!--                                                </tr>-->
+        <!--                                                <tr>-->
+        <!--                                                    <td>-->
+        <!--                                                        <strong>Date</strong>-->
+        <!--                                                    </td>-->
+        <!--                                                    <td>-->
+        <!--                                                        <span style="text-align:left" t-field="o.date_done"-->
+        <!--                                                              t-options='{"format": "dd/MM/yyyy"}'/>-->
+        <!--                                                    </td>-->
+        <!--                                                </tr>-->
+        <!--                                                <tr>-->
+        <!--                                                    <td>-->
+        <!--                                                        <strong>SO No.</strong>-->
+        <!--                                                    </td>-->
+        <!--                                                    <td>-->
+        <!--                                                        <span style="text-align:left" t-field="o.sale_id.name"/>-->
+        <!--                                                    </td>-->
+        <!--                                                </tr>-->
+        <!--                                                <tr>-->
+        <!--                                                    <td>-->
+        <!--                                                        <strong>Carrier</strong>-->
+        <!--                                                    </td>-->
+        <!--                                                    <td>-->
+        <!--                                                        <span style="text-align:left" t-field="o.carrier"/>-->
+        <!--                                                    </td>-->
+        <!--                                                </tr>-->
+        <!--                                                <tr>-->
+        <!--                                                    <td>-->
+        <!--                                                        <strong>Customer PO No</strong>-->
+        <!--                                                    </td>-->
+        <!--                                                    <td>-->
+        <!--                                                        <span style="text-align:left" t-field="o.customer_po_no"/>-->
+        <!--                                                    </td>-->
+        <!--                                                </tr>-->
+        <!--                                            </tbody>-->
+        <!--                                        </table>-->
+        <!--                                    </td>-->
+        <!--                                </tr>-->
+        <!--                            </tbody>-->
+        <!--                        </table>-->
+        <!--                        <br/>-->
+        <!--                        <t t-set="product_stock_uom_qty" t-value="0"/>-->
+
+        <!--                        &lt;!&ndash;                        class="table table-sm table-condensed table-borderless"&ndash;&gt;-->
+        <!--                        <table class="table table-borderless" name="invoice_line_table"-->
+        <!--                               style="width:100%;table-layout:fixed;">-->
+        <!--                            <style>-->
+        <!--                                tbody tr:nth-child(odd){-->
+        <!--                                background-color: #f4f4f5;-->
+        <!--                                }-->
+        <!--                            </style>-->
+        <!--                            <thead style="font-size:13px" class="table table-condensed">-->
+        <!--                                <tr>-->
+        <!--                                    <th style="width:12%;text-align: left;color:#875A7B">Pos.No</th>-->
+        <!--                                    <th style="width:20%;text-align: left;color:#875A7B">Pecko Part No</th>-->
+        <!--                                    <th style="width:20%;text-align: left;color:#875A7B">Part No</th>-->
+        <!--                                    <th style="width:30%;text-align: left;color:#875A7B">Description</th>-->
+        <!--                                    <th t-if="o.company_id.country_id.code == 'SG'"-->
+        <!--                                        style="width:20%;text-align: left;color:#875A7B">Country of Origin-->
+        <!--                                    </th>-->
+        <!--                                    <th style="width:20%;text-align: left;color:#875A7B">Delivered Qty</th>-->
+        <!--                                    <th style="width:20%;text-align: left;color:#875A7B">BackOrder Qty</th>-->
+        <!--                                </tr>-->
+        <!--                            </thead>-->
+        <!--                            <tbody class="invoice_tbody" style="line-height:10pt;font-size:12px;">-->
+        <!--                                <t t-set="i" t-value="1"/>-->
+        <!--                                <t t-if="o.partner_id" class="td2">-->
+        <!--                                    <tr t-foreach="o.move_ids_without_package" t-as="l">-->
+        <!--                                        <t t-if="l.quantity_done > 0">-->
+        <!--                                            <td style=" text-align: left;">-->
+        <!--                                                <span t-field="l.position_no"/>-->
+        <!--                                                &lt;!&ndash; <span t-esc="i" />-->
+        <!--                                                <span t-set="i" t-value="i+1" /> &ndash;&gt;-->
+        <!--                                            </td>-->
+        <!--                                            <td style=" text-align: left;">-->
+        <!--                                                <span t-field="l.product_id"/>-->
+        <!--                                                <br/>-->
+        <!--                                                <i>-->
+        <!--                                                    <span t-field="l.additional_notes"/>-->
+        <!--                                                </i>-->
+        <!--                                            </td>-->
+        <!--                                            <td style=" text-align: left;">-->
+        <!--                                                <span t-field="l.customer_part_no"/>-->
+        <!--                                            </td>-->
+        <!--                                            <td style=" text-align: left;">-->
+        <!--                                                <span t-field="l.name"/>-->
+        <!--                                            </td>-->
+        <!--                                            <td t-if="o.company_id.country_id.code == 'SG'" style=" text-align: left;">-->
+        <!--                                                <span t-field="l.product_id.country_origin"/>-->
+        <!--                                            </td>-->
+
+        <!--                                            <t t-if="l.sale_line_id and l.product_id.uom_id.name != l.sale_line_id.product_uom.name">-->
+        <!--                                                <td style=" text-align: left;">-->
+        <!--                                                    <span t-esc="round(l.quantity_done / l.sale_line_id.product_uom.factor_inv,2)"/>-->
+        <!--                                                    <span t-field="l.sale_line_id.product_uom"/>-->
+        <!--                                                </td>-->
+        <!--                                                <td style=" text-align: left;">-->
+        <!--                                                    <t t-set="qty" t-value="l.sale_line_id.qty_delivered"/>-->
+        <!--                                                    <span t-esc="round(l.sale_line_id.product_uom_qty - qty,2)"/>-->
+        <!--                                                    <span t-field="l.sale_line_id.product_uom"/>-->
+        <!--                                                </td>-->
+        <!--                                            </t>-->
+        <!--                                            <t t-else="">-->
+        <!--                                                <td style=" text-align: left;">-->
+        <!--                                                    <span t-field="l.quantity_done"/>-->
+        <!--                                                    <span t-field="l.product_uom"/>-->
+        <!--                                                </td>-->
+
+        <!--                                                <td style=" text-align: left;">-->
+        <!--                                                    <t t-set="qty" t-value="l.sale_line_id.qty_delivered"/>-->
+        <!--                                                    <span t-esc="round(l.sale_line_id.product_uom_qty - qty,2)"/>-->
+        <!--                                                    <span t-field="l.sale_line_id.product_uom"/>-->
+        <!--                                                </td>-->
+        <!--                                            </t>-->
+
+        <!--                                            &lt;!&ndash;-->
+        <!--                                            <td t-if="l.product_id.uom_id.name != l.sale_line_id.product_uom.name" style=" text-align: left;">-->
+        <!--                                                <t t-set="qty" t-value="l.sale_line_id.qty_delivered" />-->
+        <!--                                                <span t-esc="round((l.sale_line_id.product_uom_qty - qty) / l.sale_line_id.product_uom.factor_inv,2) " />-->
+        <!--                                                <span t-field="l.sale_line_id.product_uom" />-->
+        <!--                                            </td>&ndash;&gt;-->
+        <!--                                        </t>-->
+        <!--                                    </tr>-->
+        <!--                                </t>-->
+        <!--                            </tbody>-->
+        <!--                        </table>-->
+        <!--                        <table style='width:100%;background:transparent;'>-->
+        <!--                            <tr style='background-color: white;background:transparent !important;'>-->
+        <!--                                <td>-->
+        <!--                                </td>-->
+        <!--                            </tr>-->
+        <!--                        </table>-->
+        <!--                    </div>-->
+        <!--                    <table width="100%" style="border-top: 1px solid black;border-bottom: 1px solid black;">-->
+
+        <!--                    </table>-->
+        <!--                    <p style="page-break-after:always"></p>-->
+        <!--                </div>-->
+
+        <!--            </t>-->
+        <!--        </template>-->
