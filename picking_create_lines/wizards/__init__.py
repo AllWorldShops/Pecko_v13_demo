@@ -1,0 +1,1 @@
+from . import view_partner_category_product

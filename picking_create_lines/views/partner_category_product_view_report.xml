@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="partner_category_product_view_report_tree" model="ir.ui.view">
+            <field name="name">partner.category.product.view.report.tree</field>
+            <field name="model">partner.category.product.view.report</field>
+            <field name="arch" type="xml">
+                <tree string="Partner Category Product View Report">
+                    <field name="category_code"/>
+                    <field name="partner_code"/>
+                    <field name="name"/>
+                    <field name="product_id" readonly="0"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_partner_category_product_view_report" model="ir.actions.act_window">
+            <field name="name">Partner Category Product View Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">partner.category.product.view.report</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no data in the partner.
+                </p>
+            </field>
+        </record>
+
+        <record id="list_partner_code_report_tree" model="ir.ui.view">
+            <field name="name">list.partner.code.report.tree</field>
+            <field name="model">list.partner.code.report</field>
+            <field name="arch" type="xml">
+                <tree string="list.partner.code.report">
+                    <field name="name"/>
+                    <field name="category_code_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_list_partner_code_report" model="ir.actions.act_window">
+            <field name="name">List Partner Code Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">list.partner.code.report</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no data in the partner.
+                </p>
+            </field>
+        </record>
+
+        <record id="list_category_code_report_tree" model="ir.ui.view">
+            <field name="name">list.category.code.report.tree</field>
+            <field name="model">list.category.code.report</field>
+            <field name="arch" type="xml">
+                <tree string="list.category.code.report">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_list_category_code_report" model="ir.actions.act_window">
+            <field name="name">List Category Code Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">list.category.code.report</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no data in the partner.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
