@@ -11,6 +11,7 @@ class PartnerCategoryProductViewReport(models.Model):
     name = fields.Char(string='Product Name')
     product_id = fields.Many2one(comodel_name='product.product', string='Product Internal Reference')
 
+
     def get_view_product_report_values(self, category_code, partner_code):
         """Generate a product report based on the provided category and partner codes."""
         self.env.cr.execute("DELETE FROM partner_category_product_view_report")
