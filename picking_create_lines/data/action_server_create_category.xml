@@ -8,7 +8,7 @@
 action = env['view.partner.category.product']._open_category_code()
         </field>
     </record>
-    <menuitem id="view_partner_category_product_server_action" name="Partner Category Product View Report"
-              action="model_view_partner_category_product_action" sequence="510"
-              parent="stock.menu_stock_root"/>
+    <menuitem id="view_partner_category_product_server_action" name="Pecko Part Number Report"
+              action="model_view_partner_category_product_action" sequence="105"
+              parent="stock.menu_stock_inventory_control"/>
 </odoo>
