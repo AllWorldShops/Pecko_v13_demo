@@ -6,7 +6,7 @@
 {
     "name": "Picking Create lines groups",
     "summary": "Added groups for picking create lines",
-    "version": "13.0.1.0.1",
+    "version": "16.0.1.0.1",
     "author": "PPTS [India] Pvt.Ltd.",
     "license": "AGPL-3",
     "maintainer": "PPTS [India] Pvt.Ltd.",
@@ -14,8 +14,12 @@
     "website": "https://www.pptssolutions.com",
     "depends": ["stock"],
     "data": [
+        'security/ir.model.access.csv',
         'security/picking_create_security.xml',
         # 'views/assets.xml',
+        'data/action_server_create_category.xml',
+        'views/partner_category_product_view_report.xml',
+        'wizards/view_partner_category_product.xml',
     ],
     'assets': {
         'web.assets_backend': [
