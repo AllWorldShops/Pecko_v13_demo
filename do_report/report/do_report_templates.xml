@@ -298,19 +298,28 @@
                 <table style="width: 100%; font-family: Arial; border-collapse: collapse; font-size: 12px;">
                     <tbody>
                         <!-- Header Section -->
+                        <!--                        <tr>-->
+                        <!--                            <td style="border: 1px solid black; padding: 2px; text-align: center;" colspan="5">-->
+                        <!--                                <span style="font-size: 20px;">PECKO ELECTRONICS INDUSTRIES PTE LTD</span>-->
+                        <!--                            </td>-->
+                        <!--                            <td style="border: 1px solid black; padding: 8px; text-align: center;border-bottom-style:hidden; "></td>-->
+                        <!--                        </tr>-->
                         <tr>
-                            <td style="border: 1px solid black; padding: 2px; text-align: center;" colspan="5">
-                                <span style="font-size: 20px;">PECKO ELECTRONICS INDUSTRIES PTE LTD</span>
-                            </td>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;border-bottom-style:hidden; "></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size: 20px; font-weight: bold; border: 1px solid black; padding: 3px; text-align: center;"
+                            <td style="font-size: 20px; font-weight: bold; border: 1px solid black; padding: 3px; text-align: center; vertical-align: middle;"
                                 colspan="5">
                                 CERTIFICATE OF COMPLIANCE
                             </td>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;">QA STAMP</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;" colspan="2"
+                                t-if="o.company_id">
+                                <div>
+                                    <img t-if="o.company_id.logo_qa_passed"
+                                         t-att-src="image_data_uri(o.company_id.logo_qa_passed)" alt="Logo"
+                                         style="max-width: 150px; max-height: 100px; display: block; margin: 0 auto;"/>
+                                    <span style="display: block; margin-top: 10px; font-weight: bold;">QA STAMP</span>
+                                </div>
+                            </td>
                         </tr>
+
 
                         <!-- Customer and Date Section -->
                         <tr>
@@ -332,7 +341,6 @@
                                 <t t-if="o.move_line_nosuggest_ids">
                                     <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
                                         <span t-esc="prod.product_id.name"/>
-                                        <b>,</b>
                                     </t>
                                 </t>
                                 <t t-else="">N/A</t>
@@ -342,7 +350,6 @@
                                 <t t-if="o.move_line_nosuggest_ids">
                                     <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
                                         <span t-esc="prod.product_id.default_code"/>
-                                        <b>,</b>
                                     </t>
                                 </t>
                                 <t t-else="">N/A</t>
@@ -376,7 +383,6 @@
                                 <t t-if="o.move_line_nosuggest_ids">
                                     <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
                                         <span t-esc="prod.product_uom_qty"/>
-                                        <b>,</b>
                                     </t>
                                 </t>
                                 <t t-else="">N/A</t>
@@ -386,13 +392,24 @@
                         </tr>
                         <tr>
                             <td style="border: 1px solid black; padding: 8px;">Description :</td>
-                            <td style="border: 1px solid black; padding: 8px;" colspan="3"></td>
-                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"
+                            <td style="border: 1px solid black; padding: 8px;" colspan="3">
+                                <t t-if="o.move_line_nosuggest_ids">
+                                    <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
+                                        <span t-esc="prod.product_id.name"/>
+                                        <t t-if="prod != o.move_line_nosuggest_ids[-1]">
+                                            <span>,</span> <!-- Add a comma if not the last item -->
+                                        </t>
+                                    </t>
+                                </t>
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px; border-left-style: hidden;"
                                 colspan="3"></td>
                         </tr>
+
 <!--                        <tr>-->
 <!--                            <td style="border: 1px solid black; padding: 8px;">Production Order # :</td>-->
 <!--                            <td style="border: 1px solid black; padding: 8px;" colspan="3"></td>-->
+
 <!--                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"-->
 <!--                                colspan="3"></td>-->
 
@@ -405,7 +422,6 @@
                                 <t t-if="o.move_line_nosuggest_ids">
                                     <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
                                         <span t-esc="prod.product_uom_qty"/>
-                                        <b>,</b>
                                     </t>
                                 </t>
                                 <t t-else="">N/A</t>
@@ -420,25 +436,26 @@
 
                         <!-- Sampling Plan -->
                         <tr>
-                            <td style="border: 1px solid black; text-align: center; padding: 8px;" colspan="5">
+                            <td style="border: 1px solid black; text-align: center; vertical-align: middle; padding: 8px;"
+                                colspan="6">
                                 Sampling Plan AQL=0.25%, C=0 in accordance with Quality Control Inspection Instructions
                             </td>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;border-left-style:hidden;"></td>
                         </tr>
+
 
                         <!-- Data Columns -->
                         <tr>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;"></td>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;">1</td>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;">2</td>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;">3</td>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;">4</td>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;">5</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;width: 20.00%;"></td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;width: 15.00%;">1</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;width: 15.00%;">2</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;width: 15.00%;">3</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;width: 15.00%;">4</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;width: 15.00%;">5</td>
                         </tr>
 
                         <!-- Orientation -->
                         <tr>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;">ORIENTATION</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: left;">ORIENTATION :</td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
@@ -484,7 +501,7 @@
 
 
                         <tr>
-                            <td style="border: 1px solid black; padding: -20px; text-align: center;">ASSEMBLY LENGTH :
+                            <td style="border: 1px solid black; padding: 8px; text-align: left;">ASSEMBLY LENGTH :
                             </td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
@@ -539,7 +556,7 @@
                         <!-- Labeling -->
 
                         <tr>
-                            <td style="border: 1px solid black; padding: 8px; text-align: center;">Labeling</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: left;">Labeling :</td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
@@ -604,6 +621,15 @@
                             <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS / FAIL</td>
                         </tr>
                         <tr>
+                            <td style="border: 1px solid black; padding: 8px;">Inspected By :</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;8px;">Approved By :
+                            </td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+                        <tr>
                             <td style="border: 1px solid black; padding: 8px;">Remarks : ( If any )</td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;"></td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;"></td>
@@ -611,39 +637,40 @@
                             <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;"></td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
                         </tr>
+
+
                         <tr>
                             <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6">COUNTRY OF
                                 ORIGIN : MADE IN SINGAPORE
                             </td>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6">CERTIFICATE
+                            <td style="border: 1px solid black; font-weight: bold; padding: 8px;text-align:center;text-decoration: underline;"
+                                colspan="6">CERTIFICATE
                                 OF COMPLIANCE
                             </td>
                         </tr>
                         <tr>
                             <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6">This is to
-                                certify that all the parts supplied
+                                certify that all the parts supplied confirm to the specifications, drawings and
+                                requirements.
+                                <br>All product supplied are ROHS compliance</br>
                             </td>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6">confirm to
-                                the specifications, drawings and requirements.
-                            </td>
+                            <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6"></td>
                         </tr>
-
-
                         <tr>
-                            <td style="border: 1px solid black; padding: 4px;">
-                            </td>
-                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-left-style:hidden;"></td>
-                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-left-style:hidden;">
+                            <td style="border: 1px solid black; text-align: center; vertical-align: middle; padding: 8px;"
+                                colspan="6">
                                 PC-F87 Rev- 0
                             </td>
-                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-left-style:hidden;">
-                            </td>
-                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-left-style:hidden;"></td>
-                            <td style="border: 1px solid black; text-align: center; padding: 8px;">Refer
+                        </tr>
+
+                        <tr>
+                            <td style="border: 1px solid black; text-align: right; vertical-align: middle; padding: 8px;"
+                                colspan="6">
+                                Refer
                                 <br/>
                                 PC-WI-SYS06/PC-WI-SYS63
                             </td>

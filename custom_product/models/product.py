@@ -97,5 +97,6 @@ class ResCompanyInh(models.Model):
     logo_two = fields.Binary("PO Report Logo")
     logo_three = fields.Binary("Invoice Report Logo")
     logo_four = fields.Binary("SO Report Logo")
+    logo_qa_passed = fields.Binary("QA Passed")
 
             
