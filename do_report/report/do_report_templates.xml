@@ -390,13 +390,13 @@
                             <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"
                                 colspan="3"></td>
                         </tr>
-                        <tr>
-                            <td style="border: 1px solid black; padding: 8px;">Production Order # :</td>
-                            <td style="border: 1px solid black; padding: 8px;" colspan="3"></td>
-                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"
-                                colspan="3"></td>
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black; padding: 8px;">Production Order # :</td>-->
+<!--                            <td style="border: 1px solid black; padding: 8px;" colspan="3"></td>-->
+<!--                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"-->
+<!--                                colspan="3"></td>-->
 
-                        </tr>
+<!--                        </tr>-->
 
 
                         <tr>
