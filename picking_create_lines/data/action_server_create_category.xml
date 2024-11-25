@@ -13,10 +13,9 @@ action = env['view.partner.category.product']._open_category_code()
               action="model_view_partner_category_product_action" sequence="105"
               parent="stock.menu_stock_inventory_control"/>
     <!--    under mrp -->
-
     <menuitem id="view_partner_category_product_server_action_mrp" name="Pecko Part Number Report"
               action="model_view_partner_category_product_action" sequence="50"
-              parent="mrp.menu_mrp_manufacturing"/>
+              parent="mrp.menu_mrp_bom"/>
 
 
 </odoo>

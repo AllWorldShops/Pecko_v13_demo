@@ -294,277 +294,364 @@
                     </table>
                     <p style="page-break-after:always"></p>
                 </div>
-                <div class="page" style="color: black;font-family: Arial;">
-                    <table style="width: 100%; font-family: Arial;border-collapse: collapse; font-size: 12px;">
 
-                        <tbody>
-                            <tr>
-                                <td style="border: 1px solid black;display: flex;border-bottom-style: hidden; padding: 15px; text-align: center;"
-                                    colspan="3">
-                                    <span style="font-size: 20px;">PECKO ELECTRONICS INDUSTRIES PTE LTD</span>
-                                </td>
+                <table style="width: 100%; font-family: Arial; border-collapse: collapse; font-size: 12px;">
+                    <tbody>
+                        <!-- Header Section -->
+                        <tr>
+                            <td style="border: 1px solid black; padding: 2px; text-align: center;" colspan="5">
+                                <span style="font-size: 20px;">PECKO ELECTRONICS INDUSTRIES PTE LTD</span>
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;border-bottom-style:hidden; "></td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 20px; font-weight: bold; border: 1px solid black; padding: 3px; text-align: center;"
+                                colspan="5">
+                                CERTIFICATE OF COMPLIANCE
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;">QA STAMP</td>
+                        </tr>
 
-                                <td style="border: 1px solid black;border-bottom-style: hidden; padding: 8px; text-align: left;"></td>
-                            </tr>
-                            <tr>
-                                <td style="display: flex;font-size: 20px; font-weight: bold;border: 1px solid black;padding: 8px; text-align: center;"
-                                    colspan="3">
-                                    CERTIFICATE OF COMPLIANCE
-                                </td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: center;">QA STAMP</td>
-                            </tr>
+                        <!-- Customer and Date Section -->
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px; text-align: left;">Customer :</td>
+                            <td style="border: 1px solid black; padding: 8px;" colspan="2" t-if="o.partner_id">
+                                <span t-field="o.partner_id.name"/>
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: left;">Date :</td>
+                            <td style="border: 1px solid black; padding: 8px;" t-if="o.scheduled_date">
+                                <span t-field="o.scheduled_date" t-options='{"widget": "date"}'/>
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>
+                        </tr>
 
-
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px; text-align: left;">Customer :</td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: left;"
-                                    t-if="o.partner_id">
-                                    <span t-field="o.partner_id"/>
-                                </td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: left;">Date :</td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: left;"
-                                    t-if="o.scheduled_date">
-                                    <span t-field="o.scheduled_date"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Customer P/N :</td>
-                                <!--                                <td style="border: 1px solid black; padding: 8px;"></td>-->
-                                <td style="border: 1px solid black; padding: 8px;">
-                                    <t t-if="o.move_line_nosuggest_ids">
-                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
-                                            <span t-esc="prod.product_id.name"/>
-                                            <b>,</b>
-                                        </t>
+                        <!-- Customer P/N and Pecko P/N Section -->
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;">Customer P/N :</td>
+                            <td style="border: 1px solid black; padding: 8px;" colspan="2">
+                                <t t-if="o.move_line_nosuggest_ids">
+                                    <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
+                                        <span t-esc="prod.product_id.name"/>
+                                        <b>,</b>
                                     </t>
-                                    <t t-else="">
-                                        N/A
+                                </t>
+                                <t t-else="">N/A</t>
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px;">Pecko P/N :</td>
+                            <td style="border: 1px solid black; padding: 8px;" colspan="4">
+                                <t t-if="o.move_line_nosuggest_ids">
+                                    <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
+                                        <span t-esc="prod.product_id.default_code"/>
+                                        <b>,</b>
                                     </t>
-                                </td>
+                                </t>
+                                <t t-else="">N/A</t>
+                            </td>
+                            <!--                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>-->
+                        </tr>
 
-                                <td style="border: 1px solid black; padding: 8px;">Pecko P/N :</td>
-                                <td style="border: 1px solid black; padding: 8px;">
-                                    <t t-if="o.move_line_nosuggest_ids">
-                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
-                                            <span t-esc="prod.product_id.default_code"/>
-                                            <b>,</b>
-                                        </t>
+
+                        <!-- Customer P/N and Pecko P/N Section -->
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;">Datecode:</td>
+                            <td style="border: 1px solid black; padding: 8px;" colspan="2">
+
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px;">Date Packed :</td>
+                            <td style="border: 1px solid black; padding: 8px;">
+                                <span t-field="o.date_done" t-options='{"widget": "date"}'/>
+
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>
+                        </tr>
+
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;">Customer P/O No:</td>
+                            <td style="border: 1px solid black; padding: 8px;" colspan="2">
+                                <span t-field="o.customer_po_no"/>
+
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px;">Qty Packed :</td>
+                            <td style="border: 1px solid black; padding: 8px;">
+                                <t t-if="o.move_line_nosuggest_ids">
+                                    <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
+                                        <span t-esc="prod.product_uom_qty"/>
+                                        <b>,</b>
                                     </t>
-                                    <t t-else="">
-                                        N/A
+                                </t>
+                                <t t-else="">N/A</t>
+
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;">Description :</td>
+                            <td style="border: 1px solid black; padding: 8px;" colspan="3"></td>
+                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"
+                                colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;">Production Order # :</td>
+                            <td style="border: 1px solid black; padding: 8px;" colspan="3"></td>
+                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"
+                                colspan="3"></td>
+
+                        </tr>
+
+
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;">Lot Quantity :</td>
+                            <td style="border: 1px solid black; padding: 8px;" colspan="2">
+                                <t t-if="o.move_line_nosuggest_ids">
+                                    <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
+                                        <span t-esc="prod.product_uom_qty"/>
+                                        <b>,</b>
                                     </t>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Datecode:</td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;">Date Packed :</td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Customer P/O No:</td>
-                                <td style="border: 1px solid black; padding: 8px;"
-                                    t-if="o.customer_po_no">
-                                    <span t-field="o.customer_po_no"/>
-                                </td>
-                                <td style="border: 1px solid black; padding: 8px;"
-                                    t-else="">
-                                    N/A
-                                </td>
-                                <td style="border: 1px solid black; padding: 8px;">Qty Packed :</td>
+                                </t>
+                                <t t-else="">N/A</t>
 
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-<!--                                    <t t-if="o.move_line_nosuggest_ids">-->
-<!--                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">-->
-<!--                                            <span t-esc="prod.product_uom_qty"/>-->
-<!--                                            <b>,</b>-->
-<!--                                        </t>-->
-<!--                                    </t>-->
-<!--                                                                        <t t-else="">-->
-<!--                                                                            N/A-->
-<!--                                                                        </t>-->
-<!--                                </td>-->
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px;">Sampling Size :</td>
+                            <td style="border: 1px solid black; padding: 8px;">100%
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>
+                        </tr>
 
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Description :</td>
-                                <td style="border: 1px solid black; padding: 8px;" colspan="3"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Production Order # :</td>
-                                <td style="border: 1px solid black; padding: 8px;" colspan="3"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Lot Quantity :</td>
 
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-<!--                                    <t t-if="o.move_line_nosuggest_ids">-->
-<!--                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">-->
-<!--                                            <span t-esc="prod.product_uom_qty"/>-->
-<!--                                            <b>,</b>-->
-<!--                                        </t>-->
-<!--                                    </t>-->
-<!--                                                                        <t t-else="">-->
-<!--                                                                            N/A-->
-<!--                                                                        </t>-->
-<!--                                </td>-->
+                        <!-- Sampling Plan -->
+                        <tr>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;" colspan="5">
+                                Sampling Plan AQL=0.25%, C=0 in accordance with Quality Control Inspection Instructions
+                            </td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;border-left-style:hidden;"></td>
+                        </tr>
 
-                                <td style="border: 1px solid black; padding: 8px;">Sampling Size :</td>
-                                <td style="border: 1px solid black; padding: 8px;">100%</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="4">
-                                    Sampling Plan AQL=0.25%, C=0 in accordance with Quality Control Inspection
-                                    Instructions
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;">1</td>
-                                <td style="border: 1px solid black; padding: 8px;">2</td>
-                                <td style="border: 1px solid black; padding: 8px;">3</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">ORIENTATION :</td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black;text-align:center; padding: 8px;">As per drawing*
-                                </td>
-                                <td style="border: 1px solid black;text-align:center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black;text-align:center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align:center;padding: 8px;">OK</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">ASSEMBLY LENGTH :</td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">As per drawing*</td>
-                                <td style="border: 1px solid black;text-align:center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black;text-align:center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align:center;padding: 8px;">OK</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">ADD SILICON : YES / NO</td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;" rowspan="2">Continuity Test:<br/>(If
-                                    Applicable)
-                                </td>
-                                <td style="font-weight: bold; border: 1px solid black; padding: 8px; text-align: center;"
-                                    rowspan="2">PASS
-                                </td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: center;" rowspan="2">
-                                    Inspection Result:
-                                </td>
-                                <td style="border: 1px solid black; padding: 8px;" rowspan="2">PASS / FAIL</td>
-                            </tr>
-                            <tr>
-                            </tr>
+                        <!-- Data Columns -->
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;"></td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;">1</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;">2</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;">3</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;">4</td>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;">5</td>
+                        </tr>
 
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Inspected By :</td>
-                                <td></td>
-                                <td style="border: 1px solid black; padding: 8px;">Approved By :</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Remarks : ( If any )</td>
-                                <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="3">COUNTRY
-                                    OF ORIGIN :
-                                    MADE IN SINGAPORE
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="font-size: 16px; border: 1px solid black; padding: 4px;text-align:center;"
-                                    colspan="4">
-                                    CERTIFICATE OF COMPLIANCE
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 4px;border-top-style:hidden;text-align:center;"
-                                    colspan="4">
-                                    This is to certify that all the parts supplied
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 4px;border-top-style:hidden;text-align:center;"
-                                    colspan="4">
-                                    confirm to the specifications, drawings and requirements.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black;border-bottom-style:hidden; padding: 8px;"></td>
-                                <td style="border: 1px solid black;border-bottom-style:hidden;border-right-style:hidden;border-left-style:hidden; padding: 8px;"></td>
-                                <td style="border: 1px solid black; border-bottom-style:hidden;padding: 8px;"></td>
-                                <td style="border: 1px solid black;border-bottom-style:hidden; border-left-style:hidden;padding: 8px;text-align:center;">
-                                    refer to
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black;border-right-style:hidden;border-left-style:hidden; text-align:center; padding: 8px;">
-                                    PC-F87 Rev- 0
-                                </td>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; border-left-style:hidden;padding: 8px;">
-                                    PC-WI-SYS06/PC-WI-SYS63
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                        <!-- Orientation -->
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;">ORIENTATION</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;">As per drawing</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                        </tr>
+
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+
+                        <!-- Assembly Length -->
+
+
+                        <tr>
+                            <td style="border: 1px solid black; padding: -20px; text-align: center;">ASSEMBLY LENGTH :
+                            </td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+
+
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;text-align: center;">As per drawing</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+
+
+                        <!-- Labeling -->
+
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px; text-align: center;">Labeling</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+
+                        <tr>
+                            <td style="border: 1px solid black; padding: 6px;text-align: center;">As per drawing</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+
+
+                        <!-- Add Silicon -->
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;">Add Silicon (Yes/No)</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+                        <!-- Add Silicon -->
+                        <tr>
+                            <td style="border: 1px solid black; padding: 4px;">Continuity Test:<br/>If Applicable
+                            </td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;border-top-style:hidden"></td>
+                            <td style="border: 1px solid black; text-align: center;border-right-style:hidden; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: left; padding: 8px;border-right-style:hidden;">
+                                Inspection Result :
+                            </td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS / FAIL</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;">Remarks : ( If any )</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6">COUNTRY OF
+                                ORIGIN : MADE IN SINGAPORE
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6">CERTIFICATE
+                                OF COMPLIANCE
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6">This is to
+                                certify that all the parts supplied
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6">confirm to
+                                the specifications, drawings and requirements.
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td style="border: 1px solid black; padding: 4px;">
+                            </td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-left-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-left-style:hidden;">
+                                PC-F87 Rev- 0
+                            </td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-left-style:hidden;">
+                            </td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-left-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">Refer
+                                <br/>
+                                PC-WI-SYS06/PC-WI-SYS63
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
             </t>
 
         </template>
@@ -581,7 +668,7 @@
     </data>
 </odoo>
 
-                    <!--<previuous code for my reference>-->
+        <!--<previuous code for my reference>-->
 
         <!--        <template id="report_do_document">-->
         <!--            <t t-call="do_report.custom_do_external_layout">-->
