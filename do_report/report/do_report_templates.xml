@@ -361,9 +361,7 @@
                         <!-- Customer P/N and Pecko P/N Section -->
                         <tr>
                             <td style="border: 1px solid black; padding: 8px;">Datecode:</td>
-                            <td style="border: 1px solid black; padding: 8px;" colspan="2">
-
-                            </td>
+                            <td style="border: 1px solid black; padding: 8px;" colspan="2">N/A</td>
                             <td style="border: 1px solid black; padding: 8px;">Date Packed :</td>
                             <td style="border: 1px solid black; padding: 8px;">
                                 <span t-field="o.date_done" t-options='{"widget": "date"}'/>
@@ -382,7 +380,7 @@
                             <td style="border: 1px solid black; padding: 8px;">
                                 <t t-if="o.move_line_nosuggest_ids">
                                     <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
-                                        <span t-esc="prod.product_uom_qty"/>
+                                        <span t-esc="int(prod.product_uom_qty)"/>
                                     </t>
                                 </t>
                                 <t t-else="">N/A</t>
@@ -395,7 +393,7 @@
                             <td style="border: 1px solid black; padding: 8px;" colspan="3">
                                 <t t-if="o.move_line_nosuggest_ids">
                                     <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
-                                        <span t-esc="prod.product_id.name"/>
+                                        <span t-esc="prod.product_id.x_studio_field_mHzKJ"/>
                                         <t t-if="prod != o.move_line_nosuggest_ids[-1]">
                                             <span>,</span> <!-- Add a comma if not the last item -->
                                         </t>
@@ -406,14 +404,14 @@
                                 colspan="3"></td>
                         </tr>
 
-<!--                        <tr>-->
-<!--                            <td style="border: 1px solid black; padding: 8px;">Production Order # :</td>-->
-<!--                            <td style="border: 1px solid black; padding: 8px;" colspan="3"></td>-->
+                        <!--                        <tr>-->
+                        <!--                            <td style="border: 1px solid black; padding: 8px;">Production Order # :</td>-->
+                        <!--                            <td style="border: 1px solid black; padding: 8px;" colspan="3"></td>-->
 
-<!--                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"-->
-<!--                                colspan="3"></td>-->
+                        <!--                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"-->
+                        <!--                                colspan="3"></td>-->
 
-<!--                        </tr>-->
+                        <!--                        </tr>-->
 
 
                         <tr>
@@ -421,7 +419,7 @@
                             <td style="border: 1px solid black; padding: 8px;" colspan="2">
                                 <t t-if="o.move_line_nosuggest_ids">
                                     <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
-                                        <span t-esc="prod.product_uom_qty"/>
+                                        <span t-esc="int(prod.product_uom_qty)"/>
                                     </t>
                                 </t>
                                 <t t-else="">N/A</t>
@@ -602,7 +600,7 @@
                         </tr>
                         <!-- Add Silicon -->
                         <tr>
-                            <td style="border: 1px solid black; padding: 4px;">Continuity Test:<br/>If Applicable
+                            <td style="border: 1px solid black;text-align: center; padding: 4px;">Continuity Test:(If Applicable)
                             </td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
@@ -613,11 +611,10 @@
                         <tr>
                             <td style="border: 1px solid black; padding: 8px;border-top-style:hidden"></td>
                             <td style="border: 1px solid black; text-align: center;border-right-style:hidden; padding: 8px;"></td>
-                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                            <td style="border: 1px solid black; text-align: left; padding: 8px;border-right-style:hidden;">
+                            <td style="border: 1px solid black; text-align: right; padding: 8px;"></td>
+                            <td style="border: 1px solid black; text-align: right; padding: 8px;" colspan="2">
                                 Inspection Result :
                             </td>
-                            <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS / FAIL</td>
                         </tr>
                         <tr>
@@ -625,7 +622,7 @@
                             <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;"></td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                            <td style="border: 1px solid black; text-align: center; padding: 8px;8px;">Approved By :
+                            <td style="border: 1px solid black; text-align: right; padding: 8px;8px;border-left-style:hidden;">Approved By :
                             </td>
                             <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
                         </tr>
@@ -660,20 +657,22 @@
                         <tr>
                             <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6"></td>
                         </tr>
-                        <tr>
-                            <td style="border: 1px solid black; text-align: center; vertical-align: middle; padding: 8px;"
-                                colspan="6">
-                                PC-F87 Rev- 0
-                            </td>
-                        </tr>
 
-                        <tr>
-                            <td style="border: 1px solid black; text-align: right; vertical-align: middle; padding: 8px;"
-                                colspan="6">
-                                Refer
-                                <br/>
-                                PC-WI-SYS06/PC-WI-SYS63
-                            </td>
+                          <tr>
+                            <td style="border: 1px solid black; padding: 8px;border-right-style:hidden;border-bottom-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;border-bottom-style:hidden;">PC-F87 Rev- 0</td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;border-bottom-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-bottom-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-bottom-style:hidden;">Refer to</td>
+                        </tr>
+                         <tr>
+                            <td style="border: 1px solid black; padding: 8px;border-right-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;border-top-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;8px;"></td>
+                            <td style="border: 1px solid black; text-align: center; padding: 8px;">PC-WI-SYS06/<br/>PC-WI-SYS63</td>
                         </tr>
 
 
