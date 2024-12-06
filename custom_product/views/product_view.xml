@@ -158,8 +158,25 @@
                 <field name="logo_two"/>
                 <field name="logo_three"/>
                 <field name="logo_four"/>
-                <field name="logo_qa_passed"/>
             </field>
         </field>
     </record>
+
+
+    <record id="view_company_form_inherit_coc" model="ir.ui.view">
+        <field name="name">res.company.form.coc</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='social_media']" position="after">
+                <group string="Certificate of Compliance" name="certificate_of_compliance">
+                    <field name="logo_qa_passed"/>
+                    <field name="inspected_by"/>
+                    <field name="approved_by"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+
 </odoo>
