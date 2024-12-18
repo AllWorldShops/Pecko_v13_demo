@@ -13,70 +13,68 @@
                 <t t-set="company" t-value="res_company"/>
             </t>
             <div class="header o_background_header">
-                <div class="first-page">
-                    <br/>
-                    <div class="row" style="bottom:10px;top:5px">
-                        <div class="col-8">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
-                            <div class="company_address"
-                                 style="line-height:10px;font-family: Calibri;text-color:black;">
-                                <div>
-                                    <strong>
-                                        <span style="font-size: 22px;"
-                                              t-field="company.partner_id.name"/>
-                                    </strong>
+                <br/>
+                <div class="row" style="bottom:10px;top:5px">
+                    <div class="col-8">
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                        <div class="company_address"
+                             style="line-height:10px;font-family: Calibri;text-color:black;">
+                            <div>
+                                <strong>
+                                    <span style="font-size: 22px;"
+                                          t-field="company.partner_id.name"/>
+                                </strong>
+                                <br/>
+                                <span style="font-size: 14px;" t-field="o.company_id.street"/>,
+                                <t t-if="o.company_id.street1">,
+                                    <span style="font-size: 14px;" t-field="o.company_id.street1"/>,
                                     <br/>
-                                    <span style="font-size: 14px;" t-field="o.company_id.street"/>,
-                                    <t t-if="o.company_id.street1">,
-                                        <span style="font-size: 14px;" t-field="o.company_id.street1"/>,
-                                        <br/>
-                                        <span style="font-size: 14px;" t-field="o.company_id.street2"/>
-                                    </t>
-                                    <t t-else="">
-                                        <span style="font-size: 14px;" t-field="o.company_id.street2"/>
-                                    </t>
-                                    <br/>
-                                    <t t-if="o.company_id.country_id.code != 'SG'">
-                                        <span style="font-size: 14px;" t-field="o.company_id.city"/>
-                                        ,
-                                    </t>
-                                    <span style="font-size: 14px;" t-field="o.company_id.state_id"/>
+                                    <span style="font-size: 14px;" t-field="o.company_id.street2"/>
+                                </t>
+                                <t t-else="">
+                                    <span style="font-size: 14px;" t-field="o.company_id.street2"/>
+                                </t>
+                                <br/>
+                                <t t-if="o.company_id.country_id.code != 'SG'">
+                                    <span style="font-size: 14px;" t-field="o.company_id.city"/>
+                                    ,
+                                </t>
+                                <span style="font-size: 14px;" t-field="o.company_id.state_id"/>
 
-                                    <span style="font-size: 14px;" t-field="o.company_id.country_id"/>
-                                    -
-                                    <span style="font-size: 14px;" t-field="o.company_id.zip"/>
-                                    <br/>
-                                    <span style="font-size: 14px;">TEL :</span>
-                                    <span style="font-size: 14px;" t-field="o.company_id.phone"/>
-                                    <t t-if="o.company_id.fax">
-                                        |
-                                        <span style="font-size: 14px;">FAX :</span>
-                                        <span style="font-size: 14px;" t-field="o.company_id.fax"/>
-                                    </t>
-                                    <br/>
-                                    <t style="font-size: 14px;" t-if="o.company_id.country_id.code != 'SG'">
-                                        <span style="font-size: 14px;">E-mail:</span>
-                                        <span style="font-size: 14px;" t-field="o.company_id.email"/>
-                                        ,
-                                    </t>
-                                    <span style="font-size: 14px;">URL:</span>
-                                    <span style="font-size: 14px;" t-field="o.company_id.website"/>
-                                    <br/>
-                                    <span style="font-size: 14px;">Company Reg No:</span>
-                                    <span style="font-size: 14px;" t-field="o.company_id.company_registry"/>
-                                </div>
+                                <span style="font-size: 14px;" t-field="o.company_id.country_id"/>
+                                -
+                                <span style="font-size: 14px;" t-field="o.company_id.zip"/>
+                                <br/>
+                                <span style="font-size: 14px;">TEL :</span>
+                                <span style="font-size: 14px;" t-field="o.company_id.phone"/>
+                                <t t-if="o.company_id.fax">
+                                    |
+                                    <span style="font-size: 14px;">FAX :</span>
+                                    <span style="font-size: 14px;" t-field="o.company_id.fax"/>
+                                </t>
+                                <br/>
+                                <t style="font-size: 14px;" t-if="o.company_id.country_id.code != 'SG'">
+                                    <span style="font-size: 14px;">E-mail:</span>
+                                    <span style="font-size: 14px;" t-field="o.company_id.email"/>
+                                    ,
+                                </t>
+                                <span style="font-size: 14px;">URL:</span>
+                                <span style="font-size: 14px;" t-field="o.company_id.website"/>
+                                <br/>
+                                <span style="font-size: 14px;">Company Reg No:</span>
+                                <span style="font-size: 14px;" t-field="o.company_id.company_registry"/>
                             </div>
                         </div>
-                        <div class="col-4" style="bottom:14px;">
-                            <div class="text-muted text-end"
-                                 style="font-family: Calibri;text-color:black;">
-                                Page:
-                                <span class="page"/>
-                                of
-                                <span class="topage"/>
-                            </div>
-                            <div class="clearfix mb8"/>
+                    </div>
+                    <div class="col-4" style="bottom:14px;">
+                        <div class="text-muted text-end"
+                             style="font-family: Calibri;text-color:black;">
+                            Page:
+                            <span class="page"/>
+                            of
+                            <span class="topage"/>
                         </div>
+                        <div class="clearfix mb8"/>
                     </div>
                 </div>
             </div>
@@ -86,67 +84,65 @@
             </div>
             <div class="footer o_boxed_footer o_background_footer"
                  style="font-family: Calibri;font-size:12px;border-top: 1px solid black;bottom:20px;">
-                <div class="first-page">
-                    <div class="row" style="text-align:center">
-                        <div class="col-6">
-                            <t t-if="o.company_id.country_id.code != 'SG'">
-                                <strong>RECEIVED IN GOOD ORDER</strong>
-                            </t>
-                        </div>
-                        <div class="col-6">
-                            <t t-if="o.company_id.country_id.code != 'SG'">
-                                <strong>PECKO (M) SDN BHD.</strong>
-                            </t>
-                        </div>
-                    </div>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <div class="row" style="text-align:center">
-                        <div class="col-6">
-                            <t t-if="o.company_id.country_id.code != 'SG'">
-                                <strong>CUSTOMER'S STAMP &amp; SIGNATURE</strong>
-                            </t>
-                        </div>
-                        <div class="col-6">
-                            <t t-if="o.company_id.country_id.code != 'SG'">
-                                <strong>AUTHORISED SIGNATURE</strong>
-                            </t>
-                        </div>
-                    </div>
-                    <br/>
-                    <div class="row">
-                        <div class="col-9">
-                            <t t-if="o.company_id.country_id.code == 'SG'">
-                                <div style="text-align:end;">
-                                    <strong>
-                                        **This is a computer generated document. Signature is not required.**
-                                    </strong>
-                                </div>
-                                <br/>
-                            </t>
-                            <span>
-                                <strong>
-                                    NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
-                                    THEIR INTENDED USE,AND USERS ASSUME ALL<br/>RISK AND LIABILITY
-                                    WHATSOEVER IN CONNECTION THEREWITH
-                                </strong>
-                            </span>
-                        </div>
-                        <div class="col-3" style="text-align:right;position:relative;bottom:35px;">
-                            <t t-if="o.company_id.country_id.code == 'SG'">
-                                <img t-if="o.company_id.logo_one" t-att-src="image_data_uri(o.company_id.logo_one)"
-                                     style="width:122px;height:122px;top:1px;" alt="Logo"/>
-                            </t>
-                        </div>
-                    </div>
-
-                    <div style="text-align:right">
+                <div class="row" style="text-align:center">
+                    <div class="col-6">
                         <t t-if="o.company_id.country_id.code != 'SG'">
-                            <span>user:</span>
-                            <span t-esc="user.name"/>
+                            <strong>RECEIVED IN GOOD ORDER</strong>
                         </t>
                     </div>
+                    <div class="col-6">
+                        <t t-if="o.company_id.country_id.code != 'SG'">
+                            <strong>PECKO (M) SDN BHD.</strong>
+                        </t>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <div class="row" style="text-align:center">
+                    <div class="col-6">
+                        <t t-if="o.company_id.country_id.code != 'SG'">
+                            <strong>CUSTOMER'S STAMP &amp; SIGNATURE</strong>
+                        </t>
+                    </div>
+                    <div class="col-6">
+                        <t t-if="o.company_id.country_id.code != 'SG'">
+                            <strong>AUTHORISED SIGNATURE</strong>
+                        </t>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-9">
+                        <t t-if="o.company_id.country_id.code == 'SG'">
+                            <div style="text-align:end;">
+                                <strong>
+                                    **This is a computer generated document. Signature is not required.**
+                                </strong>
+                            </div>
+                            <br/>
+                        </t>
+                        <span>
+                            <strong>
+                                NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
+                                THEIR INTENDED USE,AND USERS ASSUME ALL<br/>RISK AND LIABILITY
+                                WHATSOEVER IN CONNECTION THEREWITH
+                            </strong>
+                        </span>
+                    </div>
+                    <div class="col-3" style="text-align:right;position:relative;bottom:35px;">
+                        <t t-if="o.company_id.country_id.code == 'SG'">
+                            <img t-if="o.company_id.logo_one" t-att-src="image_data_uri(o.company_id.logo_one)"
+                                 style="width:122px;height:122px;top:1px;" alt="Logo"/>
+                        </t>
+                    </div>
+                </div>
+
+                <div style="text-align:right">
+                    <t t-if="o.company_id.country_id.code != 'SG'">
+                        <span>user:</span>
+                        <span t-esc="user.name"/>
+                    </t>
                 </div>
             </div>
         </template>
@@ -180,7 +176,7 @@
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>
             <field name="header_spacing">45</field>
-            <field name="dpi">120</field>
+            <field name="dpi">90</field>
         </record>
 
         <!-- QWeb Reports -->
