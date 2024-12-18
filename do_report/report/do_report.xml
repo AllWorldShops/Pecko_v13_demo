@@ -12,74 +12,65 @@
             <t t-if="not o or not 'company_id' in o">
                 <t t-set="company" t-value="res_company"/>
             </t>
-            <div class="header o_background_header">
-                <div class="first-page">
-                    <br/>
-                    <div class="row" style="bottom:10px;top:5px">
-                        <div class="col-8">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
-                            <div class="company_address"
-                                 style="line-height:10px;font-family: Calibri;text-color:black;">
-                                <div>
-                                    <strong>
-                                        <span style="font-size: 22px;"
-                                              t-field="company.partner_id.name"/>
-                                    </strong>
-                                    <br/>
-                                    <span style="font-size: 14px;" t-field="o.company_id.street"/>,
-                                    <t t-if="o.company_id.street1">,
-                                        <span style="font-size: 14px;" t-field="o.company_id.street1"/>,
-                                        <br/>
-                                        <span style="font-size: 14px;" t-field="o.company_id.street2"/>
-                                    </t>
-                                    <t t-else="">
-                                        <span style="font-size: 14px;" t-field="o.company_id.street2"/>
-                                    </t>
-                                    <br/>
-                                    <t t-if="o.company_id.country_id.code != 'SG'">
-                                        <span style="font-size: 14px;" t-field="o.company_id.city"/>
-                                        ,
-                                    </t>
-                                    <span style="font-size: 14px;" t-field="o.company_id.state_id"/>
+            <!--            <div class="header o_background_header">-->
+            <!--                <div class="first-page">-->
+            <!--                    <br/>-->
+            <!--                    <div class="row" style="bottom:10px;top:5px">-->
+            <!--                        <div class="col-8">-->
+            <!--                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>-->
+            <!--                            <div class="company_address"-->
+            <!--                                 style="line-height:10px;font-family: Calibri;text-color:black;">-->
+            <!--                                <div>-->
+            <!--                                    <strong>-->
+            <!--                                        <span style="font-size: 22px;"-->
+            <!--                                              t-field="company.partner_id.name"/>-->
+            <!--                                    </strong>-->
+            <!--                                    <br/>-->
+            <!--                                    <span style="font-size: 14px;" t-field="o.company_id.street"/>,-->
+            <!--                                    <t t-if="o.company_id.street1">,-->
+            <!--                                        <span style="font-size: 14px;" t-field="o.company_id.street1"/>,-->
+            <!--                                        <br/>-->
+            <!--                                        <span style="font-size: 14px;" t-field="o.company_id.street2"/>-->
+            <!--                                    </t>-->
+            <!--                                    <t t-else="">-->
+            <!--                                        <span style="font-size: 14px;" t-field="o.company_id.street2"/>-->
+            <!--                                    </t>-->
+            <!--                                    <br/>-->
+            <!--                                    <t t-if="o.company_id.country_id.code != 'SG'">-->
+            <!--                                        <span style="font-size: 14px;" t-field="o.company_id.city"/>-->
+            <!--                                        ,-->
+            <!--                                    </t>-->
+            <!--                                    <span style="font-size: 14px;" t-field="o.company_id.state_id"/>-->
 
-                                    <span style="font-size: 14px;" t-field="o.company_id.country_id"/>
-                                    -
-                                    <span style="font-size: 14px;" t-field="o.company_id.zip"/>
-                                    <br/>
-                                    <span style="font-size: 14px;">TEL :</span>
-                                    <span style="font-size: 14px;" t-field="o.company_id.phone"/>
-                                    <t t-if="o.company_id.fax">
-                                        |
-                                        <span style="font-size: 14px;">FAX :</span>
-                                        <span style="font-size: 14px;" t-field="o.company_id.fax"/>
-                                    </t>
-                                    <br/>
-                                    <t style="font-size: 14px;" t-if="o.company_id.country_id.code != 'SG'">
-                                        <span style="font-size: 14px;">E-mail:</span>
-                                        <span style="font-size: 14px;" t-field="o.company_id.email"/>
-                                        ,
-                                    </t>
-                                    <span style="font-size: 14px;">URL:</span>
-                                    <span style="font-size: 14px;" t-field="o.company_id.website"/>
-                                    <br/>
-                                    <span style="font-size: 14px;">Company Reg No:</span>
-                                    <span style="font-size: 14px;" t-field="o.company_id.company_registry"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4" style="bottom:14px;">
-                            <div class="text-muted text-end"
-                                 style="font-family: Calibri;text-color:black;">
-                                Page:
-                                <span class="page"/>
-                                of
-                                <span class="topage"/>
-                            </div>
-                            <div class="clearfix mb8"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!--                                    <span style="font-size: 14px;" t-field="o.company_id.country_id"/>-->
+            <!--                                    - -->
+            <!--                                    <span style="font-size: 14px;" t-field="o.company_id.zip"/>-->
+            <!--                                    <br/>-->
+            <!--                                    <span style="font-size: 14px;">TEL :</span>-->
+            <!--                                    <span style="font-size: 14px;" t-field="o.company_id.phone"/>-->
+            <!--                                    <t t-if="o.company_id.fax">-->
+            <!--                                        |-->
+            <!--                                        <span style="font-size: 14px;">FAX :</span>-->
+            <!--                                        <span style="font-size: 14px;" t-field="o.company_id.fax"/>-->
+            <!--                                    </t>-->
+            <!--                                    <br/>-->
+            <!--                                    <t style="font-size: 14px;" t-if="o.company_id.country_id.code != 'SG'">-->
+            <!--                                        <span style="font-size: 14px;">E-mail:</span>-->
+            <!--                                        <span style="font-size: 14px;" t-field="o.company_id.email"/>-->
+            <!--                                        ,-->
+            <!--                                    </t>-->
+            <!--                                    <span style="font-size: 14px;">URL:</span>-->
+            <!--                                    <span style="font-size: 14px;" t-field="o.company_id.website"/>-->
+            <!--                                    <br/>-->
+            <!--                                    <span style="font-size: 14px;">Company Reg No:</span>-->
+            <!--                                    <span style="font-size: 14px;" t-field="o.company_id.company_registry"/>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        -->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <div class="article o_report_layout_background">
                 <t t-raw="0"/>
@@ -126,11 +117,13 @@
                                 <br/>
                             </t>
                             <span>
+                                  <div style="font-size:10px;;">
                                 <strong>
                                     NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
                                     THEIR INTENDED USE,AND USERS ASSUME ALL<br/>RISK AND LIABILITY
                                     WHATSOEVER IN CONNECTION THEREWITH
                                 </strong>
+                                  </div>
                             </span>
                         </div>
                         <div class="col-3" style="text-align:right;position:relative;bottom:35px;">
@@ -140,6 +133,18 @@
                             </t>
                         </div>
                     </div>
+
+                    <div class="col-6"
+                         style="position:relative; bottom:14px; left:25%; transform:translateX(-50%); text-align:center;">
+                        <div class="text-muted" style="font-family: Calibri; color: black;">
+                            Page:
+                            <span class="page"/>
+                            of
+                            <span class="topage"/>
+                        </div>
+                        <div class="clearfix mb8"/>
+                    </div>
+
 
                     <div style="text-align:right">
                         <t t-if="o.company_id.country_id.code != 'SG'">
@@ -174,13 +179,13 @@
             <field name="default" eval="True"/>
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
-            <field name="margin_top">45</field>
-            <field name="margin_bottom">40</field>
+            <field name="margin_top">8</field>
+            <field name="margin_bottom">45</field>
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">45</field>
-            <field name="dpi">120</field>
+            <field name="header_spacing">30</field>
+            <field name="dpi">90</field>
         </record>
 
         <!-- QWeb Reports -->
