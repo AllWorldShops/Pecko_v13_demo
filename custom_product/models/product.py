@@ -17,6 +17,7 @@ class ProductTemplate(models.Model):
     country_origin = fields.Char("Country of Origin")
     item_text = fields.Char("Item Text")
     customer_part_number = fields.Char('Customer Part Number')
+
     standard_price = fields.Float(
         'Cost', compute='_compute_standard_price',
         inverse='_set_standard_price', search='_search_standard_price',
