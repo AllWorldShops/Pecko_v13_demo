@@ -169,6 +169,7 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='social_media']" position="after">
                 <group string="Certificate of Compliance" name="certificate_of_compliance">
+                    <field name="is_coc_report"/>
                     <field name="logo_qa_passed"/>
                     <field name="inspected_by"/>
                     <field name="approved_by"/>

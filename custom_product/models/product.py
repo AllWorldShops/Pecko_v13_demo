@@ -98,5 +98,6 @@ class ResCompanyInh(models.Model):
     logo_qa_passed = fields.Binary("QA Passed")
     inspected_by = fields.Char(string='Inspected By')
     approved_by = fields.Char(string='Approved By')
+    is_coc_report = fields.Boolean(string='Is COC Report')
 
             
