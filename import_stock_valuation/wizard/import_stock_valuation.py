@@ -18,6 +18,7 @@ class ImportStockValuation(models.TransientModel):
         csv_data = base64.b64decode(self.file)
         csv_string = csv_data.decode('utf-8')
         csv_reader = csv.DictReader(StringIO(csv_string))
+        reference_count = 1
         for row in csv_reader:
             if row:
                 create_date = row['Date']
@@ -35,19 +36,18 @@ class ImportStockValuation(models.TransientModel):
                     product_id = product
                 quantity = row['Done']
                 company_id = self.env['res.company'].search([('name', '=', row['Company'])])
-                unit_cost = product_id.standard_price
+                unit_cost = row['Unit Cost']
+                # unit_cost = product_id.standard_price
                 value = float(unit_cost) * float(quantity)
-                product_des=product_id.name
 
                 stock_valuation = self.env['stock.valuation.layer'].create({
-                    # 'create_date': create_date,
+                    'create_date': create_date,
                     # 'stock_move_id': stock_move.id or False,
                     'product_id': product_id.id or False,
                     'company_id': company_id.id or False,
                     'quantity': quantity,
                     'unit_cost': unit_cost,
                     'value': value,
-                    'description': product_des,
 
                 })
 
@@ -91,4 +91,7 @@ class ImportStockValuation(models.TransientModel):
                 ]
                 account_move.sudo().write({'line_ids': line_ids})
                 account_move.action_post()
-                stock_valuation.write({'account_move_id': account_move.id})
+
+                reference = f'Manual correction {reference_count} -PPTS'
+                reference_count += 1
+                stock_valuation.write({'account_move_id': account_move.id,'description':reference })
