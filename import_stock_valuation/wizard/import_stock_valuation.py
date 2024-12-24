@@ -28,10 +28,10 @@ class ImportStockValuation(models.TransientModel):
                 if not product:
                     raise UserError(_("Product not found: %s") % row['Product'])
 
-                on_hand_check= product.with_context({'to_date': date_val}).qty_available
-                if on_hand_check:
+                on_hand_check= product.with_context({'to_date': create_date}).qty_available
+                print(on_hand_check,'-sssssssss')
+                if on_hand_check <= 0:
                   continue
-
                 if product:
                     product_id = product
                 quantity = row['Done']
