@@ -385,8 +385,8 @@
                                     <span t-field="o.partner_id.name"/>
                                 </td>
                                 <td style="border: 1px solid black; padding: 8px; text-align: left;">Date :</td>
-                                <td style="border: 1px solid black; padding: 8px;" t-if="o.scheduled_date">
-                                    <span t-field="o.scheduled_date" t-options='{"widget": "date"}'/>
+                                <td style="border: 1px solid black; padding: 8px;" t-if="o.date_done">
+                                    <span t-field="o.date_done" t-options='{"widget": "date"}'/>
                                 </td>
                                 <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>
                             </tr>
