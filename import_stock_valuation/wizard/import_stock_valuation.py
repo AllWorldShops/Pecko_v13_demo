@@ -31,7 +31,7 @@ class ImportStockValuation(models.TransientModel):
 
                 on_hand_check= product.with_context({'to_date': date_val}).qty_available
                 _logger.debug("%s on_hand_check", on_hand_check)
-                if on_hand_check <= 0:
+                if on_hand_check > 0.0:
                     _logger.info("%s =======", on_hand_check)
                     continue
                 if product:
