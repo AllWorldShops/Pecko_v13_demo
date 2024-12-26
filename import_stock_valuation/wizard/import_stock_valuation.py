@@ -49,6 +49,7 @@ class ImportStockValuation(models.TransientModel):
                 unit_cost = row['Unit Cost']
                 # unit_cost = product_id.standard_price
                 value = float(unit_cost) * float(quantity)
+                
 
                 stock_valuation = self.env['stock.valuation.layer'].create({
                     'create_date': create_date,
