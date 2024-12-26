@@ -6,6 +6,8 @@ from odoo import models, fields, _
 from datetime import datetime
 from odoo.exceptions import UserError, ValidationError
 from datetime import date
+_logger = logging.getLogger(__name__)
+
 
 
 # Manually update the valuation and stock journal using xl sheet
@@ -29,8 +31,10 @@ class ImportStockValuation(models.TransientModel):
                 product = self.env['product.product'].search([('default_code', '=', row['Product'])])
                 if not product:
                     raise UserError(_("Product not found: %s") % row['Product'])
+                _logger.debug("%s Product", product)    
 
                 on_hand_check= product.with_context({'to_date': date_val}).qty_available
+                _logger.debug("%s Productssss", on_hand_check)    
                 if on_hand_check <= 0:
                   continue
                 if product:
@@ -51,7 +55,8 @@ class ImportStockValuation(models.TransientModel):
                     'value': value,
 
                 })
-
+                
+		_logger.debug("%s stock_valuation", stock_valuation)    
                 self.env.cr.execute(
                     'UPDATE stock_valuation_layer SET create_date = %s WHERE id=%s',
                     (create_date,stock_valuation.id,)
