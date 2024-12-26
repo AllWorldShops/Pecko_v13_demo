@@ -38,9 +38,10 @@ class ImportStockValuation(models.TransientModel):
                     
 
                 on_hand_check= product.with_context({'to_date': date_val}).qty_available
-                _logger.info("%s on_hand_check", on_hand_check)
+                _logger.debug("%s on_hand_check", on_hand_check)
                 if on_hand_check <= 0:
-                  continue
+                    _logger.info("%s =======", on_hand_check)
+                    continue
                 if product:
                     product_id = product
                 quantity = row['Done']
@@ -59,7 +60,7 @@ class ImportStockValuation(models.TransientModel):
                     'value': value,
 
                 })
-                _logger.info("%s stock_valuationssssssssssss", stock_valuation)
+                _logger.info("%s stock_valuation", stock_valuation)
 
                 self.env.cr.execute(
                     'UPDATE stock_valuation_layer SET create_date = %s WHERE id=%s',
