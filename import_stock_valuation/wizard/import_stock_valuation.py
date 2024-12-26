@@ -9,8 +9,6 @@ from datetime import date
 import logging
 _logger = logging.getLogger(__name__)
 
-
-
 # Manually update the valuation and stock journal using xl sheet
 class ImportStockValuation(models.TransientModel):
     _name = "import.stock.valuation"
@@ -22,24 +20,18 @@ class ImportStockValuation(models.TransientModel):
         csv_string = csv_data.decode('utf-8')
         csv_reader = csv.DictReader(StringIO(csv_string))
         reference_count = 1
-        _logger.info("%s testtt", reference_count)
         for row in csv_reader:
             if row:
                 create_date = row['Date']
-                _logger.info("%s create_date", create_date)
                 date_val= date.today()
-                create_date_obj = datetime.strptime(create_date, "%Y-%m-%d").date()
-
                 # stock_move = self.env['stock.move'].search([('reference', '=', row['Reference'])],limit=1)
                 product = self.env['product.product'].search([('default_code', '=', row['Product'])])
-                _logger.info("%s product", product)
                 if not product:
                     raise UserError(_("Product not found: %s") % row['Product'])
-                    
 
                 on_hand_check= product.with_context({'to_date': date_val}).qty_available
                 _logger.debug("%s on_hand_check", on_hand_check)
-                if on_hand_check > 0.0:
+                if on_hand_check <= 0:
                     _logger.info("%s =======", on_hand_check)
                     continue
                 if product:
