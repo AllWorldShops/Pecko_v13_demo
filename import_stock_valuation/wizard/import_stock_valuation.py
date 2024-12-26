@@ -59,7 +59,7 @@ class ImportStockValuation(models.TransientModel):
                     'value': value,
 
                 })
-                _logger.info("%s stock_valuation", stock_valuation)
+                _logger.info("%s stock_valuationssssssssssss", stock_valuation)
 
                 self.env.cr.execute(
                     'UPDATE stock_valuation_layer SET create_date = %s WHERE id=%s',
