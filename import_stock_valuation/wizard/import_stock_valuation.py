@@ -22,23 +22,23 @@ class ImportStockValuation(models.TransientModel):
         csv_string = csv_data.decode('utf-8')
         csv_reader = csv.DictReader(StringIO(csv_string))
         reference_count = 1
-        _logger.debug("%s testtt", reference_count)
+        _logger.info("%s testtt", reference_count)
         for row in csv_reader:
             if row:
                 create_date = row['Date']
-                _logger.debug("%s create_date", create_date)
+                _logger.info("%s create_date", create_date)
                 date_val= date.today()
                 create_date_obj = datetime.strptime(create_date, "%Y-%m-%d").date()
 
                 # stock_move = self.env['stock.move'].search([('reference', '=', row['Reference'])],limit=1)
                 product = self.env['product.product'].search([('default_code', '=', row['Product'])])
-                _logger.debug("%s product", product)
+                _logger.info("%s product", product)
                 if not product:
                     raise UserError(_("Product not found: %s") % row['Product'])
                     
 
                 on_hand_check= product.with_context({'to_date': date_val}).qty_available
-                _logger.debug("%s on_hand_check", on_hand_check)
+                _logger.info("%s on_hand_check", on_hand_check)
                 if on_hand_check <= 0:
                   continue
                 if product:
@@ -59,7 +59,7 @@ class ImportStockValuation(models.TransientModel):
                     'value': value,
 
                 })
-                _logger.debug("%s stock_valuation", stock_valuation)
+                _logger.info("%s stock_valuation", stock_valuation)
 
                 self.env.cr.execute(
                     'UPDATE stock_valuation_layer SET create_date = %s WHERE id=%s',
