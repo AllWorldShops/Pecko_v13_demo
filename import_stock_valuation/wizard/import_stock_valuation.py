@@ -23,13 +23,14 @@ class ImportStockValuation(models.TransientModel):
             if row:
                 create_date = row['Date']
                 date_val= date.today()
+                create_date_obj = datetime.strptime(create_date, "%Y-%m-%d").date()
+
                 # stock_move = self.env['stock.move'].search([('reference', '=', row['Reference'])],limit=1)
                 product = self.env['product.product'].search([('default_code', '=', row['Product'])])
                 if not product:
                     raise UserError(_("Product not found: %s") % row['Product'])
 
                 on_hand_check= product.with_context({'to_date': create_date}).qty_available
-                print(on_hand_check,'-sssssssss')
                 if on_hand_check <= 0:
                   continue
                 if product:
@@ -62,9 +63,7 @@ class ImportStockValuation(models.TransientModel):
 
                 if not debit_account or not credit_account:
                     raise UserError(_("Accounts not configured for product category: %s") % category.name)
-
                 account_move = self.env['account.move'].create({
-                'date': create_date,
                 'journal_id': journal.id,
                 'ref': _("Stock Valuation Adjustment for %s") % product_id.name,
                  })
@@ -95,3 +94,8 @@ class ImportStockValuation(models.TransientModel):
                 reference = f'Manual correction {reference_count} -PPTS'
                 reference_count += 1
                 stock_valuation.write({'account_move_id': account_move.id,'description':reference })
+                self.env.cr.execute(
+                    'UPDATE account_move SET date = %s WHERE id=%s',
+                    (create_date,account_move.id,)
+                )
+
