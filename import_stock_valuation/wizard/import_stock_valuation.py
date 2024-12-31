@@ -25,10 +25,8 @@ class ImportStockValuation(models.TransientModel):
                 create_date = row['Date']
                 date_val= date.today()
                 # stock_move = self.env['stock.move'].search([('reference', '=', row['Reference'])],limit=1)
-                # product = self.env['product.product'].search([('default_code', '=', row['Product'])])
-                product = self.env['product.product'].with_context(active_test=False).search([('default_code', '=', row['Product'])])
-                _logger.info("%s product", product.name)
-
+                product = self.env['product.product'].search(
+                [ '|', ('active', '=', True), ('active', '=', False), ('default_code', '=', row['Product'])], limit=1)
 
                 if not product:
                     raise UserError(_("Product not found: %s") % row['Product'])
