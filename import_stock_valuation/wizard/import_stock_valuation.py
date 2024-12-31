@@ -43,7 +43,7 @@ class ImportStockValuation(models.TransientModel):
                 company_id = self.env['res.company'].search([('name', '=', row['Company'])])
                 unit_cost = row['Unit Cost']
                 # unit_cost = product_id.standard_price
-                # value = row['Total Value']
+                value = row['Total Value']
 
                 stock_valuation = self.env['stock.valuation.layer'].create({
                     'create_date': create_date,
@@ -52,7 +52,7 @@ class ImportStockValuation(models.TransientModel):
                     'company_id': company_id.id or False,
                     'quantity': quantity,
                     'unit_cost': unit_cost,
-                    # 'value': value,
+                    'value': value,
 
                 })
                 _logger.info("%s stock_valuation", stock_valuation)
