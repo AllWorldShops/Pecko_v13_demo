@@ -27,6 +27,7 @@ class ImportStockValuation(models.TransientModel):
                 # stock_move = self.env['stock.move'].search([('reference', '=', row['Reference'])],limit=1)
                 product = self.env['product.product'].search(
                 [ '|', ('active', '=', True), ('active', '=', False), ('default_code', '=', row['Product'])], limit=1)
+                _logger.info("%s product", product.name)
 
                 if not product:
                     raise UserError(_("Product not found: %s") % row['Product'])
