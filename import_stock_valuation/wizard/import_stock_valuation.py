@@ -43,7 +43,7 @@ class ImportStockValuation(models.TransientModel):
                 company_id = self.env['res.company'].search([('name', '=', row['Company'])])
                 unit_cost = row['Unit Cost']
                 # unit_cost = product_id.standard_price
-                value = row['Total Value']
+                # value = row['Total Value']
 
                 stock_valuation = self.env['stock.valuation.layer'].create({
                     'create_date': create_date,
@@ -52,7 +52,7 @@ class ImportStockValuation(models.TransientModel):
                     'company_id': company_id.id or False,
                     'quantity': quantity,
                     'unit_cost': unit_cost,
-                    'value': value,
+                    # 'value': value,
 
                 })
                 _logger.info("%s stock_valuation", stock_valuation)
@@ -78,7 +78,7 @@ class ImportStockValuation(models.TransientModel):
                     'move_id': account_move.id,
                     'account_id': credit_account.id,
                     'debit': 0.0,
-                    'credit': value,
+                    'credit': stock_valuation.value,
                     'name': _("Stock Valuation Credit for %s") % product.name,
                     'product_id': product.id,
                     'quantity': quantity,
@@ -86,7 +86,7 @@ class ImportStockValuation(models.TransientModel):
                 (0, 0, {
                     'move_id': account_move.id,
                     'account_id': debit_account.id,
-                    'debit': value,
+                    'debit': stock_valuation.value,
                     'credit': 0.0,
                     'name': _("Stock Valuation Debit for %s") % product.name,
                     'product_id': product.id,
