@@ -19,6 +19,10 @@ class ProductTemplate(models.Model):
     country_origin = fields.Char("Country of Origin")
     item_text = fields.Char("Item Text")
     customer_part_number = fields.Char('Customer Part Number')
+    classification_code_name = fields.Char('Code Name')
+    classification_code_id = fields.Many2one('classification.code',string='Code Name')
+
+
     standard_price = fields.Float(
         'Cost', compute='_compute_standard_price',
         inverse='_set_standard_price', search='_search_standard_price',
@@ -101,5 +105,33 @@ class ResCompanyInh(models.Model):
     inspected_by = fields.Char(string='Inspected By')
     approved_by = fields.Char(string='Approved By')
     is_coc_report = fields.Boolean(string='Is COC Report')
+    business_reg_no = fields.Char(string='Business Registration No')
+    misc_code = fields.Char(string='MISC Code')
+    business_des = fields.Char(string='Business Activity Description')
+
+
+class IdType(models.Model):
+    _name = 'id.type'
+    _description = 'ID Type'
+
+    id_name = fields.Char(string='Name')
+    name = fields.Char(string='Name')
+
+class ClassificationCode(models.Model):
+    _name = 'classification.code'
+    _description = 'ClassificationCode'
+    _rec_name = 'code'
+
+    name = fields.Char(string='Name')
+    code = fields.Char(string='Code')
+
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    reg_no = fields.Char(string='Registration/Identification/Passport')
+    tin_no = fields.Char(string='Tax Identification Number(TIN)')
+    sst_no = fields.Char(string='SST Registration Number')
+    type_id = fields.Many2one('id.type',string='ID Type')
 
             
