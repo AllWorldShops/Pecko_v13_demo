@@ -8,6 +8,9 @@
             <xpath expr="//field[@name='default_code']" position="after">
                 <field name="manufacturer_id"/>
             </xpath>
+               <xpath expr="//field[@name='barcode']" position="after">
+                <field name="classification_code_id"/>
+            </xpath>
 
             <group name="group_general" position="inside">
                 <field name="item_text"/>
@@ -157,6 +160,9 @@
                 <field name="logo_two"/>
                 <field name="logo_three"/>
                 <field name="logo_four"/>
+                <field name="business_reg_no"/>
+                <field name="misc_code"/>
+                <field name="business_des"/>
             </field>
         </field>
     </record>
@@ -178,5 +184,86 @@
         </field>
     </record>
 
+
+    <record id="view_res_partner_inherit_in" model="ir.ui.view">
+        <field name="name">res.partner.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="type_id"/>
+                <field name="reg_no"/>
+                <field name="tin_no"/>
+                <field name="sst_no"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="id_type_form" model="ir.ui.view">
+        <field name="name">id_type.form</field>
+        <field name="model">id.type</field>
+        <field name="arch" type="xml">
+            <form string="Id name">
+                <sheet>
+                    <field name="name"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="id_type_tree" model="ir.ui.view">
+        <field name="name">id_type.tree</field>
+        <field name="model">id.type</field>
+        <field name="arch" type="xml">
+            <tree string="list view">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_id_type" model="ir.actions.act_window">
+        <field name="name">Id Type details</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">id.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_id_type" id="menu_id_type" sequence="50"
+              parent="base.menu_users" name="ID Type"/>
+
+        <record id="classification_code_form" model="ir.ui.view">
+        <field name="name">classification_code.form</field>
+        <field name="model">classification.code</field>
+        <field name="arch" type="xml">
+            <form string="Classification code">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                    <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="classification_code_tree" model="ir.ui.view">
+        <field name="name">classification_code.tree</field>
+        <field name="model">classification.code</field>
+        <field name="arch" type="xml">
+            <tree string="Classification code">
+                 <field name="code"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_classification_code" model="ir.actions.act_window">
+        <field name="name">Classification code details</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">classification.code</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_classification_code" id="menu_classification_code" sequence="60"
+              parent="base.menu_users" name="Classification code"/>
 
 </odoo>
