@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        
+        <template id="mrp.report_mrp_bom">
+        <style>
+    .custom-table {
+    border-collapse: collapse; 
+}
+
+.custom-table th {
+    border-bottom: 2px solid #000; 
+    background-color: #f9f9f9; 
+}
+
+.custom-table td {
+    border-bottom: 1px solid #ccc; 
+}
+
+.custom-table tr {
+    border-bottom: 1px solid #ccc; U
+}</style>
+            <t t-set="company" t-value="res_company"/>
+            <div class="header o_background_header">
+                <div class="row" style="padding-left:1.5px">
+                    <div class="col-8">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                    </div>
+                </div>
+                <div class="row" name="company_address" style="text-start;padding-left:3px;font-family: Calibri;text-color:black;">
+                    <div class="col-8">
+                        <strong>
+                            <span style="font-size: 25px;papadding-left:3.6px" t-field="company.partner_id.name"/>
+                        </strong>
+                    </div>
+                </div>
+                <div class="row" style="padding-left:2.9px">
+                    <div class="col-8">
+                        <strong style="font-size: 35px;">BoM Structure</strong>
+                    </div>
+                </div>
+                <div class="row" style="font-size:16px;padding-left:3px">
+                    <div class="col-4">
+                        <strong>
+                            <span t-esc="data['name']"/>
+                        </strong>
+                    </div>
+                    <div class="col-4">
+                        <strong>
+                            <span style=" font-size:20px;">Customer Part No:</span>
+                        </strong>
+                        <span style=" font-size:16px;" t-esc="data['product_part_no']"/>
+                    </div>
+                    <div class="col-5">
+                        <strong>
+                            <span style=" font-size:20px; ">Description:</span>
+                        </strong>
+                        <span style=" font-size:16px; " t-esc="data['product_discription']"/>
+                    </div>
+                </div>
+            </div>
+            <div class="table_bom_structure">
+                <div t-if="data.get('lines')">
+                    <t t-set="currency" t-value="data['currency']"/>
+                    <table class="o_mrp_bom_expandable table custom-table" border='1px'>
+                        <thead>
+                            <tr>
+                                <th class="text-center">Position</th>
+                                <th name="th_mrp_bom_h">Product</th>
+                                <th class="text-center" width="20%">Part No</th>
+                                <th class="text-center">Description</th>
+                                <th class="text-center">Manufacturer</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-center" groups="uom.group_uom">Unit of Measure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td/>
+                                <td name="td_mrp_bom" t-esc="data['name']"/>
+                                <td/>
+                                <td/>
+                                <td/>
+                                <td class="text-end" t-esc="data['quantity']" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
+                                <td class="text-start" groups="uom.group_uom" t-esc="data['uom_name']"/>
+                            </tr>
+                            <t t-call="mrp.report_mrp_bom_pdf_line"/>
+                            <tr t-if="data['show_costs']" style="display:none;">
+                                <td name="td_mrp_bom_f" class="text-end">
+                                    <span t-if="data['byproducts']" t-esc="data['name']"/>
+                                </td>
+                                <td t-if="data['show_availabilities']"/>
+                                <td t-if="data['show_availabilities']"/>
+                                <td t-if="data['show_availabilities']"/>
+                                <td t-if="data['show_lead_times']"/>
+                            </tr>
+                            <t t-if="data['show_costs'] and data['byproducts']" t-foreach="data['byproducts']" t-as="byproduct">
+                                <tr style="display:none;">
+                                    <td name="td_mrp_bom_byproducts_f" class="text-end" t-esc="byproduct['name']"/>
+                                    <td t-if="data['show_availabilities']"/>
+                                    <td t-if="data['show_availabilities']"/>
+                                    <td t-if="data['show_availabilities']"/>
+                                    <td t-if="data['show_lead_times']"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <table class="o_mrp_bom_expandable table custom-table" >
+                        <thead>
+                            <tr>
+                                <th class="text-center">Operation</th>
+                                <th class="text-center">Work Center</th>
+                                <th class="text-center">Operation Text</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="data['workorder_ids']" t-as="line">
+                                <td class="text-center">
+                                    <span t-esc="line['name']"></span>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="line['workcenter']"></span>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="line['note']"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div t-else="" class="d-flex align-items-center justify-content-center h-50">
+                    <h4 class="text-muted">No data available.</h4>
+                </div>
+            </div>
+
+        </template>
+
+        <template id="mrp.report_mrp_bom_pdf_line">
+            <t t-set="currency" t-value="data['currency']"/>
+            <t t-foreach="data['lines']" t-as="l">
+                <tr t-if="l['visible'] and (l['type'] != 'operation' )">
+                    <td class="text-center" name="td_mrp_cod">
+                        <t t-if="l.get('position_no', False) is not False">
+                            <span t-esc="l['position_no']"/>
+                        </t>
+                    </td>
+                    <td name="td_mrp_code" width="22%">
+                        <span t-attf-style="text-start: {{ str(l['level'] * 20) }}px"/>
+                        <span t-esc="l['name']"/>
+                    </td>
+                    <td class="text-start" name="td_mrp_cod" width="25%">
+                        <t t-if="l.get('part_no', False) is not False">
+                            <span t-esc="l['part_no']"/>
+                        </t>
+                    </td>
+                    <td class="text-start" name="td_mrp_cod" width="28%">
+                        <t t-if="l.get('description', False) is not False">
+                            <span t-esc="l['description']"/>
+                        </t>
+                    </td>
+                    <td class="text-start" name="td_mrp_cod" width="25%">
+                        <t t-if="l.get('manufacturer', False) is not False">
+                            <span t-esc="l['manufacturer']"/>
+                        </t>
+                    </td>
+                    <td class="text-end" name="td_mrp_cod">
+                        <t t-if="l['type'] == 'operation'" t-esc="l['quantity']" t-options='{"widget": "float_time"}'/>
+                        <t t-else="" t-esc="l['quantity']" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
+                    </td>
+                    <td class="text-start" groups="uom.group_uom" name="td_mrp_cod">
+                        <t t-esc="l['uom']"/>
+                    </td>
+                </tr>
+            </t>
+            <div class="footer">
+                <div class="row">
+                    <div class="col-4">
+                    </div>
+                    <div class="col-4" style="font-size:22px">
+                        <div class="text-center">
+                            Page:
+                            <span class="page"/>
+                            of
+                            <span class="topage"/>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="text-right" style="padding-left:40px ">
+                            <strong style=" font-size:18px;">Printed on:</strong>
+                            <span style=" font-size:18px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <record id="paperformat_mrp_bom" model="report.paperformat">
+            <field name="name">BoM Structure</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">45</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">6</field>
+            <field name="margin_right">6</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">40</field>
+            <field name="dpi">90</field>
+        </record>
+
+
+
+
+
+        <!-- </record> -->
+
+
+        <record id="action_report_bom_structure_overview" model="ir.actions.report">
+            <field name="name">BoM Structure</field>
+            <field name="model">mrp.bom</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">mrp.report_bom_structure</field>
+            <field name="report_file">mrp.report_bom_structure</field>
+            <field name="print_report_name">'Bom Structure - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="mrp.model_mrp_bom"/>
+             <field name="paperformat_id" ref="custom_mrp.paperformat_mrp_bom"/>
+
+            <field name="binding_type">report</field>
+        </record>
+
+
+    </data>
+</odoo>
