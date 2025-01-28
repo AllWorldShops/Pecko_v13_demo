@@ -3,6 +3,8 @@
     'version': '18.0.1.0.0',
     'category': 'Inventory/Stock',
     'sequence': 1,
+    'author': 'PPTS [India] Pvt.Ltd.',
+    'website': 'https://www.pptssolutions.com',
     'summary': 'Product customization for Odoo 18',
     'description': """This module provides product customization features in Odoo 18.""",
     'depends': [

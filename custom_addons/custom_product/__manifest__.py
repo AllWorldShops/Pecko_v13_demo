@@ -15,8 +15,6 @@
     ],
     'data': [
         'security/ir.model.access.csv',
-        # As there is Procurement Group Cron available by default.
-        # 'data/stock_sequence_data.xml',
         'views/product_manufacturer_view.xml',
         'views/product_view.xml',
     ],

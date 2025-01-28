@@ -5,6 +5,7 @@
     'name' : 'Sale Order Excel Report',
     'version': '18.0',
     'category': 'Stock',
+    'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
     'license': 'LGPL-3',
     'depends': [
