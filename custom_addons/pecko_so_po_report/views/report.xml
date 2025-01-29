@@ -633,9 +633,9 @@
 
                                     <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
                                         <t t-if="not line.display_type">
-                                            <td style="background-color: #f4f4f5;">
-                                                <span t-field="line.line_no"/>
-                                            </td>
+<!--                                            <td style="background-color: #f4f4f5;">-->
+<!--                                                <span t-field="line.line_no"/>-->
+<!--                                            </td>-->
                                             <td style="background-color: #f4f4f5;">
                                                 <span t-field="line.product_id"/>
                                             </td>
