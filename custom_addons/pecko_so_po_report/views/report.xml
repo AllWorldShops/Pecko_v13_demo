@@ -689,7 +689,7 @@
                                     <tr style="width=100%">
                                         <td></td>
                                         <td colspan="99">
-                                            <span t-field="line.notes"/>
+                                            <span t-field="o.notes"/>
                                         </td>
                                     </tr>
                                     <t t-set="i" t-value="i+1"/>
