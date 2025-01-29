@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="ac_move_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.inherit.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+			<xpath expr="//field[@name='invoice_vendor_bill_id']" position="after">
+				<field name="receipts_id" invisible="state not in ['draft'] or state == 'purchase' or move_type != 'in_invoice'"
+                       class="oe_edit_only"
+                       domain="partner_id and [('company_id', '=', company_id), ('partner_id','child_of', [partner_id])] or [('company_id', '=', company_id)]"
+                       placeholder="Select a receipt transfer"
+                       options="{'no_create': True, 'no_open': True}"
+                       context="{'show_total_amount': True}"/>
+                <field name="picking_ids" widget="many2many_tags" invisible="1"/>
+			</xpath>
+
+        </field>
+    </record>
+      <record id="billed_amount_view_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_origin']" position="after">
+                <field name="amount_total" invisible="context.get('default_type') != 'in_invoice'" groups="base.group_user" string="Billed Amount" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="customer_po_no_search_form_inherit" model="ir.ui.view">
+        <field name="name">customer.po.no.search.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='partner_id']" position="after">
+                <field name="customer_po_no" filter_domain="[('customer_po_no','ilike',self)]"/>
+                <field name="do_name" filter_domain="[('do_name','ilike',self)]"/>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>

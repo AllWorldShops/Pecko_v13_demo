@@ -1,0 +1,1 @@
+from.import partner_category_product_view_report

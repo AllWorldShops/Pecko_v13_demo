@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_partner_category_product_from_view" model="ir.ui.view">
+        <field name="name">view.partner.category.product.form.view</field>
+        <field name="model">view.partner.category.product</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="category_code_id" string="Category Code"
+                               options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    </group>
+                    <group>
+                        <field name="partner_code_id" string='Partner Code'
+                               options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="View Data" name="partner_category_product_view" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

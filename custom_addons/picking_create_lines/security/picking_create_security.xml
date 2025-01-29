@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+	<data>
+        <record id="add_line_access_group" model="res.groups">
+	        <field name="name">Picking Lines Create Button Show</field>
+	        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+	        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+	    </record>
+
+
+	</data>
+</odoo>

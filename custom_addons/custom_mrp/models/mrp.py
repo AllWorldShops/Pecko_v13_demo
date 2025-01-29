@@ -16,7 +16,6 @@ class MrpProduction(models.Model):
 
     def _action_cancel_orders(self):
         mrp = self.sudo().search([('order_seq', 'ilike', 'C-'), ('state', '!=', 'cancel')], limit=1000)
-        # ss
         for rec in mrp:
             rec.with_delay().action_cancel()
 
@@ -26,7 +25,6 @@ class MrpProduction(models.Model):
     customer_part_no = fields.Char(string='Part Number')
     description = fields.Char(string='Description')
     transfer_done_flag = fields.Boolean(string='Transfer Done Flag',compute='_compute_boolean_txt' )
-    project = fields.Char(string='Project')
     project = fields.Char(string='Project', related='product_tmpl_id.project', store=True)
     start_date = fields.Date('Start Date P2')
     start_date_one = fields.Date('Start Date P1')

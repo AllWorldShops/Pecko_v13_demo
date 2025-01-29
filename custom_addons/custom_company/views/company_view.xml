@@ -5,9 +5,9 @@
 		<field name="model">res.company</field>
 		<field name="inherit_id" ref="base.view_company_form" />
 		<field name="arch" type="xml">
-			<field name="street" position="after">
-				<field name="street1" />
-			</field>
+			<xpath expr="//field[@name='street']" position="before">
+                <field name="street1" class="o_address_street"/>
+            </xpath>
 			<field name="phone" position="after">
 				<field name="fax" />
 			</field>

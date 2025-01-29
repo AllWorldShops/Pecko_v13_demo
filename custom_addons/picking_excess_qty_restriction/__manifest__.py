@@ -4,7 +4,7 @@
     'category': 'stock',
     'sequence':1,
     'author': 'PPTS [India] Pvt.Ltd.',
-    'website': 'www.pptssolutions.com',
+    'website': 'https://www.pptssolutions.com',
     'summary': 'This module does not allow users to validate excess quantity which is more than the demand',
     'description': """This module does not allow users to validate excess quantity which is more than the demand""",
     'depends': ['base','stock','sale'],

@@ -176,7 +176,7 @@
                 <div class="row">
                     <div class="col-4">
                     </div>
-                    <div class="col-4" style="font-size:22px">
+                    <div class="col-4" style="font-size:18">
                         <div class="text-center">
                             Page:
                             <span class="page"/>
@@ -185,7 +185,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="text-right" style="padding-left:40px ">
+                        <div class="text-right" >
                             <strong style=" font-size:18px;">Printed on:</strong>
                             <span style=" font-size:18px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
                         </div>
@@ -208,11 +208,6 @@
             <field name="dpi">90</field>
         </record>
 
-
-
-
-
-        <!-- </record> -->
 
 
         <record id="action_report_bom_structure_overview" model="ir.actions.report">

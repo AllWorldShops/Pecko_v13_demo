@@ -18,7 +18,6 @@ class Partner(models.Model):
                                             string='Verification Status')
     incoterms = fields.Char("IncoTerm")
 
-
 class AccountMoveLine(models.Model):
     _name = "account.move.line"
     _inherit = "account.move.line"

@@ -5,7 +5,6 @@ from odoo import models, fields, api, _
 class Company(models.Model):
     _inherit = "res.company"
     
-    
     fax = fields.Char('Fax')
     street1 = fields.Char('Street 1')
 
