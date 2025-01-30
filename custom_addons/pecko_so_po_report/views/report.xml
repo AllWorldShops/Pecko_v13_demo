@@ -800,7 +800,7 @@
     </record>
 
     <record id="sale.action_report_saleorder" model="ir.actions.report">
-        <field name="name">Quotation / Ordesssssssssr</field>
+        <field name="name">Quotation / Order</field>
         <field name="model">sale.order</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">sale.report_saleorder</field>
