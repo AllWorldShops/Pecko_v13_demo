@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="master_production_replenish_hide.MpsLineComponentInherit" t-inherit="mrp_mps.MpsLineComponent"
+       t-inherit-mode="extension">
+        <xpath expr="//tr[@name='demand_forecast']" position="after">
+            <tr name="onhande_quantity">
+                <th/>
+                <th>
+                 <t t-foreach="productionSchedule.forecast_ids" t-as="forecast" t-key="forecast_index"
+                    t-attf-class="text-right pe-4">
+                     <t t-if="forecast.onhand_quantity">
+                        <span style="margin-left:-21px;"> ~ </span>
+                         <span style="margin-left:10px;">Available Qty</span>
+                         =
+                         <span t-esc="forecast.onhand_quantity"/>
+                     </t>
+                </t>
+            </th>
+            </tr>
+        </xpath>
+        <xpath expr="//tr[@name='to_replenish']//button" position="attributes">
+            <attribute name="t-attf-class">o_hidden</attribute>
+        </xpath>
+    </t>
+</templates>
