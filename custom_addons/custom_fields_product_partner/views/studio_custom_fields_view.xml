@@ -120,9 +120,9 @@
                 </p>
             </field>
         </record>
+<!--groups="stock.group_stock_user"-->
+        <menuitem id="menu_action_x_itemgroup_tree" action="x_itemgroup_action" parent="stock.menu_stock_inventory_control"  sequence="4"/>
 
-        <!--         <menuitem id="menu_action_x_itemgroup_tree" action="x_itemgroup_action" parent="stock.menu_stock_inventory_control" groups="stock.group_stock_user" sequence="4"/>
-         -->
         <!-- Studio fields for BOM -->
 
         <record id="mrp_bom_inherit_form" model="ir.ui.view">
