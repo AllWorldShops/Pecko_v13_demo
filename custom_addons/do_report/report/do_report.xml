@@ -90,7 +90,7 @@
                             </t>
                         </div>
                     </div>
-                    <br/>
+<!--                    <br/>-->
                     <br/>
                     <br/>
                     <div class="row" style="text-align:center">
@@ -126,7 +126,7 @@
                                 </div>
                             </span>
                         </div>
-                        <div class="col-3" style="text-align:right;position:relative;bottom:35px;">
+                        <div class="col-3" style="text-align:right;position:relative;">
                             <t t-if="o.company_id.country_id.code == 'SG'">
                                 <img t-if="o.company_id.logo_one" t-att-src="image_data_uri(o.company_id.logo_one)"
                                      style="width:122px;height:122px;top:1px;" alt="Logo"/>
@@ -180,7 +180,7 @@
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">8</field>
-            <field name="margin_bottom">40</field>
+            <field name="margin_bottom">31</field>
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>

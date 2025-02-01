@@ -79,7 +79,8 @@ class AccountMove(models.Model):
     def _compute_currency_rate(self):
         for mov in self:
             if mov.currency_id:
-                if mov.company_id.country_id.code != 'SG':
+                if mov.company_id.country_id.code != 'CH':
+
                     currency_id_rates = self.env['res.currency.rate'].search([('currency_id','=',mov.currency_id.id),('company_id','=',mov.company_id.id)])
                     for currency_id_rate in currency_id_rates:
                         if currency_id_rate.name == mov.invoice_date:
