@@ -80,9 +80,9 @@ class AccountMove(models.Model):
         for mov in self:
             if mov.currency_id:
                 if mov.company_id.country_id.code != 'SG':
-                    print(mov.company_id.id,mov.currency_id.name,'------------=')
-                    mov.exchange_rate = 1.0
                     currency_id_rates = self.env['res.currency.rate'].search([('currency_id','=',mov.currency_id.id),('company_id','=',mov.company_id.id)])
+                    if not currency_id_rates:
+                        mov.exchange_rate = 1.0
                     for currency_id_rate in currency_id_rates:
                         if currency_id_rate.name == mov.invoice_date:
                             mov.exchange_rate = currency_id_rate.rate
@@ -101,6 +101,8 @@ class AccountMove(models.Model):
                 else:
 
                     currency_id_rates = self.env['res.currency.rate'].search([('currency_id','=',mov.currency_id.id),('company_id','=',mov.company_id.id)])
+                    if not currency_id_rates:
+                        mov.exchange_rate = 1.0
                     for currency_id_rate in currency_id_rates:
                         if currency_id_rate.name == mov.invoice_date:
                             mov.exchange_rate = 1 / currency_id_rate.rate
