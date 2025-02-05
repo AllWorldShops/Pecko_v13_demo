@@ -586,7 +586,7 @@ class AccountReport(models.Model):
             company_fiscalyear_dates = {}
             # This loop is needed because a fiscal year can be a month, quarter, etc
             for _ in range(abs(periods)):
-                date_to = (date_from if periods < 0 else date_to) + relativedelta(days=periods)
+                date_to = (date_from if periods < 0 else date_to) + relativedelta(days=periods / abs(periods))
                 company_fiscalyear_dates = self.env.company.compute_fiscalyear_dates(date_to)
                 if periods < 0:
                     date_from = company_fiscalyear_dates['date_from']
@@ -2459,6 +2459,7 @@ class AccountReport(models.Model):
 
         if on_sections_source:
             report_to_call = self.env['account.report'].browse(options['sections_source_id'])
+            options["report_id"] = report_to_call.id
             return report_to_call.dispatch_report_action(options, action, action_param=action_param, on_sections_source=False)
 
         if self.id not in (options['report_id'], options.get('sections_source_id')):
@@ -2527,7 +2528,19 @@ class AccountReport(models.Model):
             # Inject all the dynamic lines whose sequence is inferior to the next static line to add
             while dynamic_lines and line.sequence > dynamic_lines[0][0]:
                 lines.append(dynamic_lines.pop(0)[1])
-            parent_generic_id = line_cache[line.parent_id]['id'] if line.parent_id else None # The parent line has necessarily been treated in a previous iteration
+
+            parent_generic_id = None
+
+            if line.parent_id:
+                # Normally, the parent line has necessarily been treated in a previous iteration
+                try:
+                    parent_generic_id = line_cache[line.parent_id]['id']
+                except KeyError as e:
+                    raise UserError(_(
+                        "Line '%(child)s' is configured to appear before its parent '%(parent)s'. This is not allowed.",
+                        child=line.name, parent=e.args[0].name
+                    ))
+
             line_dict = self._get_static_line_dict(options, line, all_column_groups_expression_totals, parent_id=parent_generic_id)
             line_cache[line] = line_dict
 
@@ -3595,8 +3608,8 @@ class AccountReport(models.Model):
             all_expressions |= expressions
         tags = all_expressions._get_matching_tags()
 
-        groupby_sql = SQL.identifier('account_move_line', current_groupby) if current_groupby else None
         query = self._get_report_query(options, date_scope)
+        groupby_sql = self.env['account.move.line']._field_to_sql('account_move_line', current_groupby, query) if current_groupby else None
         tail_query = self._get_engine_query_tail(offset, limit)
         lang = get_lang(self.env, self.env.user.lang).code
         acc_tag_name = self.with_context(lang='en_US').env['account.account.tag']._field_to_sql('acc_tag', 'name')
@@ -3692,8 +3705,6 @@ class AccountReport(models.Model):
 
         self._check_groupby_fields((next_groupby.split(',') if next_groupby else []) + ([current_groupby] if current_groupby else []))
 
-        groupby_sql = SQL.identifier('account_move_line', current_groupby) if current_groupby else None
-
         rslt = {}
 
         for formula, expressions in formulas_dict.items():
@@ -3708,12 +3719,15 @@ class AccountReport(models.Model):
                 ))
             query = self._get_report_query(options, date_scope, domain=line_domain)
 
+            groupby_sql = self.env['account.move.line']._field_to_sql('account_move_line', current_groupby, query) if current_groupby else None
+            select_count_field = self.env['account.move.line']._field_to_sql('account_move_line', next_groupby.split(',')[0] if next_groupby else 'id', query)
+
             tail_query = self._get_engine_query_tail(offset, limit)
             query = SQL(
                 """
                 SELECT
                     COALESCE(SUM(%(balance_select)s), 0.0) AS sum,
-                    COUNT(DISTINCT account_move_line.%(select_count_field)s) AS count_rows
+                    COUNT(DISTINCT %(select_count_field)s) AS count_rows
                     %(select_groupby_sql)s
                 FROM %(table_references)s
                 %(currency_table_join)s
@@ -3722,7 +3736,7 @@ class AccountReport(models.Model):
                 %(order_by_sql)s
                 %(tail_query)s
                 """,
-                select_count_field=SQL.identifier(next_groupby.split(',')[0] if next_groupby else 'id'),
+                select_count_field=select_count_field,
                 select_groupby_sql=SQL(', %s AS grouping_key', groupby_sql) if groupby_sql else SQL(),
                 table_references=query.from_clause,
                 balance_select=self._currency_table_apply_rate(SQL("account_move_line.balance")),
@@ -3880,7 +3894,7 @@ class AccountReport(models.Model):
         # Run main query
         query = self._get_report_query(options, date_scope)
 
-        current_groupby_aml_sql = SQL.identifier('account_move_line', current_groupby) if current_groupby else SQL()
+        current_groupby_aml_sql = self.env['account.move.line']._field_to_sql('account_move_line', current_groupby, query) if current_groupby else None
         tail_query = self._get_engine_query_tail(offset, limit)
         if current_groupby_aml_sql and tail_query:
             tail_query_additional_groupby_where_sql = SQL(
@@ -3925,7 +3939,7 @@ class AccountReport(models.Model):
             search_condition=query.where_clause,
             extra_groupby_sql=extra_groupby_sql,
             tail_query_additional_groupby_where_sql=tail_query_additional_groupby_where_sql,
-            order_by_sql=SQL('ORDER BY %s', SQL.identifier('account_move_line', current_groupby)) if current_groupby else SQL(),
+            order_by_sql=SQL('ORDER BY %s', current_groupby_aml_sql) if current_groupby_aml_sql else SQL(),
             tail_query=tail_query if not tail_query_additional_groupby_where_sql else SQL(),
         )
         self._cr.execute(query)
@@ -5919,18 +5933,18 @@ class AccountReport(models.Model):
         date_default_style = workbook.add_format({'font_name': 'Lato', 'align': 'left', 'font_size': 12, 'font_color': '#666666', 'num_format': 'yyyy-mm-dd'})
         default_col1_style = workbook.add_format({'font_name': 'Lato', 'font_size': 12, 'font_color': '#666666', 'indent': 2})
         default_col2_style = workbook.add_format({'font_name': 'Lato', 'font_size': 12, 'font_color': '#666666'})
-        default_style = workbook.add_format({'font_name': 'Lato', 'font_size': 12, 'font_color': '#666666'})
+        default_style = workbook.add_format({'font_name': 'Lato', 'font_size': 12, 'font_color': '#666666', 'num_format': '#,##0.00'})
         annotation_style = workbook.add_format({'font_name': 'Lato', 'font_size': 12, 'font_color': '#666666', 'text_wrap': True})
         title_style = workbook.add_format({'font_name': 'Lato', 'font_size': 12, 'bold': True, 'bottom': 2})
-        level_0_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 13, 'bottom': 6, 'font_color': '#666666'})
+        level_0_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 13, 'bottom': 6, 'font_color': '#666666', 'num_format': '#,##0.00'})
         level_1_col1_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#666666', 'indent': 1})
-        level_1_col1_total_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#666666'})
+        level_1_col1_total_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#666666', 'num_format': '#,##0.00'})
         level_1_col2_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#666666'})
-        level_1_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#666666'})
+        level_1_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#666666', 'num_format': '#,##0.00'})
         level_2_col1_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 12, 'font_color': '#666666', 'indent': 2})
-        level_2_col1_total_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 12, 'font_color': '#666666', 'indent': 1})
+        level_2_col1_total_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 12, 'font_color': '#666666', 'indent': 1, 'num_format': '#,##0.00'})
         level_2_col2_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 12, 'font_color': '#666666', 'indent': 1})
-        level_2_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 12, 'font_color': '#666666'})
+        level_2_style = workbook.add_format({'font_name': 'Lato', 'bold': True, 'font_size': 12, 'font_color': '#666666', 'num_format': '#,##0.00'})
         col1_styles = {}
 
         print_mode_self = self.with_context(no_format=True)
@@ -5945,6 +5959,14 @@ class AccountReport(models.Model):
             if line_model == 'account.account':
                 # Reuse the _split_code_name to split the name and code in two values.
                 account_lines_split_names[line['id']] = self.env['account.account']._split_code_name(line['name'])
+
+        # Set the (Account) Name column width to 50.
+        # If we have account lines and split the name and code in two columns, we will also set the code column.
+        if len(account_lines_split_names) > 0:
+            sheet.set_column(0, 0, 13)
+            sheet.set_column(1, 1, 50)
+        else:
+            sheet.set_column(0, 0, 50)
 
         original_x_offset = 1 if len(account_lines_split_names) > 0 else 0
 
@@ -5984,7 +6006,9 @@ class AccountReport(models.Model):
 
         if account_lines_split_names:
             # If we have a separate account code column, add a title for it
-            write_cell(sheet, x_offset - 1, y_offset, _("Account Code"), title_style)
+            write_cell(sheet, x_offset - 2, y_offset, _("Code"), title_style)
+            write_cell(sheet, x_offset - 1, y_offset, _("Account Name"), title_style)
+        sheet.set_column(x_offset, x_offset + len(options['columns']), 10)
 
         for column in options['columns']:
             colspan = column.get('colspan', 1)
@@ -6025,19 +6049,10 @@ class AccountReport(models.Model):
                 col2_style = style
                 level_col1_styles = col1_styles.get(level)
                 if not level_col1_styles:
+                    level_col1_base_format = {'font_name': 'Lato', 'font_size': 12, 'font_color': '#666666', 'num_format': '#,##0.00'}
                     level_col1_styles = col1_styles[level] = {
-                        'default': workbook.add_format(
-                            {'font_name': 'Lato', 'font_size': 12, 'font_color': '#666666', 'indent': level}
-                        ),
-                        'total': workbook.add_format(
-                            {
-                                'font_name': 'Lato',
-                                'bold': True,
-                                'font_size': 12,
-                                'font_color': '#666666',
-                                'indent': level - 1,
-                            }
-                        ),
+                        'default': workbook.add_format({**level_col1_base_format, 'indent': level}),
+                        'total': workbook.add_format({**level_col1_base_format, 'bold': True, 'indent': level - 1}),
                     }
                 col1_style = level_col1_styles['total'] if is_total_line else level_col1_styles['default']
             else:
@@ -6045,23 +6060,23 @@ class AccountReport(models.Model):
                 col1_style = default_col1_style
                 col2_style = default_col2_style
 
-            # write the first column, with a specific style to manage the indentation
+            # write the (Account) Name column, with a specific style to manage the indentation
             x_offset = original_x_offset + 1
             if lines[y]['id'] in account_lines_split_names:
                 code, name = account_lines_split_names[lines[y]['id']]
-                write_cell(sheet, 0, y + y_offset, name, col1_style)
-                write_cell(sheet, 1, y + y_offset, code, col2_style)
+                write_cell(sheet, 0, y + y_offset, code, col2_style)
+                write_cell(sheet, 1, y + y_offset, name, col1_style)
             else:
                 cell_type, cell_value = self._get_cell_type_value(lines[y])
                 if cell_type == 'date':
-                    write_cell(sheet, 0, y + y_offset, cell_value, date_default_col1_style, datetime=True)
+                    write_cell(sheet, original_x_offset, y + y_offset, cell_value, date_default_col1_style, datetime=True)
                 else:
-                    write_cell(sheet, 0, y + y_offset, cell_value, col1_style)
+                    write_cell(sheet, original_x_offset, y + y_offset, cell_value, col1_style)
 
                 if lines[y].get('parent_id') and lines[y]['parent_id'] in account_lines_split_names:
-                    write_cell(sheet, 1, y + y_offset, account_lines_split_names[lines[y]['parent_id']][0], col2_style)
+                    write_cell(sheet, 1 + original_x_offset, y + y_offset, account_lines_split_names[lines[y]['parent_id']][0], col2_style)
                 elif account_lines_split_names:
-                    write_cell(sheet, 1, y + y_offset, "", col2_style)
+                    write_cell(sheet, 1 + original_x_offset, y + y_offset, "", col2_style)
 
             #write all the remaining cells
             columns = lines[y]['columns']
@@ -6365,21 +6380,30 @@ class AccountReport(models.Model):
                 line['columns'][col_index] = comparison_column
 
     def _check_groupby_fields(self, groupby_fields_name: list[str] | str):
-        """ Checks that each string in the groupby_fields_name list is a valid groupby value for an accounting report (so: it must be a field from
-        account.move.line, or a custom value allowed by the _get_custom_groupby_map function of the custom handler).
+        """ Checks that each string in the groupby_fields_name list is a valid groupby value for an accounting report.
+            So it must be:
+            - a field from account.move.line which is (1) searchable and (2) for which _field_to_sql is implemented,
+              this includes stored and related non-stored fields, or
+            - a custom value allowed by the _get_custom_groupby_map function of the custom handler
         """
         self.ensure_one()
         if isinstance(groupby_fields_name, str | bool):
             groupby_fields_name = groupby_fields_name.split(',') if groupby_fields_name else []
+
+        custom_handler_name = self._get_custom_handler_model()
+        custom_groupby_map = self.env[custom_handler_name]._get_custom_groupby_map() if custom_handler_name else {}
+
         for field_name in (fname.strip() for fname in groupby_fields_name):
             groupby_field = self.env['account.move.line']._fields.get(field_name)
-            custom_handler_name = self._get_custom_handler_model()
-
             if groupby_field:
-                if not groupby_field.store:
-                    raise UserError(_("Field %s of account.move.line is not stored, and hence cannot be used in a groupby expression", field_name))
+                if not groupby_field._description_searchable:
+                    raise UserError(self.env._("Field %s of account.move.line is not searchable and can therefore not be used in a groupby expression.", field_name))
+                try:
+                    self.env['account.move.line']._field_to_sql('account_move_line', field_name, Query(self.env, 'account_move_line'))
+                except ValueError:
+                    raise UserError(self.env._("Field %s of account.move.line cannot be used in a groupby expression.", field_name)) from None
             elif custom_handler_name:
-                if field_name not in self.env[custom_handler_name]._get_custom_groupby_map():
+                if field_name not in custom_groupby_map:
                     raise UserError(_("Field %s does not exist on account.move.line, and is not supported by this report's custom handler.", field_name))
             else:
                 raise UserError(_("Field %s does not exist on account.move.line.", field_name))
@@ -6821,7 +6845,7 @@ class AccountReportLine(models.Model):
     @api.depends('groupby', 'user_groupby')
     def _compute_display_custom_groupby_warning(self):
         for line in self:
-            line.display_custom_groupby_warning = line.get_external_id() and line.user_groupby != line.groupby
+            line.display_custom_groupby_warning = line.get_external_id()[line.id] and line.user_groupby != line.groupby
 
     @api.constrains('groupby', 'user_groupby')
     def _validate_groupby(self):
@@ -6973,7 +6997,15 @@ class AccountReportLine(models.Model):
                 if custom_groupby_name_builder := custom_groupby_map.get(current_groupby, {}).get('label_builder'):
                     keys_and_names_in_sequence[non_relational_key] = custom_groupby_name_builder(non_relational_key)
                 else:
-                    keys_and_names_in_sequence[non_relational_key] = str(non_relational_key) if non_relational_key is not None else _("Unknown")
+                    if non_relational_key is None:
+                        keys_and_names_in_sequence[non_relational_key] = _("Undefined")
+                    else:
+                        groupby_field = self.env['account.move.line']._fields[groupby_data['current_groupby']]
+                        if groupby_field.type == 'selection':
+                            selection_options = dict(groupby_field._description_selection(self.env))
+                            keys_and_names_in_sequence[non_relational_key] = selection_options.get(non_relational_key) or _("Undefined")
+                        else:
+                            keys_and_names_in_sequence[non_relational_key] = str(non_relational_key)
 
         # Build result: add a name to the groupby lines and handle totals below section for multi-level groupby
         group_lines = []
@@ -6988,6 +7020,7 @@ class AccountReportLine(models.Model):
         return group_lines
 
     def _get_groupby_line_name(self, groupby_field_name, groupby_model, grouping_key):
+        # TODO master: remove this method as it is dead code
         if groupby_model is None:
             return grouping_key
 

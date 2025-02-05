@@ -4,16 +4,16 @@
 # 
 # Translators:
 # Martin Trigaux, 2024
-# Wil Odoo, 2024
 # Abe Manyo, 2025
+# Wil Odoo, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-19 09:52+0000\n"
+"POT-Creation-Date: 2025-01-25 17:23+0000\n"
 "PO-Revision-Date: 2024-09-25 09:44+0000\n"
-"Last-Translator: Abe Manyo, 2025\n"
+"Last-Translator: Wil Odoo, 2025\n"
 "Language-Team: Indonesian (https://app.transifex.com/odoo/teams/41243/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -238,18 +238,6 @@ msgstr ""
 "menghapus satuan tersebut."
 
 #. module: account_reports
-#. odoo-python
-#: code:addons/account_reports/models/account_journal_report.py:0
-msgid "AP %s"
-msgstr "AP %s"
-
-#. module: account_reports
-#. odoo-python
-#: code:addons/account_reports/models/account_journal_report.py:0
-msgid "AR %s"
-msgstr "AR %s"
-
-#. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_total_assets0
 msgid "ASSETS"
 msgstr "AKTIVA"
@@ -276,7 +264,6 @@ msgstr "Templat Bagan Akun"
 #. module: account_reports
 #. odoo-python
 #: code:addons/account_reports/models/account_journal_report.py:0
-#: code:addons/account_reports/models/account_report.py:0
 msgid "Account Code"
 msgstr "Kode Akun"
 
@@ -296,6 +283,12 @@ msgstr "Account Display Representative Field"
 #: code:addons/account_reports/models/account_journal_report.py:0
 msgid "Account Label"
 msgstr "Label Akun"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_report.py:0
+msgid "Account Name"
+msgstr "Nama Akun"
 
 #. module: account_reports
 #: model:ir.model,name:account_reports.model_account_report_annotation
@@ -384,6 +377,8 @@ msgid "Accounts"
 msgstr "Akun"
 
 #. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_report.py:0
 #: model_terms:ir.ui.view,arch_db:account_reports.account_report_form
 msgid "Accounts Coverage Report"
 msgstr "Laporan Coverage Akun"
@@ -562,7 +557,7 @@ msgstr ""
 #. module: account_reports
 #: model:account.report.column,name:account_reports.account_financial_report_ec_sales_amount
 #: model:account.report.column,name:account_reports.bank_reconciliation_report_amount
-#: model:account.report.column,name:account_reports.partner_ledger_amount
+#: model:account.report.column,name:account_reports.customer_statement_amount
 #: model:ir.model.fields,field_description:account_reports.field_account_report_budget_item__amount
 msgid "Amount"
 msgstr "Jumlah"
@@ -573,6 +568,7 @@ msgstr "Jumlah"
 #: model:account.report.column,name:account_reports.aged_payable_report_amount_currency
 #: model:account.report.column,name:account_reports.aged_receivable_report_amount_currency
 #: model:account.report.column,name:account_reports.bank_reconciliation_report_amount_currency
+#: model:account.report.column,name:account_reports.customer_statement_report_amount_currency
 #: model:account.report.column,name:account_reports.partner_ledger_report_amount_currency
 msgid "Amount Currency"
 msgstr "Jumlah Mata Uang"
@@ -694,6 +690,7 @@ msgstr "B: %s"
 #: code:addons/account_reports/models/account_journal_report.py:0
 #: model:account.report.column,name:account_reports.balance_sheet_balance
 #: model:account.report.column,name:account_reports.cash_flow_report_balance
+#: model:account.report.column,name:account_reports.customer_statement_report_balance
 #: model:account.report.column,name:account_reports.executive_summary_column
 #: model:account.report.column,name:account_reports.general_ledger_report_balance
 #: model:account.report.column,name:account_reports.journal_report_balance
@@ -1011,6 +1008,8 @@ msgid "Closing bank balance"
 msgstr "Saldo bank penutup"
 
 #. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_report.py:0
 #: model:account.report.column,name:account_reports.journal_report_code
 msgid "Code"
 msgstr "Code"
@@ -1298,9 +1297,16 @@ msgstr ""
 "support groupby"
 
 #. module: account_reports
+#: model:account.report,name:account_reports.customer_statement_report
+#: model:ir.actions.client,name:account_reports.action_account_report_customer_statement
 #: model:mail.template,name:account_reports.email_template_customer_statement
 msgid "Customer Statement"
 msgstr "Laporan Pelanggan"
+
+#. module: account_reports
+#: model:ir.model,name:account_reports.model_account_customer_statement_report_handler
+msgid "Customer Statement Custom Handler"
+msgstr ""
 
 #. module: account_reports
 #. odoo-javascript
@@ -1487,12 +1493,6 @@ msgid "Download Anyway"
 msgstr "Tetap Unduh"
 
 #. module: account_reports
-#. odoo-python
-#: code:addons/account_reports/models/account_report.py:0
-msgid "Download Excel"
-msgstr "Unduh Excel"
-
-#. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.res_config_settings_view_form
 msgid "Download the Data Inalterability Check Report"
 msgstr "Unduh Laporan Pemeriksaan Data INalterability"
@@ -1515,6 +1515,7 @@ msgstr "Jatuh Tempo"
 #. module: account_reports
 #. odoo-javascript
 #: code:addons/account_reports/static/src/components/aged_partner_balance/filter_aging.xml:0
+#: model:account.report.column,name:account_reports.customer_statement_report_date_maturity
 #: model:account.report.column,name:account_reports.partner_ledger_report_date_maturity
 msgid "Due Date"
 msgstr "Batas Waktu"
@@ -1867,12 +1868,6 @@ msgid "Function to Call"
 msgstr "Function to Call"
 
 #. module: account_reports
-#. odoo-python
-#: code:addons/account_reports/models/account_journal_report.py:0
-msgid "G %s"
-msgstr "G %s"
-
-#. module: account_reports
 #. odoo-javascript
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
@@ -2219,6 +2214,7 @@ msgstr "Token '%(token)s' tidak valid di formula account_codes '%(formula)s'"
 #: code:addons/account_reports/static/src/components/aged_partner_balance/filter_aging.xml:0
 #: model:account.report.column,name:account_reports.aged_payable_report_invoice_date
 #: model:account.report.column,name:account_reports.aged_receivable_report_invoice_date
+#: model:account.report.column,name:account_reports.customer_statement_report_invoicing_date
 #: model:account.report.column,name:account_reports.partner_ledger_report_invoicing_date
 msgid "Invoice Date"
 msgstr "Tanggal Faktur"
@@ -2403,12 +2399,6 @@ msgid "Later"
 msgstr "Nanti"
 
 #. module: account_reports
-#. odoo-javascript
-#: code:addons/account_reports/static/src/components/aged_partner_balance/line_name/line_name.xml:0
-msgid "Ledger"
-msgstr "Ledger"
-
-#. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_cost_sales0
 msgid "Less Costs of Revenue"
 msgstr "Less Costs of Revenue"
@@ -2427,6 +2417,21 @@ msgstr "Less Other Expenses"
 #: model:ir.model.fields,field_description:account_reports.field_account_report_annotation__line_id
 msgid "Line"
 msgstr "Baris"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_report.py:0
+#, python-format
+msgid ""
+"Line '%(child)s' is configured to appear before its parent '%(parent)s'. "
+"This is not allowed."
+msgstr ""
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/account_report/line/popover/debug_popover.xml:0
+msgid "Line without formula"
+msgstr "Baris tanpa formula"
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.account_report_form
@@ -2609,8 +2614,8 @@ msgstr "Aktiva yang meningkat dalam kas dan setara kas"
 
 #. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_executivesummary_npmargin0
-msgid "Net profit margin (net profit / income)"
-msgstr "Margin laba bersih (laba bersih / penghasilan)"
+msgid "Net profit margin (net profit / revenue)"
+msgstr ""
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.account_reports_journal_dashboard_kanban_view
@@ -3065,6 +3070,24 @@ msgid "Previous Period"
 msgstr "Periode Sebelumnya"
 
 #. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/account_report/filters/filter_comparison.xml:0
+msgid "Previous Periods"
+msgstr ""
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/account_report/filters/filter_comparison.xml:0
+msgid "Previous Year"
+msgstr "Tahun sebelumnya"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/account_report/filters/filter_comparison.xml:0
+msgid "Previous Years"
+msgstr ""
+
+#. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_retained_earnings_line_2
 msgid "Previous Years Retained Earnings"
 msgstr "Laba Ditahan Tahun Sebelumnya"
@@ -3291,9 +3314,16 @@ msgstr "Bagian-Bagian"
 
 #. module: account_reports
 #. odoo-python
+#: code:addons/account_reports/models/account_customer_statement.py:0
 #: code:addons/account_reports/models/account_partner_ledger.py:0
 msgid "Send"
 msgstr "Kirim"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_partner_ledger.py:0
+msgid "Send %s Statement"
+msgstr ""
 
 #. module: account_reports
 #: model:ir.model.fields,field_description:account_reports.field_account_report__send_and_print_values
@@ -3428,6 +3458,12 @@ msgstr "Mulai dari"
 #: code:addons/account_reports/models/account_journal_report.py:0
 msgid "Starting Balance"
 msgstr "Saldo Awal"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/aged_partner_balance/line_name/line_name.xml:0
+msgid "Statement"
+msgstr "Laporan"
 
 #. module: account_reports
 #. odoo-python
@@ -3653,18 +3689,13 @@ msgstr "Konten anotasi."
 #. odoo-python
 #: code:addons/account_reports/models/account_move.py:0
 msgid ""
-"The attachments of the tax report can be found on the <a href='#' data-oe-"
-"model='account.move' data-oe-id='%s'>closing entry</a> of the representative"
-" company."
+"The attachments of the tax report can be found on the %(link_start)sclosing "
+"entry%(link_end)s of the representative company."
 msgstr ""
-"Lampiran dari laporan pajak dapat ditemukan pada <a href='#' data-oe-"
-"model='account.move' data-oe-id='%s'>entri closing</a> dari perusahaan "
-"wakil."
 
 #. module: account_reports
 #. odoo-python
 #: code:addons/account_reports/models/account_partner_ledger.py:0
-#, python-format
 msgid "The column '%s' is not available for this report."
 msgstr ""
 
@@ -3833,6 +3864,22 @@ msgid ""
 msgstr ""
 "Baris ini dan semua anaknya akan dihapus. Apakah Anda yakiningin "
 "melanjutkan?"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/widgets/account_report_x2many/account_report_x2many.xml:0
+#, python-format
+msgid "This line is out of sequence."
+msgstr ""
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/widgets/account_report_x2many/account_report_x2many.xml:0
+#, python-format
+msgid ""
+"This line is placed before its parent, which is not allowed. You can fix it "
+"by dragging it to the proper position."
+msgstr ""
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.account_report_line_form
@@ -4005,6 +4052,13 @@ msgstr "Mencoba membesarkan hasil groupby pada baris tanpa value groupby."
 #: model:account.report.line,name:account_reports.account_financial_unaffected_earnings0
 msgid "Unallocated Earnings"
 msgstr "Pendapatan Belum Teralokasi"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_report.py:0
+#, python-format
+msgid "Undefined"
+msgstr "Undefined"
 
 #. module: account_reports
 #. odoo-javascript

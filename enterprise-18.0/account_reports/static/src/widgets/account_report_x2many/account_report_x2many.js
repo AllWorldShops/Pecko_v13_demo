@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { onWillUpdateProps, useRef } from "@odoo/owl";
+import { useRef } from "@odoo/owl";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { WarningDialog } from "@web/core/errors/error_dialogs";
 import { _t } from "@web/core/l10n/translation";
@@ -25,13 +25,16 @@ export class AccountReportListRenderer extends ListRenderer {
         this.optionalActiveFields = this.computeOptionalActiveFields();
         this.columns = this.getActiveColumns(this.props.list);
 
-        onWillUpdateProps((nextProps) => {
-            // We need to rebuild the list if `props.list.records` changed on edit.
-            this.lines = this.formatData(nextProps.list.records);
-        });
-
-        // We transform the list into a list
-        this.lines = this.formatData(this.props.list.records);
+        this.env.model.config.activeFields.line_ids.defaultOrderBy = [
+            {
+                "name": "sequence",
+                "asc": true
+            },
+            {
+                "name": "id",
+                "asc": true
+            }
+        ]
 
         useNestedSortable({
             ref: useRef("root"),
@@ -63,10 +66,11 @@ export class AccountReportListRenderer extends ListRenderer {
     //------------------------------------------------------------------------------------------------------------------
     // Format
     //------------------------------------------------------------------------------------------------------------------
-    formatData(records) {
+    formatData() {
         let idToIndexMap = {};
         let tree = [];
-        let lines = this.recordsDataDeepCopy(records);
+
+        let lines = this.recordsDataDeepCopy(this.props.list.records);
 
         for (const [index, line] of lines.entries()) {
             line.index = index;
@@ -78,11 +82,18 @@ export class AccountReportListRenderer extends ListRenderer {
             if (line.parent_id?.[0]) {
                 let parentLine = lines[idToIndexMap[line.parent_id[0]]];
 
-                parentLine?.children.push(line);
+                if (parentLine) {
+                    parentLine?.children.push(line);
 
-                while (parentLine) {
-                    parentLine.descendants_count += 1;
-                    parentLine = lines[idToIndexMap[parentLine.parent_id?.[0]]];
+                    while (parentLine) {
+                        parentLine.descendants_count += 1;
+                        parentLine = lines[idToIndexMap[parentLine.parent_id?.[0]]];
+                    }
+                } else {
+                    // Since the parentLine doesn't exist yet. It means that this line is out of sequence.
+                    line.out_of_sequence_error = true;
+
+                    tree.push(line);
                 }
             } else {
                 tree.push(line);
@@ -148,7 +159,6 @@ export class AccountReportListRenderer extends ListRenderer {
 
     async setRecordHierarchy(currentElement, parentElement) {
         const currentRecordIndex = parseInt(currentElement.dataset.record_index);
-        const currentRecord = this.props.list.records[currentRecordIndex].data;
         const parentRecordIndex = parentElement?.dataset.record_index;
         const parentRecord = (parentRecordIndex) ? this.props.list.records[parentRecordIndex].data : null;
 
@@ -156,15 +166,6 @@ export class AccountReportListRenderer extends ListRenderer {
 
         if (parentRecord)
             hierarchyLevels[parentRecord.id] = parentRecord.hierarchy_level;
-
-        // The default hierarchy of a line without children is 1
-        let defaultHierarchyLevel = 1;
-        const nextRecordParentId = this.props.list.records[parseInt(currentRecordIndex) + 1]?.data.parent_id[0];
-
-        // We check if the next line is a child of the current one
-        if (nextRecordParentId === currentRecord.id)
-            // The default hierarchy of a line with children is 0
-            defaultHierarchyLevel = 0;
 
         const ancestors = new Set();
 
@@ -181,7 +182,7 @@ export class AccountReportListRenderer extends ListRenderer {
                 parentHierarchyLevel = (parentHierarchyLevel === 0) ? 1 : parentHierarchyLevel;
                 await record.update({'hierarchy_level': parentHierarchyLevel + 2});
             } else {
-                await record.update({'hierarchy_level': defaultHierarchyLevel});
+                await record.update({'hierarchy_level': 1});
             }
 
             ancestors.add(record.data.id);
@@ -309,7 +310,6 @@ export class AccountReportsLinesListX2ManyField extends X2ManyField {
                     record.update({'sequence': index + 1});
 
                 record.update({
-                    'hierarchy_level': 0,
                     'sequence': this.props.record.data.line_ids.records.length,
                 });
 

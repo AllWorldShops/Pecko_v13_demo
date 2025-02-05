@@ -30,3 +30,4 @@ from . import executive_summary_report
 from . import budget
 from . import balance_sheet
 from . import account_fiscal_position
+from . import account_customer_statement
