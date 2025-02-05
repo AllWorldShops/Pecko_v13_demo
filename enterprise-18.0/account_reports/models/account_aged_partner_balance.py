@@ -15,6 +15,7 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
     _name = 'account.aged.partner.balance.report.handler'
     _inherit = 'account.report.custom.handler'
     _description = 'Aged Partner Balance Custom Handler'
+    
 
     def _get_custom_display_config(self):
         return {
