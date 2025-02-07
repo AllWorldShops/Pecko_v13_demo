@@ -55,8 +55,10 @@ class MrpProduction(models.Model):
             'custom_mrp.workorder_flag')
 
         if wo_flag:
+            # The reserved_availability field has been deprecated with quantity in Odoo 18
+
             reserved_qty = self.move_raw_ids.filtered(
-                lambda l: l.reserved_availability != 0 and l.product_uom_qty != 0)
+                lambda l: l.quantity != 0 and l.product_uom_qty != 0)
             if reserved_qty and self.state not in ['draft', 'done']:
                 self.transfer_done_flag = True
 
@@ -67,8 +69,10 @@ class MrpProduction(models.Model):
         for rec in self:
             rec.reserved_check = False
             if wo_flag:
+                # The reserved_availability field has been deprecated with quantity in Odoo 18
+
                 reserved_qty = self.move_raw_ids.filtered(
-                    lambda l: l.reserved_availability == 0 and l.product_uom_qty != 0)
+                    lambda l: l.quantity == 0 and l.product_uom_qty != 0)
                 if reserved_qty and rec.state not in ['draft', 'done']:
                     rec.reserved_check = True
 
