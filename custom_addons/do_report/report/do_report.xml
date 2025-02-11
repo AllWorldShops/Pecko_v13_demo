@@ -127,10 +127,10 @@
                             </span>
                         </div>
                         <div class="col-3" style="text-align:right;position:relative;">
-                            <t t-if="o.company_id.country_id.code == 'CH'">
+
                                 <img t-if="o.company_id.logo_one" t-att-src="image_data_uri(o.company_id.logo_one)"
                                      style="width:122px;height:122px;top:1px;" alt="Logo"/>
-                            </t>
+
                         </div>
                     </div>
 
