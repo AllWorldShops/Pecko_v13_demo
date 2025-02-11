@@ -106,7 +106,7 @@
                 </tr>
 
             </table>
-            <t t-if="o.company_id.country_id.code == 'SG'">
+            <t t-if="o.company_id.country_id.code == 'CH'">
                 <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_four)" alt="Logo"
                      style="position:relative; bottom:54px; left:730px; width:130px;"/>
             </t>
@@ -235,7 +235,7 @@
                     <br/>
                     <span>Supplier's Acceptance &amp; Confirmation</span>
                     <div style="text-align:center;">
-                        <t t-if="o.company_id.country_id.code == 'SG'">
+                        <t t-if="o.company_id.country_id.code == 'CH'">
                             <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_two)" alt="Logo"
                                  style="width:100px;position:relative;"/>
                         </t>
@@ -811,4 +811,5 @@
         <field name="paperformat_id" ref="pecko_so_po_report.paperformat_po"/>
     </record>
 
+    
 </odoo>
