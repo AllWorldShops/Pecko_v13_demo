@@ -417,7 +417,7 @@
 
                                             <td class="text-center">
                                                 <span t-field="line.requested_date_line"
-                                                      t-options='{"format":"dd-MMM-yyyy"}'/>
+                                                      t-options='{"format":"dd-MM-yyyy"}'/>
                                             </td>
                                             <td class="text-right">
                                                 <span t-field="line.price_unit"/>
@@ -585,11 +585,11 @@
                                     <strong>
                                         <t t-if="o.state in ('draft','sent')">
                                             <span t-field="o.date_order"
-                                                  t-options='{"format": "dd-MMM-yyyy"}'/>
+                                                  t-options='{"format": "dd-MM-yyyy"}'/>
                                         </t>
                                         <t t-if="o.state in ('purchase','done')">
                                             <span t-field="o.date_approve"
-                                                  t-options='{"format": "dd-MMM-yyyy"}'/>
+                                                  t-options='{"format": "dd-MM-yyyy"}'/>
                                         </t>
                                     </strong>
                                 </span>
@@ -693,7 +693,7 @@
 
                                             <td class="text-center" style="background-color: #f4f4f5;">
                                                 <span t-field="line.date_planned"
-                                                      />
+                                                      t-options='{"format":"dd-MM-yyyy"}'/>
                                             </td>
                                             <td class="text-right" style="background-color: #f4f4f5;">
                                                 <span t-field="line.price_unit"/>
@@ -854,6 +854,5 @@
         <field name="binding_type">report</field>
         <field name="paperformat_id" ref="pecko_so_po_report.paperformat_po"/>
     </record>
-
 
 </odoo>
