@@ -693,7 +693,7 @@
 
                                             <td class="text-center" style="background-color: #f4f4f5;">
                                                 <span t-field="line.date_planned"
-                                                      t-options='{"format": "%d-%b-%Y"}'/>
+                                                      />
                                             </td>
                                             <td class="text-right" style="background-color: #f4f4f5;">
                                                 <span t-field="line.price_unit"/>
