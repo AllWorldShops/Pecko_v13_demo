@@ -1,21 +1,25 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from odoo import models, fields, api, _
+from odoo import api, fields, models, SUPERUSER_ID, _
 from odoo import tools
 from odoo import api, fields, models, SUPERUSER_ID, _
 from odoo.addons.base.models.ir_mail_server import MailDeliveryException
 from odoo.tools.safe_eval import safe_eval
 import base64
+from collections import defaultdict
 import datetime
 from odoo.tools import groupby
 from odoo.tools import float_compare, float_is_zero
 import logging
-from collections import defaultdict
+from odoo.tools import float_compare, float_is_zero
+from dateutil.relativedelta import relativedelta
 import psycopg2
 import smtplib
 from dateutil.relativedelta import relativedelta
 import threading
 import re
+from odoo.addons.stock.models.stock_rule import ProcurementException
+
 
 _logger = logging.getLogger(__name__)
 
@@ -583,4 +587,4 @@ class StockRule(models.Model):
                         po.date_order = order_date_planned
                     if fields.Date.to_date(order_date_planned) <= fields.Date.to_date(fields.Datetime.now()):
                         po.date_order = fields.Datetime.now()
-            k= self.env['purchase.order.line'].sudo().create(po_line_values)
+            self.env['purchase.order.line'].sudo().create(po_line_values)
