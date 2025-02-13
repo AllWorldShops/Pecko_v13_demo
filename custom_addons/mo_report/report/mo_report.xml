@@ -6,27 +6,25 @@
             <div class="header o_background_header">
                 <div class="row">
                     <div class="col-8">
-                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo" class="company-logo"/>
-                        <div class="company_address" style="line-height:1.5; font-family: Calibri; color: black; font-size: 13px; margin-top: 10px;">
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
+                             class="company-logo"/>
+                        <div class="company_address"
+                             style="line-height:1.5; font-family: Calibri; color: black; font-size: 13px; margin-top: 10px;">
                             <div>
                                 <strong>
-                                    <span style="font-size: 22px;" t-field="company.partner_id.name"/>
+                                    <span style="font-size: 20px;" t-field="company.partner_id.name"/>
                                 </strong>
                                 <br/>
                                 <t t-if="o.company_id.street">
-                                    <span t-field="o.company_id.street"/>
-                                </t>
-                                <t t-if="o.company_id.street2">
-                                    <br/>
-                                    <span t-field="o.company_id.street2"/>
+                                    <span t-esc="o.company_id.street + (', ' + o.company_id.street2 if o.company_id.street2 else '')"/>
                                 </t>
                                 <br/>
                                 <span t-field="o.company_id.city"/>
-,
+                                ,
                                 <span t-field="o.company_id.state_id"/>
-,
+                                ,
                                 <span t-field="o.company_id.country_id"/>
--
+                                -
                                 <span t-field="o.company_id.zip"/>
                                 <br/>
                                 <span>TEL :</span>
@@ -34,7 +32,7 @@
                                 <br/>
                                 <span>E-mail:</span>
                                 <span t-field="o.company_id.email"/>
-,
+                                ,
                                 <span>URL:</span>
                                 <span t-field="o.company_id.website"/>
                                 <br/>
@@ -54,7 +52,8 @@
                     </div>
                 </div>
             </div>
-            <div class="article o_report_layout_background" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+            <div class="article o_report_layout_background" t-att-data-oe-model="o and o._name"
+                 t-att-data-oe-id="o and o.id">
                 <t t-raw="0"/>
             </div>
         </template>
@@ -108,7 +107,6 @@
 
             <field name="binding_type">report</field>
         </record>
-
 
 
         <!-- Manufacturing Order Details -->
