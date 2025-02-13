@@ -214,7 +214,7 @@
                                     <!--                                    <td style=" text-align: left;">-->
                                     <!--                                        <span t-field="l.name"/>-->
                                     <!--                                    </td>-->
-                                    <td style=" text-align: left;">
+                                     <td style="text-align: left; white-space: nowrap;">
                                         <span t-field="l.manufacturer_id"/>
                                     </td>
                                     <td style=" text-align: left;">
