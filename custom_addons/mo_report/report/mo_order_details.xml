@@ -19,7 +19,7 @@
                     </div>
                     <div class="row" style="padding-left:2.9px;font-family: Arial">
                         <div class="col-8">
-                            <strong style="font-size: 35px;">Production Overview</strong>
+                            <strong style="font-size: 25px;">Production Overview</strong>
                         </div>
                     </div>
                     <div class="row" style="font-size:20px;padding-left:3px;font-family: Arial">
@@ -30,16 +30,16 @@
                         </div>
                         <div class="col-4">
                             <strong>
-                                <span style="font-size:20px;">MO Quantity:</span>
+                                <span style="font-size:17px;">MO Quantity:</span>
                             </strong>
-                            <span style="font-size:20px;" t-esc="o.product_qty"/>
-                            <span style="font-size:20px;text-transform: uppercase;" t-esc="o.product_uom_id.name"/>
+                            <span style="font-size:17px;" t-esc="o.product_qty"/>
+                            <span style="font-size:17px;text-transform: uppercase;" t-esc="o.product_uom_id.name"/>
                         </div>
                         <div class="col-5">
                             <strong>
-                                <span style=" font-size:20px;">Customer Part No:</span>
+                                <span style=" font-size:17px;">Customer Part No:</span>
                             </strong>
-                            <span style="font-size:20px;" t-esc="o.customer_part_no"/>
+                            <span style="font-size:17px;" t-esc="o.customer_part_no"/>
                         </div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                         }
                     </style>
                     <table class="table table-bordered" name="invoice_line_table" style="width:100%;color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
-                        <thead style="font-size:20px; border: 1px solid black;font-family: Arial" class="thead-light">
+                        <thead style="font-size:15px; border: 1px solid black;font-family: Arial" class="thead-light">
                             <tr>
                                 <th class="text-center" style="border: 1px solid black;">Position</th>
                                 <th name="th_mrp_bom_h" style="border: 1px solid black;">Product</th>
@@ -58,12 +58,10 @@
                                 <th class="text-center" style="border: 1px solid black;">Description</th>
                                 <th class="text-center" style="border: 1px solid black;">Manufacturer</th>
                                 <th class="text-center" style="border: 1px solid black;">Quantity</th>
-                                <th class="text-center" style="border: 1px solid black;">Unit of
-                                    Measure
-                                </th>
+                                <th class="text-center" style="border: 1px solid black;">Unit of Measure</th>
                             </tr>
                         </thead>
-                        <tbody class="invoice_tbody" style="font-size:20px;font-family: Arial">
+                        <tbody class="invoice_tbody" style="font-size:15px;font-family: Arial">
                             <tr>
                                 <td style="border: 1px solid black;"/>
                                 <td style="border: 1px solid black;">
@@ -110,14 +108,14 @@
                 <br/>
                 <div style="page-break-inside: avoid;">
                     <table class="table table-bordered" name="work_line_table" style="width:100%;text-color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
-                        <thead style="font-size:20px; border: 1px solid black;font-family: Arial" class="thead-light">
+                        <thead style="font-size:17px; border: 1px solid black;font-family: Arial" class="thead-light">
                             <tr>
                                 <th class="text-center" width="20%" style="border: 1px solid black;">Operation</th>
                                 <th class="text-center" width="20%" style="border: 1px solid black;">Work Center</th>
                                 <th class="text-center" width="60%" style="border: 1px solid black;">Operation Text</th>
                             </tr>
                         </thead>
-                        <tbody class="invoice_tbody" style="font-size:20px;font-family: Arial">
+                        <tbody class="invoice_tbody" style="font-size:17px;font-family: Arial">
                             <tr t-foreach="o.workorder_ids" t-as="l">
                                 <t t-if="l.name">
                                     <td class="text-center" style="border: 1px solid black;">
@@ -149,8 +147,8 @@
                     </div>
                     <div class="col">
                         <div class="text-right" >
-                            <strong style=" font-size:18px;">Printed on:</strong>
-                            <span style=" font-size:18px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+                            <strong style=" font-size:17px;">Printed on:</strong>
+                            <span style=" font-size:17px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
                         </div>
                     </div>
                 </div>
