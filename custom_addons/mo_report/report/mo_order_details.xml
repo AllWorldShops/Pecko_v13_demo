@@ -37,9 +37,9 @@
                         </div>
                         <div class="col-5">
                             <strong>
-                                <span style=" font-size:17px;">Customer Part No:</span>
+                                <span style=" font-size:15px;">Customer Part No:</span>
                             </strong>
-                            <span style="font-size:17px;" t-esc="o.customer_part_no"/>
+                            <span style="font-size:15px;" t-esc="o.customer_part_no"/>
                         </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                                     <td style="text-align: left; border: 1px solid black;">
                                         <span t-field="l.name"/>
                                     </td>
-                                    <td style="text-align: left; border: 1px solid black;">
+                                    <td style="text-align: left; border: 1px solid black; white-space: nowrap; ">
                                         <span t-field="l.manufacturer_id.name"/>
                                     </td>
                                     <td style="text-align: right; border: 1px solid black;">
