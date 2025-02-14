@@ -19,7 +19,7 @@
                          style="line-height:10px;font-family: Calibri;text-color:black;">
                         <div>
                             <strong>
-                                <span style="font-size: 22px;"
+                                <span style="font-size: 20px;"
                                       t-field="company.partner_id.name"/>
                             </strong>
                             <br/>
@@ -142,7 +142,7 @@
                          style="line-height:5px;font-size: 10px;font-family: Calibri;ftext-color:black;">
                         <div>
                             <strong>
-                                <span style="font-size: 22px;"
+                                <span style="font-size: 20px;"
                                       t-field="company.partner_id.name"/>
                             </strong>
                             <br/>

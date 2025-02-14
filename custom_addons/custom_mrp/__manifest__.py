@@ -18,6 +18,7 @@
     'installable': True,
     'application': True,
     'auto_install': False,
+    'license': 'LGPL-3',
     "assets": {
         "web.assets_backend": [
         'custom_mrp/static/src/components/inherit_bom_overview_table/mrp_bom_display_filter.js',

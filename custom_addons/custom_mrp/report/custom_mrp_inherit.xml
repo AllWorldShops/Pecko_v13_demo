@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-        
+
         <template id="mrp.report_mrp_bom">
-        <style>
-    .custom-table {
-    border-collapse: collapse; 
-}
+            <style>
+                .custom-table {
+                border-collapse: collapse;
+                }
 
-.custom-table th {
-    border-bottom: 2px solid #000; 
-    background-color: #f9f9f9; 
-}
+                .custom-table th {
+                border-bottom: 2px solid #000;
+                background-color: #f9f9f9;
+                }
 
-.custom-table td {
-    border-bottom: 1px solid #ccc; 
-}
+                .custom-table td {
+                border-bottom: 1px solid #ccc;
+                }
 
-.custom-table tr {
-    border-bottom: 1px solid #ccc; U
-}</style>
+                .custom-table tr {
+                border-bottom: 1px solid #ccc; U
+                }
+            </style>
             <t t-set="company" t-value="res_company"/>
             <div class="header o_background_header">
                 <div class="row" style="padding-left:1.5px">
@@ -27,7 +28,8 @@
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
                     </div>
                 </div>
-                <div class="row" name="company_address" style="text-start;padding-left:3px;font-family: Calibri;text-color:black;">
+                <div class="row" name="company_address"
+                     style="text-start;padding-left:3px;font-family: Calibri;text-color:black;">
                     <div class="col-8">
                         <strong>
                             <span style="font-size: 25px;papadding-left:3.6px" t-field="company.partner_id.name"/>
@@ -81,7 +83,8 @@
                                 <td/>
                                 <td/>
                                 <td/>
-                                <td class="text-end" t-esc="data['quantity']" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
+                                <td class="text-end" t-esc="data['quantity']"
+                                    t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
                                 <td class="text-start" groups="uom.group_uom" t-esc="data['uom_name']"/>
                             </tr>
                             <t t-call="mrp.report_mrp_bom_pdf_line"/>
@@ -94,7 +97,8 @@
                                 <td t-if="data['show_availabilities']"/>
                                 <td t-if="data['show_lead_times']"/>
                             </tr>
-                            <t t-if="data['show_costs'] and data['byproducts']" t-foreach="data['byproducts']" t-as="byproduct">
+                            <t t-if="data['show_costs'] and data['byproducts']" t-foreach="data['byproducts']"
+                               t-as="byproduct">
                                 <tr style="display:none;">
                                     <td name="td_mrp_bom_byproducts_f" class="text-end" t-esc="byproduct['name']"/>
                                     <td t-if="data['show_availabilities']"/>
@@ -105,7 +109,7 @@
                             </t>
                         </tbody>
                     </table>
-                    <table class="o_mrp_bom_expandable table custom-table" >
+                    <table class="o_mrp_bom_expandable table custom-table">
                         <thead>
                             <tr>
                                 <th class="text-center">Operation</th>
@@ -165,7 +169,8 @@
                     </td>
                     <td class="text-end" name="td_mrp_cod">
                         <t t-if="l['type'] == 'operation'" t-esc="l['quantity']" t-options='{"widget": "float_time"}'/>
-                        <t t-else="" t-esc="l['quantity']" t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
+                        <t t-else="" t-esc="l['quantity']"
+                           t-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/>
                     </td>
                     <td class="text-start" groups="uom.group_uom" name="td_mrp_cod">
                         <t t-esc="l['uom']"/>
@@ -185,9 +190,10 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="text-right" >
+                        <div class="text-right">
                             <strong style=" font-size:18px;">Printed on:</strong>
-                            <span style=" font-size:18px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+                            <span style=" font-size:18px;"
+                                  t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
                         </div>
                     </div>
                 </div>
@@ -209,7 +215,6 @@
         </record>
 
 
-
         <record id="action_report_bom_structure_overview" model="ir.actions.report">
             <field name="name">BoM Structure</field>
             <field name="model">mrp.bom</field>
@@ -218,7 +223,7 @@
             <field name="report_file">mrp.report_bom_structure</field>
             <field name="print_report_name">'Bom Structure - %s' % (object.name)</field>
             <field name="binding_model_id" ref="mrp.model_mrp_bom"/>
-             <field name="paperformat_id" ref="custom_mrp.paperformat_mrp_bom"/>
+            <field name="paperformat_id" ref="custom_mrp.paperformat_mrp_bom"/>
 
             <field name="binding_type">report</field>
         </record>
