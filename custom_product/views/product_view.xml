@@ -230,7 +230,7 @@
     </record>
 
     <menuitem action="action_id_type" id="menu_id_type" sequence="50"
-              parent="base.menu_users" name="Id Type"/>
+              parent="base.menu_users" name="ID Type"/>
 
         <record id="classification_code_form" model="ir.ui.view">
         <field name="name">classification_code.form</field>
