@@ -308,7 +308,7 @@
                                                     <span t-field="l.sale_line_id.product_uom"/>
                                                 </td>
                                                 <td style=" text-align: left;">
-                                                    <t t-set="qty" t-value="l.sale_line_id.qty_delivered"/>
+                                                    <t t-set="qty" t-value="l.sale_line_id.qty_delivered or 0.0"/>
                                                     <span t-esc="('%.4f' % (l.sale_line_id.product_uom_qty - qty))"/>
                                                     <span t-field="l.sale_line_id.product_uom"/>
                                                 </td>
@@ -320,8 +320,8 @@
                                                 </td>
 
                                                 <td style=" text-align: left;">
-                                                    <t t-set="qty" t-value="l.sale_line_id.qty_delivered"/>
-                                                    <span t-esc="round(l.sale_line_id.product_uom_qty - qty,2)"/>
+                                                    <t t-set="qty" t-value="l.sale_line_id.qty_delivered or 0.0"/>
+                                                    <span t-esc="('%.4f' % (l.sale_line_id.product_uom_qty - qty))"/>
                                                     <span t-field="l.sale_line_id.product_uom"/>
                                                 </td>
                                             </t>
