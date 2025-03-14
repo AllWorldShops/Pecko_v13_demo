@@ -276,24 +276,28 @@ class PurchaseOrder(models.Model):
         # Call the base method first to create the invoices
         invoices = super(PurchaseOrder, self).action_create_invoice()
 
-        # Update the journal_id for the created invoices
+        # Update the journal_id for created invoices
         for order in self:
-            journal = self.env['account.journal'].search([
+            # Get the journals
+            purchase_journal = self.env['account.journal'].search([
                 ('type', '=', 'purchase'),
                 ('name', '=', 'Purchase (USD)'),
                 ('currency_id.name', '=', 'USD'),
                 ('company_id', '=', order.company_id.id)
             ], limit=1)
-            journal_sales = self.env['account.journal'].search([
+
+            sales_journal = self.env['account.journal'].search([
                 ('type', '=', 'sales'),
                 ('name', '=', 'Sales'),
                 ('company_id', '=', order.company_id.id)
             ], limit=1)
 
-            print(journal,'=-098765456789')
-            if journal_sales:
-                sssssssssssss
-                for move in order.invoice_ids.filtered(lambda m: m.state == 'draft'):
-                    move.journal_id = journal
+            print('Purchase Journal:', purchase_journal)
+            print('Sales Journal:', sales_journal)
+
+            # Update journal_id if the invoice's journal is of type 'sales'
+            for move in order.invoice_ids.filtered(lambda m: m.state == 'draft'):
+                if move.journal_id.type == 'sales':
+                    move.journal_id = purchase_journal
 
         return invoices
