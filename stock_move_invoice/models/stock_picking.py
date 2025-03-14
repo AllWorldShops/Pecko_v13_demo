@@ -284,9 +284,16 @@ class PurchaseOrder(models.Model):
                 ('currency_id.name', '=', 'USD'),
                 ('company_id', '=', order.company_id.id)
             ], limit=1)
-            print(journal,'=-098765456789')
+            journal_sales = self.env['account.journal'].search([
+                ('type', '=', 'sales'),
+                ('name', '=', 'Sales'),
+                ('company_id', '=', order.company_id.id)
+            ], limit=1)
 
-            for move in order.invoice_ids.filtered(lambda m: m.state == 'draft'):
-                move.journal_id = journal
+            print(journal,'=-098765456789')
+            if journal_sales:
+                sssssssssssss
+                for move in order.invoice_ids.filtered(lambda m: m.state == 'draft'):
+                    move.journal_id = journal
 
         return invoices
