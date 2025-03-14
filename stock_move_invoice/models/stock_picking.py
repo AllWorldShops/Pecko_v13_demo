@@ -266,3 +266,27 @@ class StockReturnInvoicePicking(models.TransientModel):
         picking.write({'is_return': True})
         return new_picking, pick_type_id
 
+
+# pass the purchase journal for create a bill
+
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+
+    def action_create_invoice(self):
+        # Call the base method first to create the invoices
+        invoices = super(PurchaseOrder, self).action_create_invoice()
+
+        # Update the journal_id for the created invoices
+        for order in self:
+            journal = self.env['account.journal'].search([
+                ('type', '=', 'purchase'),
+                ('name', '=', 'Purchase (USD)'),
+                ('currency_id.name', '=', 'USD'),
+                ('company_id', '=', order.company_id.id)
+            ], limit=1)
+            print(journal,'=-098765456789')
+
+            for move in order.invoice_ids.filtered(lambda m: m.state == 'draft'):
+                move.journal_id = journal
+
+        return invoices
