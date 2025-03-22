@@ -27,7 +27,7 @@ class ImportStockValuation(models.TransientModel):
             if row:
                 create_date = datetime.strptime(row['Date'], '%Y-%m-%d')
                 product = self.env['product.product'].search(
-                    [('active', '=', True), ('default_code', '=', row['Product'])], limit=1)
+                    ['|', ('active', '=', True), ('active', '=', False), ('default_code', '=', row['Product'])], limit=1)
 
                 if not product:
                     raise UserError(_("Product not found: %s") % row['Product'])
