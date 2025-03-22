@@ -99,7 +99,7 @@ class ImportStockValuation(models.TransientModel):
 
 
                 if total_qty == 0:
-                    raise UserError(_("Total quantity is zero for product: %s") % product.name)
+                    raise UserError(_("Total quantity is zero for product: %s") % product.default_code)
                 total_value = average_unit_cost * total_qty
 
                 # Create stock valuation layer
