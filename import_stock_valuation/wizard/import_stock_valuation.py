@@ -126,7 +126,7 @@ class ImportStockValuation(models.TransientModel):
                 self.env.cr.execute('UPDATE stock_valuation_layer SET create_date = %s WHERE id=%s',
                                     (create_date, stock_valuation.id,))
 
-                _logger.info("Created stock valuation for %s with Qty: %s, Unit Cost: %s", product.name, total_qty, average_unit_cost)
+                _logger.info( stock_valuation,id,"Created stock valuation for %s with Qty: %s, Unit Cost: %s", product.name, total_qty, average_unit_cost)
 
                 # Journal Entry Creation
                 category = product.categ_id
