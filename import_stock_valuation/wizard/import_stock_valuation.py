@@ -31,6 +31,33 @@ class ImportStockValuation(models.TransientModel):
 
                 if not product:
                     raise UserError(_("Product not found: %s") % row['Product'])
+
+                existing_valuation = self.env['stock.valuation.layer'].search([
+                    ('product_id', '=', product.id),
+                    ('create_date', '=', create_date),
+                    ('company_id', '=', self.env.company.id)
+                ], limit=1)
+
+                if existing_valuation and existing_valuation.account_move_id:
+                    _logger.warning(
+                        "Valuation and journal entry already exist for product: %s on date: %s. Skipping record.",
+                        product.name, create_date)
+                    continue
+
+                elif existing_valuation:
+                    _logger.warning("Valuation already exists for product: %s on date: %s. Skipping record.",
+                                    product.name, create_date)
+                    continue
+
+                elif self.env['account.move'].search([
+                    ('ref', 'ilike', f"Stock Valuation Adjustment for {product.name}"),
+                    ('date', '=', create_date),
+                    ('journal_id', '=', product.categ_id.property_stock_journal.id)
+                ], limit=1):
+                    _logger.warning("Account move already exists for product: %s on date: %s. Skipping record.",
+                                    product.name, create_date)
+                    continue
+
                 stock_moves = self.env['stock.move'].search([
                     ('product_id', '=', product.id),
                     ('location_dest_id.usage', '=', 'production'),
@@ -41,31 +68,39 @@ class ImportStockValuation(models.TransientModel):
                     ('company_id', '=', self.env.company.id),
                     ('stock_valuation_layer_ids', '=', False)
                 ])
-
                 valuation_layers = self.env['stock.valuation.layer'].search([
                     ('product_id', '=', product.id),
                     ('create_date', '>=', date_start),
                     ('create_date', '<=', date_end),
                     ('company_id', '=', self.env.company.id),
+                    ('stock_move_id.location_id.usage', '=', 'supplier')  # Ensure correct field path
                 ])
-
                 if not valuation_layers:
-                    raise UserError(
-                        _("No valuation layers found for product: %s within the given date range") % product.name)
+                    # Get the last valuation layer before the start date
+                    last_layer = self.env['stock.valuation.layer'].search([
+                        ('product_id', '=', product.id),
+                        ('company_id', '=', self.env.company.id),
+                    ], order='create_date desc', limit=1)
 
-                # Calculate the average unit cost from the layers
-                total_cost = sum(valuation_layers.mapped('unit_cost'))
-                average_unit_cost = total_cost / len(valuation_layers)
+                    if last_layer:
+                        total_qty = sum(stock_moves.mapped('product_uom_qty'))
+                        unit_cost = sum(last_layer.mapped('value'))
+                        average_unit_cost = unit_cost / total_qty if total_qty else 0
+                    else:
+                        total_qty = sum(stock_moves.mapped('product_uom_qty'))
+                        average_unit_cost = product.standard_price
+                        print(f"✅ Using last updated unit price from previous layer: {average_unit_cost}")
+                else:
+                    # Calculate the average unit cost from the layers
+                    total_qty = sum(stock_moves.mapped('product_uom_qty'))
+                    unit_cost = sum(valuation_layers.mapped('value'))
+                    average_unit_cost = unit_cost / total_qty if total_qty else 0
+                print(f"✅ Calculated Average Unit Cost: {average_unit_cost}")
 
-
-
-                total_qty = sum(stock_moves.mapped('product_uom_qty'))
 
                 if total_qty == 0:
                     raise UserError(_("Total quantity is zero for product: %s") % product.name)
-
                 total_value = average_unit_cost * total_qty
-
 
                 # Create stock valuation layer
                 stock_valuation = self.env['stock.valuation.layer'].create({
@@ -79,8 +114,6 @@ class ImportStockValuation(models.TransientModel):
                 self.env.cr.execute('UPDATE stock_valuation_layer SET create_date = %s WHERE id=%s',
                                     (create_date, stock_valuation.id,))
 
-
-                # Log
                 _logger.info("Created stock valuation for %s with Qty: %s, Unit Cost: %s", product.name, total_qty, average_unit_cost)
 
                 # Journal Entry Creation
@@ -118,14 +151,11 @@ class ImportStockValuation(models.TransientModel):
 
                 account_move.sudo().write({'line_ids': line_ids})
                 account_move.action_post()
-
-                reference = f'Manual correction {reference_count} -PPTS'
+                reference = f'Manual correction RM {reference_count} -PPTS'
                 reference_count += 1
                 stock_valuation.write({'account_move_id': account_move.id, 'description': reference})
-                print('sucesss')
-
                 self.env.cr.execute('UPDATE account_move SET date = %s WHERE id=%s',
-                                    (create_date, account_move.id,))
+                                     (create_date, account_move.id,))
                 # Update the date using SQL query
 
                 _logger.info("Updated stock valuation layer date for %s to %s", product.name, create_date)
