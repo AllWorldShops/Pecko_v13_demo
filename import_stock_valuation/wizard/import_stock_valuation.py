@@ -68,6 +68,18 @@ class ImportStockValuation(models.TransientModel):
                     ('company_id', '=', self.env.company.id),
                     ('stock_valuation_layer_ids', '=', False)
                 ])
+                # If no matching stock_moves are found, search again with adjusted criteria
+                if not stock_moves:
+                    stock_moves = self.env['stock.move'].search([
+                        ('product_id', '=', product.id),
+                        ('location_dest_id.usage', '=', 'production'),
+                        ('location_id.usage', '=', 'production'),
+                        ('state', '=', 'done'),
+                        ('date', '>=', date_start),
+                        ('date', '<=', date_end),
+                        ('company_id', '=', self.env.company.id),
+                        ('stock_valuation_layer_ids', '=', False)
+                    ])
                 valuation_layers = self.env['stock.valuation.layer'].search([
                     ('product_id', '=', product.id),
                     ('create_date', '>=', date_start),
