@@ -14,6 +14,7 @@ class ImportStockValuation(models.TransientModel):
     _name = "import.stock.valuation"
 
     file = fields.Binary(string='File')
+
     def import_stock_valuation_data(self):
         if not self.file:
             raise UserError("Please upload a valid CSV file.")
