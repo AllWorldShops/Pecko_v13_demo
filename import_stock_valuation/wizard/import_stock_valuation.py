@@ -110,7 +110,7 @@ class ImportStockValuation(models.TransientModel):
                 'product_id': product.id,
                 'company_id': self.env.company.id,
                 'quantity': -1 * total_qty,
-                'unit_cost': average_unit_cost,
+                'unit_cost': abs(average_unit_cost),  
                 'value': -1 * total_value,
             })
             _logger.info("Layer created for %s", product.name)
