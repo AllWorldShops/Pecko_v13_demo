@@ -24,8 +24,8 @@ class ImportStockValuation(models.TransientModel):
         csv_reader = csv.DictReader(StringIO(csv_string))
         reference_count = 1
         completed_count = 0
-        date_end = datetime.strptime('2024-12-31', '%Y-%m-%d')
-        date_start = datetime.strptime('2024-01-01', '%Y-%m-%d')
+        date_end = datetime.strptime('2023-12-31', '%Y-%m-%d')
+        date_start = datetime.strptime('2023-01-01', '%Y-%m-%d')
 
         for row in csv_reader:
             if not row.get('Date') or not row.get('Product'):
@@ -101,16 +101,41 @@ class ImportStockValuation(models.TransientModel):
                     ('company_id', '=', self.env.company.id),
                 ], order='create_date desc', limit=1)
 
-            unit_cost = sum(valuation_layers.mapped('value')) if valuation_layers else (sum(last_layer.mapped('value')) if last_layer else product.standard_price)
-            average_unit_cost = unit_cost / total_qty if total_qty else 0
-            total_value = average_unit_cost * total_qty
+            if valuation_layers:
+                unit_cost = sum(valuation_layers.mapped('value'))
+            else:
+                unit_cost = sum(last_layer.mapped('value')) if last_layer else product.standard_price
+
+            re_valuation_layers = self.env['stock.valuation.layer'].search([
+                ('product_id', '=', product.id),
+                ('create_date', '>=', date_start),
+                ('create_date', '<=', date_end),
+                ('company_id', '=', self.env.company.id),
+                ('stock_move_id.location_id.usage', '=', 'internal'),
+                ('stock_move_id.location_dest_id.usage', '=', 'supplier')
+            ])
+            if re_valuation_layers:
+                for rec in re_valuation_layers:
+                    matching_layer = next((res for res in rec
+                                           if res.stock_move_id
+                                           and res.stock_move_id.location_id.usage == 'internal'
+                                           and res.stock_move_id.location_dest_id.usage == 'supplier'), None)
+                    if matching_layer:
+                        unit_cost += matching_layer.value
+
+                # Calculate average unit cost and total value
+                average_unit_cost = unit_cost / total_qty if total_qty else 0
+                total_value = average_unit_cost * total_qty
+            else:
+                average_unit_cost = unit_cost / total_qty if total_qty else 0
+                total_value = average_unit_cost * total_qty
 
             stock_valuation = self.env['stock.valuation.layer'].create({
                 'create_date': create_date,
                 'product_id': product.id,
                 'company_id': self.env.company.id,
                 'quantity': -1 * total_qty,
-                'unit_cost': abs(average_unit_cost),  
+                'unit_cost': abs(average_unit_cost),
                 'value': -1 * total_value,
             })
             _logger.info("Layer created for %s", product.name)
