@@ -24,8 +24,8 @@ class ImportStockValuation(models.TransientModel):
         csv_reader = csv.DictReader(StringIO(csv_string))
         reference_count = 1
         completed_count = 0
-        date_end = datetime.strptime('2024-12-31', '%Y-%m-%d')
-        date_start = datetime.strptime('2024-01-01', '%Y-%m-%d')
+        date_end = datetime.strptime('2023-12-31', '%Y-%m-%d')
+        date_start = datetime.strptime('2023-01-01', '%Y-%m-%d')
 
         for row in csv_reader:
             if not row.get('Date') or not row.get('Product'):
