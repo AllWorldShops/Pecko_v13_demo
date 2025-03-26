@@ -57,18 +57,25 @@ class WizardWizards(models.TransientModel):
             ('state', '!=', 'cancel')
         ])
         for order in sale_order_ids:
-            # invoice_ids = order.invoice_ids.filtered(lambda invoice:invoice.state != 'cancel')
-            # for invoice in invoice_ids:
             date_from = fields.Datetime.from_string(order.date_order)
             date_from = fields.Datetime.context_timestamp(order, date_from).date()
             date_to = date_from + relativedelta(months=+1, day=1, days=-1)
-            date_diffrence = relativedelta(date_to, date_from)
+
+            intake_amount = order.amount_untaxed
+            company_currency = order.company_id.currency_id
+            sale_currency = order.currency_id
+
+            # Apply exchange rate for SGD and MYR
+            if sale_currency and sale_currency != company_currency:
+                if company_currency.name == 'SGD':
+                    intake_amount = order.amount_untaxed * order.sale_exchange_rate
+                if company_currency.name == 'MYR':
+                    intake_amount = order.amount_untaxed / order.sale_exchange_rate
+
             for record in res:
                 if int(date_from.strftime('%m')) == record.get('months_name') \
-                and int(date_from.strftime('%Y')) == record.get('year_name'):
-                    record['months_amount'] += order.amount_untaxed or 0.00
-                    # record['months_turnover'] += invoice.amount_untaxed
-                    # record['months_name'] = int(date_from.strftime('%m') or '')
+                        and int(date_from.strftime('%Y')) == record.get('year_name'):
+                    record['months_amount'] += intake_amount or 0.00
         invoice_ids = self.env['account.move'].search([
             ('partner_id', '=', partnerid), 
             ('invoice_date', '<=', str(end_date)),
