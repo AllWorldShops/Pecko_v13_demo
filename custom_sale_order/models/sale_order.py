@@ -111,7 +111,12 @@ class SaleOrderLine(models.Model):
     mo_reference = fields.Char("M.O Reference")
     do_reference = fields.Char("D.O Reference", compute="_compute_do_reference", store=True)
     need_date = fields.Date(string="Need Date")
-    
+    total_invoice_qty = fields.Float(string="Total Invoice", compute='_compute_total_invoice_qty',)
+
+    def _compute_total_invoice_qty(self):
+        for line in self:
+            line.total_invoice_qty = line.price_unit * line.qty_invoiced if line.qty_invoiced else 0.0
+
     @api.depends('order_id.picking_ids')
     def _compute_do_reference(self):
         # picking = self.order_id.picking_ids.filtered(lambda l: l.state not in ['done', 'cancel']).sorted(lambda line: line.id)
