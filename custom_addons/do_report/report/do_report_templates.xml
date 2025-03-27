@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
         <template id="report_do_document">
             <t t-call="do_report.custom_do_external_layout">
                 <style>
