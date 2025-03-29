@@ -51,25 +51,25 @@ class ImportStockValuation(models.TransientModel):
                 ('company_id', '=', self.env.company.id)
             ], limit=1)
 
-            if existing_valuation and existing_valuation.account_move_id:
-                _logger.warning(
-                    "Valuation and journal entry already exist for product: %s on date: %s. Skipping record.",
-                    product.name, create_date)
-                continue
-
-            elif existing_valuation:
-                _logger.warning("Valuation already exists for product: %s on date: %s. Skipping record.",
-                                product.name, create_date)
-                continue
-
-            elif self.env['account.move'].search([
-                ('ref', 'ilike', f"Stock Valuation Adjustment for {product.name}"),
-                ('date', '=', create_date),
-                ('journal_id', '=', product.categ_id.property_stock_journal.id)
-            ], limit=1):
-                _logger.warning("Account move already exists for product: %s on date: %s. Skipping record.",
-                                product.name, create_date)
-                continue
+            # if existing_valuation and existing_valuation.account_move_id:
+            #     _logger.warning(
+            #         "Valuation and journal entry already exist for product: %s on date: %s. Skipping record.",
+            #         product.name, create_date)
+            #     continue
+            #
+            # elif existing_valuation:
+            #     _logger.warning("Valuation already exists for product: %s on date: %s. Skipping record.",
+            #                     product.name, create_date)
+            #     continue
+            #
+            # elif self.env['account.move'].search([
+            #     ('ref', 'ilike', f"Stock Valuation Adjustment for {product.name}"),
+            #     ('date', '=', create_date),
+            #     ('journal_id', '=', product.categ_id.property_stock_journal.id)
+            # ], limit=1):
+            #     _logger.warning("Account move already exists for product: %s on date: %s. Skipping record.",
+            #                     product.name, create_date)
+            #     continue
 
             # stock_moves = self.env['stock.move'].search([
             #     ('product_id', '=', product.id),
