@@ -5,6 +5,7 @@ from odoo import models, fields, _
 from datetime import datetime
 from odoo.exceptions import UserError
 from datetime import date
+
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -15,7 +16,6 @@ class ImportStockValuation(models.TransientModel):
     _name = "import.stock.valuation"
 
     file = fields.Binary(string='File')
-
     # valuation layer and journal entry created (compared with Stock move of MO ),for RM based on unit cost and price
     def import_stock_valuation_data(self):
         if not self.file:
