@@ -40,7 +40,7 @@ class ImportStockValuation(models.TransientModel):
             ], limit=1)
 
             if not product:
-                raise UserError(_("Product not found: %s") % row['Product'])
+                continue
 
             _logger.info("Processing product: %s", product.name)
             current_on_hand_qty = product.with_context({'to_date': create_date}).qty_available
