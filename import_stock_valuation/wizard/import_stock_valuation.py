@@ -20,6 +20,7 @@ class ImportStockValuation(models.TransientModel):
     def import_stock_valuation_data(self):
         if not self.file:
             raise UserError("Please upload a valid CSV file.")
+
         csv_data = base64.b64decode(self.file)
         csv_string = csv_data.decode('utf-8')
         csv_reader = csv.DictReader(StringIO(csv_string))
