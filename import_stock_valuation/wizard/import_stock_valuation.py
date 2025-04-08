@@ -106,6 +106,10 @@ class ImportStockValuation(models.TransientModel):
 
                 self.env.cr.execute('UPDATE stock_valuation_layer SET create_date = %s WHERE id=%s',
                                     (create_date, new_valuation.id))
+                _logger.info(
+                    "Created stock valuation for %s: Adjustment Qty %s, Unit Cost %s, Total Value %s, Create Date %s",
+                    product.name, adjustment_qty, unit_cost, new_value, create_date
+                )
 
             else:
                 _logger.info("No stock adjustment needed for %s", product.name)
