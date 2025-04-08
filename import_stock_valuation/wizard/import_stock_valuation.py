@@ -151,6 +151,10 @@ class ImportStockValuation(models.TransientModel):
             reference_count += 1
             completed_count += 1
             _logger.info("Journal Entry created and posted for %s", product.name)
+            self.env.cr.execute(
+                                'UPDATE account_move SET date = %s WHERE id=%s',
+                                (create_date,account_move.id,)
+                            )
 
         _logger.info("Stock Valuation Import Process Completed Successfully. Total Records Processed: %s",
                      completed_count)
