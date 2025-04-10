@@ -98,7 +98,7 @@ class ImportStockValuation(models.TransientModel):
                     'company_id': self.env.company.id,
                     'quantity': adjustment_qty,
                     'unit_cost': unit_cost,
-                    'value': new_value,
+                    'value': adjustment_value,
                 })
 
                 _logger.info("Created stock valuation for %s: Adjustment Qty %s, Unit Cost %s, Total Value %s",
