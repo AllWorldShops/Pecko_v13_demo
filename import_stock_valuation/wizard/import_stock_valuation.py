@@ -11,7 +11,6 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-# Manually update the valuation and stock journal using xl sheet
 class ImportStockValuation(models.TransientModel):
     _name = "import.stock.valuation"
 
