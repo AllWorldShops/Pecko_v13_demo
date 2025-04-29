@@ -1,6 +1,6 @@
 {
     'name': 'Import Stock Valuation',
-    'version': '16.0',
+    'version': '18.0',
     'category': 'stock',
     'author':'PPTS [India] Pvt.Ltd.',
     'description': """This module is for to import the records in stock valuation layer""",

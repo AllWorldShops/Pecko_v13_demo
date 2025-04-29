@@ -3,7 +3,7 @@
 
 {
     'name': 'Bucket Calculation',
-    'version': '1.0',
+    'version': '18.0',
     'summary': 'Bucket Calculation',
     'description': 'This module is to round the invoice (decimal amount) to the nearest value for Customer Invoice and Vendor Bills',
     'category': 'Accounting',

@@ -3,7 +3,7 @@
 
 {
 	'name': "Import Products from Excel and CSV",
-	'version': "13.0.0.1",
+	'version': "18.0",
 	'category': "Employees",
 	'summary': "Apps helps to import employee from excel import employee from csv, import multiple employee, import bulk employee import from excel",
 	'description':	"""

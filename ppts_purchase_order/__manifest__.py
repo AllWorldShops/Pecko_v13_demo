@@ -1,7 +1,7 @@
 {
     "name": "Purchase order creation",
     "summary": "purchse order creation",
-    "version": "16.0.1.0.1",
+    'version': '18.0.1.0.0',
     "author": "PPTS",
     "license": "AGPL-3",
 
