@@ -16,7 +16,7 @@
         'helpdesk',
     ],
     'data': [
-        'views/stage_views.xml'
+        # 'views/stage_views.xml'
              ],
     'license': 'AGPL-3',
     'installable': True,

@@ -10,7 +10,7 @@
     'depends': ['stock', 'base'],
     'data': [
         'security/ir.model.access.csv',
-        'views/log_activity_view.xml'
+        # 'views/log_activity_view.xml'
     ],
     'installable': True,
     'application': True,

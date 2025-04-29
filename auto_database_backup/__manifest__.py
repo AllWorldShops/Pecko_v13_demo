@@ -38,8 +38,8 @@
         'security/ir.model.access.csv',
         'data/ir_cron_data.xml',
         'data/mail_template_data.xml',
-        'views/db_backup_configure_views.xml',
-        'wizard/dropbox_auth_code_views.xml',
+        # 'views/db_backup_configure_views.xml',
+        # 'wizard/dropbox_auth_code_views.xml',
     ],
     'external_dependencies': {
         'python': ['dropbox', 'pyncclient', 'boto3', 'nextcloud-api-wrapper','paramiko']},

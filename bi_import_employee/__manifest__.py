@@ -18,8 +18,8 @@
 	'depends': ['base','hr', 'product'],
 	'data': [
 				'security/ir.model.access.csv',
-				'wizard/import_employee_view.xml',
-				'views/import_employee_menu.xml',
+				# 'wizard/import_employee_view.xml',
+				# 'views/import_employee_menu.xml',
 			],
 	'demo': [],
 	'qweb': [],

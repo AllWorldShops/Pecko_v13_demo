@@ -8,7 +8,7 @@
     "depends": ["purchase",'purchse_stock'],
     "data": [
       'data/service_cron.xml',
-      'views/purchase_view.xml'
+      # 'views/purchase_view.xml'
     ],
     "auto_install": False,
     "installable": True,

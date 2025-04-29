@@ -12,8 +12,8 @@
     'company': 'PPTS INDIA PVT LTD',
     'depends': ['base', 'account','sale'],
     'data': [
-        'views/res_config_settings_views.xml',
-        'wizard/bucket_days_wizard.xml'
+        # 'views/res_config_settings_views.xml',
+        # 'wizard/bucket_days_wizard.xml'
     ],
     'images': [ 
         
