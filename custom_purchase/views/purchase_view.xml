@@ -11,35 +11,35 @@
             </xpath>
 
 
-            <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
+            <xpath expr="//field[@name='order_line']//list//field[@name='name']" position="after">
             	<field name="manufacturer_id"/>
             </xpath>
 
 
 
 
-<!--          <xpath expr="//field[@name='order_line']//tree//field[@name='company_id']" position="replace">-->
+<!--          <xpath expr="//field[@name='order_line']//list//field[@name='company_id']" position="replace">-->
 <!--            </xpath>-->
 
-            <xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="after">
+            <xpath expr="//field[@name='order_line']//list//field[@name='taxes_id']" position="after">
                 <field name="notes"/>
             </xpath>
 
 
-			<xpath expr="//field[@name='order_line']//tree//field[@name='manufacturer_id']" position="after">
+			<xpath expr="//field[@name='order_line']//list//field[@name='manufacturer_id']" position="after">
                 <field name="item_text"/>
             </xpath>
 
-            <xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="before">
+            <xpath expr="//field[@name='order_line']//list//field[@name='product_id']" position="before">
                 <field name="line_no"/>
             </xpath>
 
-             <xpath expr="//field[@name='order_line']//tree//field[@name='date_planned']" position="after">
+             <xpath expr="//field[@name='order_line']//list//field[@name='date_planned']" position="after">
                 <field name="promise_date" optional="hide"/>
             </xpath>
 
             <xpath expr="//field[@name='company_id']" position="after">
-                <field name="old_po_no" attrs="{'readonly': [('state', 'not in', ['draft','sent'])]}"/>
+                <field name="old_po_no"  readonly="state not in ['draft', 'sent']"/>
             </xpath>
         </field>
     </record>
@@ -63,7 +63,7 @@
 		<field name="model">purchase.order.line</field>
 		<field name="priority">2</field>
 		<field name="arch" type="xml">
-			<tree string="Purchase Order Lines">
+			<list string="Purchase Order Lines">
 				<field name="order_ref" string="Order Reference"/>
 				<field name="vendor_id" string="Vendor"/>
 				<field name="product_id" string="Product"/>
@@ -81,7 +81,7 @@
 				<field name="promise_date" string="Promised Date"/>
 				<field name="order_date" string="Order Date"/>
 				<!-- <field name="price_subtotal" string="Subtotal"/> -->
-			</tree>
+			</list>
 		</field>
 	</record>
 
@@ -101,7 +101,7 @@
 		<field name="type">ir.actions.act_window</field>
 		<field name="res_model">purchase.order.line</field>
 		<field name="view_id" ref="custom_purchase.view_purchase_order_line_inherited"/>
-		<field name="view_mode">tree,form</field>
+		<field name="view_mode">list,form</field>
 	</record>
 
 
@@ -117,10 +117,10 @@
             <field name="model">res.config.settings</field>
             <field name="inherit_id" ref="base.res_config_settings_view_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//div[@class='row ml32']" position="after">
-                    <div class="row ml32">
-                        <field name="split_so" class="col-1 col-lg-1"/>
+                <xpath expr="//div[@class='row']" position="after">
+                    <div class="row">
                         <label for="split_so" class="o_light_label"/>
+                        <field name="split_so" class="col-1 col-lg-1"/>
                     </div>
                 </xpath>
             </field>
@@ -132,7 +132,7 @@
             <field name="model">res.company</field>
             <field name="inherit_id" ref="base.view_company_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='auto_validation']" position="after">
+                <xpath expr="//field[@name='intercompany_generate_purchase_orders']" position="after">
                     <field name="split_so"/>
                 </xpath>
             </field>

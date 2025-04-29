@@ -2,7 +2,7 @@
 
 {
     'name': 'Custom Stock',
-    'version': '12.0',
+    'version': '18.0',
     'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
     'category': 'Stock',
@@ -15,4 +15,5 @@
     'installable': True,
     'application': True,
     'auto_install': False,
+    'license': 'LGPL-3',
 }

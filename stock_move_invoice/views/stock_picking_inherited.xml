@@ -14,28 +14,16 @@
                 <xpath expr="//div[@name='button_box']" position="inside">
                     <button name="action_open_picking_invoice" type="object"
                             class="oe_stat_button" icon="fa-file-text"
-                            attrs="{'invisible': [('invoice_count','=', 0)]}">
+                            invisible="invoice_count == 0"
+                            >
                         <field name="invoice_count" widget="statinfo"/>
                     </button>
                 </xpath>
-                <xpath expr="//button[@name='action_toggle_is_locked']" position="after">
-                    <!-- <button name="create_invoice" class="oe_highlight"
-                            string="Create Invoice" type="object"
-                            attrs="{'invisible': ['|','|','|','|','|',('invoice_count','!=', 0),('state','!=','done'),('operation_code','=','incoming'),('is_return','=',True),('origin', 'ilike', 'Return'),('invoice_status', '=', 'invoiced')]}" invisible="1"/> -->
-                     <button name="create_invoice" class="oe_highlight"
+                <xpath expr="//button[@name='action_confirm']" position="after">
+                    <button name="create_invoice" class="oe_highlight"
                             string="Create Invoice" type="object" invisible="1"/>
-                    <!-- <button name="create_bill" class="oe_highlight"
-                            string="Create Bill" type="object"
-                            attrs="{'invisible': ['|','|','|',('invoice_count','!=', 0),('state','!=','done'),('operation_code','=','outgoing'),('is_return','=',True)]}"/> -->
-                    <!-- <button name="create_customer_credit" class="oe_highlight"
-                            string="Create Credit Note" type="object"
-                            attrs="{'invisible': ['|','|','|','|',('invoice_count','!=', 0),('state','!=','done'),('operation_code','=','outgoing'),('is_return','=', False),('invoice_status', '=', 'invoiced')]}" invisible="1"/> -->
-
                     <button name="create_customer_credit" class="oe_highlight"
                             string="Create Credit Note" type="object" invisible="1"/>
-                    <!-- <button name="create_vendor_credit" class="oe_highlight"
-                            string="Create Vendor Credit" type="object"
-                            attrs="{'invisible': ['|','|','|',('invoice_count','!=', 0),('state','!=','done'),('operation_code','=','incoming'),('is_return','=',False)]}"/> -->
                 </xpath>
             </field>
         </record>

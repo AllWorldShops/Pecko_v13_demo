@@ -16,7 +16,7 @@ locale.setlocale(locale.LC_ALL, '')
 class MrpProductionSchedule(models.Model):
     _inherit = 'mrp.production.schedule'
 
-    def get_production_schedule_view_state(self):
+    def get_production_schedule_view_state(self, period_scale=False):
 
         company_id = self.env.company
         date_range = company_id._get_date_range()
@@ -144,7 +144,7 @@ class MrpProductionSchedule(models.Model):
                 quantity_check = self.env['stock.quant'].search(
                     [('location_id', 'in', loc.ids), ('product_id', '=', product.id)])
                 for qty in quantity_check:
-                    quantity_total += qty.quantity
+                    quantity_total += qty.inventory_quantity_auto_apply
             rounded_value = round(quantity_total, 4)
             forecast_values['onhand_quantity'] = f'{rounded_value:n}'
             forecast_values['mpn_supplier_no'] =  production_schedule.product_id.x_studio_field_qr3ai

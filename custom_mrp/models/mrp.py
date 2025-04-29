@@ -2,8 +2,10 @@ from email.policy import default
 from odoo import models, fields, api, _
 from odoo.tools import float_round
 from odoo.exceptions import UserError
-import datetime
+from odoo.tools import float_compare, float_round, format_date, float_is_zero
 
+import datetime
+from collections import defaultdict
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -11,23 +13,9 @@ _logger = logging.getLogger(__name__)
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
-    
-    @api.model
-    def action_update_storage_loc(self):
-        stock_moves = self.env['stock.move'].sudo().search([
-            ('storage_location_id', '=', False),('raw_material_production_id.state', '!=', 'cancel'),
-            ('raw_material_production_id', '!=', False)
-        ] ,limit=1000)
-        _logger.info("------------------Number of stock moves found: %s--------------------", str(len(stock_moves)))
-        for move in stock_moves:
-            if move.product_id.product_tmpl_id.storage_location_id:
-                move.sudo().update({
-                'storage_location_id': move.product_id.product_tmpl_id.storage_location_id
-            })
 
     def _action_cancel_orders(self):
         mrp = self.sudo().search([('order_seq', 'ilike', 'C-'), ('state', '!=', 'cancel')], limit=1000)
-        # ss
         for rec in mrp:
             rec.with_delay().action_cancel()
 
@@ -37,7 +25,6 @@ class MrpProduction(models.Model):
     customer_part_no = fields.Char(string='Part Number')
     description = fields.Char(string='Description')
     transfer_done_flag = fields.Boolean(string='Transfer Done Flag',compute='_compute_boolean_txt' )
-    # project = fields.Char(string='Project')
     project = fields.Char(string='Project', related='product_tmpl_id.project', store=True)
     start_date = fields.Date('Start Date P2')
     start_date_one = fields.Date('Start Date P1')
@@ -68,11 +55,12 @@ class MrpProduction(models.Model):
             'custom_mrp.workorder_flag')
 
         if wo_flag:
+            # The reserved_availability field has been deprecated with quantity in Odoo 18
+
             reserved_qty = self.move_raw_ids.filtered(
-                lambda l: l.reserved_availability != 0 and l.product_uom_qty != 0)
+                lambda l: l.quantity != 0 and l.product_uom_qty != 0)
             if reserved_qty and self.state not in ['draft', 'done']:
                 self.transfer_done_flag = True
-
 
     def _compute_reserved(self):
         # reserved_qty = []
@@ -81,8 +69,10 @@ class MrpProduction(models.Model):
         for rec in self:
             rec.reserved_check = False
             if wo_flag:
+                # The reserved_availability field has been deprecated with quantity in Odoo 18
+
                 reserved_qty = self.move_raw_ids.filtered(
-                    lambda l: l.reserved_availability == 0 and l.product_uom_qty != 0)
+                    lambda l: l.quantity == 0 and l.product_uom_qty != 0)
                 if reserved_qty and rec.state not in ['draft', 'done']:
                     rec.reserved_check = True
 
@@ -94,21 +84,9 @@ class MrpProduction(models.Model):
     def onchange_responsible(self):
         if self.product_id:
             self.user_id = self.product_id.responsible_id.id
-            # self.order_seq = self.product_id.order_seq or ' '
+ 
 
-    # MRP 3 Step Location Auto Change
-    # def step_location_sync(self):
-    #     location_route = self.env['stock.location.route'].search(
-    #         [('name', '=', 'PM Warehouse: Pick components, manufacture and then store products (3 steps)')], limit=1)
-    #     for loc_route in location_route:
-    #         for rul in loc_route.rule_ids:
-    #             if rul.location_src_id.complete_name == 'PM-WH/Production Floor':
-    #                 loc_id = self.env['stock.location'].search(
-    #                     [('complete_name', '=', 'Virtual Locations/My Company: Production')], limit=1)
-    #                 if loc_id:
-    #                     rul.location_id = loc_id.id
-
-
+ 
     @api.onchange('product_id')
     def onchange_mrp_product(self):
         for mrp_product in self:
@@ -117,52 +95,6 @@ class MrpProduction(models.Model):
                 mrp_product.customer_part_no = mrp_product.product_id.name
                 mrp_product.description = mrp_product.product_id.product_tmpl_id.x_studio_field_mHzKJ
 
-
-    #i commented (t)
-
-    # def _generate_raw_move(self, bom_line, line_data):
-    #     quantity = line_data['qty']
-    #     # alt_op needed for the case when you explode phantom bom and all the lines will be consumed in the operation given by the parent bom line
-    #     alt_op = line_data['parent_line'] and line_data['parent_line'].operation_id.id or False
-    #     if bom_line.child_bom_id and bom_line.child_bom_id.type == 'phantom':
-    #         return self.env['stock.move']
-    #     if bom_line.product_id.type not in ['product', 'consu']:
-    #         return self.env['stock.move']
-    #     if self.routing_id:
-    #         routing = self.routing_id
-    #     else:
-    #         routing = self.bom_id.routing_id
-    #     if routing and routing.location_id:
-    #         source_location = routing.location_id
-    #     else:
-    #         source_location = self.location_src_id
-    #     original_quantity = (self.product_qty - self.qty_produced) or 1.0
-    #     data = {
-    #         'sequence': bom_line.sequence,
-    #         'name': bom_line.product_id.x_studio_field_mHzKJ,
-    #         'date': self.date_planned_start,
-    #         'date_expected': self.date_planned_start,
-    #         'bom_line_id': bom_line.id,
-    #         'picking_type_id': self.picking_type_id.id,
-    #         'product_id': bom_line.product_id.id,
-    #         'product_uom_qty': quantity,
-    #         'product_uom': bom_line.product_uom_id.id,
-    #         'location_id': source_location.id,
-    #         'location_dest_id': self.product_id.property_stock_production.id,
-    #         'raw_material_production_id': self.id,
-    #         'company_id': self.company_id.id,
-    #         'operation_id': bom_line.operation_id.id or alt_op,
-    #         'price_unit': bom_line.product_id.standard_price,
-    #         'procure_method': 'make_to_stock',
-    #         'origin': self.name,
-    #         'warehouse_id': source_location.get_warehouse().id,
-    #         'group_id': self.procurement_group_id.id,
-    #         'propagate': self.propagate,
-    #         'unit_factor': quantity / original_quantity,
-    #         'manufacturer_id': bom_line.product_id.manufacturer_id.id,
-    #         'customer_part_no': bom_line.product_id.name
-    #     }
-    #     return self.env['stock.move'].create(data)
 
     @api.model
     def create(self, vals):
@@ -224,10 +156,6 @@ class StockMove(models.Model):
     item_text = fields.Char("Item Text", related='product_id.item_text')
     position_no = fields.Integer(string="Position", compute="_compute_position_no")
 
-    # def _compute_storage_location_id(self):
-    #     ir_property = self.env['ir.property'].browse()
-
-    #     for line in self:
 
     @api.depends('product_id')
     def _compute_product_name(self):
@@ -282,20 +210,30 @@ class SaleOrderInherit(models.Model):
             for rec in mrp:
                 rec.user_id = rec.product_id.responsible_id.id or False
                 rec.customer_po_no = self.customer_po_no
-                # so_line = self.order_line.filtered(lambda line: line.product_id.id == rec.product_id.id)
-                # for s_line in so_line:
-                #     if s_line.product_id.id == rec.product_id.id and self.name == rec.origin:
-                #         s_line.mo_reference = rec.name
-
+               
         return res
 
 
 class ReportBomStructureInherit(models.AbstractModel):
     _inherit = 'report.mrp.report_bom_structure'
 
+    
     @api.model
-    def _get_bom_data(self, bom, warehouse, product=False, line_qty=False, bom_line=False, level=0, parent_bom=False,
-                      index=0, product_info=False, ignore_stock=False):
+    def _compute_current_production_capacity(self, bom_data):
+        # Get the maximum amount producible product of the selected bom given each component's stock levels.
+        components_qty_to_produce = defaultdict(lambda: 0)
+        components_qty_available = {}
+        for comp in bom_data.get('components', []):
+            if not comp['product'].is_storable or float_is_zero(comp['base_bom_line_qty'], precision_rounding=comp['uom'].rounding):
+                continue
+            components_qty_to_produce[comp['product_id']] += comp['base_bom_line_qty']
+            components_qty_available[comp['product_id']] = comp['free_to_manufacture_qty']
+        producibles = [float_round(components_qty_available[p_id] / qty, precision_digits=0, rounding_method='DOWN') for p_id, qty in components_qty_to_produce.items()]
+        return min(producibles) * bom_data['bom']['product_qty'] if producibles else 0
+
+    
+    @api.model
+    def _get_bom_data(self, bom, warehouse, product=False, line_qty=False, bom_line=False, level=0, parent_bom=False, parent_product=False, index=0, product_info=False, ignore_stock=False, simulated_leaves_per_workcenter=False):
         """ Gets recursively the BoM and all its subassemblies and computes availibility estimations for each component and their disponibility in stock.
             Accepts specific keys in context that will affect the data computed :
             - 'minimized': Will cut all data not required to compute availability estimations.
@@ -304,14 +242,12 @@ class ReportBomStructureInherit(models.AbstractModel):
         is_minimized = self.env.context.get('minimized', False)
         if not product:
             product = bom.product_id or bom.product_tmpl_id.product_variant_id
-        if not line_qty:
+        if line_qty is False:
             line_qty = bom.product_qty
-
         if not product_info:
             product_info = {}
-        key = product.id
-        if key not in product_info:
-            product_info[key] = {'consumptions': {'in_stock': 0}}
+        if simulated_leaves_per_workcenter is False:
+            simulated_leaves_per_workcenter = defaultdict(list)
 
         company = bom.company_id or self.env.company
         current_quantity = line_qty
@@ -319,34 +255,29 @@ class ReportBomStructureInherit(models.AbstractModel):
             current_quantity = bom_line.product_uom_id._compute_quantity(line_qty, bom.product_uom_id) or 0
 
         prod_cost = 0
-        attachment_ids = []
+        has_attachments = []
+
         if not is_minimized:
             if product:
-                prod_cost = product.uom_id._compute_price(product.with_company(company).standard_price,
-                                                          bom.product_uom_id) * current_quantity
-                attachment_ids = self.env['mrp.document'].search(['|', '&', ('res_model', '=', 'product.product'),
-                                                                  ('res_id', '=', product.id), '&',
-                                                                  ('res_model', '=', 'product.template'),
-                                                                  ('res_id', '=', product.product_tmpl_id.id)]).ids
+                prod_cost = product.uom_id._compute_price(product.with_company(company).standard_price, bom.product_uom_id) * current_quantity
+                has_attachments = self.env['product.document'].search_count(['&', '&', ('attached_on_mrp', '=', 'bom'), ('active', '=', 't'), '|', '&', ('res_model', '=', 'product.product'),
+                                                                 ('res_id', '=', product.id), '&', ('res_model', '=', 'product.template'),
+                                                                 ('res_id', '=', product.product_tmpl_id.id)], limit=1) > 0
             else:
                 # Use the product template instead of the variant
-                prod_cost = bom.product_tmpl_id.uom_id._compute_price(
-                    bom.product_tmpl_id.with_company(company).standard_price, bom.product_uom_id) * current_quantity
-                attachment_ids = self.env['mrp.document'].search(
-                    [('res_model', '=', 'product.template'), ('res_id', '=', bom.product_tmpl_id.id)]).ids
+                prod_cost = bom.product_tmpl_id.uom_id._compute_price(bom.product_tmpl_id.with_company(company).standard_price, bom.product_uom_id) * current_quantity
+                has_attachments = self.env['product.document'].search_count(['&', '&', ('attached_on_mrp', '=', 'bom'), ('active', '=', 't'),
+                                                                    '&', ('res_model', '=', 'product.template'), ('res_id', '=', bom.product_tmpl_id.id)], limit=1) > 0
 
+        key = product.id
         bom_key = bom.id
-        if not product_info[key].get(bom_key):
-            product_info[key][bom_key] = self.with_context(product_info=product_info,
-                                                           parent_bom=parent_bom)._get_resupply_route_info(warehouse,
-                                                                                                           product,
-                                                                                                           current_quantity,
-                                                                                                           bom)
+        qty_product_uom = bom.product_uom_id._compute_quantity(current_quantity, product.uom_id or bom.product_tmpl_id.uom_id)
+        self._update_product_info(product, bom_key, product_info, warehouse, qty_product_uom, bom=bom, parent_bom=parent_bom, parent_product=parent_product)
         route_info = product_info[key].get(bom_key, {})
         quantities_info = {}
         if not ignore_stock:
             # Useless to compute quantities_info if it's not going to be used later on
-            quantities_info = self._get_quantities_info(product, bom.product_uom_id, parent_bom, product_info)
+            quantities_info = self._get_quantities_info(product, bom.product_uom_id, product_info, parent_bom, parent_product)
         workorder_list = []
         for line in bom.operation_ids:
             workorder_list.append({'name':line.name,
@@ -384,58 +315,75 @@ class ReportBomStructureInherit(models.AbstractModel):
             'prod_cost': prod_cost,
             'bom_cost': 0,
             'level': level or 0,
-            'attachment_ids': attachment_ids,
+            'has_attachments': has_attachments,
             'phantom_bom': bom.type == 'phantom',
             'parent_id': parent_bom and parent_bom.id or False,
             'workorder_ids' : workorder_list
         }
 
-        if not is_minimized:
-            operations = self._get_operation_line(product, bom, float_round(current_quantity, precision_rounding=1,
-                                                                            rounding_method='UP'), level + 1, index)
-            bom_report_line['operations'] = operations
-            bom_report_line['operations_cost'] = sum([op['bom_cost'] for op in operations])
-            bom_report_line['operations_time'] = sum([op['quantity'] for op in operations])
-            bom_report_line['bom_cost'] += bom_report_line['operations_cost']
-
         components = []
+        no_bom_lines = self.env['mrp.bom.line']
+        line_quantities = {}
+        for line in bom.bom_line_ids:
+            if product and line._skip_bom_line(product):
+                continue
+            line_quantity = (current_quantity / (bom.product_qty or 1.0)) * line.product_qty
+            line_quantities[line.id] = line_quantity
+            if not line.child_bom_id:
+                no_bom_lines |= line
+                # Update product_info for all the components before computing closest forecasted.
+                qty_product_uom = line.product_uom_id._compute_quantity(line_quantity, line.product_id.uom_id)
+                self._update_product_info(line.product_id, bom.id, product_info, warehouse, qty_product_uom, bom=False, parent_bom=bom, parent_product=product)
+        components_closest_forecasted = self._get_components_closest_forecasted(no_bom_lines, line_quantities, bom, product_info, product, ignore_stock)
         for component_index, line in enumerate(bom.bom_line_ids):
             new_index = f"{index}{component_index}"
             if product and line._skip_bom_line(product):
                 continue
-            line_quantity = (current_quantity / (bom.product_qty or 1.0)) * line.product_qty
+            line_quantity = line_quantities.get(line.id, 0.0)
             if line.child_bom_id:
-                component = self.with_context(parent_product_id=product.id)._get_bom_data(line.child_bom_id, warehouse,
-                                                                                          line.product_id,
-                                                                                          line_quantity, bom_line=line,
-                                                                                          level=level + 1,
-                                                                                          parent_bom=bom,
-                                                                                          index=new_index,
-                                                                                          product_info=product_info,
-                                                                                          ignore_stock=ignore_stock)
+                component = self._get_bom_data(line.child_bom_id, warehouse, line.product_id, line_quantity, bom_line=line, level=level + 1, parent_bom=bom,
+                                               parent_product=product, index=new_index, product_info=product_info, ignore_stock=ignore_stock,
+                                               simulated_leaves_per_workcenter=simulated_leaves_per_workcenter)
             else:
-                component = self.with_context(parent_product_id=product.id)._get_component_data(bom, warehouse, line,
-                                                                                                line_quantity,
-                                                                                                level + 1, new_index,
-                                                                                                product_info,
-                                                                                                ignore_stock)
-            components.append(component)
+                component = self.with_context(
+                    components_closest_forecasted=components_closest_forecasted,
+                )._get_component_data(bom, product, warehouse, line, line_quantity, level + 1, new_index, product_info, ignore_stock)
+            for component_bom in components:
+                if component['product_id'] == component_bom['product_id'] and component['uom'].id == component_bom['uom'].id:
+                    self._merge_components(component_bom, component)
+                    break
+            else:
+                components.append(component)
             bom_report_line['bom_cost'] += component['bom_cost']
         bom_report_line['components'] = components
-        bom_report_line['producible_qty'] = self._compute_current_production_capacity(bom_report_line)
+        # bom_report_line['producible_qty'] = self._compute_current_production_capacity(bom_report_line)
+
+        availabilities = self._get_availabilities(product, current_quantity, product_info, bom_key, quantities_info, level, ignore_stock, components, report_line=bom_report_line)
+        # in case of subcontracting, lead_time will be calculated with components availability delay
+        bom_report_line['lead_time'] = route_info.get('lead_time', False)
+        bom_report_line['manufacture_delay'] = route_info.get('manufacture_delay', False)
+        bom_report_line.update(availabilities)
 
         if not is_minimized:
-            byproducts, byproduct_cost_portion = self._get_byproducts_lines(product, bom, current_quantity, level + 1,
-                                                                            bom_report_line['bom_cost'], index)
+
+            operations = self._get_operation_line(product, bom, float_round(current_quantity, precision_rounding=1, rounding_method='UP'), level + 1, index, bom_report_line, simulated_leaves_per_workcenter)
+            bom_report_line['operations'] = operations
+            bom_report_line['operations_cost'] = sum(op['bom_cost'] for op in operations)
+            bom_report_line['operations_time'] = sum(op['quantity'] for op in operations)
+            bom_report_line['operations_delay'] = max((op['availability_delay'] for op in operations), default=0)
+            if 'simulated' in bom_report_line:
+                bom_report_line['availability_state'] = 'estimated'
+                max_component_delay = bom_report_line['max_component_delay']
+                bom_report_line['availability_delay'] = max_component_delay + max(bom.produce_delay, bom_report_line['operations_delay'])
+                bom_report_line['availability_display'] = self._format_date_display(bom_report_line['availability_state'], bom_report_line['availability_delay'])
+            bom_report_line['bom_cost'] += bom_report_line['operations_cost']
+
+            byproducts, byproduct_cost_portion = self._get_byproducts_lines(product, bom, current_quantity, level + 1, bom_report_line['bom_cost'], index)
             bom_report_line['byproducts'] = byproducts
             bom_report_line['cost_share'] = float_round(1 - byproduct_cost_portion, precision_rounding=0.0001)
             bom_report_line['byproducts_cost'] = sum(byproduct['bom_cost'] for byproduct in byproducts)
             bom_report_line['byproducts_total'] = sum(byproduct['quantity'] for byproduct in byproducts)
             bom_report_line['bom_cost'] *= bom_report_line['cost_share']
-
-        availabilities = self._get_availabilities(product, current_quantity, product_info, bom_key, quantities_info,
-                                                  level, ignore_stock, components)
-        bom_report_line.update(availabilities)
 
         if level == 0:
             # Gives a unique key for the first line that indicates if product is ready for production right now.
@@ -443,39 +391,25 @@ class ReportBomStructureInherit(models.AbstractModel):
         return bom_report_line
 
     @api.model
-    def _get_component_data(self, parent_bom, warehouse, bom_line, line_quantity, level, index, product_info,
-                            ignore_stock=False):
+    def _get_component_data(self, parent_bom, parent_product, warehouse, bom_line, line_quantity, level, index, product_info, ignore_stock=False):
         company = parent_bom.company_id or self.env.company
-        key = bom_line.product_id.id
-        if key not in product_info:
-            product_info[key] = {'consumptions': {'in_stock': 0}}
-
-        price = bom_line.product_id.uom_id._compute_price(bom_line.product_id.with_company(company).standard_price,
-                                                          bom_line.product_uom_id) * line_quantity
+        price = bom_line.product_id.uom_id._compute_price(bom_line.product_id.with_company(company).standard_price, bom_line.product_uom_id) * line_quantity
         rounded_price = company.currency_id.round(price)
 
+        key = bom_line.product_id.id
         bom_key = parent_bom.id
-        if not product_info[key].get(bom_key):
-            product_info[key][bom_key] = self.with_context(product_info=product_info,
-                                                           parent_bom=parent_bom)._get_resupply_route_info(warehouse,
-                                                                                                           bom_line.product_id,
-                                                                                                           line_quantity)
         route_info = product_info[key].get(bom_key, {})
 
         quantities_info = {}
         if not ignore_stock:
             # Useless to compute quantities_info if it's not going to be used later on
-            quantities_info = self._get_quantities_info(bom_line.product_id, bom_line.product_uom_id, parent_bom,
-                                                        product_info)
-        availabilities = self._get_availabilities(bom_line.product_id, line_quantity, product_info, bom_key,
-                                                  quantities_info, level, ignore_stock)
+            quantities_info = self._get_quantities_info(bom_line.product_id, bom_line.product_uom_id, product_info, parent_bom, parent_product)
+        availabilities = self._get_availabilities(bom_line.product_id, line_quantity, product_info, bom_key, quantities_info, level, ignore_stock, bom_line=bom_line)
 
-        attachment_ids = []
+        has_attachments = False
         if not self.env.context.get('minimized', False):
-            attachment_ids = self.env['mrp.document'].search(
-                ['|', '&', ('res_model', '=', 'product.product'), ('res_id', '=', bom_line.product_id.id),
-                 '&', ('res_model', '=', 'product.template'),
-                 ('res_id', '=', bom_line.product_id.product_tmpl_id.id)]).ids
+            has_attachments = self.env['product.document'].search_count(['&', ('attached_on_mrp', '=', 'bom'), '|', '&', ('res_model', '=', 'product.product'), ('res_id', '=', bom_line.product_id.id),
+                                                              '&', ('res_model', '=', 'product.template'), ('res_id', '=', bom_line.product_id.product_tmpl_id.id)]) > 0
 
         return {
             'type': 'component',
@@ -514,14 +448,16 @@ class ReportBomStructureInherit(models.AbstractModel):
             'availability_delay': availabilities['availability_delay'],
             'parent_id': parent_bom.id,
             'level': level or 0,
-            'attachment_ids': attachment_ids,
+            'has_attachments': has_attachments,
         }
+        
+        
+        
     @api.model
     def _get_bom_array_lines(self, data, level, unfolded_ids, unfolded, parent_unfolded=True):
         bom_lines = data['components']
         lines = []
         for bom_line in bom_lines:
-            print(bom_line,'gdskjds')
             line_unfolded = ('bom_' + str(bom_line['index'])) in unfolded_ids
             line_visible = level == 1 or unfolded or parent_unfolded
             lines.append({
@@ -551,8 +487,7 @@ class ReportBomStructureInherit(models.AbstractModel):
                 'visible': line_visible,
             })
             if bom_line.get('components'):
-                lines += self._get_bom_array_lines(bom_line, level + 1, unfolded_ids, unfolded,
-                                                   line_visible and line_unfolded)
+                lines += self._get_bom_array_lines(bom_line, level + 1, unfolded_ids, unfolded, line_visible and line_unfolded)
 
         if data['operations']:
             lines.append({
@@ -573,6 +508,9 @@ class ReportBomStructureInherit(models.AbstractModel):
                     'uom': _('minutes'),
                     'bom_cost': operation['bom_cost'],
                     'level': level + 1,
+                    'availability_state': operation['availability_state'],
+                    'availability_delay': operation['availability_delay'],
+                    'availability_display': operation['availability_display'],
                     'visible': operations_unfolded,
                 })
         if data['byproducts']:
@@ -582,7 +520,6 @@ class ReportBomStructureInherit(models.AbstractModel):
                 'uom': False,
                 'quantity': data['byproducts_total'],
                 'bom_cost': data['byproducts_cost'],
-                'prod_cost_unit': data['prod_cost_unit'],
                 'level': level,
                 'visible': parent_unfolded,
             })
@@ -595,59 +532,8 @@ class ReportBomStructureInherit(models.AbstractModel):
                     'uom': byproduct['uom_name'],
                     'prod_cost': byproduct['prod_cost'],
                     'bom_cost': byproduct['bom_cost'],
-                    'prod_cost_unit': byproduct['prod_cost_unit'],
                     'level': level + 1,
                     'visible': byproducts_unfolded,
                 })
         return lines
 
-
-
-# class MrpAbstractWorkorderInherit(models.AbstractModel):
-#     _inherit = "mrp.abstract.workorder"
-#
-#     def _update_finished_move(self):
-#         """ Update the finished move & move lines in order to set the finished
-#         product lot on it as well as the produced quantity. This method get the
-#         information either from the last workorder or from the Produce wizard."""
-#         move_line_vals = []
-#         for abstract_wo in self:
-#             production_move = abstract_wo.production_id.move_finished_ids.filtered(
-#                 lambda move: move.product_id == abstract_wo.product_id and
-#                              move.state not in ('done', 'cancel')
-#             )
-#             if not production_move:
-#                 continue
-#             if production_move.product_id.tracking != 'none':
-#                 if not abstract_wo.finished_lot_id:
-#                     raise UserError(_('You need to provide a lot for the finished product.'))
-#                 move_line = production_move.move_line_ids.filtered(
-#                     lambda line: line.lot_id.id == abstract_wo.finished_lot_id.id
-#                 )
-#                 if move_line:
-#                     if abstract_wo.product_id.tracking == 'serial':
-#                         raise UserError(_('You cannot produce the same serial number twice.'))
-#                     move_line.product_uom_qty += abstract_wo.qty_producing
-#                     move_line.qty_done += abstract_wo.qty_producing
-#                 else:
-#                     location_dest_id = production_move.location_dest_id._get_putaway_strategy(
-#                         abstract_wo.product_id).id or production_move.location_dest_id.id
-#                     move_line_vals.append({
-#                         'move_id': production_move.id,
-#                         'product_id': production_move.product_id.id,
-#                         'lot_id': abstract_wo.finished_lot_id.id,
-#                         'product_uom_qty': abstract_wo.qty_producing,
-#                         'product_uom_id': abstract_wo.product_uom_id.id,
-#                         'qty_done': abstract_wo.qty_producing,
-#                         'location_id': production_move.location_id.id,
-#                         'company_id': production_move.company_id.id,
-#                         'location_dest_id': location_dest_id,
-#                     })
-#             else:
-#                 rounding = production_move.product_uom.rounding
-#                 _logger.info("----------Manufacturing _set_quantity_done---:- %s", str(production_move))
-#                 production_move._set_quantity_done(
-#                     float_round(abstract_wo.qty_producing, precision_rounding=rounding)
-#                 )
-#         if production_move:
-#             self.env['stock.move.line'].create(move_line_vals)

@@ -19,10 +19,12 @@
                          style="line-height:10px;font-family: Calibri;text-color:black;">
                         <div>
                             <strong>
-                                <span style="font-size: 22px;"
+                                <span style="font-size: 20px;"
                                       t-field="company.partner_id.name"/>
                             </strong>
                             <br/>
+                            <br/>
+
                             <span style="font-size: 14px;" t-field="o.company_id.street"/>,
                             <t t-if="o.company_id.street1">,
                                 <span style="font-size: 14px;" t-field="o.company_id.street1"/>,
@@ -32,6 +34,7 @@
                             <t t-else="">
                                 <span style="font-size: 14px;" t-field="o.company_id.street2"/>
                             </t>
+                            <br/>
                             <br/>
                             <t t-if="o.company_id.country_id.code != 'SG'">
                                 <span style="font-size: 14px;" t-field="o.company_id.city"/>
@@ -43,6 +46,7 @@
                             -
                             <span style="font-size: 14px;" t-field="o.company_id.zip"/>
                             <br/>
+                            <br/>
                             <span style="font-size: 14px;">TEL :</span>
                             <span style="font-size: 14px;" t-field="o.company_id.phone"/>
                             <t t-if="o.company_id.fax">
@@ -51,6 +55,7 @@
                                 <span style="font-size: 14px;" t-field="o.company_id.fax"/>
                             </t>
                             <br/>
+                            <br/>
                             <t style="font-size: 14px;" t-if="o.company_id.country_id.code != 'SG'">
                                 <span style="font-size: 14px;">E-mail:</span>
                                 <span style="font-size: 14px;" t-field="o.company_id.email"/>
@@ -58,6 +63,7 @@
                             </t>
                             <span style="font-size: 14px;">URL:</span>
                             <span style="font-size: 14px;" t-field="o.company_id.website"/>
+                            <br/>
                             <br/>
                             <span style="font-size: 14px;">Company Reg No:</span>
                             <span style="font-size: 14px;" t-field="o.company_id.company_registry"/>
@@ -103,10 +109,10 @@
                 </tr>
 
             </table>
-            <t t-if="o.company_id.country_id.code == 'SG'">
-                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_four)" alt="Logo"
-                     style="position:relative; bottom:54px; left:730px; width:130px;"/>
-            </t>
+
+            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_four)" alt="Logo"
+                 style="position:relative; bottom:54px; left:730px; width:130px;"/>
+
             <div style="text-align:right">
 
                 <span>user:</span>
@@ -130,24 +136,35 @@
             <div class="row" style="bottom:1px;top:1px">
                 <div class="col-8">
                     <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                    <br/>
+                    <br/>
                     <div class="company_address"
                          style="line-height:5px;font-size: 10px;font-family: Calibri;ftext-color:black;">
                         <div>
                             <strong>
-                                <span style="font-size: 22px;"
+                                <span style="font-size: 20px;"
                                       t-field="company.partner_id.name"/>
                             </strong>
                             <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+
                             <span style="font-size: 14px;" t-field="o.company_id.street"/>,
                             <t t-if="o.company_id.street1">
                                 <span style="font-size: 14px;" t-field="o.company_id.street1"/>,
 
+                                <br/>
+                                <br/>
                                 <br/>
                                 <span style="font-size: 14px;" t-field="o.company_id.street2"/>,
                             </t>
                             <t t-else="">
                                 <span style="font-size: 14px;" t-field="o.company_id.street2"/>,
                             </t>
+                            <br/>
+                            <br/>
+                            <br/>
                             <br/>
                             <t t-if="o.company_id.country_id.code != 'SG'">
                                 <span style="font-size: 14px;" t-field="o.company_id.city"/>
@@ -159,6 +176,9 @@
                             -
                             <span style="font-size: 14px;" t-field="o.company_id.zip"/>
                             <br/>
+                            <br/>
+                            <br/>
+                            <br/>
                             <span style="font-size: 14px;">TEL :</span>
                             <span style="font-size: 14px;" t-field="o.company_id.phone"/>
                             <t t-if="o.company_id.fax">
@@ -167,6 +187,9 @@
                                 <span style="font-size: 14px;" t-field="o.company_id.fax"/>
                             </t>
                             <br/>
+                            <br/>
+                            <br/>
+                            <br/>
                             <t t-if="o.company_id.country_id.code != 'SG'">
                                 <span style="font-size: 14px;">E-mail:</span>
                                 <span style="font-size: 14px;" t-field="o.company_id.email"/>
@@ -174,6 +197,9 @@
                             </t>
                             <span style="font-size: 14px;">URL:</span>
                             <span style="font-size: 14px;" t-field="o.company_id.website"/>
+                            <br/>
+                            <br/>
+                            <br/>
                             <br/>
                             <span style="font-size: 14px;">Company Reg No:</span>
                             <span style="font-size: 14px;" t-field="o.company_id.company_registry"/>
@@ -205,13 +231,16 @@
                         **This is a computer generated document. Signature is not required.**
                     </span>
                     <br/>
-                    <span>NOTE : ALL ITEM MUST BE COMPLY TO REACH REGULATION PER 147301, REACH ANNEX XVII,CONFLICT MINERALS LAW AND CONFLICT - FREE SMELTER
-                    <br/>
-                       REQUIREMENTS OF ALL SUPPLIED PARTS.THE SUPPLIER SHALL PROVIDE DOCUMENTATION AND CERTIFICATION OF SUCH COMPLIANCE UPON REQUEST.
+                    <span>NOTE : ALL ITEM MUST BE COMPLY TO REACH REGULATION PER 147301, REACH ANNEX XVII,CONFLICT
+                        MINERALS LAW AND CONFLICT - FREE SMELTER
+                        <br/>
+                        REQUIREMENTS OF ALL SUPPLIED PARTS.THE SUPPLIER SHALL PROVIDE DOCUMENTATION AND CERTIFICATION OF
+                        SUCH COMPLIANCE UPON REQUEST.
                     </span>
                     <br/>
                     <span>
-                        - PLEASE ADHERE TO OUR PO REQUEST DATE UNLESS WE REQUEST A PULL IN. DO NOT DELIVER AHEAD OF SCHEDULE.
+                        - PLEASE ADHERE TO OUR PO REQUEST DATE UNLESS WE REQUEST A PULL IN. DO NOT DELIVER AHEAD OF
+                        SCHEDULE.
                         <br/>
                         - PLEASE SIGN &amp; REPLY BY EMAIL TO ACKNOWLEDGE ACCEPTANCE OF ORDER SCHEDULE.
                         <!-- <br/> -->
@@ -228,10 +257,10 @@
                     <br/>
                     <span>Supplier's Acceptance &amp; Confirmation</span>
                     <div style="text-align:center;">
-                        <t t-if="o.company_id.country_id.code == 'SG'">
-                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_two)" alt="Logo"
-                                 style="width:100px;position:relative;"/>
-                        </t>
+
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_two)" alt="Logo"
+                             style="width:100px;position:relative;"/>
+
                     </div>
                 </div>
             </div>
@@ -388,7 +417,7 @@
 
                                             <td class="text-center">
                                                 <span t-field="line.requested_date_line"
-                                                      t-options='{"format":"dd-MMM-yyyy"}'/>
+                                                      t-options='{"format":"dd-MM-yyyy"}'/>
                                             </td>
                                             <td class="text-right">
                                                 <span t-field="line.price_unit"/>
@@ -556,11 +585,11 @@
                                     <strong>
                                         <t t-if="o.state in ('draft','sent')">
                                             <span t-field="o.date_order"
-                                                  t-options='{"format": "dd-MMM-yyyy"}'/>
+                                                  t-options='{"format": "dd-MM-yyyy"}'/>
                                         </t>
                                         <t t-if="o.state in ('purchase','done')">
                                             <span t-field="o.date_approve"
-                                                  t-options='{"format": "dd-MMM-yyyy"}'/>
+                                                  t-options='{"format": "dd-MM-yyyy"}'/>
                                         </t>
                                     </strong>
                                 </span>
@@ -587,16 +616,34 @@
                             <thead>
                                 <tr style="text-size:13px;width:100%">
                                     <t t-set="colspan" t-value="5"/>
-                                    <th class="text-left" style="width:5%">NO</th>
-                                    <th class="text-left" style="width:15%">PECKO PART NUMBER</th>
-                                    <th class="text-left" style="width:15%">PART NUMBER</th>
-                                    <th class="text-left" style="width:15%">DESCRIPTION</th>
-                                    <th class="text-left" style="width:19%">MANUFACTURER</th>
-                                    <th class="text-left" style="width:12%">QUANTITY</th>
-                                    <th class="text-center" style="width:13%">ETA DATE</th>
-                                    <th class="text-right" style="width:10%">PRICE</th>
+                                    <th class="text-left" style="width:5%">
+                                        <b>NO</b>
+                                    </th>
+                                    <th class="text-left" style="width:15%">
+                                        <b>PECKO PART NUMBER</b>
+                                    </th>
+                                    <th class="text-left" style="width:15%">
+                                        <b>PART NUMBER</b>
+                                    </th>
+                                    <th class="text-left" style="width:15%">
+                                        <b>DESCRIPTION</b>
+                                    </th>
+                                    <th class="text-left" style="width:19%">
+                                        <b>MANUFACTURER</b>
+                                    </th>
+                                    <th class="text-left" style="width:12%">
+                                        <b>QUANTITY</b>
+                                    </th>
+                                    <th class="text-center" style="width:13%">
+                                        <b>ETA DATE</b>
+                                    </th>
+                                    <th class="text-right" style="width:10%">
+                                        <b>PRICE</b>
+                                    </th>
                                     <t t-if="o.amount_tax>0">
-                                        <th class="text-right" style="width:10%">TAXES</th>
+                                        <th class="text-right" style="width:10%">
+                                            <b>TAXES</b>
+                                        </th>
                                     </t>
                                     <th class="text-end" style="width:15%">
                                         <t groups="account.group_show_line_subtotals_tax_excluded"
@@ -646,7 +693,7 @@
 
                                             <td class="text-center" style="background-color: #f4f4f5;">
                                                 <span t-field="line.date_planned"
-                                                      t-options='{"format":"dd-MMM-yyyy"}'/>
+                                                      t-options='{"format":"dd-MM-yyyy"}'/>
                                             </td>
                                             <td class="text-right" style="background-color: #f4f4f5;">
                                                 <span t-field="line.price_unit"/>
@@ -680,7 +727,7 @@
                                     <tr style="width=100%">
                                         <td></td>
                                         <td colspan="99">
-                                            <span t-field="line.notes"/>
+                                            <span t-field="o.notes"/>
                                         </td>
                                     </tr>
                                     <t t-set="i" t-value="i+1"/>
@@ -718,14 +765,7 @@
                             </div>
                         </div>
                         <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <br/>
+
                     </div>
                     <t t-if="o.company_id.country_id.code != 'SG'">
                         <table width="100%" class="table table-borderless"
@@ -753,9 +793,6 @@
                             </tbody>
                         </table>
                     </t>
-                    <br/>
-                    <br/>
-                    <br/>
                     <br/>
                 </div>
             </t>
@@ -797,7 +834,9 @@
         <field name="report_name">sale.report_saleorder</field>
         <field name="report_file">sale.report_saleorder</field>
         <field name="binding_model_id" ref="model_sale_order"/>
-        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)</field>
+        <field name="print_report_name">
+            [('draft', 'sent')].count(object.state) and ('Quotation - %s' % object.name) or ('Order - %s' % object.name)
+        </field>
         <field name="binding_type">report</field>
         <field name="paperformat_id" ref="pecko_so_po_report.paperformat_so"/>
     </record>
@@ -808,7 +847,9 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">purchase.report_purchaseorder</field>
         <field name="report_file">purchase.report_purchaseorder</field>
-        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or 'Purchase Order - %s' % (object.name))</field>
+        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Request for Quotation - %s' %
+            (object.name) or 'Purchase Order - %s' % (object.name))
+        </field>
         <field name="binding_model_id" ref="model_purchase_order"/>
         <field name="binding_type">report</field>
         <field name="paperformat_id" ref="pecko_so_po_report.paperformat_po"/>

@@ -9,13 +9,12 @@ class PurchaseorderLine(models.Model):
         return number % divisor == 0
 
     @api.model
-    def _prepare_purchase_order_line_from_procurement(self, product_id, product_qty, product_uom, company_id, values, po):
+    def _prepare_purchase_order_line_from_procurement(self, product_id, product_qty, product_uom, location_dest_id, name, origin, company_id, values, po):
         line_description = ''
-        print(product_uom.name, "product_uomppppppp")
         if values.get('product_description_variants'):
             line_description = values['product_description_variants']
         supplier = values.get('supplier')
-        # customised by PPTS 
+        # customised by PPTS
         # Purpose:- The quantity of purchase order should be based on minimum quantity in Vendor/Supplier under 'products'.
         ###############################################################################################
         if supplier.min_qty > 0:
@@ -29,13 +28,12 @@ class PurchaseorderLine(models.Model):
                     if product_uom != product_id.uom_po_id:
                         product_uom = product_id.uom_po_id
             if qty < supplier.min_qty:
-                # qty = 
                 product_qty = supplier.min_qty
                 if product_uom != product_id.uom_po_id:
                     product_uom = product_id.uom_po_id
 
         ###############################################################################################
-        res = self._prepare_purchase_order_line(product_id, product_qty, product_uom, company_id, supplier, po)
+        res = self._prepare_purchase_order_line(product_id, product_qty,product_uom , company_id, supplier, po)
         # We need to keep the vendor name set in _prepare_purchase_order_line. To avoid redundancy
         # in the line name, we add the line_description only if different from the product name.
         # This way, we shoud not lose any valuable information.

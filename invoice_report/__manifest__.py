@@ -2,7 +2,7 @@
 
 {
     'name': 'Invoice Report',
-    'version': '12.0',
+    'version': '18.0',
     'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
     'category': 'Account',
@@ -16,4 +16,5 @@
     'installable': True,
     'application': True,
     'auto_install': False,
+    'license': 'LGPL-3',
 }

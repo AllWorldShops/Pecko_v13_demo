@@ -5,7 +5,7 @@
         <field name="model">res.company</field>
         <field name="inherit_id" ref="base.view_company_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='favicon']" position="after">
+            <xpath expr="//field[@name='color']" position="after">
                 <field name="location_ids" widget="many2many_tags"/>
             </xpath>
 

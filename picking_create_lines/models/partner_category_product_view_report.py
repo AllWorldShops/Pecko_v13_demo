@@ -43,7 +43,7 @@ class PartnerCategoryProductViewReport(models.Model):
                 'name': _('Partner Category Product View Report'),
                 'res_model': 'partner.category.product.view.report',
                 'type': 'ir.actions.act_window',
-                'view_mode': 'tree',
+                'view_mode': 'list',
                 'target': 'current',
             }
         else:

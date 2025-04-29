@@ -22,34 +22,26 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="attn" domain="[('parent_id', '=', partner_id)]"/>
             </xpath>
-            <!-- <xpath expr="//button[@name='action_confirm']" position="after">
-                 <button name="action_update_mo" id="action_update_mo" string="Update MO" class="btn-primary" type="object" groups="base.group_no_one"/>
-            </xpath> -->
-            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']"
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/list/field[@name='product_id']"
                    position="replace">
                 <field name="product_id" string="Pecko Part Number"
                        domain="[('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]"/>
             </xpath>
-            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']"
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/list/field[@name='product_id']"
                    position="after">
                 <field name="customer_part_no" string="Customer Part Number"/>
             </xpath>
-            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']"
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/list/field[@name='product_id']"
                    position="before">
                 <field name="line_no"/>
             </xpath>
-            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='price_unit']"
+            <xpath expr="//form/sheet/notebook/page/field[@name='order_line']/list/field[@name='price_unit']"
                    position="after">
                 <field name="requested_date_line"/>
                 <field name="need_date" optional="hide"/>
                 <field name="promised_date" optional="hide"/>
             </xpath>
-            <!--	<xpath expr="//form/sheet/notebook/page/field[@name='order_line'/form/group/group[1]/field[@name='product_id']" position="replace">
-                <field name="product_id" string="Pecko Part Number"/>
-            </xpath>
-            <xpath expr="//form/sheet/notebook/page/field[@name='order_line'/form/group/group[1]/field[@name='product_id']" position="after">
-                <field name="customer_part_no" string="Customer Part Number"/>
-            </xpath>-->
+
             <xpath expr="//field[@name='effective_date']" position="replace">
             </xpath>
             <xpath expr="//field[@name='origin']" position="after">
@@ -71,7 +63,7 @@
         <field name="model">sale.order.line</field>
         <field name="priority">2</field>
         <field name="arch" type="xml">
-            <tree string="Sale Order Lines" default_order='order_ref desc'>
+            <list string="Sale Order Lines" default_order='order_ref desc'>
                 <field name="order_ref" string="Order Reference"/>
                 <field name="line_no" string="Position"/>
                 <field name="customer_id" string="Customer"/>
@@ -96,7 +88,7 @@
                 <field name="need_date"/>
                 <field name="promised_date"/>
                 <field name="price_subtotal" string="Subtotal"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -122,11 +114,12 @@
         <field name="arch" type="xml">
             <xpath expr="//search/field[@name='partner_id']" position="after">
                 <field name="customer_po_no"/>
-            </xpath>
-            <xpath expr="//search/field[@name='analytic_account_id']" position="after">
                 <field name="order_line" string="Customer Part Number "
                        filter_domain="[('order_line.product_id.customer_part_number', 'ilike', self)]"/>
             </xpath>
+<!--            <xpath expr="//search/field[@name='analytic_account_id']" position="after">-->
+<!--                />-->
+<!--            </xpath>-->
         </field>
     </record>
 
@@ -135,7 +128,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">sale.order.line</field>
         <field name="view_id" ref="custom_sale_order.view_sale_order_line_inherited"/>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <menuitem id="action_sale_lines_menu_id" name="Sale Lines" action="custom_sale_order.action_sale_lines_menu"

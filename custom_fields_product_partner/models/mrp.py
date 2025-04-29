@@ -1,7 +1,4 @@
-
-from odoo import models, fields, api, _
-from datetime import datetime, date
-
+from odoo import models, fields
 
 class MrpBom(models.Model):
     _inherit = 'mrp.bom'
@@ -12,7 +9,7 @@ class MrpBom(models.Model):
     x_studio_field_E1iTU = fields.Selection(
         [('Please Select', 'Please Select'), ('Confirmed', 'Confirmed'), ('Not Confirmed', 'Not Confirmed')],
         string='Verification Status')
-    project = fields.Char(string='Project')
+    project = fields.Char(string='Project', related='product_tmpl_id.project')
 
 
 class MrpBomLine(models.Model):
@@ -38,12 +35,6 @@ class Warehouse(models.Model):
     x_studio_field_0zbIN = fields.Selection(
         [('PECKO CN - Raw Materials', 'PECKO CN - Raw Materials'), ('PECKO CN - Production', 'PECKO CN - Production'),
          ('PECKO CN - Finished Goods', 'PECKO CN - Finished Goods')], string='Kanban Seq.')
-
-
-# class MrpRouting(models.Model):
-#     _inherit = 'mrp.routing'
-#
-#     x_code = fields.Char(string='Code')
 
 
 class MrpRoutingWorkcenter(models.Model):

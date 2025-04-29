@@ -1,87 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	<record id="view_picking_form_inherit" model="ir.ui.view">
+
+    <record id="view_picking_tree_inherit" model="ir.ui.view">
+        <field name="name">stock.move.line.inherit.search</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//list//field[@name='product_id']" position="before">
+                <field name="position_no" readonly="1"/>
+            </xpath>
+            <xpath expr="//list//field[@name='lot_name']" position="before">
+                <field name="part_no" string="Customer / Manufacturer Part Number"/>
+                <field name="location_id"/>
+                <field name="package_id"/>
+                <field name="result_package_id"/>
+                <field name="owner_id"/>
+                <field name="lot_id"/>
+                <field name="product_uom_qty"/>
+                <field name="product_uom_id" readonly="1"/>
+<!--				commented by gowtham-->
+<!--									<field name="reserved_uom_qty" readonly="1"/>-->
+                <field name="qty_done"/>
+
+            </xpath>
+
+
+        </field>
+    </record>
+
+
+
+     <record id="inherit_stock_backorder_confirmation" model="ir.ui.view">
+            <field name="name">stock.backorder.confirmation.inherit</field>
+            <field name="model">stock.backorder.confirmation</field>
+            <field name="inherit_id" ref="stock.view_backorder_confirmation"/>
+            <field name="arch" type="xml">
+                <!-- Hide the "No Backorder" button -->
+                <xpath expr="//button[@name='process_cancel_backorder']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+    <record id="view_picking_form_inherit" model="ir.ui.view">
         <field name="name">stock.picking.inherit.form</field>
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
-			
-			<xpath expr="//field[@name='quantity_done']" position="attributes">
-				<attribute name="attrs">{'column_invisible': ['|',('parent.picking_type_code', 'in',['outgoing']),('parent.state', '=', 'draft'), ('parent.immediate_transfer', '=', False)]}</attribute>
-			</xpath>
-			
+            <!--			gowth-->
+            <!--			<xpath expr="//field[@name='quantity_done']" position="attributes">-->
+            <!--				<attribute name="attrs">{'column_invisible': ['|',('parent.picking_type_code', 'in',['outgoing']),('parent.state', '=', 'draft'), ('parent.immediate_transfer', '=', False)]}</attribute>-->
+            <!--			</xpath>-->
+
             <xpath expr="//field[@name='origin']" position="after">
                 <field name="carrier"/>
-                <field name="customer_po_no" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
-                <field name="packing_slip" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+                <field name="customer_po_no" invisible="picking_type_code != 'outgoing'"/>
+                <field name="packing_slip" invisible="picking_type_code != 'incoming'"/>
+            </xpath>
+            <xpath expr="//field[@name='move_ids_without_package']//list//field[@name='product_id']" position="after">
+                <field name="customer_part_no" string="Part Number"/>
             </xpath>
 
-            <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='product_id']" position="after">
-				<field name="customer_part_no" string="Part Number" />
-			</xpath>
+            <xpath expr="//field[@name='move_ids_without_package']//list//field[@name='description_picking']"
+                   position="after">
+                <field name="additional_notes" readonly="1"/>
+            </xpath>
 
-			 <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='description_picking']" position="after">
-				<field name="additional_notes" readonly="1"/>
-			</xpath>
-			
-<!--			<xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='product_id']" position="replace">-->
-<!--				<field name="product_id" string="Pecko Part Number" required="1" attrs="{'readonly': ['|', '&amp;', ('state', '!=', 'draft'), ('additional', '=', False), ('has_move_lines', '=', True)]}"/>-->
-<!--			</xpath>-->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="attn" domain="[('parent_id', '=', partner_id)]" invisible="1"/>
+            </xpath>
 
-			<xpath expr="//field[@name='partner_id']" position="after">
-				<field name="attn" domain="[('parent_id', '=', partner_id)]" invisible="1"/>
-			</xpath>
+            <!--			<xpath expr="//field[@name='move_line_ids_without_package']" position="inside">-->
+            <!--				<list editable="bottom" create="0">-->
+            <!--					<field name="position_no"/>-->
+            <!--					<field name="product_id" />-->
+            <!--            					<field name="part_no" string="Customer / Manufacturer Part Number" />-->
+            <!--            					<field name="location_id"/>-->
+            <!--            					<field name="package_id" />-->
+            <!--            					<field name="result_package_id" />-->
+            <!--            					<field name="company_id" force_save="1" invisible="1"/>-->
+            <!--            					<field name="owner_id"/>-->
+            <!--            					<field name="location_dest_id" invisible="1"/>-->
+            <!--            					<field name="lot_id" />-->
+            <!--            					<field name="product_uom_qty" />-->
+            <!--            					<field name="product_uom_id" readonly="1"/>-->
+            <!--            					<field name="qty_done" />-->
+            <!--				</list>-->
+            <!--			</xpath>-->
+            <xpath expr="//field[@name='move_ids_without_package']/list/field[@name='product_id']" position="before">
+                <field name="position_no"/>
+            </xpath>
 
-			<xpath expr="//field[@name='move_line_ids_without_package']" position="inside">
-				<tree editable="0" create="0">
-					<field name="position_no" />
-
-					<field name="product_id" />
-					<field name="part_no" string="Customer / Manufacturer Part Number" />
-					<field name="location_id"/>
-					<field name="package_id" />
-					<field name="result_package_id" />
-					<field name="company_id" force_save="1" invisible="1"/>
-<!--					groups="base.group_multi_company" -->
-					<field name="owner_id"/>
-
-					<field name="location_dest_id" invisible="1"/>
-					<field name="lot_id" />
-<!--					<field name="product_uom_qty" readonly="1"/>-->
-					<field name="product_uom_qty" />
-					<field name="reserved_uom_qty" readonly="1"/>
-					<field name="qty_done" />
-<!--					<field name="product_uom_id"/>-->
-				</tree>
-			</xpath>
-			<xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="before">
-					<field name="position_no" />	
-			</xpath>
-
-			<!-- <xpath expr="//field[@name='move_ids_without_package']/tree" position="attributes">
-				<attribute name="create">false</attribute>
-			</xpath> -->
-
-			<xpath expr="//field[@name='move_line_nosuggest_ids']" position="inside">
-			<tree editable="0">
-			
-						<field name="position_no" />
-<!--			           <field name="product_id" />-->
-					   <field name="part_no" string="Customer / Manufacturer Part Number" />
-                        <field name="location_dest_id"/>
-                        <field name="package_id" />
-						<field name="result_package_id" />
-<!--                        <field name="owner_id"/>-->
-						<field name="company_id" groups="base.group_multi_company" force_save="1" invisible="1"/>
-                        <field name="location_id" invisible="1"/>
-<!--						<field name="lot_id" />-->
-<!--						<field name="product_uom_qty" />-->
-                         <field name="qty_done" />
-<!--                        <field name="product_uom_id"/>-->
-                    
-                    </tree>
-				
-			</xpath>
+            <!--			<xpath expr="//field[@name='move_line_ids_without_package']" position="inside">-->
+            <!--			<list editable="bottom">-->
+            <!--						<field name="position_no" />-->
+            <!--					   <field name="part_no" string="Customer / Manufacturer Part Number" />-->
+            <!--                        <field name="location_dest_id"/>-->
+            <!--                        <field name="package_id" />-->
+            <!--						<field name="result_package_id" />-->
+            <!--						<field name="company_id" groups="base.group_multi_company" force_save="1" invisible="1"/>-->
+            <!--                        <field name="location_id" invisible="1"/>-->
+            <!--                         <field name="qty_done" />-->
+            <!--                    </list>-->
+            <!--				-->
+            <!--			</xpath>-->
         </field>
     </record>
 
@@ -93,12 +117,11 @@
             <xpath expr="//search/field[@name='origin']" position="after">
                 <field name="customer_po_no"/>
             </xpath>
-
             <xpath expr="//search/field[@name='move_line_ids']" position="after">
                 <field name="move_line_ids" string="Customer Part Number"
                        filter_domain="[('move_line_ids.product_id.customer_part_number', 'ilike', self)]"/>
             </xpath>
         </field>
     </record>
-    
+
 </odoo>

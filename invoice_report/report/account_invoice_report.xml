@@ -6,10 +6,10 @@
                 <div class="row" style="bottom:10px;top:10px">
                     <div class="col-10">
                         <!--                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" height="80" width="80"/>-->
-                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" 
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
                              alt="Logo"/>
                         <div class="company_address" style="line-height:10px;font-family: Calibri;">
-                            <div style="font-size:11px;line-height:11px">
+                            <div style="font-size:11px;line-height:16px">
                                 <strong>
                                     <span style="font-size: 25px;" t-field="company.partner_id.name"/>
                                 </strong>
@@ -76,104 +76,181 @@
 
 
             <div class="footer o_background_footer" style="font-family: Calibri;font-size:12px;">
-
-                <!-- <div > -->
-
-                <!-- </div> -->
                 <t t-if="o.company_id.country_id.code != 'SG'">
-                    <div width="100%" style="border-bottom: 1px solid black;font-size=10px;line-height:18px">
+                    <t t-if="o.company_id.country_id.code != 'SG'">
+                        <table width="100%"
+                               style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;height:15px;"
+                               class="table table-borderless">
+                            <tr style="height:5px;">
+                                <td width="25%">For Tax Purpose in MYR Only</td>
+                                <td width=""></td>
+                                <td width="10%"></td>
+                                <td width="15%" style="text-align:right;">Net Total (MYR)</td>
+                                <td width="" style="text-align:right;">:</td>
+                                <td width="15%">
+                                    <span t-esc="'%.2f'%(o.get_net_amount_report())"/>
+                                </td>
+                                <td width="15%" style="text-align:right;">Net Total (
+                                    <span t-field="o.currency_id"/>
+                                    )
+                                </td>
+                                <td width="1%" style="text-align:left;">:</td>
+                                <td width="15%" style="text-align:right;">
+                                    <span t-esc="'%.2f'%(o.amount_untaxed)"/>
+                                </td>
+                            </tr>
+                            <tr style="height:5px;">
+                                <td width="15%">1 MYR =
+                                    <span t-field="o.exchange_rate"/>
+                                    USD
+                                </td>
+                                <td width="3.3%"></td>
+                                <td width="15%"></td>
+                                <td width="15%" style="text-align:right;">Tax Amount</td>
+                                <td width="3" style="text-align:right;">:</td>
+                                <td width="15%">
+                                    <span style="padding-left:3px" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/>
+                                </td>
+                                <td width="16%" style="text-align:right;">Tax Amount</td>
+                                <td width="1%" style="text-align:left;">:</td>
+                                <td width="15%" style="text-align:right;">
+                                    <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/>
+                                </td>
+                            </tr>
+                            <tr style="height:5px">
+                                <td width="15%">Conversation Rate =
+                                    <span t-field="o.exchange_rate"/>
+                                </td>
+                                <td width="3.3%"></td>
+                                <td width="15%"></td>
+                                <td width="15%" style="text-align:right;">Grand Total (MYR)</td>
+                                <td width="3%" style="text-align:right;">:</td>
+                                <td width="15%">
+                                    <span style="padding-left:3px"
+                                          t-esc="'%.2f'%((o.amount_tax / o.exchange_rate) + o.get_net_amount_report())"/>
+                                </td>
+                                <td width="16%" style="text-align:right;">Grand Total (
+                                    <span t-field="o.currency_id"/>
+                                    )
+                                </td>
+                                <td width="1%" style="text-align:left;">:</td>
+                                <td width="15%" style="text-align:right;">
+                                    <span t-esc="'%.2f'%(o.amount_total)"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </t>
+<!--                    <p style="page-break-after:always"></p>-->
+                    <t t-if="o.company_id.country_id.code != 'SG'">
+                        <div width="100%" style="border-bottom: 1px solid black;font-size=10px;line-height:18px">
+                            <tr>
+                                <td width="85%">
+                                    **This is a computer generated document. Signature is not required.**
+                                    <br/>
+                                    1.Please remit to Pecko (M) Sdn Bhd, Swift Code: MBBEMYKL,
+                                    Maybank Islamic Berhad (MYR A/C: 551100316366);
+                                    Malayan Banking Berhad (USD A/C: 701105010725).
+                                    Swift Code: RHBBMYKL, RHB Bank Berhad (USD A/C: 60113800001626).
+                                    <br/>
+                                    2.Any discrepancy noted herein must be brought to our notice
+                                    within 7 days in writing from the date of this invoice.
+                                    <br/>
+                                    3.Title to this merchandise remains with PECKO (M) SDN BHD until
+                                    such time as full settlement of all sums due from you to us under
+                                    this invoice or otherwise is received.
+                                </td>
+                                <td width="15%">
+                                    <div style="position:relative;top:40px;">
 
-                        <tr>
-                            <td width="85%">
-                                **This is a computer generated document. Signature is not required.**
-                                <br/>
-                                1.Please remit to Pecko (M) Sdn Bhd, Swift Code: MBBEMYKL,
-                                Maybank Islamic Berhad (MYR A/C: 551100316366);
-                                Malayan Banking Berhad (USD A/C: 701105010725).
-                                Swift Code: RHBBMYKL, RHB Bank Berhad (USD A/C: 60113800001626).
-                                <br/>
-                                2.Any discrepancy noted herein must be brought to our notice
-                                within 7 days in writing from the date of this invoice.
-                                <br/>
-                                3.Title to this merchandise remains with PECKO (M) SDN BHD until
-                                such time as full settlement of all sums due from you to us under
-                                this invoice or otherwise is received.
-                            </td>
-                            <td width="15%">
+                                            <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
+                                                 style="width:110px;"/> -->
+                                            <img t-if="o.company_id.logo_three"
+                                                 t-att-src="image_data_uri(o.company_id.logo_three)"
+                                                 style="width:110px;"
+                                                 alt="Logo"/>
 
-                                <div style="position:relative;top:40px;">
-                                    <t t-if="o.company_id.country_id.code == 'SG'">
-
-                                        <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
-                                             style="width:110px;"/> -->
-                                        <img t-if="o.company_id.logo_three" t-att-src="image_data_uri(o.company_id.logo_three)" style="width:110px;"
-                             alt="Logo"/>
-                                    </t>
-                                </div>
-                            </td>
-                        </tr>
-                    </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </div>
+                    </t>
                 </t>
-                 <table style='width:100%;background:transparent;'>
-                        <tr
-                                style='background-color: white;background:transparent !important;'>
-                            <td>
-                            </td>
-                        </tr>
-                    </table>
+                <table style='width:100%;background:transparent;'>
+                    <tr
+                            style='background-color: white;background:transparent !important;'>
+                        <td>
+                        </td>
+                    </tr>
+                </table>
                 <style>
                 </style>
                 <t t-if="o.company_id.country_id.code == 'SG'">
-
                     <t t-if="o.company_id.country_id.code == 'SG'">
-                         <table width="100%"
-                           style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:px;height:15px"
-                           class="table table-borderless">
-                             <tr style="height:5px;">
-                                 <td width="25%"> For Tax Purpose in SGD Only</td>
-                                 <td width=""> </td>
-                                 <td width="10%"> </td>
-                                 <td width="15%" style="text-align:right;"> Net Total (SGD) </td>
-                                 <td width="" style="text-align:right;">:</td>
-                                 <td width="15%"><span t-esc="'%.2f'%(o.amount_untaxed * o.exchange_rate)"/></td>
-                                 <td width="15%" style="text-align:right;">  Net Total (
-                                        <span t-field="o.currency_id"/>
-                                        ) </td>
-                                 <td width="1%" style="text-align:left;">:</td>
-                                 <td width="15%" style="text-align:right;"> <span t-esc="'%.2f'%(o.amount_untaxed)"/></td>
-                             </tr>
-                              <tr style="height:5px;" >
-                                 <td width="15%" >  1 USD =
-                                        <span  t-field="o.exchange_rate"/>
-                                        SGD</td>
-                                 <td width="3.3%"> </td>
-                                 <td width="15%"> </td>
-                                 <td width="15%" style="text-align:right;">Tax Amount </td>
-                                 <td  width="5%" style="text-align:right;">:</td>
-                                 <td width="15%"> <span style="padding:8px" t-esc="'%.2f'%(o.amount_tax * o.exchange_rate)"/></td>
-                                 <td width="15%" style="text-align:right;">Tax Amount </td>
-                                 <td width="1%" style="text-align:left;">:</td>
-                                 <td width="15%" style="text-align:right;"><span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/></td>
-                             </tr>
-                              <tr style="height:5px">
-                                 <td width="15%">Conversation Rate =
-                                        <span t-field="o.exchange_rate"/>SGD</td>
-                                 <td width="3.3%"> </td>
-                                 <td width="15%"> </td>
-                                 <td width="15%" style="text-align:right;">Grand Total (SGD) </td>
-                                 <td width="5%" style="text-align:right;">:</td>
-                                 <td width="15%"> <span t-esc="'%.2f'%((o.amount_tax * o.exchange_rate) + (o.amount_untaxed * o.exchange_rate))"/></td>
-                                 <td width="15%" style="text-align:right;"> Grand Total (
-                                        <span t-field="o.currency_id"/>
-                                        ) </td>
-                                  <td width="1%" style="text-align:left;">:</td>
-                                 <td width="15%" style="text-align:right;"> <span t-esc="'%.2f'%(o.amount_total)"/></td>
-                             </tr>
-                         </table>
+                        <table width="100%"
+                               style="margin-bottom:10px;border-top: 1px solid black;border-bottom: 1px solid black;font-size:px;height:15px"
+                               class="table table-borderless">
+                            <tr style="height:5px;">
+                                <td width="25%">For Tax Purpose in SGD Only</td>
+                                <td width=""></td>
+                                <td width="10%"></td>
+                                <td width="15%" style="text-align:right;">Net Total (SGD)</td>
+                                <td width="" style="text-align:right;">:</td>
+                                <td width="15%">
+                                    <span t-esc="'%.2f'%(o.amount_untaxed * o.exchange_rate)"/>
+                                </td>
+                                <td width="15%" style="text-align:right;">Net Total (
+                                    <span t-field="o.currency_id"/>
+                                    )
+                                </td>
+                                <td width="1%" style="text-align:left;">:</td>
+                                <td width="15%" style="text-align:right;">
+                                    <span t-esc="'%.2f'%(o.amount_untaxed)"/>
+                                </td>
+                            </tr>
+                            <tr style="height:5px;">
+                                <td width="15%">1 USD =
+                                    <span t-field="o.exchange_rate"/>
+                                    SGD
+                                </td>
+                                <td width="3.3%"></td>
+                                <td width="15%"></td>
+                                <td width="15%" style="text-align:right;">Tax Amount</td>
+                                <td width="5%" style="text-align:right;">:</td>
+                                <td width="15%">
+                                    <span style="padding:8px" t-esc="'%.2f'%(o.amount_tax * o.exchange_rate)"/>
+                                </td>
+                                <td width="15%" style="text-align:right;">Tax Amount</td>
+                                <td width="1%" style="text-align:left;">:</td>
+                                <td width="15%" style="text-align:right;">
+                                    <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/>
+                                </td>
+                            </tr>
+                            <tr style="height:5px">
+                                <td width="15%">Conversation Rate =
+                                    <span t-field="o.exchange_rate"/>SGD
+                                </td>
+                                <td width="3.3%"></td>
+                                <td width="15%"></td>
+                                <td width="15%" style="text-align:right;">Grand Total (SGD)</td>
+                                <td width="5%" style="text-align:right;">:</td>
+                                <td width="15%">
+                                    <span t-esc="'%.2f'%((o.amount_tax * o.exchange_rate) + (o.amount_untaxed * o.exchange_rate))"/>
+                                </td>
+                                <td width="15%" style="text-align:right;">Grand Total (
+                                    <span t-field="o.currency_id"/>
+                                    )
+                                </td>
+                                <td width="1%" style="text-align:left;">:</td>
+                                <td width="15%" style="text-align:right;">
+                                    <span t-esc="'%.2f'%(o.amount_total)"/>
+                                </td>
+                            </tr>
+                        </table>
                     </t>
 
 
-                    <table width="100%" style="border-bottom: 1px solid black;position:relative;line-height:1.5;" class="table table-borderless">
+                    <table width="100%" style="border-bottom: 1px solid black;position:relative;line-height:1.5;"
+                           class="table table-borderless">
                         <tr>
                             <td width="85%" t-if="o.company_id.id == 2">
                                 **This is a computer generated document. Signature is not required.**
@@ -205,15 +282,14 @@
                                 this invoice or otherwise is received.
                             </td>
                             <td width="15%">
-
                                 <div style="position:relative;top:50px;">
-                                    <t t-if="o.company_id.country_id.code == 'SG'">
 
                                         <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
                                              style="width:110px;"/> -->
-                                        <img t-if="o.company_id.logo_three" t-att-src="image_data_uri(o.company_id.logo_three)" style="width:110px;"
-                             alt="Logo"/>
-                                    </t>
+                                        <img t-if="o.company_id.logo_three"
+                                             t-att-src="image_data_uri(o.company_id.logo_three)" style="width:110px;"
+                                             alt="Logo"/>
+
                                 </div>
                             </td>
                         </tr>
@@ -260,14 +336,20 @@
         </record>
 
         <!-- QWeb Reports -->
-        <report id="invoice_ppts" model="account.move"
-                string="Invoice Report"
-                report_type="qweb-pdf"
-                name="invoice_report.report_ppts_invoice_custom"
-                file="invoice_report.report_ppts_invoice_custom"
-                paperformat="paperformat_invoice"
-                attachment="(object.state in ('draft','open','paid')) and ('INV'+(object.name or '').replace('/','')+'.pdf')"
-                print_report_name="(object._get_report_base_filename())"/>
+
+        <record id="account_invoice_ppts" model="ir.actions.report">
+            <field name="name">Invoice Report</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">invoice_report.report_ppts_invoice_custom</field>
+            <field name="report_file">invoice_report.report_ppts_invoice_custom</field>
+            <field name="paperformat_id" ref="invoice_report.paperformat_invoice"/>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="attachment">(object.state in ('draft','open','paid')) and ('INV'+(object.name or
+                '').replace('/','')+'.pdf')
+            </field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+        </record>
 
     </data>
 </odoo>

@@ -11,17 +11,12 @@
                <xpath expr="//field[@name='barcode']" position="after">
                 <field name="classification_code_id"/>
             </xpath>
-
             <group name="group_general" position="inside">
                 <field name="item_text"/>
                 <field name="customer_part_number"/>
-
             </group>
             <xpath expr="//field[@name='uom_po_id']" position="after">
                 <field name="storage_location_id" invisible="0"/>
-                <!-- <field name="new_storage_loc" /> -->
-
-
             </xpath>
             <page name="invoicing" position="after">
                 <page string="Malaysia">
@@ -41,7 +36,6 @@
                     </group>
                 </page>
             </page>
-
         </field>
     </record>
 
@@ -67,18 +61,6 @@
         </field>
     </record>
 
-    <!--     <record id="view_product_product_search_extend" model="ir.ui.view">-->
-    <!--        <field name="name">product.product.search.extend</field>-->
-    <!--        <field name="model">product.product</field>-->
-    <!--        <field name="inherit_id" ref="product.product_search_form_view"/>-->
-    <!--        <field name="arch" type="xml">-->
-    <!--            <xpath expr="//search" position="inside">-->
-    <!--                <field name="customer_part_number" string="Customer Partssssss Number"/>-->
-    <!--            </xpath>-->
-    <!--        </field>-->
-    <!--    </record>-->
-
-
     <record id="view_custom_product_product_tree" model="ir.ui.view">
         <field name="name">product.stock.tree.inherit</field>
         <field name="model">product.product</field>
@@ -90,7 +72,6 @@
         </field>
     </record>
 
-
     <record id="product_normal_form_view_inherit" model="ir.ui.view">
         <field name="name">product.product.form</field>
         <field name="model">product.product</field>
@@ -101,11 +82,9 @@
                 <field name="storage_location_id"/>
                 <field name="project"/>
             </xpath>
-
             <group name="group_general" position="inside">
                 <field name="item_text"/>
                 <field name="customer_part_number"/>
-
             </group>
             <page name="invoicing" position="after">
                 <page string="Malaysia">
@@ -115,7 +94,6 @@
                             <field name="order_seq" invisible="1"/>
                         </group>
                     </group>
-
                 </page>
                 <page string="Singapore">
                     <group>
@@ -145,7 +123,7 @@
         <field name="model">product.supplierinfo</field>
         <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='partner_id']" position="before">
+            <xpath expr="//field[@name='product_name']" position="before">
                 <field name="sequence"/>
             </xpath>
         </field>
@@ -168,7 +146,6 @@
         </field>
     </record>
 
-
     <record id="view_company_form_inherit_coc" model="ir.ui.view">
         <field name="name">res.company.form.coc</field>
         <field name="model">res.company</field>
@@ -185,22 +162,6 @@
         </field>
     </record>
 
-
-    <record id="view_res_partner_inherit_in" model="ir.ui.view">
-        <field name="name">res.partner.inherit</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='vat']" position="after">
-                <field name="type_id"/>
-                <field name="reg_no"/>
-                <field name="tin_no"/>
-                <field name="sst_no"/>
-            </xpath>
-        </field>
-    </record>
-
-
     <record id="id_type_form" model="ir.ui.view">
         <field name="name">id_type.form</field>
         <field name="model">id.type</field>
@@ -212,13 +173,14 @@
             </form>
         </field>
     </record>
+
     <record id="id_type_tree" model="ir.ui.view">
         <field name="name">id_type.tree</field>
         <field name="model">id.type</field>
         <field name="arch" type="xml">
-            <tree string="list view">
+            <list string="list view">
                 <field name="name"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -226,7 +188,7 @@
         <field name="name">Id Type details</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">id.type</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <menuitem action="action_id_type" id="menu_id_type" sequence="50"
@@ -246,14 +208,15 @@
             </form>
         </field>
     </record>
+
     <record id="classification_code_tree" model="ir.ui.view">
         <field name="name">classification_code.tree</field>
         <field name="model">classification.code</field>
         <field name="arch" type="xml">
-            <tree string="Classification code">
+            <list string="Classification code">
                  <field name="code"/>
                 <field name="name"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -261,7 +224,7 @@
         <field name="name">Classification code details</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">classification.code</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <menuitem action="action_classification_code" id="menu_classification_code" sequence="60"

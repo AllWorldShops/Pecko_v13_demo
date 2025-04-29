@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from collections import defaultdict
-from odoo import models, fields, api
-from odoo.tools import float_compare
-from odoo.tools.float_utils import float_round
+from odoo import models, fields
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -11,7 +8,6 @@ class ProductTemplate(models.Model):
     manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer/Customer Name')
     storage_location_id = fields.Char(string='Storage Location', company_dependent=True)
     new_storage_loc = fields.Char(string="Storage Location New")
-    # new_storage_loc = fields.Char(string="Storage Location", company_dependent=True)
     project = fields.Char(string='Project')
     production_cell = fields.Char(string="Production Cell")
     order_seq = fields.Char(string="Order Sequence")
@@ -21,8 +17,6 @@ class ProductTemplate(models.Model):
     customer_part_number = fields.Char('Customer Part Number')
     classification_code_name = fields.Char('Code Name')
     classification_code_id = fields.Many2one('classification.code',string='Code Name')
-
-
     standard_price = fields.Float(
         'Cost', compute='_compute_standard_price',
         inverse='_set_standard_price', search='_search_standard_price',
@@ -55,7 +49,6 @@ class ProductProduct(models.Model):
         Used to value the product when the purchase cost is not known (e.g. inventory adjustment).
         Used to compute margins on sale orders.""")
 
-#     @api.multi
     def write(self, vals):
         rec = super(ProductProduct, self).write(vals)
         if vals.get('manufacturer_id'):
@@ -77,18 +70,6 @@ class ProductProduct(models.Model):
             quantity_uom_seller = quantity
             if quantity_uom_seller and uom_id and uom_id != seller.product_uom:
                 quantity_uom_seller = uom_id._compute_quantity(quantity_uom_seller, seller.product_uom)
-
-            # if seller.date_start and seller.date_start > date:
-            #     continue
-            # if seller.date_end and seller.date_end < date:
-            #     continue
-            # if partner_id and seller.partner_id not in [partner_id, partner_id.parent_id]:
-            #     continue
-            # if quantity is not None and float_compare(quantity_uom_seller, seller.min_qty, precision_digits=precision) == -1:
-            #     continue
-            # if seller.product_id and seller.product_id != self:
-            #     continue
-
             if not res or res.partner_id == seller.partner_id:
                 res |= seller
 
@@ -125,13 +106,5 @@ class ClassificationCode(models.Model):
     name = fields.Char(string='Name')
     code = fields.Char(string='Code')
 
-
-class ResPartner(models.Model):
-    _inherit = 'res.partner'
-
-    reg_no = fields.Char(string='Registration/Identification/Passport')
-    tin_no = fields.Char(string='Tax Identification Number(TIN)')
-    sst_no = fields.Char(string='SST Registration Number')
-    type_id = fields.Many2one('id.type',string='ID Type')
 
             

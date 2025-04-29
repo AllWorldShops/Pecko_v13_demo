@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-
 {
     'name': 'Invoice Credit Notes',
-    'version': '16.0',
+    'version': '18.0.1.0.0',
     'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
-    'category': 'Account',
-    'description': """Invoice Credit Notes""",
+    'category': 'Accounting',
+    'summary': 'Manage and process invoice credit notes effectively.',
+    'description': """This module provides functionality to handle and manage invoice credit notes seamlessly, enhancing the accounting operations.""",
     'depends': ['account', 'base_setup'],
     'data': [
         'views/invoice_action.xml',
@@ -15,4 +15,5 @@
     'installable': True,
     'application': True,
     'auto_install': False,
+    'license': 'LGPL-3',
 }
