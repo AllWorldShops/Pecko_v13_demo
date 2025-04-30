@@ -36,27 +36,27 @@
         </record>
 
         <!-- Studio fields for res.partner -->
-
-        <record id="res_partner_inherit_form_custom" model="ir.ui.view">
-            <field name="name">res.partner.form.inherit</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='vat']" position="before">
-                    <field name="x_studio_field_cpiWw" string="Supplier Name"/>
-                </xpath>
-                <xpath expr="//field[@name='vat']" position="after">
-                    <field name="create_date" readonly="0"/>
-                 </xpath>
-                <xpath expr="//field[@name='category_id']" position="after">
-                    <field name="x_studio_field_MTmaF" string="For Company"/>
-                    <field name="incoterms" />
-                </xpath>
-                <xpath expr="//field[@name='user_id']" position="after">
-                   <field name="opt_out" string="Mailing Opt-Out" groups="base.group_no_one"/>
-                </xpath>
-            </field>
-        </record>
+<!-- commented bu ga-->
+<!--        <record id="res_partner_inherit_form_custom" model="ir.ui.view">-->
+<!--            <field name="name">res.partner.form.inherit</field>-->
+<!--            <field name="model">res.partner</field>-->
+<!--            <field name="inherit_id" ref="base.view_partner_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='vat']" position="before">-->
+<!--                    <field name="x_studio_field_cpiWw" string="Supplier Name"/>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//field[@name='vat']" position="after">-->
+<!--                    <field name="create_date" readonly="0"/>-->
+<!--                 </xpath>-->
+<!--                <xpath expr="//field[@name='category_id']" position="after">-->
+<!--                    <field name="x_studio_field_MTmaF" string="For Company"/>-->
+<!--                    <field name="incoterms" />-->
+<!--                </xpath>-->
+<!--                <xpath expr="//field[@name='user_id']" position="after">-->
+<!--                   <field name="opt_out" string="Mailing Opt-Out" groups="base.group_no_one"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
 
         <!-- Studio fields for x_manufacturer -->
 

@@ -10,7 +10,7 @@ import binascii
 from io import StringIO
 from datetime import date, datetime, time
 from odoo import api, fields, models, tools, _
-from odoo.exceptions import Warning, UserError, ValidationError
+from odoo.exceptions import UserError, ValidationError
 _logger = logging.getLogger(__name__)
 
 try:
