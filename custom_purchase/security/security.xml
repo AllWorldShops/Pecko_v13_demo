@@ -3,7 +3,7 @@
 
         <record id="group_hide_po_unit_price" model="res.groups">
             <field name="name">Hide PO Unit Price</field>
-            <field name="category_id" ref="base.module_category_purchase_management"/>
+<!--            <field name="category_id" ref="base.module_category_purchase_management"/>-->
         </record>
 
 
