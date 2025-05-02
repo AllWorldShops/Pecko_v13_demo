@@ -1,32 +1,32 @@
 <odoo>
 
-	<record id="purchase_order_form_inherit" model="ir.ui.view">
+    <record id="purchase_order_form_inherit" model="ir.ui.view">
         <field name="name">purchase.order.inherit.form</field>
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
 
-        	<xpath expr="//button[@name='button_unlock']" position="attributes">
+            <xpath expr="//button[@name='button_unlock']" position="attributes">
                 <attribute name="groups"></attribute>
             </xpath>
-
+            <xpath expr="//field[@name='order_line']//tree/field[@name='price_unit']" position="attributes">
+                <attribute name="groups">custom_purchase.group_hide_po_unit_price</attribute>
+            </xpath>
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
-            	<field name="manufacturer_id"/>
+                <field name="manufacturer_id"/>
             </xpath>
 
 
-
-
-<!--          <xpath expr="//field[@name='order_line']//tree//field[@name='company_id']" position="replace">-->
-<!--            </xpath>-->
+            <!--          <xpath expr="//field[@name='order_line']//tree//field[@name='company_id']" position="replace">-->
+            <!--            </xpath>-->
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='taxes_id']" position="after">
                 <field name="notes"/>
             </xpath>
 
 
-			<xpath expr="//field[@name='order_line']//tree//field[@name='manufacturer_id']" position="after">
+            <xpath expr="//field[@name='order_line']//tree//field[@name='manufacturer_id']" position="after">
                 <field name="item_text"/>
             </xpath>
 
@@ -34,7 +34,7 @@
                 <field name="line_no"/>
             </xpath>
 
-             <xpath expr="//field[@name='order_line']//tree//field[@name='date_planned']" position="after">
+            <xpath expr="//field[@name='order_line']//tree//field[@name='date_planned']" position="after">
                 <field name="promise_date" optional="hide"/>
             </xpath>
 
@@ -48,7 +48,7 @@
     <record id="purchase_order_tree_inherit_custom_purchase" model="ir.ui.view">
         <field name="name">purchase.order.tree.inherit.custom.purchase</field>
         <field name="model">purchase.order</field>
-        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree" />
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='name']" position="after">
@@ -59,86 +59,81 @@
     </record>
 
     <record id="view_purchase_order_line_inherited" model="ir.ui.view">
-		<field name="name">purchase.order.line</field>
-		<field name="model">purchase.order.line</field>
-		<field name="priority">2</field>
-		<field name="arch" type="xml">
-			<tree string="Purchase Order Lines">
-				<field name="order_ref" string="Order Reference"/>
-				<field name="vendor_id" string="Vendor"/>
-				<field name="product_id" string="Product"/>
-				<field name="customer_part_no" string="Part No"/>
-				<field name="old_po_no" string="Old PO Number"/>
-				<field name="name" string="Description"/>
-				<field name="manufacturer_id" string="Manufacturer"/>
-				<field name="price_unit" string="Unit Price"/>
-				<field name="product_qty" string="Quantity"/>
-				<field name="qty_received" string="Received Qty"/>
-				<field name="back_order_qty"></field>
-				<field name="product_uom" string="Product Unit of Measure"/>
-				<!-- <field name="schedule_date" string="Scheduled Date"/> -->
-				<field name="date_planned" string="Scheduled Date"/>
-				<field name="promise_date" string="Promised Date"/>
-				<field name="order_date" string="Order Date"/>
-				<!-- <field name="price_subtotal" string="Subtotal"/> -->
-			</tree>
-		</field>
-	</record>
+        <field name="name">purchase.order.line</field>
+        <field name="model">purchase.order.line</field>
+        <field name="priority">2</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase Order Lines">
+                <field name="order_ref" string="Order Reference"/>
+                <field name="vendor_id" string="Vendor"/>
+                <field name="product_id" string="Product"/>
+                <field name="customer_part_no" string="Part No"/>
+                <field name="old_po_no" string="Old PO Number"/>
+                <field name="name" string="Description"/>
+                <field name="manufacturer_id" string="Manufacturer"/>
+                <field name="price_unit" string="Unit Price"/>
+                <field name="product_qty" string="Quantity"/>
+                <field name="qty_received" string="Received Qty"/>
+                <field name="back_order_qty"></field>
+                <field name="product_uom" string="Product Unit of Measure"/>
+                <!-- <field name="schedule_date" string="Scheduled Date"/> -->
+                <field name="date_planned" string="Scheduled Date"/>
+                <field name="promise_date" string="Promised Date"/>
+                <field name="order_date" string="Order Date"/>
+                <!-- <field name="price_subtotal" string="Subtotal"/> -->
+            </tree>
+        </field>
+    </record>
 
-	<record id="purchase_order_line_search_inherit" model="ir.ui.view">
-		<field name="name">purchase.order.line.search.inherit</field>
-		<field name="model">purchase.order.line</field>
-		<field name="inherit_id" ref="purchase.purchase_order_line_search"/>
-		<field name="arch" type="xml">
-			<xpath expr="//search/group" position="inside">
-				<filter string="Promised Date" name="Promised Date" context="{'group_by':'promise_date'}"/>
-			</xpath>
-		</field>
-	</record>
+    <record id="purchase_order_line_search_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.line.search.inherit</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/group" position="inside">
+                <filter string="Promised Date" name="Promised Date" context="{'group_by':'promise_date'}"/>
+            </xpath>
+        </field>
+    </record>
 
-	<record id="action_purchase_lines_menu" model="ir.actions.act_window">
-		<field name="name">Purchase Order Lines</field>
-		<field name="type">ir.actions.act_window</field>
-		<field name="res_model">purchase.order.line</field>
-		<field name="view_id" ref="custom_purchase.view_purchase_order_line_inherited"/>
-		<field name="view_mode">tree,form</field>
-	</record>
-
-
+    <record id="action_purchase_lines_menu" model="ir.actions.act_window">
+        <field name="name">Purchase Order Lines</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_id" ref="custom_purchase.view_purchase_order_line_inherited"/>
+        <field name="view_mode">tree,form</field>
+    </record>
 
 
+    <menuitem id="action_purchase_lines_menu_id" name="Purchase Lines"
+              action="custom_purchase.action_purchase_lines_menu" parent="purchase.menu_procurement_management"
+              sequence="10"/>
 
-	<menuitem id="action_purchase_lines_menu_id" name="Purchase Lines"
-		action="custom_purchase.action_purchase_lines_menu" parent="purchase.menu_procurement_management"
-		 sequence="10"/>
-
-<record id="res_config_settings_view_form_inherit" model="ir.ui.view">
-            <field name="name">res.config.settings.view.form.inherit.inter.company.rules.inherit</field>
-            <field name="model">res.config.settings</field>
-            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//div[@class='row ml32']" position="after">
-                    <div class="row ml32">
-                        <field name="split_so" class="col-1 col-lg-1"/>
-                        <label for="split_so" class="o_light_label"/>
-                    </div>
-                </xpath>
-            </field>
+    <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.inter.company.rules.inherit</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='row ml32']" position="after">
+                <div class="row ml32">
+                    <field name="split_so" class="col-1 col-lg-1"/>
+                    <label for="split_so" class="o_light_label"/>
+                </div>
+            </xpath>
+        </field>
     </record>
 
 
     <record id="res_company_settings_view_form_inherit" model="ir.ui.view">
-            <field name="name">res_company_view_form_inherit</field>
-            <field name="model">res.company</field>
-            <field name="inherit_id" ref="base.view_company_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='auto_validation']" position="after">
-                    <field name="split_so"/>
-                </xpath>
-            </field>
+        <field name="name">res_company_view_form_inherit</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='auto_validation']" position="after">
+                <field name="split_so"/>
+            </xpath>
+        </field>
     </record>
-
-
 
 
 </odoo>

@@ -9,6 +9,7 @@
     'description': """Enhancement in Purchase module""",
     'depends': ['purchase','custom_product','pecko_so_po_report', 'sale_purchase_inter_company_rules'],
     'data': [
+        'security/security.xml',
         'views/purchase_view.xml'
     ],
     'installable': True,
