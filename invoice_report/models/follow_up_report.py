@@ -63,20 +63,17 @@ class AccountFollowupReport(models.AbstractModel):
             total = 0
             total_issued = 0
             for aml in aml_recs:
-                # print(aml,'77777777777777777777777777777777777777777777777')
                 amount = aml.amount_residual_currency if aml.currency_id else aml.amount_residual
                 invoice_date = {
                     'name': format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code),
                     'class': 'date',
                     'style': 'white-space:nowrap;text-align:center;'
                 }
-                print(aml.customer_po_no, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
                 custmer_po = {
                     'name': aml.customer_po_no,
                     'style': 'text-align:right; white-space:normal;'
                 }
 
-                # print(invoice_date,'000000000000000000000000000000000000000000000000000000')
                 date_due = format_date(self.env, aml.date_maturity or aml.move_id.invoice_date or aml.date,
                                        lang_code=lang_code)
                 total += not aml.blocked and amount or 0
@@ -85,7 +82,6 @@ class AccountFollowupReport(models.AbstractModel):
                 if is_overdue or is_payment:
                     total_issued += not aml.blocked and amount or 0
                 date_due = {'name': date_due, 'class': 'date', 'style': 'white-space:nowrap;text-align:center;'}
-                print(date_due, '9999999999999999999999999999999999999999999999999999999999999999999')
                 if is_overdue:
                     date_due['style'] += 'color: red;'
                 if is_payment:

@@ -16,7 +16,7 @@
         'sale_purchase_inter_company_rules',
     ],
     'data': [
-        # 'views/inter_company_so_po_view.xml',
+        'views/inter_company_so_po_view.xml',
     ],
     'installable': True,
     'auto_install': False,

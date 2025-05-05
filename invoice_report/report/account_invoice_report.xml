@@ -140,7 +140,7 @@
                             </tr>
                         </table>
                     </t>
-<!--                    <p style="page-break-after:always"></p>-->
+                    <!--                    <p style="page-break-after:always"></p>-->
                     <t t-if="o.company_id.country_id.code != 'SG'">
                         <div width="100%" style="border-bottom: 1px solid black;font-size=10px;line-height:18px">
                             <tr>
@@ -160,14 +160,14 @@
                                     this invoice or otherwise is received.
                                 </td>
                                 <td width="15%">
-                                    <div style="position:relative;top:40px;">
+                                    <div style="position:relative;top:10px;">
 
-                                            <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
-                                                 style="width:110px;"/> -->
-                                            <img t-if="o.company_id.logo_three"
-                                                 t-att-src="image_data_uri(o.company_id.logo_three)"
-                                                 style="width:110px;"
-                                                 alt="Logo"/>
+                                        <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
+                                             style="width:110px;"/> -->
+                                        <img t-if="o.company_id.logo_three"
+                                             t-att-src="image_data_uri(o.company_id.logo_three)"
+                                             style="width:110px;"
+                                             alt="Logo"/>
 
                                     </div>
                                 </td>
@@ -282,14 +282,15 @@
                                 this invoice or otherwise is received.
                             </td>
                             <td width="15%">
-                                <div style="position:relative;top:50px;">
+                                <div style="position:relative;top:10px;">
+                                    <t t-if="o.company_id.country_id.code == 'SG'">
 
                                         <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
                                              style="width:110px;"/> -->
                                         <img t-if="o.company_id.logo_three"
                                              t-att-src="image_data_uri(o.company_id.logo_three)" style="width:110px;"
                                              alt="Logo"/>
-
+                                    </t>
                                 </div>
                             </td>
                         </tr>

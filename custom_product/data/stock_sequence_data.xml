@@ -9,7 +9,7 @@
             <field name="model_id" ref="stock.model_procurement_group"/>
             <field name="state">code</field>
             <field name="code">
-model.run_scheduler(True)
+                model.run_scheduler(True)
             </field>
             <field eval="True" name="active"/>
             <field name="user_id" ref="base.user_root"/>

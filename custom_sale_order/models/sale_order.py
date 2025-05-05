@@ -115,7 +115,6 @@ class SaleOrderLine(models.Model):
 class AccountGeneralLedgerReport(models.AbstractModel):
     _inherit = "account.partner.ledger.report.handler"
 
-
     @api.model
     def _get_account_total_line(self, options, account, amount_currency, debit, credit, balance):
         return {

@@ -76,17 +76,11 @@ class MrpProduction(models.Model):
                 if reserved_qty and rec.state not in ['draft', 'done']:
                     rec.reserved_check = True
 
-
-
-
-
     @api.onchange('product_id')
     def onchange_responsible(self):
         if self.product_id:
             self.user_id = self.product_id.responsible_id.id
- 
 
- 
     @api.onchange('product_id')
     def onchange_mrp_product(self):
         for mrp_product in self:
@@ -103,8 +97,6 @@ class MrpProduction(models.Model):
         vals['customer_part_no'] = product_id.name
         vals['description'] = product_id.product_tmpl_id.x_studio_field_mHzKJ
         return super(MrpProduction, self).create(vals)
-
-
 
     def _get_move_raw_values(self, product_id, product_uom_qty, product_uom, operation_id=False, bom_line=False):
         res = super(MrpProduction, self)._get_move_raw_values(product_id, product_uom_qty, product_uom, operation_id, bom_line )

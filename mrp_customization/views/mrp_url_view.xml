@@ -30,11 +30,11 @@
 		<field name="name">url.tree</field>
 		<field name="model">url.config</field>
 		<field name="arch" type="xml">
-			<tree string="url">
+			<list string="url">
 				<field name="name"/>
 				<field name="code"/>
 				<field name="active" widget="boolean_toggle"/>
-			</tree>
+			</list>
 		</field>
 	</record>
 
@@ -43,7 +43,7 @@
 		<field name="name">URL</field>
 		<field name="type">ir.actions.act_window</field>
 		<field name="res_model">url.config</field>
-		<field name="view_mode">tree,form</field>
+		<field name="view_mode">list,form</field>
 	</record>
 
 	<!-- Menu Details -->

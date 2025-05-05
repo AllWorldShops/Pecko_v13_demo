@@ -92,7 +92,6 @@ class ProductTemplate(models.Model):
         if buy_route:
             route = self.env['stock.route'].sudo().search(['|',('id', '=', buy_route.id),('name', 'ilike', 'PEI - Buy from Vendor')])
             for rte in route:
-                # print(rte.name,"////_--------------;;;;;;;", rte)
                 if rte.company_id == self.env.company:
                     return rte.ids
         return []

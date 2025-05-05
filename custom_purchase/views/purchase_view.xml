@@ -16,11 +16,6 @@
             </xpath>
 
 
-
-
-<!--          <xpath expr="//field[@name='order_line']//list//field[@name='company_id']" position="replace">-->
-<!--            </xpath>-->
-
             <xpath expr="//field[@name='order_line']//list//field[@name='taxes_id']" position="after">
                 <field name="notes"/>
             </xpath>

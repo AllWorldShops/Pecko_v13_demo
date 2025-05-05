@@ -14,8 +14,8 @@
     'depends': ['base', 'mrp'],
     'data': [
         'security/ir.model.access.csv',
-        # 'views/mrp_view.xml',
-        # 'views/mrp_url_view.xml'
+        'views/mrp_view.xml',
+        'views/mrp_url_view.xml'
     ],
     'installable': True,
     'auto_install': False,

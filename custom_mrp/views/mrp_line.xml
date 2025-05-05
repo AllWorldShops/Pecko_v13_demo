@@ -25,9 +25,6 @@
 					<field name="workorder_ids" readonly="state in ['cancel', 'done'] and is_locked" context="{'tree_view_ref': 'mrp.mrp_production_workorder_tree_editable_view', 'default_product_uom_id': product_uom_id, 'from_manufacturing_order': True}"/>
 				</page>
 			</xpath>
-
-
-
 			<xpath expr="//form/header/button[3]" position="replace">
 				<button name="button_mark_done" invisible="transfer_done_flag != True or state != 'to_close' or move_raw_ids or (state not in ('confirmed', 'progress') and qty_producing != 0 and state != 'to_close')" string="Mark as Done" type="object" class="oe_highlight" data-hotkey="g"/>
 			</xpath>
