@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<menuitem
+				id="bi_import_products_menu"
+				name="Import Products"
+				action="import_products_wizard_action"
+				parent="hr.menu_hr_employee_payroll"
+				groups="hr.group_hr_manager"
+		/>
+
+	</data>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="bucket_days_wizard">
+			<field name="name">Bucket Days</field>
+			<field name="model">bucket.days</field>
+			<field name="arch" type="xml">
+				<form string="Details">
+					<sheet>
+						<group>
+							<field name="days" />
+						</group>
+						<footer>
+							<button name="report_aged_receivable" type="object"
+								string="Aged Payments" class="oe_highlight" />
+							or
+							<button name="cancel" string="Cancel" special="cancel"
+								class="oe_link" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<record id="action_bucket_days" model="ir.actions.act_window">
+			<field name="name">Bucket Days</field>
+			 <!-- <field name="tag">bucket_day_calc</field> -->
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">bucket.days</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="bucket_days_wizard" />
+			<field name="target">new</field>
+		</record>
+	</data>
+	
+
+</odoo>
