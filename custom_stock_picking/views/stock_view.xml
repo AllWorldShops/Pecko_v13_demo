@@ -21,7 +21,7 @@
                 <field name="product_uom_id" readonly="1"/>
 <!--				commented This field not in base 18-->
 <!--									<field name="reserved_uom_qty" readonly="1"/>-->
-                <field name="qty_done"/>
+<!--                <field name="qty_done"/>-->
 
             </xpath>
 
