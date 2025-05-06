@@ -128,8 +128,8 @@
                                         <img t-att-src="image_data_uri(o.company_id.logo)"
                                              alt="Logo" style="width:105px;"/>
 
-<!--                                        i commented (t)-->
-<!--                                        <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="width:105px;"/>-->
+                                        <!--                                        i commented (t)-->
+                                        <!--                                        <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" style="width:105px;"/>-->
 
                                     </t>
                                 </div>
@@ -209,13 +209,19 @@
             <field name="header_spacing">35</field>
             <field name="dpi">90</field>
         </record>
-        <report id="journal_entry_report_id"
-                string="Journal Entries"
-                model="account.move"
-                report_type="qweb-pdf"
-                paperformat="paperformat_journal"
-                file="journal_entries_report.journal_entry_report_template_id"
-                name="journal_entries_report.journal_entry_report_template_id"/>
+
+
+        <record id="journal_entry_report_inherit_id" model="ir.actions.report">
+            <field name="name">Journal Entries</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">journal_entries_report.journal_entry_report_template_id</field>
+            <field name="report_file">journal_entries_report.journal_entry_report_template_id</field>
+            <field name="paperformat_id" ref="journal_entries_report.paperformat_journal"/>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+        </record>
+
 
     </data>
 </odoo>
