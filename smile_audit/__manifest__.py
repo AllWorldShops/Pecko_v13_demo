@@ -21,8 +21,8 @@ all the objects of the system
     ],
     "data": [
         'security/ir.model.access.csv',
-        # 'views/audit_rule_view.xml',
-        # 'views/audit_log_view.xml',
+        'views/audit_rule_view.xml',
+        'views/audit_log_view.xml',
     ],
     'installable': True,
     'auto_install': False,
