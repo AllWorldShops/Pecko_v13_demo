@@ -163,19 +163,19 @@
     </record>
 
 
-    <record id="view_res_partner_inherit_in" model="ir.ui.view">
-        <field name="name">res.partner.inherit</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='vat']" position="after">
-                <field name="type_id"/>
-                <field name="reg_no"/>
-                <field name="tin_no"/>
-                <field name="sst_no"/>
-            </xpath>
-        </field>
-    </record>
+<!--    <record id="view_res_partner_inherit_in" model="ir.ui.view">-->
+<!--        <field name="name">res.partner.inherit</field>-->
+<!--        <field name="model">res.partner</field>-->
+<!--        <field name="inherit_id" ref="base.view_partner_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//field[@name='vat']" position="after">-->
+<!--                <field name="type_id"/>-->
+<!--                <field name="reg_no"/>-->
+<!--                <field name="tin_no"/>-->
+<!--                <field name="sst_no"/>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
 
 
     <record id="id_type_form" model="ir.ui.view">
