@@ -9,18 +9,12 @@
         	<xpath expr="//button[@name='button_unlock']" position="attributes">
                 <attribute name="groups"></attribute>
             </xpath>
-
-
             <xpath expr="//field[@name='order_line']//list//field[@name='name']" position="after">
             	<field name="manufacturer_id"/>
             </xpath>
-
-
             <xpath expr="//field[@name='order_line']//list//field[@name='taxes_id']" position="after">
                 <field name="notes"/>
             </xpath>
-
-
 			<xpath expr="//field[@name='order_line']//list//field[@name='manufacturer_id']" position="after">
                 <field name="item_text"/>
             </xpath>
