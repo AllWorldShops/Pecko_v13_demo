@@ -24,12 +24,6 @@
                         <group>
                             <field name="project"/>
                             <field name="production_cell"/>
-                            <field name="customer_goods"/>
-                            <field name="tariff_code"/>
-                            <field name="tariff_unit"/>
-                            <field name="import_duty_rate"/>
-                            <field name="eksport_duty_rate"/>
-                            <field name="sst"/>
                             <field name="order_seq" invisible="1"/>
                         </group>
                     </group>
@@ -97,12 +91,6 @@
                     <group>
                         <group>
                             <field name="production_cell"/>
-                            <field name="customer_goods"/>
-                            <field name="tariff_code"/>
-                            <field name="tariff_unit"/>
-                            <field name="import_duty_rate"/>
-                            <field name="eksport_duty_rate"/>
-                            <field name="sst"/>
                             <field name="order_seq" invisible="1"/>
                         </group>
                     </group>
