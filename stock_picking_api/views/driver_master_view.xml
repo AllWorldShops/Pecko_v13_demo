@@ -25,17 +25,17 @@
         <field name="name">driver.master.view.tree</field>
         <field name="model">driver.master</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="ph_no" />
-            </tree>
+            </list>
         </field>
     </record>
 
     <record id="driver_master_action" model="ir.actions.act_window">
         <field name="name">Drivers</field>
         <field name="res_model">driver.master</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <menuitem id="driver_master_menu" action="driver_master_action" parent="stock.menu_stock_config_settings" sequence="5"/>

@@ -16,8 +16,8 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        # 'views/driver_master_view.xml',
-        # 'views/stock_view.xml'
+        'views/driver_master_view.xml',
+        'views/stock_view.xml'
         
     ],
     'installable': True,
