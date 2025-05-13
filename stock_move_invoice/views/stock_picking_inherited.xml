@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
-        <record id="stock_picking_form_view_inherited" model="ir.ui.view">
+        <record id="stock_picking_form_view_inherited_id" model="ir.ui.view">
             <field name="name">stock.picking.form.view.inherited</field>
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='pod_date']" position="after">
+                    <field name="custom_form_reference_number"/>
+                </xpath>
                 <xpath expr="//field[@name='picking_type_id']" position="after">
                     <field name="operation_code" invisible="1"/>
                     <field name="is_return" invisible="1"/>
@@ -15,7 +18,7 @@
                     <button name="action_open_picking_invoice" type="object"
                             class="oe_stat_button" icon="fa-file-text"
                             invisible="invoice_count == 0"
-                            >
+                    >
                         <field name="invoice_count" widget="statinfo"/>
                     </button>
                 </xpath>

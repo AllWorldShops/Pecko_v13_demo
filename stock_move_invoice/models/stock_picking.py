@@ -11,7 +11,28 @@ class StockPicking(models.Model):
     operation_code = fields.Selection(related='picking_type_id.code')
     is_return = fields.Boolean()
     invoice_created = fields.Boolean()
+    invoice_id = fields.Many2one('account.move', string='Invoice')
     invoice_status = fields.Selection(related='sale_id.invoice_status', string='Invoice Status', store=True, readonly=True)
+    custom_form_reference_number = fields.Char(string='Customs Form Reference Number')
+
+    @api.onchange('custom_form_reference_number')
+    def onchange_custom_form_reference_number(self):
+        for picking in self:
+            if picking.custom_form_reference_number and picking.invoice_id:
+                picking.invoice_id.write({
+                    'l10n_my_edi_custom_form_reference': picking.custom_form_reference_number
+                })
+
+    # @api.model
+    # def write(self, vals):
+    #     res = super().write(vals)
+    #     if 'custom_form_reference_number' in vals:
+    #         for picking in self:
+    #             invoices = self.env['account.move'].search([('picking_id', '=', picking.id)])
+    #             for invoice in invoices:
+    #                 invoice.l10n_my_edi_custom_form_reference = vals['custom_form_reference_number']
+    #     return res
+
 
     def _action_done(self):
         res = super(StockPicking, self)._action_done()
@@ -98,10 +119,12 @@ class StockPicking(models.Model):
                     invoice['customer_po_no'] = picking_id.customer_po_no
                     invoice['do_name'] = picking_id.name
                     invoice['journal_id'] = journal_id
+                    invoice['l10n_my_edi_custom_form_reference'] = picking_id.custom_form_reference_number
                     # invoice['invoice_origin'] = picking_id.sale_id.name,
                     invoice['invoice_line_ids'] = invoice_line_list
                     invoices = self.env['account.move'].create(invoice)
                     picking_id.invoice_created = True
+                    picking_id.invoice_id = invoices.id
                     return invoices
 
     def create_customer_credit(self):
