@@ -16,12 +16,11 @@ class StockPicking(models.Model):
     custom_form_reference_number = fields.Char(string='Customs Form Reference Number')
 
     @api.onchange('custom_form_reference_number')
-    def onchange_custom_form_reference_number(self):
+    def _onchange_custom_form_reference_number(self):
         for picking in self:
-            if picking.custom_form_reference_number and picking.invoice_id:
-                picking.invoice_id.write({
-                    'l10n_my_edi_custom_form_reference': picking.custom_form_reference_number
-                })
+            if picking.custom_form_reference_number and picking.picking_type_id.code in ['incoming', 'outgoing']:
+                if picking.invoice_id:
+                    picking.invoice_id.l10n_my_edi_custom_form_reference = picking.custom_form_reference_number
 
     # @api.model
     # def write(self, vals):
