@@ -271,8 +271,8 @@ class ResConfigSettings(models.TransientModel):
 class MailMail(models.Model):
     _inherit = 'mail.mail'
 
-
-    def _send(self, auto_commit=False, raise_exception=False, smtp_session=None):
+    def _send(self, auto_commit=False, raise_exception=False, smtp_session=None, alias_domain_id=False,
+              mail_server=False, post_send_callback=None):
         IrMailServer = self.env['ir.mail_server']
         IrAttachment = self.env['ir.attachment']
         for mail_id in self.ids:
@@ -282,6 +282,8 @@ class MailMail(models.Model):
             mail = None
             try:
                 mail = self.browse(mail_id)
+
+                # Skip if not outgoing
                 if mail.state != 'outgoing':
                     if mail.state != 'exception' and mail.auto_delete:
                         mail.sudo().unlink()
