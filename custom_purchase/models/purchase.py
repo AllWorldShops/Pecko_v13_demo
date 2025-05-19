@@ -40,6 +40,7 @@ class PurchaseOrder(models.Model):
             self_comp = self.with_company(company_id)
             if vals.get('name', 'New') == 'New':
                 seq_date = fields.datetime.now()
+
                 # if 'date_order' in vals:
                 #     seq_date = fields.Datetime.context_timestamp(self, fields.Datetime.to_datetime(vals['date_order']))
                 vals['name'] = self_comp.env['ir.sequence'].next_by_code('purchase.order', sequence_date=seq_date) or '/'
