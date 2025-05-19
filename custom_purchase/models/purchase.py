@@ -230,8 +230,8 @@ class PurchaseOrderLine(models.Model):
             'taxes_id': [(6, 0, taxes.ids)],
             'order_id': po.id,
         }
-    
-    @api.depends('product_qty','qty_received')
+
+    @api.depends('product_qty', 'qty_received')
     def _compute_back_order_qty(self):
         for pro in self:
             # if pro.qty_received:
