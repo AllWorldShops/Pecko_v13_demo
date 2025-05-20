@@ -42,14 +42,14 @@
                             <div>TEL:
                                 <span t-field="o.company_id.phone"/>
                             </div>
-                            <t t-if="o.company_id.email">
-                                <div>Email:
-                                    <span t-field="o.company_id.email"/>
-                                </div>
-                            </t>
                             <t t-if="o.company_id.website">
                                 <div>URL:
                                     <span t-field="o.company_id.website"/>
+                                </div>
+                            </t>
+                            <t t-if="o.company_id.email">
+                                <div>Email:
+                                    <span t-field="o.company_id.email"/>
                                 </div>
                             </t>
                             <t t-if="o.company_id.company_registry">
@@ -62,6 +62,21 @@
                                     <span t-field="o.company_id.vat"/>
                                 </div>
                             </t>
+                            <t t-if="o.company_id.country_id.code != 'SG'">
+                                <t>
+                                    <div>MSIC CODE:
+                                        <span t-field="o.company_id.misc_code"/>
+                                        TIN NO:
+                                        <span t-field="o.company_id.ttx_registration_number"/>
+                                    </div>
+                                </t>
+                                <t t-if="o.company_id.business_des">
+                                    <div>Business Activity Description:
+                                        <span t-field="o.company_id.business_des"/>
+                                    </div>
+                                </t>
+                            </t>
+
                         </div>
                     </div>
                     <div class="col-2 text-right" style="font-size: 12px;">
@@ -86,6 +101,74 @@
 
                 <!-- </div> -->
                 <t t-if="o.company_id.country_id.code != 'SG'">
+                    <t t-if="o.company_id.country_id.code != 'SG'">
+                        <div style="font-family: Calibri; font-size: 10px;">
+                            <div>Classification: 002</div>
+                            <div>Details Tax Exemption: Licensed Manufacturing Warehouse (LMW)</div>
+                        </div>
+                        <table width="100%"
+                               style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;height:15px"
+                               class="table table-borderless">
+                            <tr style="height:5px;">
+                                <td width="25%">For Tax Purpose in MYR Only</td>
+                                <td width=""></td>
+                                <td width="10%"></td>
+                                <td width="15%" style="text-align:right;">Net Total (MYR)</td>
+                                <td width="" style="text-align:right;">:</td>
+                                <td width="15%">
+                                    <span t-esc="'%.2f'%(o.get_net_amount_report())"/>
+                                </td>
+                                <td width="15%" style="text-align:right;">Net Total (
+                                    <span t-field="o.currency_id"/>
+                                    )
+                                </td>
+                                <td width="1%" style="text-align:left;">:</td>
+                                <td width="15%" style="text-align:right;">
+                                    <span t-esc="'%.2f'%(o.amount_untaxed)"/>
+                                </td>
+                            </tr>
+                            <tr style="height:5px;">
+                                <td width="15%">1 MYR =
+                                    <span t-field="o.exchange_rate"/>
+                                    USD
+                                </td>
+                                <td width="3.3%"></td>
+                                <td width="15%"></td>
+                                <td width="15%" style="text-align:right;">Tax Amount</td>
+                                <td width="3" style="text-align:right;">:</td>
+                                <td width="15%">
+                                    <span style="padding-left:3px" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/>
+                                </td>
+                                <td width="16%" style="text-align:right;">Tax Amount</td>
+                                <td width="1%" style="text-align:left;">:</td>
+                                <td width="15%" style="text-align:right;">
+                                    <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/>
+                                </td>
+                            </tr>
+                            <tr style="height:5px">
+                                <td width="15%">Conversation Rate =
+                                    <span t-field="o.exchange_rate"/>
+                                </td>
+                                <td width="3.3%"></td>
+                                <td width="15%"></td>
+                                <td width="15%" style="text-align:right;">Grand Total (MYR)</td>
+                                <td width="3%" style="text-align:right;">:</td>
+                                <td width="15%">
+                                    <span style="padding-left:3px"
+                                          t-esc="'%.2f'%((o.amount_tax / o.exchange_rate) + o.get_net_amount_report())"/>
+                                </td>
+                                <td width="16%" style="text-align:right;">Grand Total (
+                                    <span t-field="o.currency_id"/>
+                                    )
+                                </td>
+                                <td width="1%" style="text-align:left;">:</td>
+                                <td width="15%" style="text-align:right;">
+                                    <span t-esc="'%.2f'%(o.amount_total)"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </t>
                     <div width="100%" style="border-bottom: 1px solid black;font-size=10px;line-height:18px">
 
                         <tr>
