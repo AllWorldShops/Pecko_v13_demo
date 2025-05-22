@@ -8,14 +8,24 @@ from odoo import api, fields, models, SUPERUSER_ID, _
 from odoo.exceptions import AccessError, UserError
 import math
 
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    @api.depends('name', 'default_code')
+    def _compute_display_name(self):
+        for template in self:
+            template.display_name = template.default_code or ''
+
 class Product(models.Model):   
     _inherit = "product.product"
      
-#     @api.multi
-    def name_get(self):
-        return [(template.id, '%s' % (template.default_code))
-                for template in self]
-        
+    @api.depends('name', 'default_code', 'product_tmpl_id')
+    @api.depends_context('display_default_code', 'seller_id', 'company_id', 'partner_id')
+    def _compute_display_name(self):
+        for product in self:
+            product.display_name = product.default_code or ''
+
+
     def get_product_multiline_description_sale(self):
         """ Compute a multiline description of this product, in the context of sales
                 (do not use for purchases or other display reasons that don't intend to use "description_sale").
