@@ -43,6 +43,9 @@
                     </div>
                     <div class="col-4">
                         <div style="text-align:right">
+                            <strong>
+                                <span t-field="o.name"/>
+                            </strong>
                             Page:
                             <span class="page"/>
                             of
