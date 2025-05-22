@@ -44,6 +44,6 @@
     </record>
 
     <record id="mrp_workorder.menu_mrp_dashboard" model="ir.ui.menu">
-            <field name="sequence" eval="12"/>
-        </record>
+        <field name="sequence" eval="12"/>
+    </record>
 </odoo>
