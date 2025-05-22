@@ -537,41 +537,106 @@
                             </span>
                         </div>
                         <br/>
-                        <div width="100%">
-                            <div style="float:left;font-size:13px">
+                        <div style="width:100%; overflow:hidden; font-size:13px;">
+
+                            <!-- Bill To (Left Side) -->
+                            <div style="float:left; width:35%; font-size:13px;">
                                 <span>
                                     <strong>
                                         <t t-esc="o.partner_id.name"/>
                                     </strong>
                                 </span>
                                 <br/>
-                                <span>
-                                    <t t-esc="o.partner_id.street"/>
-                                    <t t-esc="o.partner_id.street2"/>
-                                </span>
-                                <br/>
-                                <span>
 
-                                    <t t-esc="o.partner_id.city"/>
-                                    <t t-esc="o.partner_id.state_id.name"/>
+                                <t t-if="o.partner_id.street">
+                                    <span>
+                                        <t t-esc="o.partner_id.street"/>
+                                    </span>
+                                    <br/>
+                                </t>
+                                <t t-if="o.partner_id.street2">
+                                    <span>
+                                        <t t-esc="o.partner_id.street2"/>
+                                    </span>
+                                    <br/>
+                                </t>
 
-                                </span>
+                                <t t-if="o.partner_id.city or o.partner_id.state_id">
+                                    <span>
+                                        <t t-esc="o.partner_id.city"/>
+                                        <t t-if="o.partner_id.city and o.partner_id.state_id">,</t>
+                                        <t t-esc="o.partner_id.state_id.name"/>
+                                    </span>
+                                    <br/>
+                                </t>
+
+                                <t t-if="o.partner_id.country_id or o.partner_id.zip">
+                                    <span>
+                                        <t t-esc="o.partner_id.country_id.name"/>
+                                        <t t-if="o.partner_id.country_id and o.partner_id.zip">,</t>
+                                        <t t-esc="o.partner_id.zip"/>
+                                    </span>
+                                    <br/>
+                                </t>
+
                                 <br/>
-                                <span>
-                                    <t t-esc="o.partner_id.country_id.name"/>
-                                    <t t-esc="o.partner_id.zip"/>
-                                </span>
-                                <br/>
-                                <br/>
-                                <span>
-                                    ATTN :
-                                    <t t-esc="o.attn.name"/>
-                                </span>
-                                <br/>
+                                <t t-if="o.attn">
+                                    <span>ATTN :
+                                        <t t-esc="o.attn.name"/>
+                                    </span>
+                                    <br/>
+                                </t>
                                 <br/>
                                 <div>Please supply the following :</div>
                             </div>
-                            <div style="float:right;font-size:13px">
+
+                            <!-- Ship To (Middle) -->
+                            <div style="float:left; width:30%; margin-left:5%; font-size:13px;">
+                                <span>
+                                    <strong>SHIP To:</strong>
+                                </span>
+                                <br/>
+                                <span>
+                                    <strong>
+                                        <t t-esc="o.partner_id.name"/>
+                                    </strong>
+                                </span>
+                                <br/>
+
+                                <t t-if="o.partner_id.street">
+                                    <span>
+                                        <t t-esc="o.partner_id.street"/>
+                                    </span>
+                                    <br/>
+                                </t>
+                                <t t-if="o.partner_id.street2">
+                                    <span>
+                                        <t t-esc="o.partner_id.street2"/>
+                                    </span>
+                                    <br/>
+                                </t>
+
+                                <t t-if="o.partner_id.city or o.partner_id.state_id">
+                                    <span>
+                                        <t t-esc="o.partner_id.city"/>
+                                        <t t-if="o.partner_id.city and o.partner_id.state_id">,</t>
+                                        <t t-esc="o.partner_id.state_id.name"/>
+                                    </span>
+                                    <br/>
+                                </t>
+
+                                <t t-if="o.partner_id.country_id or o.partner_id.zip">
+                                    <span>
+                                        <t t-esc="o.partner_id.country_id.name"/>
+                                        <t t-if="o.partner_id.country_id and o.partner_id.zip">,</t>
+                                        <t t-esc="o.partner_id.zip"/>
+                                    </span>
+                                    <br/>
+                                </t>
+                            </div>
+
+                            <!-- PO Details (Right Side) -->
+                            <div style="float:right; width:30%; font-size:13px;">
                                 <span>
                                     PO NO :
                                     <strong>
@@ -584,31 +649,28 @@
                                     DATE :
                                     <strong>
                                         <t t-if="o.state in ('draft','sent')">
-                                            <span t-field="o.date_order"
-                                                  t-options='{"format": "dd-MM-yyyy"}'/>
+                                            <span t-field="o.date_order" t-options='{"format": "dd-MMM-yyyy"}'/>
                                         </t>
                                         <t t-if="o.state in ('purchase','done')">
-                                            <span t-field="o.date_approve"
-                                                  t-options='{"format": "dd-MM-yyyy"}'/>
+                                            <span t-field="o.date_approve" t-options='{"format": "dd-MMM-yyyy"}'/>
                                         </t>
                                     </strong>
                                 </span>
                                 <br/>
 
-                                <span>
-                                    Old PO Number:
-                                    <strong>
-                                        <span t-field="o.old_po_no"/>
-                                    </strong>
-                                </span>
-
+                                <t t-if="o.old_po_no">
+                                    <span>
+                                        Old PO Number:
+                                        <strong>
+                                            <span t-field="o.old_po_no"/>
+                                        </strong>
+                                    </span>
+                                    <br/>
+                                </t>
                             </div>
                         </div>
-
-
                         <table class="table table-sm table-borderless"
-                               style="margin-top:170px;table-layout:fixed;border-bottom-style: none;">
-
+                               style="margin-top:30px;table-layout:fixed;border-bottom-style: none;">
                             <style>
                                 th{font-size:13px}
                                 td{font-size:13px}
@@ -625,7 +687,7 @@
                                     <th class="text-left" style="width:15%">
                                         <b>PART NUMBER</b>
                                     </th>
-                                    <th class="text-left" style="width:15%">
+                                    <th class="text-left" style="width:18%">
                                         <b>DESCRIPTION</b>
                                     </th>
                                     <th class="text-left" style="width:19%">
@@ -634,25 +696,21 @@
                                     <th class="text-left" style="width:12%">
                                         <b>QUANTITY</b>
                                     </th>
-                                    <th class="text-center" style="width:13%">
-                                        <b>ETA DATE</b>
+                                    <th class="text-center" style="width:16%">
+                                        <b>REQUESTED DATE</b>
                                     </th>
                                     <th class="text-right" style="width:10%">
-                                        <b>PRICE</b>
+                                        <b>UNIT PRICE</b>
                                     </th>
                                     <t t-if="o.amount_tax>0">
                                         <th class="text-right" style="width:10%">
                                             <b>TAXES</b>
                                         </th>
                                     </t>
-                                    <th class="text-end" style="width:15%">
-                                        <t groups="account.group_show_line_subtotals_tax_excluded"
-                                        >AMOUNT
-                                        </t>
-                                        <t groups="account.group_show_line_subtotals_tax_included"
-                                        >TOTAL
-                                        </t>
+                                    <th class="text-right" style="width:18%">
+                                        <b>AMOUNT</b>
                                     </th>
+
                                 </tr>
                             </thead>
                             <tbody class="sale_tbody" style="font-size:12px">
@@ -700,15 +758,11 @@
                                             </td>
                                             <t t-if="o.amount_tax>0">
                                                 <td style="background-color: #f4f4f5;">
-                                                    <span t-esc="line.taxes_id.code"/>
+                                                    <span t-esc="line.taxes_id.display_name"/>
                                                 </td>
                                             </t>
-
-                                            <td class="text-end" style="background-color: #f4f4f5;">
-                                                <span t-field="line.price_subtotal"
-                                                      groups="account.group_show_line_subtotals_tax_excluded"/>
-                                                <span t-field="line.price_total"
-                                                      groups="account.group_show_line_subtotals_tax_included"/>
+                                            <td class="text-right" style="background-color: #f4f4f5;">
+                                                <span t-field="line.price_subtotal"/>
                                             </td>
                                         </t>
                                         <t t-if="line.display_type == 'line_section'">
@@ -767,32 +821,32 @@
                         <br/>
 
                     </div>
-                    <t t-if="o.company_id.country_id.code != 'SG'">
-                        <table width="100%" class="table table-borderless"
-                               style="font-family: Calibri;text-color:black;font-size:13px">
-                            <tbody>
-                                <tr style="background-color: #f4f4f5;">
-                                    <td width="25%" style="text-align:center">
-                                        <span>--------------------</span>
-                                        <br/>
-                                        <span>Prepared By</span>
-                                    </td>
-                                    <td width="25%" style="text-align:center">
-                                        <span>-------------------</span>
-                                        <br/>
-                                        <span>Verified By</span>
-                                    </td>
-                                    <td width="25%" style="text-align:center">
-                                        <span>---------------------</span>
-                                        <br/>
-                                        <span>Approved By</span>
-                                    </td>
-                                    <td width="25%">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </t>
+                    <!--                    <t t-if="o.company_id.country_id.code != 'SG'">-->
+                    <!--                        <table width="100%" class="table table-borderless"-->
+                    <!--                               style="font-family: Calibri;text-color:black;font-size:13px">-->
+                    <!--                            <tbody>-->
+                    <!--                                <tr style="background-color: #f4f4f5;">-->
+                    <!--                                    <td width="25%" style="text-align:center">-->
+                    <!--                                        <span>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</span>-->
+                    <!--                                        <br/>-->
+                    <!--                                        <span>Prepared By</span>-->
+                    <!--                                    </td>-->
+                    <!--                                    <td width="25%" style="text-align:center">-->
+                    <!--                                        <span>-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</span>-->
+                    <!--                                        <br/>-->
+                    <!--                                        <span>Verified By</span>-->
+                    <!--                                    </td>-->
+                    <!--                                    <td width="25%" style="text-align:center">-->
+                    <!--                                        <span>-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</span>-->
+                    <!--                                        <br/>-->
+                    <!--                                        <span>Approved By</span>-->
+                    <!--                                    </td>-->
+                    <!--                                    <td width="25%">-->
+                    <!--                                    </td>-->
+                    <!--                                </tr>-->
+                    <!--                            </tbody>-->
+                    <!--                        </table>-->
+                    <!--                    </t>-->
                     <br/>
                 </div>
             </t>
