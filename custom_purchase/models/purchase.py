@@ -256,6 +256,13 @@ class PurchaseOrdLine(models.Model):
     _inherit = 'purchase.order.line'
 
     item_text = fields.Char("Item Text", related='product_id.item_text')
+    customer_part_no = fields.Char("Customer Part Number", related='product_id.customer_part_number')
+    balance_qty = fields.Float(string="Balance Quantity", compute='_compute_balance_qty', store=True)
+
+    @api.depends('product_qty', 'qty_received')
+    def _compute_balance_qty(self):
+        for line in self:
+            line.balance_qty = line.product_qty - line.qty_received
 
 
 class ResCompany(models.Model):

@@ -50,6 +50,8 @@ class StockMove(models.Model):
     additional_notes = fields.Char(string='Additional Notes')
     customer_part_no = fields.Text(string='Part Number')
     position_no = fields.Integer(string="Position", compute="_compute_position_no")
+    manufacturer_name = fields.Char(string='Manufacturer', store=True, readonly=True)
+    # related = 'product_id.manufacturer_id.name'
 
     def _compute_position_no(self):
         for move in self:

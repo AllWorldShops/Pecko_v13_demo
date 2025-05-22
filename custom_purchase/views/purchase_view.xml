@@ -11,6 +11,10 @@
             </xpath>
             <xpath expr="//field[@name='order_line']//list//field[@name='name']" position="after">
             	<field name="manufacturer_id"/>
+                <field name="customer_part_no"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//list//field[@name='qty_received']" position="after">
+            	<field name="balance_qty"/>
             </xpath>
             <xpath expr="//field[@name='order_line']//list//field[@name='taxes_id']" position="after">
                 <field name="notes"/>

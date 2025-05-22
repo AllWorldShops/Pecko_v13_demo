@@ -84,7 +84,7 @@
                 <field name="do_reference"/>
                 <field name="price_subtotal" string="Subtotal"/>
                 <field name="internal_ref_no" optional="hide"></field>
-                <field name="prodution_type" string="Purchased / Manufactured" optional="hide"/>
+<!--                <field name="prodution_type" string="Purchased / Manufactured" optional="hide"/>-->
                 <field name="sales_person_id" string="Salesperson" optional="hide"/>
                 <field name="total_invoice_qty" string="Invoice Value" optional="hide"/>
                 <field name="qty_invoiced" string="Invoiced" optional="hide"/>
@@ -117,9 +117,9 @@
                 <field name="order_line" string="Customer Part Number "
                        filter_domain="[('order_line.product_id.customer_part_number', 'ilike', self)]"/>
             </xpath>
-<!--            <xpath expr="//search/field[@name='analytic_account_id']" position="after">-->
-<!--                />-->
-<!--            </xpath>-->
+            <!--            <xpath expr="//search/field[@name='analytic_account_id']" position="after">-->
+            <!--                />-->
+            <!--            </xpath>-->
         </field>
     </record>
 

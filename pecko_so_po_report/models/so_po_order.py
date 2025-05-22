@@ -19,7 +19,7 @@ class ProductTemplate(models.Model):
 class Product(models.Model):   
     _inherit = "product.product"
      
-    @api.depends('name', 'default_code', 'product_tmpl_id')
+    @api.depends('default_code')
     @api.depends_context('display_default_code', 'seller_id', 'company_id', 'partner_id')
     def _compute_display_name(self):
         for product in self:

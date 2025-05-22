@@ -316,7 +316,7 @@
                                             <t t-else="">
                                                 <td style=" text-align: left;">
                                                     <span t-field="l.quantity"/>
-<!--                                                    <span t-field="l.product_uom_qty"/>-->
+                                                    <!--                                                    <span t-field="l.product_uom_qty"/>-->
                                                 </td>
 
                                                 <td style=" text-align: left;">
