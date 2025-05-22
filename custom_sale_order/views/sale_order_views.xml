@@ -58,36 +58,36 @@
         </field>
     </record>
 
-    <record id="view_sale_order_line_inherited" model="ir.ui.view">
+    <record id="view_sale_order_line_inherited_id" model="ir.ui.view">
         <field name="name">sale.order.line</field>
         <field name="model">sale.order.line</field>
         <field name="priority">2</field>
         <field name="arch" type="xml">
             <list string="Sale Order Lines" default_order='order_ref desc'>
                 <field name="order_ref" string="Order Reference"/>
-                <field name="line_no" string="Position"/>
                 <field name="customer_id" string="Customer"/>
-                <field name="product_id" string="Pecko Part Number" invisible="1"/>
-                <field name="customer_part_no" string="Customer Part Number" invisible="0"/>
-                <field name="internal_ref_no"></field>
-                <field name="mo_reference"/>
-                <field name="do_reference"/>
                 <field name="customer_po_no" string="Customer Po No" invisible="0"/>
+                <field name="line_no" string="Position"/>
+                <field name="product_id" string="Pecko Part Number"/>
+                <field name="customer_part_no" string="Customer Part Number" invisible="0"/>
                 <field name="name" string="Description"/>
-                <field name="production_type" string="Purchased / Manufactured" invisible="1"/>
-                <field name="sales_person_id" string="Salesperson" optional="hide"/>
+                <field name="mo_reference"/>
                 <field name="price_unit" string="Unit Price"/>
                 <field name="currency_id" string="Currency"/>
-                <field name="total_invoice_qty" string="Invoice Value"/>
                 <field name="product_uom_qty" string="Qty"/>
                 <field name="qty_delivered" string="Delivered"/>
-                <field name="qty_invoiced" string="Invoiced"/>
                 <field name="back_order_qty"/>
                 <field name="product_uom" string="Unit of Measure"/>
                 <field name="requested_date_line" string="Requested Date"/>
                 <field name="need_date"/>
                 <field name="promised_date"/>
+                <field name="do_reference"/>
                 <field name="price_subtotal" string="Subtotal"/>
+                <field name="internal_ref_no" optional="hide"></field>
+                <field name="prodution_type" string="Purchased / Manufactured" optional="hide"/>
+                <field name="sales_person_id" string="Salesperson" optional="hide"/>
+                <field name="total_invoice_qty" string="Invoice Value" optional="hide"/>
+                <field name="qty_invoiced" string="Invoiced" optional="hide"/>
             </list>
         </field>
     </record>
