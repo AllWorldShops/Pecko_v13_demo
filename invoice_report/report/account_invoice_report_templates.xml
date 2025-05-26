@@ -107,9 +107,24 @@
                                         Co.Reg.No:
                                         <br/>
                                     </t>
-                                    <img class="pull-right"
-                                         t-att-src="'/report/barcode/?type=QR&amp;value=%s&amp;width=180&amp;height=180' % o.l10n_my_edi_file"
-                                         t-if="o.l10n_my_edi_file"/>
+                                    <div id="myinvois_qrcode" class="d-flex mb-3 avoid-page-break-inside"
+                                         t-if="o.l10n_my_edi_external_uuid">
+                                        <div class="qrcode me-3" id="myinvois_qrcode_image">
+                                            <t t-set="qr_code_url" t-value="o._generate_myinvois_qr_code()"/>
+                                            <p t-if="qr_code_url" class="position-relative mb-0">
+                                                <img t-att-src="qr_code_url"/>
+                                                <img src="/account/static/src/img/Odoo_logo_O.svg"
+                                                     id="qrcode_odoo_logo"
+                                                     class="top-50 start-50 position-absolute bg-white border border-white border-3 rounded-circle"
+                                                />
+                                            </p>
+                                        </div>
+                                        <div class="d-inline text-muted lh-sm fst-italic" id="qrcode_info"
+                                             t-if="qr_code_url">
+                                            <p>Scan this QR Code to<br/>access your invoice
+                                            </p>
+                                        </div>
+                                    </div>
 
 
                                     <!--                                    <span t-field="o.partner_id.SST_registration_number"/>-->
