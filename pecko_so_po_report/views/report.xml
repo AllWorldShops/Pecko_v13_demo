@@ -598,38 +598,38 @@
                                 <br/>
                                 <span>
                                     <strong>
-                                        <t t-esc="o.partner_id.name"/>
+                                        <t t-esc="o.company_id.name"/>
                                     </strong>
                                 </span>
                                 <br/>
 
-                                <t t-if="o.partner_id.street">
+                                <t t-if="o.company_id.street">
                                     <span>
-                                        <t t-esc="o.partner_id.street"/>
+                                        <t t-esc="o.company_id.street"/>
                                     </span>
                                     <br/>
                                 </t>
-                                <t t-if="o.partner_id.street2">
+                                <t t-if="o.company_id.street2">
                                     <span>
-                                        <t t-esc="o.partner_id.street2"/>
-                                    </span>
-                                    <br/>
-                                </t>
-
-                                <t t-if="o.partner_id.city or o.partner_id.state_id">
-                                    <span>
-                                        <t t-esc="o.partner_id.city"/>
-                                        <t t-if="o.partner_id.city and o.partner_id.state_id">,</t>
-                                        <t t-esc="o.partner_id.state_id.name"/>
+                                        <t t-esc="o.company_id.street2"/>
                                     </span>
                                     <br/>
                                 </t>
 
-                                <t t-if="o.partner_id.country_id or o.partner_id.zip">
+                                <t t-if="o.company_id.city or o.company_id.state_id">
                                     <span>
-                                        <t t-esc="o.partner_id.country_id.name"/>
-                                        <t t-if="o.partner_id.country_id and o.partner_id.zip">,</t>
-                                        <t t-esc="o.partner_id.zip"/>
+                                        <t t-esc="o.company_id.city"/>
+                                        <t t-if="o.company_id.city and o.company_id.state_id">,</t>
+                                        <t t-esc="o.company_id.state_id.name"/>
+                                    </span>
+                                    <br/>
+                                </t>
+
+                                <t t-if="o.company_id.country_id or o.company_id.zip">
+                                    <span>
+                                        <t t-esc="o.company_id.country_id.name"/>
+                                        <t t-if="o.company_id.country_id and o.company_id.zip">,</t>
+                                        <t t-esc="o.company_id.zip"/>
                                     </span>
                                     <br/>
                                 </t>
@@ -748,10 +748,9 @@
                                                 <span t-field="line.product_qty"/>
                                                 <span t-field="line.product_uom"/>
                                             </td>
-
                                             <td class="text-center" style="background-color: #f4f4f5;">
                                                 <span t-field="line.date_planned"
-                                                      t-options='{"format":"dd-MM-yyyy"}'/>
+                                                      t-options='{"format":"dd-MMM-yyyy"}'/>
                                             </td>
                                             <td class="text-right" style="background-color: #f4f4f5;">
                                                 <span t-field="line.price_unit"/>

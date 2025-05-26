@@ -107,7 +107,9 @@
                                         Co.Reg.No:
                                         <br/>
                                     </t>
-                                    <span t-field="o.l10n_my_edi_file"/>
+                                    <img class="pull-right"
+                                         t-att-src="'/report/barcode/?type=QR&amp;value=%s&amp;width=180&amp;height=180' % o.l10n_my_edi_file"
+                                         t-if="o.l10n_my_edi_file"/>
 
 
                                     <!--                                    <span t-field="o.partner_id.SST_registration_number"/>-->
