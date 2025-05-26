@@ -218,7 +218,7 @@
                                                     </td>
                                                     <td>
                                                         <span style="text-align:left" t-field="o.date_done"
-                                                              t-options='{"format": "dd/MM/yyyy"}'/>
+                                                              t-options='{"format": "dd-MMM-yyyy"}'/>
                                                     </td>
                                                 </tr>
                                                 <tr>
