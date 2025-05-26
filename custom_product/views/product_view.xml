@@ -55,7 +55,7 @@
                 <field name="default_code"/>
             </xpath>
             <xpath expr="//field[@name='name']" position="after">
-                <field name="description"/>
+<!--                <field name="x_studio_field_mHzKJ"/>-->
                 <field name="customer_part_number"/>
                 <field name="manufacturer_id" string="Manufacturer"/>
                 <field name="storage_location_id" string="storage_location"/>
@@ -84,7 +84,7 @@
                 <field name="default_code"/>
             </xpath>
             <xpath expr="//field[@name='name']" position="after">
-                <field name="description"/>
+<!--                <field name="x_studio_field_mHzKJ"/>-->
                 <field name="customer_part_number"/>
                 <field name="manufacturer_id" string="Manufacturer"/>
                 <field name="storage_location_id" string="storage_location"/>

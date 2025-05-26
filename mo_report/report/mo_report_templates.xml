@@ -106,10 +106,10 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <strong>MO order</strong>
+                                                    <strong>order Sequence</strong>
                                                 </td>
                                                 <td>
-                                                    <span style="text-align:left" t-field="o.name"/>
+                                                    <span style="text-align:left" t-field="o.order_seq"/>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -220,7 +220,7 @@
                                         <span t-field="l.customer_part_no"/>
                                     </td>
                                     <td style=" text-align: left;">
-                                        <span t-field="l.product_tmpl_id.description"/>
+                                        <span t-field="l.product_tmpl_id.x_studio_field_mHzKJ"/>
                                     </td>
                                     <td style="text-align: left; white-space: nowrap;">
                                         <span t-field="l.manufacturer_id"/>

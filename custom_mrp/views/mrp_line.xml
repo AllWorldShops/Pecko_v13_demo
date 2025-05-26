@@ -58,20 +58,29 @@
             <!--	mo line item views	-->
 
             <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='product_id']"
-                   position="before">
-                <field name="position_no"/>
-                <field name="storage_location_id"/>
-                <field name="product_id" required="1" string="Pecko Part Number"/>
+                   position="after">
                 <field name="customer_part_no"/>
                 <field name="name"/>
                 <field name="item_text"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='item_text']"
+                   position="before">
                 <field name="manufacturer_id"/>
 
             </xpath>
-
             <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='quantity']"
                    position="replace">
                 <field name="quantity" string="Consumed"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='product_id']"
+                   position="attributes">
+                <attribute name="string">Pecko Part Number</attribute>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='product_id']"
+                   position="before">
+                <field name="position_no"/>
+                <field name="storage_location_id"/>
             </xpath>
 
         </field>
@@ -123,6 +132,11 @@
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_id']"
                    position="after">
                 <field name="customer_part_no"/>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='customer_part_no']"
+                   position="before">
+                <field name="manufacturer_id"/>
+
             </xpath>
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_id']"
                    position="attributes">
