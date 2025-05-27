@@ -7,7 +7,7 @@ class AcmoveInherit(models.Model):
     _inherit = 'account.move'
     
     receipts_id = fields.Many2one('stock.picking', string="Receipts",
-    readonly=True, states={'draft': [('readonly', False)]})
+     states={'draft': [('readonly', False)]})
     picking_ids = fields.Many2many('stock.picking', string="Picking_ids")
 
 
@@ -42,7 +42,7 @@ class AcmoveInherit(models.Model):
                     'manufacturer_id': line.manufacturer_id.id,
                     'name' : line.product_id.default_code,
                     # 'quantity':line.purchase_line_id.qty_received if line.purchase_line_id else line.quantity_done,
-                    'quantity': line.quantity_done / line.purchase_line_id.product_uom.factor_inv if line.purchase_line_id and line.product_uom.id != line.purchase_line_id.product_uom.id else line.quantity_done,
+                    'quantity': line.quantity / line.purchase_line_id.product_uom.factor_inv if line.purchase_line_id and line.product_uom.id != line.purchase_line_id.product_uom.id else line.quantity,
                     'price_unit': line.purchase_line_id.price_unit if line.purchase_line_id else line.product_id.standard_price,
                     'account_id': line.product_id.categ_id.property_stock_account_input_categ_id.id or False,
                     'name':line.product_id.name,
