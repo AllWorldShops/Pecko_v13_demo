@@ -88,6 +88,7 @@
                 <field name="sales_person_id" string="Salesperson" optional="hide"/>
                 <field name="total_invoice_qty" string="Invoice Value" optional="hide"/>
                 <field name="qty_invoiced" string="Invoiced" optional="hide"/>
+
             </list>
         </field>
     </record>
