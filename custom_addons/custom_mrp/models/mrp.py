@@ -119,6 +119,8 @@ class MrpBomLine(models.Model):
     manufacturer_id = fields.Many2one('product.manufacturer', string='Manufacturer')
     customer_part_no = fields.Text(string='Part Number', compute="_compute_product_name", store=True)
     item_text = fields.Char("Item Text", related='product_id.item_text')
+    seq_updated = fields.Text("Test seq")
+
 
     @api.depends('product_id')
     def _compute_product_name(self):
