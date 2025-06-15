@@ -35,6 +35,8 @@ class MrpProduction(models.Model):
     customer_po_no = fields.Char(string="Customer PO No")
     store_start_date = fields.Date("Store Start Date")
     confirm_cancel = fields.Boolean(compute='_compute_confirm_cancel')
+    material_release = fields.Char(string='Materials Release')
+    test_name = fields.Char(string='Test MO')
 
 
 
