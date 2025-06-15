@@ -156,6 +156,8 @@ class StockMove(models.Model):
     manufacturer_id = fields.Many2one('product.manufacturer', string='Manufacturer Name')
     customer_part_no = fields.Text(string='Part Number', compute="_compute_product_name", store=True)
     test_seq = fields.Text(string='Test seq')
+    material_release = fields.Char(string='Materials Release')
+
     item_text = fields.Char("Item Text", related='product_id.item_text')
     position_no = fields.Integer(string="Position", compute="_compute_position_no")
 
