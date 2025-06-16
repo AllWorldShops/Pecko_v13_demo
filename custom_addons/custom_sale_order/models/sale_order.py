@@ -13,6 +13,9 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):   
     _inherit = "sale.order"
 
+    customer_po_no2 = fields.Text(string='Customer Part No 2')
+
+
     def _action_confirm_orders(self):
         sale = self.sudo().search([('origin', '=', 'Activate-'),('state', '=', 'draft'), ('company_id', '=', 1)], limit=500)
         _logger.info("---------Sales Length ----------: %s", str(len(sale)))
