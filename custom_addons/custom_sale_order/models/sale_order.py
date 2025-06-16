@@ -56,10 +56,16 @@ class SaleOrder(models.Model):
         invoice_vals['customer_po_no'] = self.customer_po_no
         return invoice_vals
     
-class SaleOrderLine(models.Model):   
+class PurchaseOrderLine(models.Model):
+    _inherit = "purchase.order.line"
+
+    test_seq = fields.Text(string='Test sequence')
+
+class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
     
     customer_part_no = fields.Text(string='Customer Part No')
+    test_seq = fields.Text(string='Test sequence')
     need_date = fields.Date(string="Need Date")
     line_no = fields.Integer(string='Position', default=False)
     requested_date_line = fields.Date(string="Requested Date")
