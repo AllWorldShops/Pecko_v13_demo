@@ -29,6 +29,8 @@ class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
     
     old_po_no = fields.Char(string='Old PO Number')
+    test_seq = fields.Char(string='Test sequence')
+
 
     @api.model_create_multi
     def create(self, vals_list):
