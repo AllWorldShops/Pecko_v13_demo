@@ -5,9 +5,9 @@
         <field name="model_id" ref="cr_backdate_entries.model_backdate_entries_wiz"/>
         <field name="binding_model_id" ref="stock.model_stock_picking"/>
         <field name="groups_id" eval="[(4, ref('cr_backdate_entries.backdate_access_group'))]"/>
-		<field name="state">code</field>
+        <field name="state">code</field>
         <field name="binding_view_types">list,form</field>
-         <field name="code">
+        <field name="code">
             action = model.change_to_backdate_wizard()
         </field>
     </record>
@@ -17,9 +17,9 @@
         <field name="model_id" ref="cr_backdate_entries.model_backdate_entries_wiz"/>
         <field name="binding_model_id" ref="stock.model_stock_quant"/>
         <field name="groups_id" eval="[(4, ref('cr_backdate_entries.backdate_access_group'))]"/>
-		<field name="state">code</field>
+        <field name="state">code</field>
         <field name="binding_view_types">list,form</field>
-         <field name="code">
+        <field name="code">
             action = model.change_to_backdate_wizard()
         </field>
     </record>
@@ -29,9 +29,9 @@
         <field name="model_id" ref="cr_backdate_entries.model_backdate_entries_wiz"/>
         <field name="binding_model_id" ref="stock.model_stock_scrap"/>
         <field name="groups_id" eval="[(4, ref('cr_backdate_entries.backdate_access_group'))]"/>
-		<field name="state">code</field>
+        <field name="state">code</field>
         <field name="binding_view_types">list,form</field>
-         <field name="code">
+        <field name="code">
             action = model.change_to_backdate_wizard()
         </field>
     </record>
@@ -41,33 +41,46 @@
         <field name="model_id" ref="cr_backdate_entries.model_backdate_entries_wiz"/>
         <field name="binding_model_id" ref="mrp.model_mrp_production"/>
         <field name="groups_id" eval="[(4, ref('cr_backdate_entries.backdate_access_group'))]"/>
-		<field name="state">code</field>
+        <field name="state">code</field>
         <field name="binding_view_types">list,form</field>
-         <field name="code">
+        <field name="code">
             action = model.change_to_backdate_wizard()
         </field>
     </record>
+
+    <record id="model_action_stock_move_line_backdate_wizard" model="ir.actions.server">
+        <field name="name">Backdate - Stock move</field>
+        <field name="model_id" ref="cr_backdate_entries.model_backdate_entries_wiz"/>
+        <field name="binding_model_id" ref="mrp.model_stock_move_line"/>
+        <field name="groups_id" eval="[(4, ref('cr_backdate_entries.backdate_access_group'))]"/>
+        <field name="state">code</field>
+        <field name="binding_view_types">list,form</field>
+        <field name="code">
+            action = model.change_to_backdate_wizard()
+        </field>
+    </record>
+
 
     <record id="model_action_open_backdate_wizard_sale_order" model="ir.actions.server">
         <field name="name">Backdate - Sale Order</field>
         <field name="model_id" ref="cr_backdate_entries.model_backdate_entries_wiz"/>
         <field name="binding_model_id" ref="sale.model_sale_order"/>
         <field name="groups_id" eval="[(4, ref('cr_backdate_entries.backdate_access_group'))]"/>
-		<field name="state">code</field>
+        <field name="state">code</field>
         <field name="binding_view_types">list,form</field>
-         <field name="code">
+        <field name="code">
             action = model.change_to_backdate_wizard()
         </field>
     </record>
 
-     <record id="model_stock_picking_action_open_backdate_wizard_purchase_order" model="ir.actions.server">
+    <record id="model_stock_picking_action_open_backdate_wizard_purchase_order" model="ir.actions.server">
         <field name="name">Backdate - Purchase Order</field>
         <field name="model_id" ref="cr_backdate_entries.model_backdate_entries_wiz"/>
         <field name="binding_model_id" ref="purchase.model_purchase_order"/>
         <field name="groups_id" eval="[(4, ref('cr_backdate_entries.backdate_access_group'))]"/>
-		<field name="state">code</field>
+        <field name="state">code</field>
         <field name="binding_view_types">list,form</field>
-         <field name="code">
+        <field name="code">
             action = model.change_to_backdate_wizard()
         </field>
     </record>

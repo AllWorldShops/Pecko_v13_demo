@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api,_
+from odoo import models, fields, api, _
 import logging
 from odoo.exceptions import UserError
 
-
 _logger = logging.getLogger(__name__)
+
 
 class StockPickingInherit(models.Model):
     _inherit = 'stock.picking'
@@ -13,6 +13,7 @@ class StockPickingInherit(models.Model):
         """Set move line dates to match the scheduled date of picking"""
         for picking in self:
             picking.move_line_ids.write({'date': picking.scheduled_date})
+
 
 class BackDateWiz(models.TransientModel):
     _name = 'backdate.entries.wiz'
@@ -76,6 +77,8 @@ class BackDateWiz(models.TransientModel):
                     raise UserError(_("Purchase Order must be confirmed or done."))
 
                 po.write({'date_order': self.date})
+                po.write({'date_approve': self.date})
+
                 po.order_line.write({'date_planned': self.date})
 
                 for picking in po.picking_ids:
@@ -161,6 +164,44 @@ class BackDateWiz(models.TransientModel):
                                 'UPDATE account_move_line SET date = %s WHERE move_id = %s',
                                 (self.date, layer.account_move_id.id)
                             )
+
+
+        elif active_model == 'stock.move.line':
+
+            for line in records:
+                if line.state != 'done':
+                    raise UserError(_("Only completed Stock Move Lines can be backdated."))
+                line.write({'date': self.date})
+                move = line.move_id
+                if move and move.state == 'done':
+                    move.write({'date': self.date})
+                    move.move_line_ids.write({'date': self.date})
+                    valuation_layers = self.env['stock.valuation.layer'].search([
+                        ('stock_move_id', '=', move.id)
+                    ])
+                    for layer in valuation_layers:
+                        self.env.cr.execute(
+                            'UPDATE stock_valuation_layer SET create_date = %s WHERE id = %s',
+                            (self.date, layer.id)
+                        )
+                        if layer.account_move_id:
+                            self.env.cr.execute(
+                                'UPDATE account_move SET date = %s, invoice_date = %s WHERE id = %s',
+                                (self.date, self.date, layer.account_move_id.id)
+                            )
+                            self.env.cr.execute(
+                                'UPDATE account_move_line SET date = %s WHERE move_id = %s',
+                                (self.date, layer.account_move_id.id)
+                            )
+                quant = self.env['stock.quant'].search([
+                    ('product_id', '=', line.product_id.id),
+                    ('location_id', '=', line.location_dest_id.id)
+                ], limit=1)
+                if quant:
+                    quant.write({
+                        'in_date': self.date,
+                        'inventory_date': self.date,
+                    })
 
         else:
             raise UserError(
