@@ -10,17 +10,20 @@
                             <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
                         </div>
                     </div>
-                    <div class="row" name="company_address" style="text-start;padding-left:3px;font-family: Arial;text-color:black;">
+                    <div class="row" name="company_address"
+                         style="text-start;padding-left:3px;font-family: Arial;text-color:black;">
                         <div class="col-8">
                             <strong>
-                                <span style="font-size: 25px;papadding-left:3.6px" t-field="o.company_id.partner_id.name"/>
+                                <span style="font-size: 25px;papadding-left:3.6px"
+                                      t-field="o.company_id.partner_id.name"/>
                             </strong>
                         </div>
                     </div>
-                    <div class="row" style="padding-left:2.9px;font-family: Arial">
-                        <div class="col-8">
-                            <strong style="font-size: 25px;">Production Overview</strong>
-                        </div>
+                    <div class="col-8">
+                        <strong style="font-size: 25px;">
+                            <t t-if="user.lang == 'zh_CN'">生产概况</t>
+                            <t t-else="">Production Overview</t>
+                        </strong>
                     </div>
                     <div class="row" style="font-size:20px;padding-left:3px;font-family: Arial">
                         <div class="col-4">
@@ -30,17 +33,29 @@
                         </div>
                         <div class="col-4">
                             <strong>
-                                <span style="font-size:17px;">MO Quantity:</span>
+                                <t t-if="user.lang == 'zh_CN'">
+                                    <span style="font-size:17px;">生产数量：</span>
+                                </t>
+                                <t t-else="">
+                                    <span style="font-size:17px;">MO Quantity:</span>
+                                </t>
                             </strong>
                             <span style="font-size:17px;" t-esc="o.product_qty"/>
                             <span style="font-size:17px;text-transform: uppercase;" t-esc="o.product_uom_id.name"/>
                         </div>
+
                         <div class="col-5">
                             <strong>
-                                <span style=" font-size:15px;">Customer Part No:</span>
+                                <t t-if="user.lang == 'zh_CN'">
+                                    <span style="font-size:15px;">客户部件号：</span>
+                                </t>
+                                <t t-else="">
+                                    <span style="font-size:15px;">Customer Part No:</span>
+                                </t>
                             </strong>
                             <span style="font-size:15px;" t-esc="o.customer_part_no"/>
                         </div>
+
                     </div>
                 </div>
                 <div class="table_bom_structure" style="page-break-inside: avoid;">
@@ -49,18 +64,33 @@
                         padding: 6px;
                         }
                     </style>
-                    <table class="table table-bordered" name="invoice_line_table" style="width:100%;color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
+                    <table class="table table-bordered" name="invoice_line_table"
+                           style="width:100%;color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
                         <thead style="font-size:15px; border: 1px solid black;font-family: Arial" class="thead-light">
-                            <tr>
-                                <th class="text-center" style="border: 1px solid black;">Position</th>
-                                <th name="th_mrp_bom_h" style="border: 1px solid black;">Product</th>
-                                <th class="text-center" width="20%" style="border: 1px solid black;">Part No</th>
-                                <th class="text-center" style="border: 1px solid black;">Description</th>
-                                <th class="text-center" style="border: 1px solid black;">Manufacturer</th>
-                                <th class="text-center" style="border: 1px solid black;">Quantity</th>
-                                <th class="text-center" style="border: 1px solid black;">Unit of Measure</th>
-                            </tr>
+                            <t t-if="user.lang == 'zh_CN'">
+                                <tr>
+                                    <th class="text-center" style="border: 1px solid black;">位置</th>
+                                    <th style="border: 1px solid black;">产品</th>
+                                    <th class="text-center" width="20%" style="border: 1px solid black;">部件号</th>
+                                    <th class="text-center" style="border: 1px solid black;">描述</th>
+                                    <th class="text-center" style="border: 1px solid black;">制造商</th>
+                                    <th class="text-center" style="border: 1px solid black;">数量</th>
+                                    <th class="text-center" style="border: 1px solid black;">单位</th>
+                                </tr>
+                            </t>
+                            <t t-else="">
+                                <tr>
+                                    <th class="text-center" style="border: 1px solid black;">Position</th>
+                                    <th name="th_mrp_bom_h" style="border: 1px solid black;">Product</th>
+                                    <th class="text-center" width="20%" style="border: 1px solid black;">Part No</th>
+                                    <th class="text-center" style="border: 1px solid black;">Description</th>
+                                    <th class="text-center" style="border: 1px solid black;">Manufacturer</th>
+                                    <th class="text-center" style="border: 1px solid black;">Quantity</th>
+                                    <th class="text-center" style="border: 1px solid black;">Unit of Measure</th>
+                                </tr>
+                            </t>
                         </thead>
+
                         <tbody class="invoice_tbody" style="font-size:15px;font-family: Arial">
                             <tr>
                                 <td style="border: 1px solid black;"/>
@@ -107,14 +137,28 @@
                 </div>
                 <br/>
                 <div style="page-break-inside: avoid;">
-                    <table class="table table-bordered" name="work_line_table" style="width:100%;text-color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
+                    <table class="table table-bordered" name="work_line_table"
+                           style="width:100%;text-color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
                         <thead style="font-size:17px; border: 1px solid black;font-family: Arial" class="thead-light">
-                            <tr>
-                                <th class="text-center" width="20%" style="border: 1px solid black;">Operation</th>
-                                <th class="text-center" width="20%" style="border: 1px solid black;">Work Center</th>
-                                <th class="text-center" width="60%" style="border: 1px solid black;">Operation Text</th>
-                            </tr>
+                            <t t-if="user.lang == 'zh_CN'">
+                                <tr>
+                                    <th class="text-center" width="20%" style="border: 1px solid black;">工序</th>
+                                    <th class="text-center" width="20%" style="border: 1px solid black;">工作中心</th>
+                                    <th class="text-center" width="60%" style="border: 1px solid black;">工序说明</th>
+                                </tr>
+                            </t>
+                            <t t-else="">
+                                <tr>
+                                    <th class="text-center" width="20%" style="border: 1px solid black;">Operation</th>
+                                    <th class="text-center" width="20%" style="border: 1px solid black;">Work Center
+                                    </th>
+                                    <th class="text-center" width="60%" style="border: 1px solid black;">Operation
+                                        Text
+                                    </th>
+                                </tr>
+                            </t>
                         </thead>
+
                         <tbody class="invoice_tbody" style="font-size:17px;font-family: Arial">
                             <tr t-foreach="o.workorder_ids" t-as="l">
                                 <t t-if="l.name">
@@ -139,17 +183,32 @@
                     </div>
                     <div class="col-4" style="font-size:18px">
                         <div class="text-center">
-                            Page:
-                            <span class="page"/>
-                            of
-                            <span class="topage"/>
+                            <t t-if="user.lang == 'zh_CN'">
+                                页码：
+                                <span class="page"/>
+                                共
+                                <span class="topage"/>
+                                页
+                            </t>
+                            <t t-else="">
+                                Page:
+                                <span class="page"/>
+                                of
+                                <span class="topage"/>
+                            </t>
                         </div>
                     </div>
+
                     <div class="col">
-                        <div class="text-right" >
-                            <strong style=" font-size:17px;">Printed on:</strong>
-                            <span style=" font-size:17px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+                        <div class="text-right">
+                            <strong style="font-size:17px;">
+                                <t t-if="user.lang == 'zh_CN'">打印时间：</t>
+                                <t t-else="">Printed on:</t>
+                            </strong>
+                            <span style="font-size:17px;"
+                                  t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
                         </div>
+
                     </div>
                 </div>
             </div>

@@ -101,10 +101,10 @@
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">mo_report.report_custom_mo</field>
             <field name="report_file">mo_report.report_custom_mo</field>
-            <field name="print_report_name">'Mo Report - %s' % (object.name)</field>
+            <!-- Let it use the model method -->
+            <field name="print_report_name">object._get_report_base_filename()</field>
             <field name="binding_model_id" ref="mrp.model_mrp_production"/>
             <field name="paperformat_id" ref="mo_report.paperformat_mo"/>
-
             <field name="binding_type">report</field>
         </record>
 
@@ -124,12 +124,12 @@
             <field name="header_spacing">40</field>
             <field name="dpi">90</field>
         </record>
-        <!-- 
+        <!--
         <report id="action_report_mo_order_details" model="mrp.production" string="Production Overview" report_type="qweb-pdf" name="mo_report.report_mo_order_details" file="mo_report.report_mo_order_details" paperformat="paperformat_mo_order_details" print_report_name="'Production Overview - %s' % object.display_name"/> -->
 
 
         <record id="action_report_mo_order_details" model="ir.actions.report">
-            <field name="name">Production Overview</field>
+            <field name="name">Production Overview</field> <!-- Translatable string -->
             <field name="model">mrp.production</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">mo_report.report_mo_order_details</field>

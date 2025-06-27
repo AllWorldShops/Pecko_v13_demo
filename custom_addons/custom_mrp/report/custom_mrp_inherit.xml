@@ -38,7 +38,10 @@
                 </div>
                 <div class="row" style="padding-left:2.9px">
                     <div class="col-8">
-                        <strong style="font-size: 35px;">BoM Structure</strong>
+                        <strong style="font-size: 35px;">
+                            <t t-if="user.lang == 'zh_CN'">BOM结构</t>
+                            <t t-else="">BoM Structure</t>
+                        </strong>
                     </div>
                 </div>
                 <div class="row" style="font-size:16px;padding-left:3px">
@@ -49,16 +52,28 @@
                     </div>
                     <div class="col-4">
                         <strong>
-                            <span style=" font-size:20px;">Customer Part No:</span>
+                            <t t-if="user.lang == 'zh_CN'">
+                                <span style="font-size:20px;">客户部件号：</span>
+                            </t>
+                            <t t-else="">
+                                <span style="font-size:20px;">Customer Part No:</span>
+                            </t>
                         </strong>
+
                         <span style=" font-size:16px;" t-esc="data['product_part_no']"/>
                     </div>
                     <div class="col-5">
                         <strong>
-                            <span style=" font-size:20px; ">Description:</span>
+                            <t t-if="user.lang == 'zh_CN'">
+                                <span style="font-size:20px;">描述：</span>
+                            </t>
+                            <t t-else="">
+                                <span style="font-size:20px;">Description:</span>
+                            </t>
                         </strong>
-                        <span style=" font-size:16px; " t-esc="data['product_discription']"/>
+                        <span style="font-size:16px;" t-esc="data['product_discription']"/>
                     </div>
+
                 </div>
             </div>
             <div class="table_bom_structure">
@@ -66,16 +81,58 @@
                     <t t-set="currency" t-value="data['currency']"/>
                     <table class="o_mrp_bom_expandable table custom-table" border='1px'>
                         <thead>
-                            <tr>
-                                <th class="text-center">Position</th>
-                                <th name="th_mrp_bom_h">Product</th>
-                                <th class="text-center" width="20%">Part No</th>
-                                <th class="text-center">Description</th>
-                                <th class="text-center">Manufacturer</th>
-                                <th class="text-center">Quantity</th>
-                                <th class="text-center" groups="uom.group_uom">Unit of Measure</th>
-                            </tr>
+                            <t t-if="user.lang == 'zh_CN'">
+                                <tr>
+                                    <th class="text-center">
+                                        <strong>位置</strong>
+                                    </th>
+                                    <th name="th_mrp_bom_h">
+                                        <strong>产品</strong>
+                                    </th>
+                                    <th class="text-center" width="20%">
+                                        <strong>部件号</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>描述</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>制造商</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>数量</strong>
+                                    </th>
+                                    <th class="text-center" groups="uom.group_uom">
+                                        <strong>单位</strong>
+                                    </th>
+                                </tr>
+                            </t>
+                            <t t-else="">
+                                <tr>
+                                    <th class="text-center">
+                                        <strong>Position</strong>
+                                    </th>
+                                    <th name="th_mrp_bom_h">
+                                        <strong>Product</strong>
+                                    </th>
+                                    <th class="text-center" width="20%">
+                                        <strong>Part No</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>Description</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>Manufacturer</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>Quantity</strong>
+                                    </th>
+                                    <th class="text-center" groups="uom.group_uom">
+                                        <strong>Unit of Measure</strong>
+                                    </th>
+                                </tr>
+                            </t>
                         </thead>
+
                         <tbody>
                             <tr>
                                 <td/>
@@ -111,12 +168,34 @@
                     </table>
                     <table class="o_mrp_bom_expandable table custom-table">
                         <thead>
-                            <tr>
-                                <th class="text-center">Operation</th>
-                                <th class="text-center">Work Center</th>
-                                <th class="text-center">Operation Text</th>
-                            </tr>
+                            <t t-if="user.lang == 'zh_CN'">
+                                <tr>
+                                    <th class="text-center">
+                                        <strong>工序</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>工作中心</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>工序说明</strong>
+                                    </th>
+                                </tr>
+                            </t>
+                            <t t-else="">
+                                <tr>
+                                    <th class="text-center">
+                                        <strong>Operation</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>Work Center</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>Operation Text</strong>
+                                    </th>
+                                </tr>
+                            </t>
                         </thead>
+
                         <tbody>
                             <tr t-foreach="data['workorder_ids']" t-as="line">
                                 <td class="text-center">
@@ -133,8 +212,16 @@
                     </table>
                 </div>
                 <div t-else="" class="d-flex align-items-center justify-content-center h-50">
-                    <h4 class="text-muted">No data available.</h4>
+                    <h4 class="text-muted">
+                        <t t-if="user.lang == 'zh_CN'">
+                            <strong>暂无数据</strong>
+                        </t>
+                        <t t-else="">
+                            <strong>No data available.</strong>
+                        </t>
+                    </h4>
                 </div>
+
             </div>
 
         </template>
@@ -181,21 +268,37 @@
                 <div class="row">
                     <div class="col-4">
                     </div>
-                    <div class="col-4" style="font-size:18">
+                    <div class="col-4" style="font-size:18px;">
                         <div class="text-center">
-                            Page:
-                            <span class="page"/>
-                            of
-                            <span class="topage"/>
+                            <t t-if="user.lang == 'zh_CN'">
+                                <strong>页码：</strong>
+                                <span class="page"/>
+                                <strong>共</strong>
+                                <span class="topage"/>
+                                <strong>页</strong>
+                            </t>
+                            <t t-else="">
+                                <strong>Page:</strong>
+                                <span class="page"/>
+                                <strong>of</strong>
+                                <span class="topage"/>
+                            </t>
                         </div>
                     </div>
+
                     <div class="col">
                         <div class="text-right">
-                            <strong style=" font-size:18px;">Printed on:</strong>
-                            <span style=" font-size:18px;"
+                            <t t-if="user.lang == 'zh_CN'">
+                                <strong style="font-size:18px;">打印时间：</strong>
+                            </t>
+                            <t t-else="">
+                                <strong style="font-size:18px;">Printed on:</strong>
+                            </t>
+                            <span style="font-size:18px;"
                                   t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
                         </div>
                     </div>
+
                 </div>
             </div>
         </template>

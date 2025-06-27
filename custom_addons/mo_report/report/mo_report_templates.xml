@@ -51,14 +51,25 @@
 
                 <div class="page" style="text-color:black">
                     <br/>
-                    <div style="font-size: 20px;text-align: center;">
-                        <span>
-                            <strong>
-                                MATERIAL LIST
-                                <br/>
-                                (Original)
-                            </strong>
-                        </span>
+                    <div style="font-size: 20px; text-align: center;">
+                        <t t-if="user.lang == 'zh_CN'">
+                            <span>
+                                <strong>
+                                    材料清单
+                                    <br/>
+                                    (原始)
+                                </strong>
+                            </span>
+                        </t>
+                        <t t-else="">
+                            <span>
+                                <strong>
+                                    MATERIAL LIST
+                                    <br/>
+                                    (Original)
+                                </strong>
+                            </span>
+                        </t>
                     </div>
                     <br/>
                     <!--                    <br/>-->
@@ -71,91 +82,179 @@
                                 <td style="width:57%;background-color: white;font-size:15px;">
                                     <table>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <strong>Item No</strong>
-                                                </td>
-                                                <td>
-                                                    <span style="text-align:left" t-field="o.product_id"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Part Number</strong>
-                                                </td>
-                                                <td>
-                                                    <span style="text-align:left"
-                                                          t-field="o.customer_part_no"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Description</strong>
-                                                </td>
-                                                <td>
-                                                    <span style="text-align:left" t-field="o.description"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Project</strong>
-                                                </td>
-                                                <td>
-                                                    <span style="text-align:left" t-field="o.project"/>
-                                                </td>
-                                            </tr>
+                                            <!-- Chinese version -->
+                                            <t t-if="user.lang == 'zh_CN'">
+                                                <tr>
+                                                    <td>
+                                                        <strong>项目编号</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.product_id"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>部件编号</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.customer_part_no"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>描述</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.description"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>项目</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.project"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+
+                                            <!-- English version -->
+                                            <t t-else="">
+                                                <tr>
+                                                    <td>
+                                                        <strong>Item No</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.product_id"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Part Number</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.customer_part_no"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Description</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.description"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Project</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.project"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
                                         </tbody>
                                     </table>
                                 </td>
+
                                 <td style="width:43%;background-color: white;font-size:15px;">
                                     <table>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <strong>Production Order No</strong>
-                                                </td>
-                                                <td>
-                                                    <span style="text-align:left" t-field="o.name"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Source Document</strong>
-                                                </td>
-                                                <td>
-                                                    <span style="text-align:left" t-field="o.origin"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Quantity Order</strong>
-                                                </td>
-                                                <td>
-                                                    <span style="text-align:left" t-field="o.product_qty"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Schedule Date</strong>
-                                                </td>
-                                                <td>
-                                                    <span style="text-align:left"
-                                                          t-field="o.date_start"
-                                                          t-options='{"format": "dd/MM/yyyy"}'/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Printing Date</strong>
-                                                </td>
-                                                <td>
-                                                    <span
-                                                            t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
-                                                </td>
-                                            </tr>
+                                            <!-- Chinese Labels -->
+                                            <t t-if="user.lang == 'zh_CN'">
+                                                <tr>
+                                                    <td>
+                                                        <strong>生产订单号</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.name"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>来源单据</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.origin"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>订单数量</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.product_qty"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>计划日期</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left"
+                                                              t-field="o.date_start"
+                                                              t-options='{"format": "dd/MM/yyyy"}'/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>打印日期</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+
+                                            <!-- English Labels -->
+                                            <t t-else="">
+                                                <tr>
+                                                    <td>
+                                                        <strong>Production Order No</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.name"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Source Document</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.origin"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Quantity Order</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left" t-field="o.product_qty"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Schedule Date</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span style="text-align:left"
+                                                              t-field="o.date_start"
+                                                              t-options='{"format": "dd/MM/yyyy"}'/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Printing Date</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
                                         </tbody>
                                     </table>
                                 </td>
+
                             </tr>
                         </tbody>
                     </table>
@@ -164,7 +263,6 @@
                            name="invoice_line_table"
                            style="width:100%;margin-top:-30px;text-color:black;font-size:13px;table-layout:auto;">
                         <style>
-
                             tbody tr:nth-child(odd){
                             background-color:#f4f4f5;
                             border-top:none;
@@ -172,37 +270,45 @@
                             }
                             th{font-size:13px}
                             td{font-size:13px}
-
-
                         </style>
 
                         <thead style="font-size:8px;border-bottom:none" class="thead-light">
-
-                            <!-- <tr> <th >Storage Location</th> <th class="text-left" >Item No</th>
-                                <th class="text-left" >Part No</th> <th class="text-left" >Description</th>
-                                <th class="text-left" >Manufaturer</th> <th class="text-left" >u/m</th> <th
-                                class="text-left" rowspan="2">Qty</th> </tr> -->
-                            <tr>
-                                <th class="text-left" style="width:7%;color:#875A7B;text-align:left">Position</th>
-                                <th style="width: 20%; color: #875A7B; text-align: left; padding-left: 10px;">Storage
-                                    Location
-                                </th>
-
-                                <th class="text-left" style="width:14%;color:#875A7B;text-align:left">Item No</th>
-                                <th class="text-left" style="width:14%;color:#875A7B;text-align:left">Part No</th>
-                                <!--                                <th class="text-left" style="width:20%;color:#875A7B;text-align:left">Description</th>-->
-                                <th class="text-left" style="width:14%;color:#875A7B">Manufacturer</th>
-                                <th class="text-left" style="width:7%;color:#875A7B">uom</th>
-                                <th class="text-left" style="width:7%;color:#875A7B">Qty</th>
-                            </tr>
+                            <!-- Chinese Header -->
+                            <t t-if="user.lang == 'zh_CN'">
+                                <tr>
+                                    <th class="text-left" style="width:7%;color:#875A7B;">位置</th>
+                                    <th style="width: 20%; color: #875A7B; text-align: left; padding-left: 10px;">库位
+                                    </th>
+                                    <th class="text-left" style="width:14%;color:#875A7B;">项目编号</th>
+                                    <th class="text-left" style="width:14%;color:#875A7B;">部件编号</th>
+                                    <th class="text-left" style="width:14%;color:#875A7B;">制造商</th>
+                                    <th class="text-left" style="width:7%;color:#875A7B;">单位</th>
+                                    <th class="text-left" style="width:7%;color:#875A7B;">数量</th>
+                                </tr>
+                            </t>
+                            <!-- English Header -->
+                            <t t-else="">
+                                <tr>
+                                    <th class="text-left" style="width:7%;color:#875A7B;">Position</th>
+                                    <th style="width: 20%; color: #875A7B; text-align: left; padding-left: 10px;">
+                                        Storage Location
+                                    </th>
+                                    <th class="text-left" style="width:14%;color:#875A7B;">Item No</th>
+                                    <th class="text-left" style="width:14%;color:#875A7B;">Part No</th>
+                                    <th class="text-left" style="width:14%;color:#875A7B;">Manufacturer</th>
+                                    <th class="text-left" style="width:7%;color:#875A7B;">UOM</th>
+                                    <th class="text-left" style="width:7%;color:#875A7B;">Qty</th>
+                                </tr>
+                            </t>
                         </thead>
+
                         <tbody class="invoice_tbody" style="font-size:12px">
                             <tr t-foreach="o.move_raw_ids" t-as="l">
                                 <t t-if="l.product_uom_qty > 0">
-                                    <td style=" text-align: left;">
+                                    <td style="text-align: left;">
                                         <span t-field="l.position_no"/>
                                     </td>
-                                    <td style=" text-align: left;">
+                                    <td style="text-align: left;">
                                         <span t-field="l.storage_location_id"/>
                                     </td>
                                     <td style="text-align: left; white-space: nowrap;">
@@ -211,22 +317,20 @@
                                     <td style="text-align: left; white-space: nowrap;">
                                         <span t-field="l.customer_part_no"/>
                                     </td>
-                                    <!--                                    <td style=" text-align: left;">-->
-                                    <!--                                        <span t-field="l.name"/>-->
-                                    <!--                                    </td>-->
-                                     <td style="text-align: left; white-space: nowrap;">
+                                    <td style="text-align: left; white-space: nowrap;">
                                         <span t-field="l.manufacturer_id"/>
                                     </td>
-                                    <td style=" text-align: left;">
+                                    <td style="text-align: left;">
                                         <span t-field="l.product_uom"/>
                                     </td>
-                                    <td style=" text-align: right;">
+                                    <td style="text-align: right;">
                                         <span t-field="l.product_uom_qty"/>
                                     </td>
                                 </t>
                             </tr>
                         </tbody>
                     </table>
+
 
                     <table style='width:100%;background:transparent;'>
                         <tr

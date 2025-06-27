@@ -38,6 +38,14 @@ class MrpProduction(models.Model):
     material_release = fields.Char(string='Materials Release')
     test_name = fields.Char(string='Test MO')
 
+    def _get_report_base_filename(self):
+        self.ensure_one()
+        lang = self.env.user.lang
+        if lang == 'zh_CN':
+            return '制造业报告 - %s' % self.name
+        return 'MO Report - %s' % self.name
+
+
 
 
     def _compute_boolean_txt(self):
