@@ -5,7 +5,6 @@
             <div class="header o_background_header">
                 <div class="row" style="bottom:10px;top:10px">
                     <div class="col-10">
-                        <!--                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" height="80" width="80"/>-->
                         <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
                              alt="Logo"/>
                         <div class="company_address" style="line-height:10px;font-family: Calibri;">
@@ -35,11 +34,6 @@
                                 <br/>
                                 <span>TEL :</span>
                                 <span t-field="o.company_id.phone"/>
-                                <!--                                <t t-if="o.company_id.fax">-->
-                                <!--                                    |-->
-                                <!--                                    <span>FAX :</span>-->
-                                <!--                                    <span t-field="o.company_id.fax" />-->
-                                <!--                                </t>-->
                                 <br/>
                                 <t t-if="o.company_id.country_id.code != 'SG'">
                                     <span>E-mail:</span>
@@ -59,10 +53,18 @@
                     </div>
                     <div class="col-2">
                         <div class="text-muted text-right">
-                            Page:
-                            <span class="page"/>
-                            of
-                            <span class="topage"/>
+                            <t t-if="user.lang == 'zh_CN'">
+                                页数:
+                                <span class="page"/>
+                                /
+                                <span class="topage"/>
+                            </t>
+                            <t t-else="">
+                                Page:
+                                <span class="page"/>
+                                of
+                                <span class="topage"/>
+                            </t>
                         </div>
                         <div class="clearfix mb8"/>
                     </div>
@@ -76,104 +78,131 @@
 
 
             <div class="footer o_background_footer" style="font-family: Calibri;font-size:12px;">
-                <t t-if="o.company_id.country_id.code != 'SG'">
-                    <t t-if="o.company_id.country_id.code != 'SG'">
+                <t t-if="o.company_id.country_id.code != 'CN'">
+                    <t t-if="o.company_id.country_id.code != 'CN'">
                         <table width="100%"
                                style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;height:15px;"
                                class="table table-borderless">
                             <tr style="height:5px;">
-                                <td width="25%">For Tax Purpose in MYR Only</td>
+                                <td width="25%">
+                                    <t t-if="user.lang == 'zh_CN'">仅用于税务目的（人民币）</t>
+                                    <t t-else="">For Tax Purpose in CNY Only</t>
+                                </td>
                                 <td width=""></td>
                                 <td width="10%"></td>
-                                <td width="15%" style="text-align:right;">Net Total (MYR)</td>
+                                <td width="15%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">净总额（人民币）</t>
+                                    <t t-else="">Net Total (CNY)</t>
+                                </td>
                                 <td width="" style="text-align:right;">:</td>
-                                <td width="15%">
-                                    <span t-esc="'%.2f'%(o.get_net_amount_report())"/>
+                                <!--                                <td width="15%">-->
+                                <!--                                    <t t-if="o.get_net_amount_report()">-->
+                                <!--                                        <span t-esc="'%.2f' % (o.get_net_amount_report())"/>-->
+                                <!--                                    </t>-->
+                                <!--                                    <t t-else="">-->
+                                <!--                                        <span>-</span>-->
+                                <!--                                    </t>-->
+                                <!--                                </td>-->
+
+                                <td width="15%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">
+                                        净总额（<span t-field="o.currency_id"/>）
+                                    </t>
+                                    <t t-else="">
+                                        Net Total (<span t-field="o.currency_id"/>)
+                                    </t>
                                 </td>
-                                <td width="15%" style="text-align:right;">Net Total (
-                                    <span t-field="o.currency_id"/>
-                                    )
-                                </td>
+
                                 <td width="1%" style="text-align:left;">:</td>
                                 <td width="15%" style="text-align:right;">
                                     <span t-esc="'%.2f'%(o.amount_untaxed)"/>
                                 </td>
                             </tr>
                             <tr style="height:5px;">
-                                <td width="15%">1 MYR =
-                                    <span t-field="o.exchange_rate"/>
+                                <td width="15%">1 CNY =
+                                    <span t-field="o.invoice_currency_rate"/>
                                     USD
                                 </td>
                                 <td width="3.3%"></td>
                                 <td width="15%"></td>
-                                <td width="15%" style="text-align:right;">Tax Amount</td>
-                                <td width="3" style="text-align:right;">:</td>
-                                <td width="15%">
-                                    <span style="padding-left:3px" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/>
+                                <td width="15%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">税额</t>
+                                    <t t-else="">Tax Amount</t>
                                 </td>
-                                <td width="16%" style="text-align:right;">Tax Amount</td>
+                                <td width="3" style="text-align:right;">:</td>
+                                <t t-if="o.invoice_currency_rate">
+                                    <span t-esc="'%.2f' % (o.amount_tax / o.invoice_currency_rate)"/>
+                                </t>
+                                <t t-else="">
+                                    <span>0.00</span>
+                                </t>
+
+                                <td width="16%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">税额</t>
+                                    <t t-else="">Tax Amount</t>
+                                </td>
                                 <td width="1%" style="text-align:left;">:</td>
                                 <td width="15%" style="text-align:right;">
                                     <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/>
                                 </td>
                             </tr>
                             <tr style="height:5px">
-                                <td width="15%">Conversation Rate =
-                                    <span t-field="o.exchange_rate"/>
+                                <td width="15%">
+                                    <t t-if="user.lang == 'zh_CN'">
+                                        汇率 =
+                                    </t>
+                                    <t t-else="">
+                                        Conversation Rate =
+                                    </t>
+                                    <span t-field="o.invoice_currency_rate"/>
                                 </td>
+
                                 <td width="3.3%"></td>
                                 <td width="15%"></td>
-                                <td width="15%" style="text-align:right;">Grand Total (MYR)</td>
-                                <td width="3%" style="text-align:right;">:</td>
-                                <td width="15%">
-                                    <span style="padding-left:3px"
-                                          t-esc="'%.2f'%((o.amount_tax / o.exchange_rate) + o.get_net_amount_report())"/>
+
+                                <td width="15%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">
+                                        总计 (CNY)
+                                    </t>
+                                    <t t-else="">
+                                        Grand Total (CNY)
+                                    </t>
                                 </td>
-                                <td width="16%" style="text-align:right;">Grand Total (
+
+                                <td width="3%" style="text-align:right;">:</td>
+
+                                <t t-if="o.invoice_currency_rate">
+                                    <span style="padding-left:3px"
+                                          t-esc="'%.2f' % (((o.amount_tax or 0) / o.invoice_currency_rate) + o.get_net_amount_report())"/>
+                                </t>
+                                <t t-else="">
+                                    <span style="color:red;padding-left:3px;">
+                                        <t t-if="user.lang == 'zh_CN'">0.00（无效汇率）</t>
+                                        <t t-else="">0.00 (Invalid exchange rate)</t>
+                                    </span>
+                                </t>
+
+                                <td width="16%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">
+                                        总计 (
+                                    </t>
+                                    <t t-else="">
+                                        Grand Total (
+                                    </t>
                                     <span t-field="o.currency_id"/>
                                     )
                                 </td>
+
                                 <td width="1%" style="text-align:left;">:</td>
+
                                 <td width="15%" style="text-align:right;">
                                     <span t-esc="'%.2f'%(o.amount_total)"/>
                                 </td>
                             </tr>
+
                         </table>
                     </t>
-<!--                    <p style="page-break-after:always"></p>-->
-                    <t t-if="o.company_id.country_id.code != 'SG'">
-                        <div width="100%" style="border-bottom: 1px solid black;font-size=10px;line-height:18px">
-                            <tr>
-                                <td width="85%">
-                                    **This is a computer generated document. Signature is not required.**
-                                    <br/>
-                                    1.Please remit to Pecko (M) Sdn Bhd, Swift Code: MBBEMYKL,
-                                    Maybank Islamic Berhad (MYR A/C: 551100316366);
-                                    Malayan Banking Berhad (USD A/C: 701105010725).
-                                    Swift Code: RHBBMYKL, RHB Bank Berhad (USD A/C: 60113800001626).
-                                    <br/>
-                                    2.Any discrepancy noted herein must be brought to our notice
-                                    within 7 days in writing from the date of this invoice.
-                                    <br/>
-                                    3.Title to this merchandise remains with PECKO (M) SDN BHD until
-                                    such time as full settlement of all sums due from you to us under
-                                    this invoice or otherwise is received.
-                                </td>
-                                <td width="15%">
-                                    <div style="position:relative;top:40px;">
-
-                                            <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
-                                                 style="width:110px;"/> -->
-                                            <img t-if="o.company_id.logo_three"
-                                                 t-att-src="image_data_uri(o.company_id.logo_three)"
-                                                 style="width:110px;"
-                                                 alt="Logo"/>
-
-                                    </div>
-                                </td>
-                            </tr>
-                        </div>
-                    </t>
+                    <!--                    <p style="page-break-after:always"></p>-->
                 </t>
                 <table style='width:100%;background:transparent;'>
                     <tr
@@ -184,23 +213,33 @@
                 </table>
                 <style>
                 </style>
-                <t t-if="o.company_id.country_id.code == 'SG'">
-                    <t t-if="o.company_id.country_id.code == 'SG'">
+                <t t-if="o.company_id.country_id.code == 'CN'">
+                    <t t-if="o.company_id.country_id.code == 'CN'">
                         <table width="100%"
                                style="margin-bottom:10px;border-top: 1px solid black;border-bottom: 1px solid black;font-size:px;height:15px"
                                class="table table-borderless">
                             <tr style="height:5px;">
-                                <td width="25%">For Tax Purpose in SGD Only</td>
+                                <td width="25%">
+                                    <t t-if="user.lang == 'zh_CN'">仅用于税务目的（人民币）</t>
+                                    <t t-else="">For Tax Purpose in CNY Only</t>
+                                </td>
                                 <td width=""></td>
                                 <td width="10%"></td>
-                                <td width="15%" style="text-align:right;">Net Total (SGD)</td>
+                                <td width="15%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">净总额（人民币）</t>
+                                    <t t-else="">Net Total (CNY)</t>
+                                </td>
                                 <td width="" style="text-align:right;">:</td>
                                 <td width="15%">
-                                    <span t-esc="'%.2f'%(o.amount_untaxed * o.exchange_rate)"/>
+                                    <span t-esc="'%.2f'%(o.amount_untaxed * o.invoice_currency_rate)"/>
                                 </td>
-                                <td width="15%" style="text-align:right;">Net Total (
-                                    <span t-field="o.currency_id"/>
-                                    )
+                                <td width="15%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">
+                                        净总额（<span t-field="o.currency_id"/>）
+                                    </t>
+                                    <t t-else="">
+                                        Net Total (<span t-field="o.currency_id"/>)
+                                    </t>
                                 </td>
                                 <td width="1%" style="text-align:left;">:</td>
                                 <td width="15%" style="text-align:right;">
@@ -209,42 +248,63 @@
                             </tr>
                             <tr style="height:5px;">
                                 <td width="15%">1 USD =
-                                    <span t-field="o.exchange_rate"/>
-                                    SGD
+                                    <span t-field="o.invoice_currency_rate"/>
+                                    CNY
                                 </td>
                                 <td width="3.3%"></td>
                                 <td width="15%"></td>
-                                <td width="15%" style="text-align:right;">Tax Amount</td>
+                                <td width="15%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">税额</t>
+                                    <t t-else="">Tax Amount</t>
+                                </td>
                                 <td width="5%" style="text-align:right;">:</td>
                                 <td width="15%">
-                                    <span style="padding:8px" t-esc="'%.2f'%(o.amount_tax * o.exchange_rate)"/>
+                                    <span style="padding:8px" t-esc="'%.2f'%(o.amount_tax * o.invoice_currency_rate)"/>
                                 </td>
-                                <td width="15%" style="text-align:right;">Tax Amount</td>
+                                <td width="16%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">税额</t>
+                                    <t t-else="">Tax Amount</t>
+                                </td>
                                 <td width="1%" style="text-align:left;">:</td>
                                 <td width="15%" style="text-align:right;">
                                     <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/>
                                 </td>
                             </tr>
                             <tr style="height:5px">
-                                <td width="15%">Conversation Rate =
-                                    <span t-field="o.exchange_rate"/>SGD
+                                <td width="15%">
+                                    <t t-if="user.lang == 'zh_CN'">汇率 =</t>
+                                    <t t-else="">Conversation Rate =</t>
+                                    <span t-field="o.invoice_currency_rate"/>
+                                    CNY
                                 </td>
+
                                 <td width="3.3%"></td>
                                 <td width="15%"></td>
-                                <td width="15%" style="text-align:right;">Grand Total (SGD)</td>
+
+                                <td width="15%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">总计 (CNY)</t>
+                                    <t t-else="">Grand Total (CNY)</t>
+                                </td>
+
                                 <td width="5%" style="text-align:right;">:</td>
+
                                 <td width="15%">
-                                    <span t-esc="'%.2f'%((o.amount_tax * o.exchange_rate) + (o.amount_untaxed * o.exchange_rate))"/>
+                                    <span t-esc="'%.2f'%((o.amount_tax * o.invoice_currency_rate) + (o.amount_untaxed * o.invoice_currency_rate))"/>
                                 </td>
-                                <td width="15%" style="text-align:right;">Grand Total (
-                                    <span t-field="o.currency_id"/>
-                                    )
+
+                                <td width="15%" style="text-align:right;">
+                                    <t t-if="user.lang == 'zh_CN'">总计 (</t>
+                                    <t t-else="">Grand Total (</t>
+                                    <span t-field="o.currency_id"/>)
                                 </td>
+
                                 <td width="1%" style="text-align:left;">:</td>
+
                                 <td width="15%" style="text-align:right;">
                                     <span t-esc="'%.2f'%(o.amount_total)"/>
                                 </td>
                             </tr>
+
                         </table>
                     </t>
 
@@ -252,56 +312,16 @@
                     <table width="100%" style="border-bottom: 1px solid black;position:relative;line-height:1.5;"
                            class="table table-borderless">
                         <tr>
-                            <td width="85%" t-if="o.company_id.id == 2">
-                                **This is a computer generated document. Signature is not required.**
-                                <br/>
-                                1.Please remit to Pecko Electronics Industries Pte.Ltd, Swift Code: (UOVBSGSG),
-                                United Overseas Bank (SGD A/C: 213-307-107-7);
-                                United Overseas Bank (USD A/C: 213-900-224-7).
-                                <br/>
-                                2.Any discrepancy noted herein must be brought to our notice
-                                within 7 days in writing from the date of this invoice.
-                                <br/>
-                                3.Title to this merchandise remains with Pecko Electronics Industries Pte.Ltd until
-                                such time as full settlement of all sums due from you to us under
-                                this invoice or otherwise is received.
-
-                            </td>
-                            <td width="85%" t-if="o.company_id.id == 4">
-                                **This is a computer generated document. Signature is not required.**
-                                <br/>
-                                1.Please remit to All World Shop Pte.Ltd, Swift Code: (UOVBSGSG),
-                                United Overseas Bank (SGD A/C: 3783029764);
-                                United Overseas Bank (USD A/C: 3789004550).
-                                <br/>
-                                2.Any discrepancy noted herein must be brought to our notice
-                                within 7 days in writing from the date of this invoice.
-                                <br/>
-                                3.Title to this merchandise remains with All World Shop Pte.Ltd until
-                                such time as full settlement of all sums due from you to us under
-                                this invoice or otherwise is received.
-                            </td>
-                            <td width="15%">
-                                <div style="position:relative;top:50px;">
-
-                                        <!-- <img t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo_three)"
-                                             style="width:110px;"/> -->
-                                        <img t-if="o.company_id.logo_three"
-                                             t-att-src="image_data_uri(o.company_id.logo_three)" style="width:110px;"
-                                             alt="Logo"/>
-
-                                </div>
+                            <td width="15%" style="vertical-align: top; padding-top: 20px; padding-left: 750px;">
+                                <img t-if="o.company_id.logo_three"
+                                     t-att-src="image_data_uri(o.company_id.logo_three)"
+                                     style="width:110px; display: block;"
+                                     alt="Logo"/>
                             </td>
                         </tr>
+
                     </table>
                 </t>
-                <!-- <t t-if="o.company_id.country_id.code == 'SG'">
-                            <table width="100%" style="border-bottom:1px solid black;border-top:1px solid black;">
-                                <tr>
-                                </tr>
-                            </table>
-                        </t> -->
-
             </div>
         </template>
         <template id="custom_invoice_external_layout">

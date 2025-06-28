@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="31a3f58c-2461-43f6-a709-c8b9e9d7b95c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/custom_addons/custom_mrp/report/custom_mrp_inherit.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom_addons/custom_mrp/report/custom_mrp_inherit.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_addons/do_report/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_addons/do_report/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_addons/do_report/report/do_report.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom_addons/do_report/report/do_report.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_addons/do_report/report/do_report_templates.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom_addons/do_report/report/do_report_templates.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_addons/invoice_report/report/account_invoice_report.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom_addons/invoice_report/report/account_invoice_report.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_addons/invoice_report/report/account_invoice_report_templates.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom_addons/invoice_report/report/account_invoice_report_templates.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_addons/payment_receipt_report/report/report_payment_templates.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom_addons/payment_receipt_report/report/report_payment_templates.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2z8jNkV5Nm3JIS7FrYi4vZPLf7F" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "stage",
+    "last_opened_file_path": "/home/gowtham.a/workspace/peckofeb5/pecko_18_stage"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-53e2683a6804-9cdd278e9d02-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-251.26094.141" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="31a3f58c-2461-43f6-a709-c8b9e9d7b95c" name="Changes" comment="" />
+      <created>1751119557264</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1751119557264</updated>
+    </task>
+    <servers />
+  </component>
+</project>

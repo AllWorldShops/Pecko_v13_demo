@@ -112,20 +112,26 @@
                 </div>
                 <div class="page" style="text-color:black;">
                     <div>
-                        <div style="font-size: 20px;text-align: center;">
+                        <div style="font-size: 20px; text-align: center;">
                             <span>
-                                <strong>Delivery Order</strong>
+                                <strong>
+                                    <t t-if="user.lang == 'zh_CN'">交货报告</t>
+                                    <t t-else="">Delivery Order</t>
+                                </strong>
                             </span>
                         </div>
-
-
                         <table style="width: 100%;height:120px;background-color: white;line-height:13pt;"
                                class="table-borderless">
                             <tbody>
                                 <tr>
                                     <td style="width:55%;background-color: white;font-size:13px;">
                                         <strong>
-                                            <span style="color:#875A7B">Customer</span>
+                                            <t t-if="user.lang == 'zh_CN'">
+                                                <span style="color:#875A7B">客户</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span style="color:#875A7B">Customer</span>
+                                            </t>
                                         </strong>
                                         <br/>
                                         <strong>
@@ -140,37 +146,41 @@
                                             <span t-field="o.partner_id.state_id"/>
                                             <br/>
                                         </t>
-
                                         <t t-if="o.partner_id.country_id">
                                             <span t-field="o.partner_id.country_id"/>
                                             <span t-field="o.partner_id.zip"/>
                                             <br/>
                                         </t>
-
                                         <t t-if="o.partner_id.phone">
-                                            Phone:
+                                            <t t-if="user.lang == 'zh_CN'">电话:</t>
+                                            <t t-else="">Phone:</t>
                                             <span t-field="o.partner_id.phone"/>
                                             <br/>
                                         </t>
                                         <t t-if="o.company_id.country_id.code != 'SG'">
-                                            Email:
+                                            <t t-if="user.lang == 'zh_CN'">邮箱:</t>
+                                            <t t-else="">Email:</t>
                                             <span t-field="o.partner_id.email"/>
                                         </t>
                                         <br/>
                                         <br/>
-
                                     </td>
+
                                     <td style="width:45%;background-color: white;font-size:13px;">
                                         <table style="width:100%;background-color: white;" class="table-borderless">
                                             <tbody>
                                                 <tr>
                                                     <td>
-                                                        <strong>Delivery Address</strong>
+                                                        <t t-if="user.lang == 'zh_CN'">
+                                                            <strong>收货地址</strong>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <strong>Delivery Address</strong>
+                                                        </t>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
-
                                                         <span t-field="o.partner_id.name"/>
                                                         <br/>
                                                         <span t-field="o.partner_id.street"/>
@@ -195,17 +205,19 @@
                                                         </t>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>
-                                                    </td>
-                                                </tr>
                                             </tbody>
                                         </table>
+
                                         <table class="table-borderless">
                                             <tbody>
                                                 <tr>
                                                     <td>
-                                                        <strong>Shipment</strong>
+                                                        <t t-if="user.lang == 'zh_CN'">
+                                                            <strong>发货</strong>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <strong>Shipment</strong>
+                                                        </t>
                                                     </td>
                                                     <td>
                                                         <span style="text-align:left" t-field="o.name"/>
@@ -213,7 +225,12 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <strong>Date</strong>
+                                                        <t t-if="user.lang == 'zh_CN'">
+                                                            <strong>日期</strong>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <strong>Date</strong>
+                                                        </t>
                                                     </td>
                                                     <td>
                                                         <span style="text-align:left" t-field="o.date_done"
@@ -222,7 +239,12 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <strong>SO No.</strong>
+                                                        <t t-if="user.lang == 'zh_CN'">
+                                                            <strong>销售订单号</strong>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <strong>SO No.</strong>
+                                                        </t>
                                                     </td>
                                                     <td>
                                                         <span style="text-align:left" t-field="o.sale_id.name"/>
@@ -230,7 +252,12 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <strong>Carrier</strong>
+                                                        <t t-if="user.lang == 'zh_CN'">
+                                                            <strong>承运人</strong>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <strong>Carrier</strong>
+                                                        </t>
                                                     </td>
                                                     <td>
                                                         <span style="text-align:left" t-field="o.carrier"/>
@@ -238,7 +265,12 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <strong>Customer PO No</strong>
+                                                        <t t-if="user.lang == 'zh_CN'">
+                                                            <strong>客户订单号</strong>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <strong>Customer PO No</strong>
+                                                        </t>
                                                     </td>
                                                     <td>
                                                         <span style="text-align:left" t-field="o.customer_po_no"/>
@@ -250,6 +282,7 @@
                                 </tr>
                             </tbody>
                         </table>
+
                         <br/>
                         <t t-set="product_stock_uom_qty" t-value="0"/>
 
@@ -263,15 +296,35 @@
                             </style>
                             <thead style="font-size:13px" class="table table-condensed">
                                 <tr>
-                                    <th style="width:12%;text-align: left;color:#875A7B">Pos.No</th>
-                                    <th style="width:20%;text-align: left;color:#875A7B">Pecko Part No</th>
-                                    <th style="width:20%;text-align: left;color:#875A7B">Part No</th>
-                                    <th style="width:30%;text-align: left;color:#875A7B">Description</th>
-                                    <th t-if="o.company_id.country_id.code == 'SG'"
-                                        style="width:20%;text-align: left;color:#875A7B">Country of Origin
+                                    <th style="width:12%;text-align: left;color:#875A7B">
+                                        <t t-if="user.lang == 'zh_CN'">位置编号</t>
+                                        <t t-else="">Pos.No</t>
                                     </th>
-                                    <th style="width:20%;text-align: left;color:#875A7B">Delivered Qty</th>
-                                    <th style="width:20%;text-align: left;color:#875A7B">BackOrder Qty</th>
+                                    <th style="width:20%;text-align: left;color:#875A7B">
+                                        <t t-if="user.lang == 'zh_CN'">Pecko 部件号</t>
+                                        <t t-else="">Pecko Part No</t>
+                                    </th>
+                                    <th style="width:20%;text-align: left;color:#875A7B">
+                                        <t t-if="user.lang == 'zh_CN'">部件号</t>
+                                        <t t-else="">Part No</t>
+                                    </th>
+                                    <th style="width:30%;text-align: left;color:#875A7B">
+                                        <t t-if="user.lang == 'zh_CN'">描述</t>
+                                        <t t-else="">Description</t>
+                                    </th>
+                                    <th t-if="o.company_id.country_id.code == 'SG'"
+                                        style="width:20%;text-align: left;color:#875A7B">
+                                        <t t-if="user.lang == 'zh_CN'">原产国</t>
+                                        <t t-else="">Country of Origin</t>
+                                    </th>
+                                    <th style="width:20%;text-align: left;color:#875A7B">
+                                        <t t-if="user.lang == 'zh_CN'">已交数量</t>
+                                        <t t-else="">Delivered Qty</t>
+                                    </th>
+                                    <th style="width:20%;text-align: left;color:#875A7B">
+                                        <t t-if="user.lang == 'zh_CN'">欠交数量</t>
+                                        <t t-else="">BackOrder Qty</t>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="invoice_tbody" style="line-height:10pt;font-size:12px;">
@@ -315,7 +368,7 @@
                                             <t t-else="">
                                                 <td style=" text-align: left;">
                                                     <span t-field="l.quantity"/>
-<!--                                                    <span t-field="l.product_uom_qty"/>-->
+                                                    <!--                                                    <span t-field="l.product_uom_qty"/>-->
                                                 </td>
 
                                                 <td style=" text-align: left;">
@@ -362,37 +415,53 @@
                             <tr>
                                 <td style="font-size: 20px; font-weight: bold; border: 1px solid black; padding: 3px; text-align: center; vertical-align: middle;"
                                     colspan="5">
-                                    CERTIFICATE OF COMPLIANCE
+                                    <t t-if="user.lang == 'zh_CN'">合格证书</t>
+                                    <t t-else="">CERTIFICATE OF COMPLIANCE</t>
                                 </td>
+
                                 <td style="border: 1px solid black; padding: 8px; text-align: center;" colspan="2"
                                     t-if="o.company_id">
                                     <div>
                                         <img t-if="o.company_id.logo_qa_passed"
                                              t-att-src="image_data_uri(o.company_id.logo_qa_passed)" alt="Logo"
                                              style="max-width: 150px; max-height: 100px; display: block; margin: 0 auto;"/>
-                                        <span style="display: block; margin-top: 10px; font-weight: bold;">QA STAMP
+
+                                        <span style="display: block; margin-top: 10px; font-weight: bold; text-align: center;">
+                                            <t t-if="user.lang == 'zh_CN'">质量保证印章</t>
+                                            <t t-else="">QA STAMP</t>
                                         </span>
                                     </div>
+
                                 </td>
                             </tr>
 
 
                             <!-- Customer and Date Section -->
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px; text-align: left;">Customer :</td>
+                                <td style="border: 1px solid black; padding: 8px; text-align: left;">
+                                    <t t-if="user.lang == 'zh_CN'">顾客 :</t>
+                                    <t t-else="">Customer :</t>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="2" t-if="o.partner_id">
                                     <span t-field="o.partner_id.name"/>
                                 </td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: left;">Date :</td>
+                                <td style="border: 1px solid black; padding: 8px; text-align: left;">
+                                    <t t-if="user.lang == 'zh_CN'">日期 :</t>
+                                    <t t-else="">Date :</t>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;" t-if="o.date_done">
                                     <span t-field="o.date_done" t-options='{"widget": "date"}'/>
                                 </td>
                                 <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>
                             </tr>
 
+
                             <!-- Customer P/N and Pecko P/N Section -->
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Customer P/N :</td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <t t-if="user.lang == 'zh_CN'">客户料号 :</t>
+                                    <t t-else="">Customer P/N :</t>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="2">
                                     <t t-if="o.move_ids_without_package">
                                         <t t-foreach="o.move_ids_without_package" t-as="prod">
@@ -401,7 +470,10 @@
                                     </t>
                                     <t t-else="">N/A</t>
                                 </td>
-                                <td style="border: 1px solid black; padding: 8px;">Pecko P/N :</td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <t t-if="user.lang == 'zh_CN'">Pecko 料号 :</t>
+                                    <t t-else="">Pecko P/N :</t>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="4">
                                     <t t-if="o.move_ids_without_package">
                                         <t t-foreach="o.move_ids_without_package" t-as="prod">
@@ -410,15 +482,20 @@
                                     </t>
                                     <t t-else="">N/A</t>
                                 </td>
-                                <!--                            <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>-->
                             </tr>
 
 
                             <!-- Customer P/N and Pecko P/N Section -->
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Datecode:</td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <t t-if="user.lang == 'zh_CN'">日期代码:</t>
+                                    <t t-else="">Datecode:</t>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="2">N/A</td>
-                                <td style="border: 1px solid black; padding: 8px;">Date Packed :</td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <t t-if="user.lang == 'zh_CN'">包装日期:</t>
+                                    <t t-else="">Date Packed :</t>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;">
                                     <span t-field="o.date_done" t-options='{"widget": "date"}'/>
                                 </td>
@@ -426,11 +503,17 @@
                             </tr>
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Customer P/O No:</td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <t t-if="user.lang == 'zh_CN'">客户订单号:</t>
+                                    <t t-else="">Customer P/O No:</t>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="2">
                                     <span t-field="o.customer_po_no"/>
                                 </td>
-                                <td style="border: 1px solid black; padding: 8px;">Qty Packed :</td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <t t-if="user.lang == 'zh_CN'">包装数量:</t>
+                                    <t t-else="">Qty Packed :</t>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;">
                                     <t t-if="o.move_ids_without_package">
                                         <t t-foreach="o.move_ids_without_package" t-as="prod">
@@ -438,18 +521,21 @@
                                         </t>
                                     </t>
                                     <t t-else="">N/A</t>
-
                                 </td>
                                 <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>
                             </tr>
+
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Description :</td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <t t-if="user.lang == 'zh_CN'">描述:</t>
+                                    <t t-else="">Description :</t>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="3">
                                     <t t-if="o.move_ids_without_package">
                                         <t t-foreach="o.move_ids_without_package" t-as="prod">
                                             <span t-esc="prod.product_id.x_studio_field_mHzKJ"/>
                                             <t t-if="prod != o.move_ids_without_package[-1]">
-                                                <span>,</span> <!-- Add a comma if not the last item -->
+                                                <span>,</span>
                                             </t>
                                         </t>
                                     </t>
@@ -457,6 +543,7 @@
                                 <td style="border: 1px solid black; padding: 8px; border-left-style: hidden;"
                                     colspan="3"></td>
                             </tr>
+
 
                             <!--                        <tr>-->
                             <!--                            <td style="border: 1px solid black; padding: 8px;">Production Order # :</td>-->
@@ -469,7 +556,10 @@
 
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Lot Quantity :</td>
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <t t-if="user.lang == 'zh_CN'">批量数量 :</t>
+                                    <t t-else="">Lot Quantity :</t>
+                                </td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="2">
                                     <t t-if="o.move_ids_without_package">
                                         <t t-foreach="o.move_ids_without_package" t-as="prod">
@@ -477,21 +567,26 @@
                                         </t>
                                     </t>
                                     <t t-else="">N/A</t>
-
                                 </td>
-                                <td style="border: 1px solid black; padding: 8px;">Sampling Size :</td>
-                                <td style="border: 1px solid black; padding: 8px;">100%
+                                <td style="border: 1px solid black; padding: 8px;">
+                                    <t t-if="user.lang == 'zh_CN'">抽样大小 :</t>
+                                    <t t-else="">Sampling Size :</t>
                                 </td>
+                                <td style="border: 1px solid black; padding: 8px;">100%</td>
                                 <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>
                             </tr>
-
 
                             <!-- Sampling Plan -->
                             <tr>
                                 <td style="border: 1px solid black; text-align: center; vertical-align: middle; padding: 7px;"
                                     colspan="6">
-                                    Sampling Plan AQL=0.25%, C=0 in accordance with Quality Control Inspection
-                                    Instructions
+                                    <t t-if="user.lang == 'zh_CN'">
+                                        抽样计划 AQL=0.25%, C=0，根据质量控制检验说明执行
+                                    </t>
+                                    <t t-else="">
+                                        Sampling Plan AQL=0.25%, C=0 in accordance with Quality Control Inspection
+                                        Instructions
+                                    </t>
                                 </td>
                             </tr>
 
@@ -513,7 +608,10 @@
 
                             <!-- Orientation -->
                             <tr>
-                                <td style="border: 1px solid black; padding: 7px; text-align: left;">ORIENTATION :</td>
+                                <td style="border: 1px solid black; padding: 7px; text-align: left;">
+                                    <t t-if="user.lang == 'zh_CN'">方向 :</t>
+                                    <t t-else="">ORIENTATION :</t>
+                                </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
@@ -522,7 +620,9 @@
                             </tr>
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 7px; text-align: center;">As per drawing
+                                <td style="border: 1px solid black; padding: 7px; text-align: center;">
+                                    <t t-if="user.lang == 'zh_CN'">根据图纸</t>
+                                    <t t-else="">As per drawing</t>
                                 </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
@@ -530,6 +630,7 @@
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                             </tr>
+
 
                             <tr>
                                 <td style="border: 1px solid black; padding: 7px;"></td>
@@ -560,7 +661,9 @@
 
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 7px; text-align: left;">ASSEMBLY LENGTH :
+                                <td style="border: 1px solid black; padding: 7px; text-align: left;">
+                                    <t t-if="user.lang == 'zh_CN'">组装长度 :</t>
+                                    <t t-else="">ASSEMBLY LENGTH :</t>
                                 </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
@@ -568,10 +671,11 @@
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
-
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 7px;text-align: center;">As per drawing
+                                <td style="border: 1px solid black; padding: 7px; text-align: center;">
+                                    <t t-if="user.lang == 'zh_CN'">根据图纸</t>
+                                    <t t-else="">As per drawing</t>
                                 </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
@@ -579,6 +683,7 @@
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                             </tr>
+
                             <tr>
                                 <td style="border: 1px solid black; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
@@ -616,7 +721,10 @@
                             <!-- Labeling -->
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 7px; text-align: left;">Labeling :</td>
+                                <td style="border: 1px solid black; padding: 7px; text-align: left;">
+                                    <t t-if="user.lang == 'zh_CN'">标签 :</t>
+                                    <t t-else="">Labeling :</t>
+                                </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
@@ -625,7 +733,9 @@
                             </tr>
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 6px;text-align: center;">As per drawing
+                                <td style="border: 1px solid black; padding: 6px; text-align: center;">
+                                    <t t-if="user.lang == 'zh_CN'">根据图纸</t>
+                                    <t t-else="">As per drawing</t>
                                 </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
@@ -633,6 +743,7 @@
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                             </tr>
+
                             <tr>
                                 <td style="border: 1px solid black; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
@@ -654,18 +765,21 @@
 
                             <!-- Add Silicon -->
                             <tr>
-                                <td style="border: 1px solid black; padding: 7px;">Add Silicon (Yes/No)</td>
+                                <td style="border: 1px solid black; padding: 7px;">
+                                    <t t-if="user.lang == 'zh_CN'">加硅胶（是/否）</t>
+                                    <t t-else="">Add Silicon (Yes/No)</t>
+                                </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
-                            <!-- Add Silicon -->
+
                             <tr>
-                                <td style="border: 1px solid black;text-align: center; padding: 4px;">Continuity
-                                    Test:(If
-                                    Applicable)
+                                <td style="border: 1px solid black;text-align: center; padding: 4px;">
+                                    <t t-if="user.lang == 'zh_CN'">连续性测试：（如适用）</t>
+                                    <t t-else="">Continuity Test: (If Applicable)</t>
                                 </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS</td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS</td>
@@ -673,20 +787,24 @@
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS</td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS</td>
                             </tr>
+
                             <tr>
-                                <td style="border: 1px solid black; padding: 7px;border-top-style:hidden"></td>
-                                <td style="border: 1px solid black; text-align: center;border-right-style:hidden; padding: 7px;"></td>
+                                <td style="border: 1px solid black; padding: 7px; border-top-style:hidden"></td>
+                                <td style="border: 1px solid black; text-align: center; border-right-style:hidden; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: right; padding: 7px;"></td>
                                 <td style="border: 1px solid black; text-align: right; padding: 7px;" colspan="2">
-                                    Inspection Result :
+                                    <t t-if="user.lang == 'zh_CN'">检验结果 :</t>
+                                    <t t-else="">Inspection Result :</t>
                                 </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS / FAIL</td>
                             </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 7px;">Inspected By :</td>
 
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;"
-                                    colspan="2">
+                            <tr>
+                                <td style="border: 1px solid black; padding: 7px;">
+                                    <t t-if="user.lang == 'zh_CN'">检验员 :</t>
+                                    <t t-else="">Inspected By :</t>
+                                </td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;" colspan="2">
                                     <t t-if="o.company_id">
                                         <span t-esc="o.company_id.inspected_by"
                                               style="display: block; text-align: center;"/>
@@ -694,8 +812,9 @@
                                     <t t-else="">N/A</t>
                                 </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
-                                <td style="border: 1px solid black; text-align: right; padding: 7px;border-left-style:hidden;">
-                                    Approved By :
+                                <td style="border: 1px solid black; text-align: right; padding: 7px; border-left-style:hidden;">
+                                    <t t-if="user.lang == 'zh_CN'">批准 :</t>
+                                    <t t-else="">Approved By :</t>
                                 </td>
                                 <td style="border: 1px solid black; text-align: center; padding: 7px;">
                                     <t t-if="o.company_id">
@@ -706,60 +825,41 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 7px;">Remarks : ( If any )</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
-                            </tr>
-
-
-                            <tr>
-                                <td style="border: 1px solid black; padding: 7px;text-align:center;" colspan="6">COUNTRY
-                                    OF
-                                    ORIGIN : MADE IN SINGAPORE
+                                <td style="border: 1px solid black; padding: 7px;">
+                                    <t t-if="user.lang == 'zh_CN'">备注：（如有）</t>
+                                    <t t-else="">Remarks : ( If any )</t>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; font-weight: bold; padding: 7px;text-align:center;text-decoration: underline;"
-                                    colspan="6">CERTIFICATE
-                                    OF COMPLIANCE
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 7px;text-align:center;" colspan="6">This is
-                                    to
-                                    certify that all the parts supplied confirm to the specifications, drawings and
-                                    requirements.
-                                    <br>All product supplied are ROHS compliance</br>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid black; padding: 7px;text-align:center;" colspan="6"></td>
+                                <td colspan="5" style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 7px; border-right-style: hidden; border-bottom-style: hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px; border-right-style: hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px; border-right-style: hidden; border-bottom-style: hidden;"
-                                    colspan="2">PC-F87 Rev- 0
-                                </td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px; border-bottom-style: hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px; border-bottom-style: hidden;">
-                                    Refer to
+                                <td colspan="6" style="border: 1px solid black; padding: 7px; text-align:center;">
+                                    <t t-if="user.lang == 'zh_CN'">原产国：新加坡制造</t>
+                                    <t t-else="">COUNTRY OF ORIGIN : MADE IN SINGAPORE</t>
                                 </td>
                             </tr>
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 7px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;border-top-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 7px;">PC-WI-SYS06/
-                                    <br/>
-                                    PC-WI-SYS63
+                                <td colspan="6"
+                                    style="border: 1px solid black; font-weight: bold; padding: 7px; text-align:center; text-decoration: underline;">
+                                    <t t-if="user.lang == 'zh_CN'">符合性证明</t>
+                                    <t t-else="">CERTIFICATE OF COMPLIANCE</t>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="6" style="border: 1px solid black; padding: 7px; text-align:center;">
+                                    <t t-if="user.lang == 'zh_CN'">
+                                        兹证明所有提供的零件均符合规格、图纸和要求。
+                                        <br/>
+                                        所有提供的产品均符合ROHS标准。
+                                    </t>
+                                    <t t-else="">
+                                        This is to certify that all the parts supplied conform to the specifications,
+                                        drawings and requirements.
+                                        <br/>
+                                        All products supplied are ROHS compliant.
+                                    </t>
                                 </td>
                             </tr>
 

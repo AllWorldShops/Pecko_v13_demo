@@ -81,74 +81,103 @@
                     <div class="row" style="text-align:center">
                         <div class="col-6">
                             <t t-if="o.company_id.country_id.code != 'SG'">
-                                <strong>RECEIVED IN GOOD ORDER</strong>
+                                <strong>
+                                    <t t-if="user.lang == 'zh_CN'">完好收到</t>
+                                    <t t-else="">RECEIVED IN GOOD ORDER</t>
+                                </strong>
                             </t>
                         </div>
                         <div class="col-6">
                             <t t-if="o.company_id.country_id.code != 'SG'">
-                                <strong>PECKO (M) SDN BHD.</strong>
+                                <strong>
+                                    <t t-if="user.lang == 'zh_CN'">Pecko Electronics Technology (Kunshan) Co., Ltd</t>
+                                    <t t-else="">Pecko Electronics Technology (Kunshan) Co., Ltd</t>
+                                </strong>
                             </t>
                         </div>
                     </div>
-<!--                    <br/>-->
+
                     <br/>
                     <br/>
+
                     <div class="row" style="text-align:center">
                         <div class="col-6">
                             <t t-if="o.company_id.country_id.code != 'SG'">
-                                <strong>CUSTOMER'S STAMP &amp; SIGNATURE</strong>
+                                <strong>
+                                    <t t-if="user.lang == 'zh_CN'">客户盖章和签名</t>
+                                    <t t-else="">CUSTOMER'S STAMP &amp; SIGNATURE</t>
+                                </strong>
                             </t>
                         </div>
                         <div class="col-6">
                             <t t-if="o.company_id.country_id.code != 'SG'">
-                                <strong>AUTHORISED SIGNATURE</strong>
+                                <strong>
+                                    <t t-if="user.lang == 'zh_CN'">授权签名</t>
+                                    <t t-else="">AUTHORISED SIGNATURE</t>
+                                </strong>
                             </t>
                         </div>
                     </div>
+
                     <br/>
+
                     <div class="row">
                         <div class="col-9">
                             <t t-if="o.company_id.country_id.code == 'SG'">
                                 <div style="text-align:end;">
                                     <strong>
-                                        **This is a computer generated document. Signature is not required.**
+                                        <t t-if="user.lang == 'zh_CN'">**这是计算机生成的文件，无需签名。**</t>
+                                        <t t-else="">**This is a computer generated document. Signature is not
+                                            required.**
+                                        </t>
                                     </strong>
                                 </div>
                                 <br/>
                             </t>
                             <span>
-                                <div style="font-size:10px;;">
+                                <div style="font-size:10px;">
                                     <strong>
-                                        NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
-                                        THEIR INTENDED USE,AND USERS ASSUME ALL<br/>RISK AND LIABILITY
-                                        WHATSOEVER IN CONNECTION THEREWITH
+                                        <t t-if="user.lang == 'zh_CN'">
+                                            注意：用户应确定产品是否适合其预期用途，并承担所有
+                                            <br/>
+                                            与此相关的任何风险和责任
+                                        </t>
+                                        <t t-else="">
+                                            NOTE : USER SHALL DETERMINE THE SUITABILITY OF THE PRODUCT FOR
+                                            THEIR INTENDED USE,AND USERS ASSUME ALL<br/>RISK AND LIABILITY
+                                            WHATSOEVER IN CONNECTION THEREWITH
+                                        </t>
                                     </strong>
                                 </div>
                             </span>
                         </div>
                         <div class="col-3" style="text-align:right;position:relative;">
-
-                                <img t-if="o.company_id.logo_one" t-att-src="image_data_uri(o.company_id.logo_one)"
-                                     style="width:122px;height:122px;top:1px;" alt="Logo"/>
-
+                            <img t-if="o.company_id.logo_one"
+                                 t-att-src="image_data_uri(o.company_id.logo_one)"
+                                 style="width:122px;height:122px;position:relative;top:-70px;" alt="Logo"/>
                         </div>
+
                     </div>
 
                     <div class="col-6"
                          style="position:relative; bottom:14px; left:25%; transform:translateX(-50%); text-align:center;">
                         <div class="text-muted" style="font-family: Calibri; color: black;">
-                            Page:
+                            <t t-if="user.lang == 'zh_CN'">页:</t>
+                            <t t-else="">Page:</t>
                             <span class="page"/>
-                            of
+                            <t t-if="user.lang == 'zh_CN'">/</t>
+                            <t t-else="">of</t>
                             <span class="topage"/>
                         </div>
                         <div class="clearfix mb8"/>
                     </div>
 
-
                     <div style="text-align:right">
                         <t t-if="o.company_id.country_id.code != 'SG'">
-                            <span>user:</span>
+                            <span>
+                                <t t-if="user.lang == 'zh_CN'">用户:</t>
+                                <t t-else="">user:</t>
+                            </span>
                             <span t-esc="user.name"/>
                         </t>
                     </div>
@@ -179,7 +208,7 @@
             <field name="default" eval="True"/>
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
-            <field name="margin_top">8</field>
+            <field name="margin_top">1</field>
             <field name="margin_bottom">31</field>
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
