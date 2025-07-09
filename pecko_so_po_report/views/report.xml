@@ -581,8 +581,8 @@
                                style="margin-top:170px;table-layout:fixed;border-bottom-style: none;">
 
                             <style>
-                                th{font-size:13px}
-                                td{font-size:13px}
+                                th{font-size:11px}
+                                td{font-size:12px}
                             </style>
                             <thead>
                                 <tr style="text-size:13px;width:100%">
@@ -591,7 +591,8 @@
                                     <th class="text-left" style="width:15%">PECKO PART NUMBER</th>
                                     <th class="text-left" style="width:15%">PART NUMBER</th>
                                     <th class="text-left" style="width:15%">DESCRIPTION</th>
-                                    <th class="text-left" style="width:19%">MANUFACTURER</th>
+                                    <th class="text-left" style="width:17%">MANUFACTURER</th>
+                                    <th class="text-left" style="width:12%">COUNTRY OF ORIGIN</th>
                                     <th class="text-left" style="width:12%">QUANTITY</th>
                                     <th class="text-center" style="width:13%">ETA DATE</th>
                                     <th class="text-right" style="width:10%">PRICE</th>
@@ -638,6 +639,9 @@
                                             </td>
                                             <td style="background-color: #f4f4f5;">
                                                 <span t-field="line.product_id.manufacturer_id"/>
+                                            </td>
+                                            <td style="background-color: #f4f4f5;">
+                                                <span t-field="line.country_origin"/>
                                             </td>
                                             <td class="text-left" style="background-color: #f4f4f5;">
                                                 <span t-field="line.product_qty"/>

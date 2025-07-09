@@ -174,6 +174,7 @@ class PurchaseOrderLine(models.Model):
     back_order_qty = fields.Float(string='Pending Qty', compute='_compute_back_order_qty', store=True)
     line_no = fields.Integer(string='Position', default=False)
     old_po_no = fields.Char(string="Old PO Number", related="order_id.old_po_no")
+    country_origin = fields.Char(string="Country of Origin", related='product_id.country_origin')
 
     @api.model
     def _prepare_purchase_order_line(self, product_id, product_qty, product_uom, company_id, supplier, po):
