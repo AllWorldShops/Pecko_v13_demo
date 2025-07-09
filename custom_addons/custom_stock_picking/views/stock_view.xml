@@ -66,6 +66,7 @@
             <xpath expr="//field[@name='move_ids_without_package']//list//field[@name='description_picking']"
                    position="after">
                 <field name="additional_notes" readonly="1"/>
+                <field name="storage_location_id" readonly="1" column_invisible="parent.picking_type_code != 'incoming'"/>
             </xpath>
 
             <xpath expr="//field[@name='partner_id']" position="after">
