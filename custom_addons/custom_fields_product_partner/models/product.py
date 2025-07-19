@@ -108,12 +108,6 @@ class StockWarehouseOrderpoint(models.Model):
     def _compute_qty_to_order(self):
         for op in self:
             forecast = op.product_id.virtual_available
-            # print('op.product_id=========',op.product_id.name)
-            # print('forecast---------',forecast)
-            # print('op.product_min_qty',op.product_min_qty)
-            # c = op.product_max_qty - forecast
-            # print('ccccccc',c)
-
             # As per Suresh request, we have updated the qty_to_order value to address the issue where MO was not being triggered 
             # during SO confirmation or while running the Reordering Rule. The root cause was that the Reordering Rule was not updating the 'To Order' quantity correctly. 
             # To resolve this, we modified the default flow logic accordingly.
