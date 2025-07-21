@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	<record id="product_template_only_form_view_inherit" model="ir.ui.view">
+    <record id="product_template_only_form_view_inherit" model="ir.ui.view">
         <field name="name">product.template.form</field>
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='default_code']" position="after">
-            	<field name="manufacturer_id"/>
+                <field name="manufacturer_id"/>
             </xpath>
-           
+               <xpath expr="//field[@name='barcode']" position="after">
+                <field name="classification_code_id"/>
+            </xpath>
+
             <group name="group_general" position="inside">
                 <field name="item_text"/>
                 <field name="customer_part_number"/>
 
             </group>
             <xpath expr="//field[@name='uom_po_id']" position="after">
-            	<field name="storage_location_id" invisible="0"/>
+                <field name="storage_location_id" invisible="0"/>
                 <!-- <field name="new_storage_loc" /> -->
+
             </xpath>
             <page name="invoicing" position="after">
-                <page string="Malaysia" >
+                <page string="Malaysia">
                     <group>
                         <group>
                             <field name="project"/>
                             <field name="production_cell"/>
+                            <field name="customer_goods"/>
+                            <field name="tariff_code"/>
+                            <field name="tariff_unit"/>
+                            <field name="import_duty_rate"/>
+                            <field name="eksport_duty_rate"/>
+                            <field name="sst"/>
                             <field name="order_seq" invisible="1"/>
                         </group>
                     </group>
                 </page>
-                <page string="Singapore" >
+                <page string="Singapore">
                     <group>
                         <group>
                             <field name="country_origin"/>
@@ -62,17 +72,16 @@
         </field>
     </record>
 
-<!--     <record id="view_product_product_search_extend" model="ir.ui.view">-->
-<!--        <field name="name">product.product.search.extend</field>-->
-<!--        <field name="model">product.product</field>-->
-<!--        <field name="inherit_id" ref="product.product_search_form_view"/>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <xpath expr="//search" position="inside">-->
-<!--                <field name="customer_part_number" string="Customer Part Number"/>-->
-<!--            </xpath>-->
-<!--        </field>-->
-<!--    </record>-->
-
+    <!--     <record id="view_product_product_search_extend" model="ir.ui.view">-->
+    <!--        <field name="name">product.product.search.extend</field>-->
+    <!--        <field name="model">product.product</field>-->
+    <!--        <field name="inherit_id" ref="product.product_search_form_view"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//search" position="inside">-->
+    <!--                <field name="customer_part_number" string="Customer Part Number"/>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
 
 
     <record id="view_custom_product_product_tree" model="ir.ui.view">
@@ -93,36 +102,42 @@
         <field name="inherit_id" ref="product.product_normal_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='default_code']" position="after">
-            	<field name="manufacturer_id"/>
-            	<field name="storage_location_id"/>
+                <field name="manufacturer_id"/>
+                <field name="storage_location_id"/>
                 <field name="project"/>
-            </xpath> 
+            </xpath>
 
             <group name="group_general" position="inside">
                 <field name="item_text"/>
                 <field name="customer_part_number"/>
 
             </group>
-            <page name="invoicing"  position="after">
-                <page string="Malaysia" >
+            <page name="invoicing" position="after">
+                <page string="Malaysia">
                     <group>
                         <group>
-                            <field name="production_cell" />
+                            <field name="production_cell"/>
+                            <field name="customer_goods"/>
+                            <field name="tariff_code"/>
+                            <field name="tariff_unit"/>
+                            <field name="import_duty_rate"/>
+                            <field name="eksport_duty_rate"/>
+                            <field name="sst"/>
                             <field name="order_seq" invisible="1"/>
                         </group>
                     </group>
-                    
+
                 </page>
                 <page string="Singapore">
                     <group>
                         <group>
-                            <field name="country_origin" />
+                            <field name="country_origin"/>
                         </group>
                     </group>
                 </page>
             </page>
         </field>
-    </record> 
+    </record>
 
 
     <record id="product_seller_inherited_view" model="ir.ui.view">
@@ -135,7 +150,7 @@
             </xpath>
         </field>
     </record>
-    
+
     <record id="product_supplierinfo_form_inherited_view" model="ir.ui.view">
         <field name="name">product.seller.view</field>
         <field name="model">product.supplierinfo</field>
@@ -148,16 +163,119 @@
     </record>
 
     <record id="view_company_form_inherit_ttse" model="ir.ui.view">
-		<field name="name">res.company.form</field>
-		<field name="model">res.company</field>
-		<field name="inherit_id" ref="base.view_company_form" />
-		<field name="arch" type="xml">
-			<field name="currency_id" position="after">
-				<field name="logo_one"/>
-                <field name="logo_two" />
-                <field name="logo_three" />
-                <field name="logo_four" />
-			</field>
-		</field>
-	</record>
+        <field name="name">res.company.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <field name="currency_id" position="after">
+                <field name="logo_one"/>
+                <field name="logo_two"/>
+                <field name="logo_three"/>
+                <field name="logo_four"/>
+                <field name="business_reg_no"/>
+                <field name="misc_code"/>
+                <field name="business_des"/>
+            </field>
+        </field>
+    </record>
+
+
+    <record id="view_company_form_inherit_coc" model="ir.ui.view">
+        <field name="name">res.company.form.coc</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='social_media']" position="after">
+                <group string="Certificate of Compliance" name="certificate_of_compliance">
+                    <field name="is_coc_report"/>
+                    <field name="logo_qa_passed"/>
+                    <field name="inspected_by"/>
+                    <field name="approved_by"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_res_partner_inherit_in" model="ir.ui.view">
+        <field name="name">res.partner.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="type_id"/>
+                <field name="reg_no"/>
+                <field name="tin_no"/>
+                <field name="sst_no"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="id_type_form" model="ir.ui.view">
+        <field name="name">id_type.form</field>
+        <field name="model">id.type</field>
+        <field name="arch" type="xml">
+            <form string="Id name">
+                <sheet>
+                    <field name="name"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="id_type_tree" model="ir.ui.view">
+        <field name="name">id_type.tree</field>
+        <field name="model">id.type</field>
+        <field name="arch" type="xml">
+            <tree string="list view">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_id_type" model="ir.actions.act_window">
+        <field name="name">Id Type details</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">id.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_id_type" id="menu_id_type" sequence="50"
+              parent="base.menu_users" name="ID Type"/>
+
+        <record id="classification_code_form" model="ir.ui.view">
+        <field name="name">classification_code.form</field>
+        <field name="model">classification.code</field>
+        <field name="arch" type="xml">
+            <form string="Classification code">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                    <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="classification_code_tree" model="ir.ui.view">
+        <field name="name">classification_code.tree</field>
+        <field name="model">classification.code</field>
+        <field name="arch" type="xml">
+            <tree string="Classification code">
+                 <field name="code"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_classification_code" model="ir.actions.act_window">
+        <field name="name">Classification code details</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">classification.code</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_classification_code" id="menu_classification_code" sequence="60"
+              parent="base.menu_users" name="Classification code"/>
+
 </odoo>
