@@ -141,12 +141,10 @@
                     <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
                     <br/>
                     <br/>
-                    <div class="company_address"
-                         style="line-height:5px;font-size: 10px;font-family: Calibri;ftext-color:black;">
+                    <div class="company_address" style="line-height:5px;font-size: 10px;font-family: Calibri;ftext-color:black;">
                         <div>
                             <strong>
-                                <span style="font-size: 20px;"
-                                      t-field="company.partner_id.name"/>
+                                <span style="font-size: 20px;" t-field="company.partner_id.name"/>
                             </strong>
                             <br/>
                             <br/>
@@ -234,71 +232,26 @@
             <t t-raw="0"/>
         </div>
 
-        <div class="footer o_boxed_footer o_background_footer"
-             style="font-family: Calibri;font-size:8px;bottom:20px;border-top-style: none;">
-            <div class="row">
-                <div class="col-9">
-                    <t t-if="user.lang == 'zh_CN'">
-                        <span style="text-align:center;">
-                            **这是计算机生成的文件，无需签名。**
-                        </span>
-                        <br/>
-                        <span>
-                            注意：所有物品必须符合 REACH 法规第 147301 条款、REACH 附录 XVII、冲突矿产法以及无冲突冶炼厂的要求。
-                            <br/>
-                            供应商应根据要求提供符合性文件和认证。
-                        </span>
-                        <br/>
-                        <span>
-                            - 除非我们要求提前交货，请遵守采购订单上请求的交货日期。请勿提前交货。
-                            <br/>
-                            - 请签署并通过电子邮件回复以确认订单排期。
-                            <br/>
-                            - 所有物品必须符合 RoHS 标准，并必须附有符合性证书 (COC)。
-                            <br/>
-                            - 任何将停产 (EOL) 的产品须提前 12 个月通知。
-                        </span>
-                    </t>
-                    <t t-else="">
-                        <span style="text-align:center;">
-                            **This is a computer generated document. Signature is not required.**
-                        </span>
-                        <br/>
-                        <span>
-                            NOTE : ALL ITEM MUST BE COMPLY TO REACH REGULATION PER 147301, REACH ANNEX XVII, CONFLICT
-                            MINERALS LAW
-                            AND CONFLICT-FREE SMELTER
-                            <br/>
-                            REQUIREMENTS OF ALL SUPPLIED PARTS. THE SUPPLIER SHALL PROVIDE DOCUMENTATION AND
-                            CERTIFICATION OF SUCH
-                            COMPLIANCE UPON REQUEST.
-                        </span>
-                        <br/>
-                        <span>
-                            - PLEASE ADHERE TO OUR PO REQUEST DATE UNLESS WE REQUEST A PULL IN. DO NOT DELIVER AHEAD OF
-                            SCHEDULE.
-                            <br/>
-                            - PLEASE SIGN &amp; REPLY BY EMAIL TO ACKNOWLEDGE ACCEPTANCE OF ORDER SCHEDULE.
-                            <br/>
-                            - ALL ITEMS MUST BE RoHS COMPLIANCE AND MUST ACCOMPANY WITH CERTIFICATE OF COMPLIANCE (COC).
-                            <br/>
-                            - ANY PRODUCTS SUBJECT TO End-Of-Life (EOL) NEED TO BE INFORMED 12 MONTHS AHEAD.
-                        </span>
-                    </t>
-                </div>
+        <div class="footer o_background_footer">
 
-                <div class="col-3" style="text-align:center;position:relative;">
-                    <span>------------------------------------------</span>
-                    <br/>
-                    <span>
-                        <t t-if="user.lang == 'zh_CN'">供应商接受与确认</t>
-                        <t t-else="">Supplier's Acceptance &amp; Confirmation</t>
-                    </span>
-                    <div style="text-align:center;">
-                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo_two)" alt="Logo"
-                             style="width:100px;position:relative;"/>
-                    </div>
-                </div>
+             <table class="table table-sm table-borderless" style="width:100%; font-size:13px; border-collapse: collapse; margin-top:20px;">
+
+                <tr>
+                    <td style="width:30%;">制单</td>
+                    <td style="width:25%;">确认</td>
+                    <td style="width:20%;">批准</td>
+                    <td style="width:20%;">供应商回签</td>
+                    </tr>
+                </table>
+
+
+    <!-- Contact Info Footer -->
+            <div style="font-size:13px; text-align:center; border-top:1px solid black; padding-top:5px;">
+                Phone: +86(512)57877211   
+                Email: orders@pecko.com   
+                Web: http://www.pecko.com
+                <br/>
+                <span style="font-size:11px;">Page: <span class="page"/> / <span class="topage"/></span>
             </div>
         </div>
 
@@ -601,11 +554,9 @@
         </xpath>
     </template>
 
-    <template id="inherit_report_purchaseorder_document"
-              inherit_id="purchase.report_purchaseorder_document">
+    <template id="inherit_report_purchaseorder_document" inherit_id="purchase.report_purchaseorder_document">
 
-        <xpath expr="//t[@t-call='web.external_layout']"
-               position="replace">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
             <t t-call="pecko_so_po_report.external_layout_po_report">
                 <div style="position:relative;top:30px;">
                     <div class="page" style="font-family: Calibri;text-color:black;">
@@ -671,10 +622,10 @@
                                     <t t-else="">DATE :</t>
                                     <strong>
                                         <t t-if="o.state in ('draft','sent')">
-                                            <span t-field="o.date_order" t-options='{"format": "dd-MM-yyyy"}'/>
+                                            <span t-field="o.date_order" t-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/>
                                         </t>
                                         <t t-if="o.state in ('purchase','done')">
-                                            <span t-field="o.date_approve" t-options='{"format": "dd-MM-yyyy"}'/>
+                                            <span t-field="o.date_approve" t-options="{&quot;format&quot;: &quot;dd-MM-yyyy&quot;}"/>
                                         </t>
                                     </strong>
                                 </span>
@@ -691,8 +642,7 @@
                         </div>
 
 
-                        <table class="table table-sm table-borderless"
-                               style="margin-top:170px;table-layout:fixed;border-bottom-style: none;">
+                        <table class="table table-sm table-borderless" style="width:100%; font-size:13px; border-collapse: collapse; margin-top:20px;                                                                                                                               ">
 
                             <style>
                                 th{font-size:13px}
@@ -707,28 +657,34 @@
                                             <t t-else="">NO</t>
                                         </b>
                                     </th>
-                                    <th class="text-left" style="width:15%">
+                                    <th class="text-left" style="width:25%">
                                         <b>
                                             <t t-if="user.lang == 'zh_CN'">Pecko 部件号</t>
                                             <t t-else="">PECKO PART NUMBER</t>
                                         </b>
                                     </th>
-                                    <th class="text-left" style="width:15%">
+                                    <!--<th class="text-left" style="width:15%">-->
+                                    <!--    <b>-->
+                                    <!--        <t t-if="user.lang == 'zh_CN'">部件号</t>-->
+                                    <!--        <t t-else="">PART NUMBER</t>-->
+                                    <!--    </b>-->
+                                    <!--</th>-->
+                                    <!--<th class="text-left" style="width:15%">-->
+                                    <!--    <b>-->
+                                    <!--        <t t-if="user.lang == 'zh_CN'">描述</t>-->
+                                    <!--        <t t-else="">DESCRIPTION</t>-->
+                                    <!--    </b>-->
+                                    <!--</th>-->
+                                    <!--<th class="text-left" style="width:19%">-->
+                                    <!--    <b>-->
+                                    <!--        <t t-if="user.lang == 'zh_CN'">制造商</t>-->
+                                    <!--        <t t-else="">MANUFACTURER</t>-->
+                                    <!--    </b>-->
+                                    <!--</th>-->
+                                     <th class="text-center" style="width:13%">
                                         <b>
-                                            <t t-if="user.lang == 'zh_CN'">部件号</t>
-                                            <t t-else="">PART NUMBER</t>
-                                        </b>
-                                    </th>
-                                    <th class="text-left" style="width:15%">
-                                        <b>
-                                            <t t-if="user.lang == 'zh_CN'">描述</t>
-                                            <t t-else="">DESCRIPTION</t>
-                                        </b>
-                                    </th>
-                                    <th class="text-left" style="width:19%">
-                                        <b>
-                                            <t t-if="user.lang == 'zh_CN'">制造商</t>
-                                            <t t-else="">MANUFACTURER</t>
+                                            <t t-if="user.lang == 'zh_CN'">预计到货日期</t>
+                                            <t t-else="">ETA DATE</t>
                                         </b>
                                     </th>
                                     <th class="text-left" style="width:12%">
@@ -737,27 +693,21 @@
                                             <t t-else="">QUANTITY</t>
                                         </b>
                                     </th>
-                                    <th class="text-center" style="width:13%">
-                                        <b>
-                                            <t t-if="user.lang == 'zh_CN'">预计到货日期</t>
-                                            <t t-else="">ETA DATE</t>
-                                        </b>
-                                    </th>
                                     <th class="text-right" style="width:10%">
                                         <b>
                                             <t t-if="user.lang == 'zh_CN'">单价</t>
                                             <t t-else="">PRICE</t>
                                         </b>
                                     </th>
-                                    <t t-if="o.amount_tax > 0">
-                                        <th class="text-right" style="width:10%">
-                                            <b>
-                                                <t t-if="user.lang == 'zh_CN'">税费</t>
-                                                <t t-else="">TAXES</t>
-                                            </b>
-                                        </th>
-                                    </t>
-                                    <th class="text-end" style="width:15%">
+                                    <!--<t t-if="o.amount_tax &gt; 0">-->
+                                    <!--    <th class="text-right" style="width:10%">-->
+                                    <!--        <b>-->
+                                    <!--            <t t-if="user.lang == 'zh_CN'">税费</t>-->
+                                    <!--            <t t-else="">TAXES</t>-->
+                                    <!--        </b>-->
+                                    <!--    </th>-->
+                                    <!--</t>-->
+                                    <th class="text-end" style="width:10%">
                                         <b>
                                             <t t-if="user.lang == 'zh_CN'">金额</t>
                                             <t t-else="">AMOUNT</t>
@@ -776,12 +726,8 @@
 
                                 <t t-foreach="o.order_line" t-as="line">
 
-                                    <t t-set="current_subtotal"
-                                       t-value="current_subtotal + line.price_subtotal"
-                                    />
-                                    <t t-set="current_subtotal"
-                                       t-value="current_subtotal + line.price_total"
-                                       groups="account.group_show_line_subtotals_tax_included"/>
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
 
                                     <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
                                         <t t-if="not line.display_type">
@@ -791,38 +737,34 @@
                                             <td style="background-color: #f4f4f5;">
                                                 <span t-field="line.product_id"/>
                                             </td>
-                                            <td style="background-color: #f4f4f5;">
-                                                <span t-field="line.product_id.name"/>
-                                            </td>
-                                            <td style="background-color: #f4f4f5;">
-                                                <span t-field="line.name"/>
-                                            </td>
-                                            <td style="background-color: #f4f4f5;">
-                                                <span t-field="line.product_id.manufacturer_id"/>
+                                            <!--<td style="background-color: #f4f4f5;">-->
+                                            <!--    <span t-field="line.product_id.name"/>-->
+                                            <!--</td>-->
+                                            <!--<td style="background-color: #f4f4f5;">-->
+                                            <!--    <span t-field="line.name"/>-->
+                                            <!--</td>-->
+                                            <!--<td style="background-color: #f4f4f5;">-->
+                                            <!--    <span t-field="line.product_id.manufacturer_id"/>-->
+                                            <!--</td>-->
+                                            <td class="text-center" style="background-color: #f4f4f5;">
+                                                <span t-field="line.date_planned" t-options="{&quot;format&quot;:&quot;dd-MM-yyyy&quot;}"/>
                                             </td>
                                             <td class="text-left" style="background-color: #f4f4f5;">
                                                 <span t-field="line.product_qty"/>
                                                 <span t-field="line.product_uom"/>
                                             </td>
-
-                                            <td class="text-center" style="background-color: #f4f4f5;">
-                                                <span t-field="line.date_planned"
-                                                      t-options='{"format":"dd-MM-yyyy"}'/>
-                                            </td>
                                             <td class="text-right" style="background-color: #f4f4f5;">
                                                 <span t-field="line.price_unit"/>
                                             </td>
-                                            <t t-if="o.amount_tax>0">
-                                                <td style="background-color: #f4f4f5;">
-                                                    <span t-esc="line.taxes_id.code"/>
-                                                </td>
-                                            </t>
+                                            <!--<t t-if="o.amount_tax&gt;0">-->
+                                            <!--    <td style="background-color: #f4f4f5;">-->
+                                            <!--        <span t-esc="line.taxes_id.code"/>-->
+                                            <!--    </td>-->
+                                            <!--</t>-->
 
                                             <td class="text-end" style="background-color: #f4f4f5;">
-                                                <span t-field="line.price_subtotal"
-                                                />
-                                                <span t-field="line.price_total"
-                                                      groups="account.group_show_line_subtotals_tax_included"/>
+                                                <span t-field="line.price_subtotal"/>
+                                                <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
                                             </td>
                                         </t>
                                         <t t-if="line.display_type == 'line_section'">
@@ -839,7 +781,7 @@
                                         </t>
                                     </tr>
                                     <tr style="width=100%">
-                                        <td></td>
+                                        <td/>
                                         <td colspan="99">
                                             <span t-field="o.notes"/>
                                         </td>
@@ -852,31 +794,22 @@
                         <div class="row justify-content-end">
                             <div class="col-4">
                                 <table class="table table-sm table-borderless" style="font-size:13px">
-                                    <t t-if="o.amount_tax > 0">
-                                        <tr>
-                                            <td>
-                                                <t t-if="user.lang == 'zh_CN'">税费</t>
-                                                <t t-else="">Taxes</t>
-                                            </td>
-                                            <td class="text-end">
-                                                <span t-field="o.amount_tax"
-                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                            </td>
-                                        </tr>
-                                    </t>
                                     <tr class="border-black">
-                                        <td>
-                                            <strong>
-                                                <t t-if="user.lang == 'zh_CN'">总计 (</t>
-                                                <t t-else="">Total (</t>
-                                                <span t-field="o.currency_id"/>
-                                                <t t-if="user.lang == 'zh_CN'">)：</t>
-                                                <t t-else="">):</t>
-                                            </strong>
+                                        <td><strong>Subtotal</strong></td>
+                                        <td class="text-right">
+                                            <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                                         </td>
-                                        <td class="text-end">
-                                            <span t-field="o.amount_total"
-                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </tr>
+                                    <tr>
+                                        <td>Taxes</td>
+                                        <td class="text-right">
+                                            <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-black">
+                                        <td><strong>Total</strong></td>
+                                        <td class="text-right">
+                                            <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -885,42 +818,7 @@
                         <br/>
 
                     </div>
-                    <t t-if="o.company_id.country_id.code != 'SG'">
-                        <table width="100%" class="table table-borderless"
-                               style="font-family: Calibri; color: black; font-size:13px;">
-                            <tbody>
-                                <tr style="background-color: #f4f4f5;">
-                                    <td width="25%" style="text-align:center">
-                                        <span>--------------------</span>
-                                        <br/>
-                                        <span>
-                                            <t t-if="user.lang == 'zh_CN'">制表人</t>
-                                            <t t-else="">Prepared By</t>
-                                        </span>
-                                    </td>
-                                    <td width="25%" style="text-align:center">
-                                        <span>-------------------</span>
-                                        <br/>
-                                        <span>
-                                            <t t-if="user.lang == 'zh_CN'">审核人</t>
-                                            <t t-else="">Verified By</t>
-                                        </span>
-                                    </td>
-                                    <td width="25%" style="text-align:center">
-                                        <span>---------------------</span>
-                                        <br/>
-                                        <span>
-                                            <t t-if="user.lang == 'zh_CN'">批准人</t>
-                                            <t t-else="">Approved By</t>
-                                        </span>
-                                    </td>
-                                    <td width="25%">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </t>
-                    <br/>
+
                 </div>
             </t>
         </xpath>
