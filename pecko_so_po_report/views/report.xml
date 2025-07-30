@@ -271,8 +271,7 @@
     <template id="inherit_report_saleorder_document"
               inherit_id="sale.report_saleorder_document">
 
-        <xpath expr="//t[@t-call='web.external_layout']"
-               position="replace">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
             <t t-call="pecko_so_po_report.external_layout_so_report">
                 <div class="page" style="font-family: Calibri;text-color:black;">
                     <div style="position:relative;">
@@ -327,9 +326,7 @@
                                         <strong>DATE ORDER</strong>
                                     </div>
                                     <div class="col-6">
-                                        <span style="text-align:left"
-                                              t-field="doc.date_order"
-                                              t-options='{"format":"dd/MM/yyyy"}'/>
+                                        <span style="text-align:left" t-field="doc.date_order" t-options="{&quot;format&quot;:&quot;dd/MM/yyyy&quot;}"/>
                                     </div>
                                 </div>
                                 <div class="row" style="background-color: none;">
@@ -337,8 +334,7 @@
                                         <strong>PAYMENT TERM</strong>
                                     </div>
                                     <div class="col-6">
-                                        <span style="text-align:left"
-                                              t-field="doc.payment_term_id.name"/>
+                                        <span style="text-align:left" t-field="doc.payment_term_id.name"/>
                                     </div>
                                 </div>
                             </div>
@@ -354,8 +350,7 @@
                                 td{font-size:13px}
                             </style>
                             <thead>
-                                <tr
-                                        style="border-top:1px solid black;border-bottom:1px solid black;">
+                                <tr style="border-top:1px solid black;border-bottom:1px solid black;">
                                     <t t-set="colspan" t-value="5"/>
                                     <th class="text-left" style="width:4%;color:#875A7B">NO</th>
                                     <th class="text-left" style="width:20%;color:#875A7B">PECKO PART NUMBER</th>
@@ -364,19 +359,17 @@
                                     <th class="text-center" style="width:10%;color:#875A7B">QUANTITY</th>
                                     <th class="text-center" style="width:13%;color:#875A7B">NEED DATE</th>
                                     <th class="text-right" style="width:8%;color:#875A7B">PRICE</th>
-                                    <th t-if="display_discount" class="text-right" style="width:10%;color:#875A7B"
-                                        groups="sale.group_discount_per_so_line">
+                                    <th t-if="display_discount" class="text-right" style="width:10%;color:#875A7B" groups="sale.group_discount_per_so_line">
                                         <span>DISC.(%)</span>
                                         <t t-set="colspan" t-value="colspan+1"/>
                                     </th>
-                                    <t t-if="doc.amount_tax>0">
+                                    <t t-if="doc.amount_tax&gt;0">
                                         <th class="text-end;col-lg-6" style="width:10%;color:#875A7B;align:right">
                                             TAXES
                                         </th>
                                     </t>
-                                    <th class="text-end" style="width:15%;color:#875A7B">
-                                        <t groups="account.group_show_line_subtotals_tax_excluded">AMOUNT</t>
-                                        <t groups="account.group_show_line_subtotals_tax_included">TOTAL</t>
+                                    <th class="text-end" style="width:10%;color:#875A7B">
+                                        AMOUNT
                                     </th>
                                 </tr>
                             </thead>
@@ -387,15 +380,10 @@
 
                                 <t t-foreach="doc.order_line" t-as="line">
 
-                                    <t t-set="current_subtotal"
-                                       t-value="current_subtotal + line.price_subtotal"
-                                       groups="account.group_show_line_subtotals_tax_excluded"/>
-                                    <t t-set="current_subtotal"
-                                       t-value="current_subtotal + line.price_total"
-                                       groups="account.group_show_line_subtotals_tax_included"/>
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
 
-                                    <tr
-                                            t-att-class="'bg-200 font-weight-bold' if line.display_type == 'line_section' else 'font-italic' if line.display_type == 'line_note' else ''">
+                                    <tr t-att-class="'bg-200 font-weight-bold' if line.display_type == 'line_section' else 'font-italic' if line.display_type == 'line_note' else ''">
                                         <t t-if="not line.display_type">
                                             <td>
                                                 <span t-field="line.line_no"/>
@@ -416,40 +404,35 @@
                                             </td>
 
                                             <td class="text-center">
-                                                <span t-field="line.requested_date_line"
-                                                      t-options='{"format":"dd-MM-yyyy"}'/>
+                                                <span t-field="line.requested_date_line" t-options="{&quot;format&quot;:&quot;dd-MMM-yyyy&quot;}"/>
                                             </td>
                                             <td class="text-right">
                                                 <span t-field="line.price_unit"/>
                                             </td>
-                                            <td t-if="display_discount" class="text-right"
-                                                groups="sale.group_discount_per_so_line">
+                                            <td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
                                                 <span t-field="line.discount"/>
                                             </td>
-                                            <t t-if="doc.amount_tax>0">
-                                                <td class="text-right">
-                                                    <span t-esc="line.tax_id.code"/>
+                                                <t t-if="doc.amount_tax&gt;0">
+                                                    <td class="text-right">
+                                                        <span t-esc="doc.amount_tax"/>
+                                                    </td>
+                                                </t>
+                                                <td class="text-end">
+                                                    <span t-field="line.price_subtotal"/>
                                                 </td>
                                             </t>
-                                            <td class="text-end">
-                                                <span t-field="line.price_subtotal"
-                                                      groups="account.group_show_line_subtotals_tax_excluded"/>
-                                                <span t-field="line.price_total"
-                                                      groups="account.group_show_line_subtotals_tax_included"/>
-                                            </td>
-                                        </t>
-                                        <t t-if="line.display_type == 'line_section'">
-                                            <td t-att-colspan="colspan">
-                                                <span t-field="line.name"/>
-                                            </td>
-                                            <t t-set="current_section" t-value="line"/>
-                                            <t t-set="current_subtotal" t-value="0"/>
-                                        </t>
-                                        <t t-if="line.display_type == 'line_note'">
-                                            <td t-att-colspan="colspan">
-                                                <span t-field="line.name"/>
-                                            </td>
-                                        </t>
+                                            <t t-if="line.display_type == 'line_section'">
+                                                <td t-att-colspan="colspan">
+                                                    <span t-field="line.name"/>
+                                                </td>
+                                                <t t-set="current_section" t-value="line"/>
+                                                <t t-set="current_subtotal" t-value="0"/>
+                                            </t>
+                                            <t t-if="line.display_type == 'line_note'">
+                                                <td t-att-colspan="colspan">
+                                                    <span t-field="line.name"/>
+                                                </td>
+                                            </t>
                                     </tr>
                                     <t t-set="i" t-value="i+1"/>
 
@@ -459,16 +442,13 @@
                         <div class="clearfix">
                             <div class="row" name="total">
                                 <div class="col-8"/>
-                                <div
-                                        t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
-                                    <table class="table table-sm table-borderless"
-                                           style="border-top:1px solid #dddddd;">
+                                <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                                    <table class="table table-sm table-borderless" style="border-top:1px solid #dddddd;">
 
                                         <t t-foreach="doc.amount_by_group" t-as="amount_by_group">
                                             <tr style="border-bottom:1px solid #dddddd;">
 
-                                                <t
-                                                        t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
+                                                <t t-if="amount_by_group[3] == 1 and doc.amount_untaxed == amount_by_group[2]">
 
                                                     <td class="text-end">
                                                         <span t-esc="amount_by_group[0]"/>
@@ -476,13 +456,11 @@
                                                             &amp;nbsp;
                                                             <span>on</span>
                                                             &amp;nbsp;
-                                                            <t t-esc="amount_by_group[2]"
-                                                               t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                            <t t-esc="amount_by_group[2]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
                                                         </span>
                                                     </td>
                                                     <td class="text-end">
-                                                        <span t-esc="amount_by_group[1]"
-                                                              t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                        <span t-esc="amount_by_group[1]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
                                                     </td>
                                                 </t>
                                                 <t t-else="">
@@ -490,14 +468,12 @@
                                                         <span t-esc="amount_by_group[0]"/>
                                                     </td>
                                                     <td class="text-end">
-                                                        <span t-esc="amount_by_group[1]"
-                                                              t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                                        <span t-esc="amount_by_group[1]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
                                                     </td>
                                                 </t>
                                             </tr>
                                         </t>
-                                        <tr class="border-black text-end"
-                                            style="text-align: right;border-top:1px solid #dddddd;">
+                                        <tr class="border-black text-end" style="text-align: right;border-top:1px solid #dddddd;">
                                             <td style="font-size:13px">
                                                 <strong>
                                                     Total(
@@ -697,7 +673,7 @@
                                         <b>QUANTITY</b>
                                     </th>
                                     <th class="text-center" style="width:16%">
-                                        <b>REQUESTED DATE</b>
+                                        <b>ETA DATE</b>
                                     </th>
                                     <th class="text-right" style="width:10%">
                                         <b>UNIT PRICE</b>
