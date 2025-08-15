@@ -269,5 +269,14 @@
                 attachment="(object.state in ('draft','open','paid')) and ('INV'+(object.name or '').replace('/','')+'.pdf')"
                 print_report_name="(object._get_report_base_filename())"/>
 
+        <report id="proforma_invoice_ppts" model="account.move"
+                string="Proforma Invoice"
+                report_type="qweb-pdf"
+                name="invoice_report.report_ppts_proforma_invoice_custom"
+                file="invoice_report.report_ppts_proforma_invoice_custom"
+                paperformat="paperformat_invoice"
+                attachment="(object.state in ('draft','open','paid')) and ('PRO_INV'+(object.name or '').replace('/','')+'.pdf')"
+                print_report_name="('PRO_INV_'+(object.name or '').replace('/','_'))"/>
+
     </data>
 </odoo>
