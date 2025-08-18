@@ -445,7 +445,8 @@
                                     class="table table-borderless">
                                     <strong>
                                         <t t-if="o.journal_id.name != 'Debit Note'">
-                                            <span style="color:#875A7B">Invoice-To</span>
+                                            <span style="padding-left:55px;">PM/INV/<t t-esc="str(o.id)"/>
+                                            </span>
                                         </t>
                                         <t t-if="o.journal_id.name == 'Debit Note'">
                                             <span style="color:#875A7B">Debit Note-To</span>
