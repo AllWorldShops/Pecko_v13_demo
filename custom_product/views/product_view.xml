@@ -42,6 +42,7 @@
                     <group>
                         <group>
                             <field name="country_origin"/>
+                            <button name="reverse_jounrnal" type='object' string="Reverse Journal" class="oe_highlight"/>
                         </group>
                     </group>
                 </page>

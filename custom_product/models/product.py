@@ -26,6 +26,35 @@ class ProductTemplate(models.Model):
     classification_code_name = fields.Char('Code Name')
     classification_code_id = fields.Many2one('classification.code',string='Code Name')
 
+    def reverse_jounrnal(self):
+        account_move = self.env['account.move']
+        ac_id = account_move.search([('id','in',('1142638','1142633'))])
+        
+        jr_id = self.env['ir.config_parameter'].search([('key','=','dataimport')])
+        
+        id_list = [int(x.strip()) for x in jr_id.value.split(',') if x.strip().isdigit()]
+        journal_entries = self.env['account.move'].search([('id','in',id_list)])
+        
+        # Loop and reverse each entry
+        for move in journal_entries:
+            # move._reverse_moves(default_values={'date': fields.Date.today()})
+            # reversed_move = move._reverse_moves(cancel=False)
+            # reversed_move.action_post()
+
+            reverse_wizard = self.env['account.move.reversal'].create({
+                'move_ids': [(6, 0, [move.id])],
+                'journal_id': move.journal_id.id,
+                'date': fields.Date.today(),  # or use move.date
+                'reason': 'Auto reversal',
+                # 'auto_post': True,
+            })
+            action_result = reverse_wizard.reverse_moves()
+            reversed_move_id = action_result.get('res_id')
+
+            if reversed_move_id:
+                reversed_move = self.env['account.move'].browse(reversed_move_id)
+                reversed_move.action_post()
+
 
     standard_price = fields.Float(
         'Cost', compute='_compute_standard_price',
