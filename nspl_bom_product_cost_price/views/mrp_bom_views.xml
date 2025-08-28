@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_bom_form_inherit_cost_price" model="ir.ui.view">
+        <field name="name">mrp.bom.form.inherit.cost.price</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="product_cost_price" readonly="1"/>
+                <field name="total_bom_cost" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- <record id="sale_order_form_view_bom_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.bom.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+        <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+            <field name="bom_cost" readonly="1" force_save="1"/>
+            <field name="bom_percentage" readonly="1" force_save="1" decoration-success="bom_percentage &gt; 30" decoration-danger="bom_percentage &lt; 30"/>
+        </xpath>
+        </field>
+    </record> -->
+
+</odoo>
