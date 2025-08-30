@@ -1,5 +1,4 @@
-from odoo import models, fields, api
-from datetime import datetime, date
+from odoo import models, fields
 
 
 class ProductProduct(models.Model):

@@ -42,9 +42,9 @@
         <record model="ir.ui.view" id="view_audit_log_tree">
             <field name="name">audit.log.tree</field>
             <field name="model">audit.log</field>
-            <field name="type">tree</field>
+            <field name="type">list</field>
             <field name="arch" type="xml">
-                <tree string="Audit Logs" create="false">
+                <list string="Audit Logs" create="false">
                     <field name="create_date"/>
                     <field name="name"/>
                     <field name="model_id" groups="base.group_no_one"/>
@@ -53,7 +53,7 @@
                     <field name="user_id"/>
                     <button name="display_history_revision" type="object" string="Display history revision"
                       icon="fa-history"/>
-                </tree>
+                </list>
             </field>
         </record>
 

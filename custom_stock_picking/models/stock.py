@@ -3,7 +3,7 @@
 from statistics import mode
 from odoo import models, fields, api, _
 from datetime import date
-from odoo.exceptions import Warning, ValidationError, UserError
+from odoo.exceptions import ValidationError, UserError
 import logging
 _logger = logging.getLogger(__name__)
 from odoo.tools.misc import split_every
@@ -35,8 +35,6 @@ class StockPicking(models.Model):
         return super(StockPicking, self).create(vals)
 
 
-
-
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
@@ -50,8 +48,25 @@ class StockMove(models.Model):
                 _logger.info("-----Exception occurred stock moves--------- : %s", str(e))
 
     additional_notes = fields.Char(string='Additional Notes')
-    customer_part_no = fields.Text(string='Part Num                ber')
+    customer_part_no = fields.Text(string='Part Number')
     position_no = fields.Integer(string="Position", compute="_compute_position_no")
+    manufacturer_name = fields.Char(string='Manufacturer',related="product_id.product_tmpl_id.manufacturer_id.name", store=True, readonly=True)
+    # related = 'product_id.manufacturer_id.name'
+
+    @api.onchange('product_id')
+    def _onchange_product_id_set_manufacturer(self):
+        for move in self:
+            if move.product_id and move.product_id.product_tmpl_id.manufacturer_id:
+                move.manufacturer_name = move.product_id.product_tmpl_id.manufacturer_id.name
+            else:
+                move.manufacturer_name = ""
+
+    @api.model
+    def create(self, vals):
+        if vals.get("product_id"):
+            product = self.env["product.product"].browse(vals["product_id"])
+            vals["manufacturer_name"] = product.product_tmpl_id.manufacturer_id.name or ""
+        return super().create(vals)
 
     def _compute_position_no(self):
         for move in self:
@@ -82,82 +97,6 @@ class StockMoveLine(models.Model):
             else:
                 line.position_no = 0
 
-
-class StockQuant(models.Model):
-    _inherit = 'stock.quant'
-
-    # def action_open_inventory_lines(self):
-    #     self.ensure_one()
-    #     action = {
-    #         'type': 'ir.actions.act_window',
-    #         'views': [(self.env.ref('stock.stock_inventory_line_tree2').id, 'tree')],
-    #         'view_mode': 'tree',
-    #         'name': _('Inventory Lines'),
-    #         'res_model': 'stock.inventory.line',
-    #     }
-    #     context = {
-    #         'default_is_editable': True,
-    #         'default_inventory_id': self.id,
-    #         'default_company_id': self.company_id.id,
-    #     }
-    #     # Define domains and context
-    #     domain = [
-    #         ('inventory_id', '=', self.id)
-    #     ]
-    #     if self.location_ids:
-    #         context['default_location_id'] = self.location_ids[0].id
-    #         if len(self.location_ids) == 1:
-    #             if not self.location_ids[0].child_ids:
-    #                 context['readonly_location_id'] = True
-    #
-    #     if self.product_ids:
-    #         if len(self.product_ids) == 1:
-    #             context['default_product_id'] = self.product_ids[0].id
-    #
-    #     action['context'] = context
-    #     action['domain'] = domain
-    #     return action
-    #
-    # location_ids = fields.Many2many(
-    #     'stock.location', string='Locations',
-    #     readonly=True, check_company=True,
-    #     states={'draft': [('readonly', False)]},
-    #     domain="[('company_id', '=', company_id)]")
-#
-# class StockInventoryLine(models.Model):
-#     _inherit = 'stock.inventory.line'
-
-    # @api.model
-    # def _domain_location_id(self):
-    #     if self.env.context.get('active_model') == 'stock.inventory':
-    #         inventory = self.env['stock.inventory'].browse(self.env.context.get('active_id'))
-    #         if inventory.exists() and inventory.location_ids:
-    #             return "[('company_id', '=', company_id), ('id', 'child_of', %s)]" % inventory.location_ids.ids
-    #     return "[('company_id', '=', company_id)]"
-    #
-    # def _check_no_duplicate_line(self):
-    #     for line in self:
-    #         domain = [
-    #             ('id', '!=', line.id),
-    #             ('product_id', '=', line.product_id.id),
-    #             ('location_id', '=', line.location_id.id),
-    #             ('partner_id', '=', line.partner_id.id),
-    #             ('package_id', '=', line.package_id.id),
-    #             ('prod_lot_id', '=', line.prod_lot_id.id),
-    #             ('inventory_id', '=', line.inventory_id.id),
-    #             ('state', '!=', 'done')]
-    #         # if line.location_id.usage != 'internal':
-    #         #     dmn = self.search(domain)
-    #         #     _logger.info("-------Duplicate Lineitem : %s------" % dmn)
-    #         #     dmn.unlink()
-    #         rec = self.search(domain)
-    #         _logger.info("-------Duplicate Lineitem : %s------" % rec.inventory_id)
-    #         existings = self.search_count(domain)
-    #         if existings:
-    #             raise UserError(_("There is already one inventory adjustment line for this product,"
-    #                               " you should rather modify this one instead of creating a new one."))
-
-
 class ProductTemplate(models.Model):
     _name = 'product.template'
     _inherit = 'product.template'
@@ -170,45 +109,6 @@ class ProductTemplate(models.Model):
         if buy_route:
             route = self.env['stock.route'].sudo().search(['|',('id', '=', buy_route.id),('name', 'ilike', 'PEI - Buy from Vendor')])
             for rte in route:
-                # print(rte.name,"////_--------------;;;;;;;", rte)
                 if rte.company_id == self.env.company:
                     return rte.ids
         return []
-
-
-# class StockLocation(models.Model):
-#     _inherit = "stock.location"
-#
-#     def _should_be_valued(self):
-#         """ This method returns a boolean reflecting whether the products stored in `self` should
-#         be considered when valuating the stock of a company.
-#         """
-#         self.ensure_one()
-#         if self.usage == 'internal' or (self.usage == 'transit' and self.company_id) or (self.usage == 'production' and self.company_id):
-#             return True
-#         return False
-
-
-# class ProcurementRule(models.Model):
-#     _inherit = 'procurement.group'
-
-#     @api.model
-#     def _run_scheduler_tasks(self, use_new_cursor=False, company_id=False):
-#         # Minimum stock rules
-#         self.sudo()._procure_orderpoint_confirm(use_new_cursor=use_new_cursor, company_id=company_id)
-#         if use_new_cursor:
-#             self._cr.commit()
-#         # Search all confirmed stock_moves and try to assign them
-#         # domain = self._get_moves_to_assign_domain(company_id)
-#         # moves_to_assign = self.env['stock.move'].search(domain, limit=None,
-#         #     order='priority desc, date_expected asc')
-#         # for moves_chunk in split_every(100, moves_to_assign.ids):
-#         #     self.env['stock.move'].browse(moves_chunk).sudo()._action_assign()
-#         #     if use_new_cursor:
-#         #         self._cr.commit()
-#         _logger.info("doneeeeeeeeeeeeeeeeee")
-#         # Merge duplicated quants
-#         self.env['stock.quant']._quant_tasks()
-#         if use_new_cursor:
-#             self._cr.commit()
-#         _logger.info("tooooooooooooooo")

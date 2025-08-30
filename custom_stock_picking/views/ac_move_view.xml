@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
 			<xpath expr="//field[@name='invoice_vendor_bill_id']" position="after">
-				<field name="receipts_id" attrs="{'invisible': ['|', '|', ('state','not in',['draft']), ('state', '=', 'purchase'), ('move_type', '!=', 'in_invoice')]}"
+				<field name="receipts_id" invisible="state not in ['draft'] or state == 'purchase' or move_type != 'in_invoice'"
                        class="oe_edit_only"
                        domain="partner_id and [('company_id', '=', company_id), ('partner_id','child_of', [partner_id])] or [('company_id', '=', company_id)]"
                        placeholder="Select a receipt transfer"

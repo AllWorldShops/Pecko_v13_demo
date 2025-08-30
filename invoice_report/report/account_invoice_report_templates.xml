@@ -42,7 +42,7 @@
                     tr { page-break-inside: avoid }
                 </style>
                 <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
- <br/>
+                <br/>
                 <div class="page">
                     <div style="font-size:20px;text-align:center;">
                         <!-- <span ><strong> <t t-if="o.type == 'out_invoice'"> Tax Invoice </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span> -->
@@ -96,6 +96,38 @@
                                         Email:
                                         <span t-field="o.partner_id.email"/>
                                     </t>
+                                    <t t-if="o.company_id.country_id.code != 'SG'">
+                                        <br/>
+                                        TIN NO:
+                                        <span t-field="o.partner_id.ttx_registration_number"/>
+                                        <br/>
+                                        SST ID:
+                                        <span t-field="o.partner_id.sst_registration_number"/>
+                                        <br/>
+                                        Co.Reg.No:
+                                        <br/>
+                                    </t>
+                                    <div id="myinvois_qrcode" class="d-flex mb-3 avoid-page-break-inside"
+                                         t-if="o.l10n_my_edi_external_uuid">
+                                        <div class="qrcode me-3" id="myinvois_qrcode_image">
+                                            <t t-set="qr_code_url" t-value="o._generate_myinvois_qr_code()"/>
+                                            <p t-if="qr_code_url" class="position-relative mb-0">
+                                                <img t-att-src="qr_code_url"/>
+                                                <img src="/account/static/src/img/Odoo_logo_O.svg"
+                                                     id="qrcode_odoo_logo"
+                                                     class="top-50 start-50 position-absolute bg-white border border-white border-3 rounded-circle"
+                                                />
+                                            </p>
+                                        </div>
+                                        <div class="d-inline text-muted lh-sm fst-italic" id="qrcode_info"
+                                             t-if="qr_code_url">
+                                            <p>Scan this QR Code to<br/>access your invoice
+                                            </p>
+                                        </div>
+                                    </div>
+
+
+                                    <!--                                    <span t-field="o.partner_id.SST_registration_number"/>-->
                                     <br/>
                                     <br/>
 
@@ -136,16 +168,18 @@
                             <span style="background-color: #f4f4f5;">
 
                                 <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">
-                                        <strong> Invoice No.</strong>
-                                        <span style="padding-left:55px;" t-field="o.name"/>
-                                    </t>
-                                <t t-if="o.journal_id.name == 'Debit Note'"><strong>DN No.</strong>
-                                         <span style="padding-left:78px;" t-field="o.name"/>
-                                     </t>
-                                    <t t-if="o.move_type == 'out_invoice'"></t>
-                                <t t-if="o.move_type == 'out_refund'"> <strong>CN No.</strong>
-                                         <span style="padding-left:78px;" t-field="o.name"/>
-                                    </t>
+                                    <strong>Invoice No:</strong>
+                                    <span style="padding-left:55px;" t-field="o.name"/>
+                                </t>
+                                <t t-if="o.journal_id.name == 'Debit Note'">
+                                    <strong>DN No:</strong>
+                                    <span style="padding-left:78px;" t-field="o.name"/>
+                                </t>
+                                <t t-if="o.move_type == 'out_invoice'"></t>
+                                <t t-if="o.move_type == 'out_refund'">
+                                    <strong>CN No:</strong>
+                                    <span style="padding-left:78px;" t-field="o.name"/>
+                                </t>
 
 
                             </span>
@@ -157,7 +191,7 @@
                             <br/>
                             <tr>
                                 <td>
-                                    <strong>Date</strong>
+                                    <strong>Date:</strong>
                                     <span style="padding-left:93px;" t-field="o.invoice_date"
                                           t-options='{"format": "dd/MM/yyyy"}'/>
                                 </td>
@@ -165,7 +199,7 @@
                             <br/>
                             <tr>
                                 <td>
-                                    <strong>SO No.</strong>
+                                    <strong>SO No:</strong>
                                     <span style="padding-left:80px;"
                                           t-field="o.invoice_origin"/>
                                 </td>
@@ -173,7 +207,7 @@
                             <br/>
                             <tr>
                                 <span style="background-color: #f4f4f5;">
-                                    <strong>Cust P.O</strong>
+                                    <strong>Cust P.O:</strong>
                                     <span style="padding-left:67px;" t-field="o.customer_po_no"/>
                                 </span>
                             </tr>
@@ -181,8 +215,17 @@
                             <tr>
                                 <td>
                                     <span>
-                                        <strong>Do No.</strong>
+                                        <strong>Do No:</strong>
                                         <span style="padding-left:80px;" t-field="o.do_name"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <br/>
+                            <tr>
+                                <td>
+                                    <span>
+                                        <strong>Payment Terms:</strong>
+                                        <span style="padding-left:27px;" t-field="o.invoice_payment_term_id"/>
                                     </span>
                                 </td>
                             </tr>
@@ -190,7 +233,7 @@
                             <tr>
                                 <span style="background-color: #f4f4f5;">
                                     <t t-if="o.move_type == 'out_refund'">
-                                        <strong>Payment Reference</strong>
+                                        <strong>Payment Reference:</strong>
                                         <span style="padding-left:7px;" t-field="o.payment_reference"/>
                                     </t>
                                     <t t-else=""/>
@@ -218,20 +261,25 @@
                            name="invoice_line_table" style="line-height:12pt;font-size:10px;">
                         <thead>
                             <tr>
-                                <th class="text-left" style="width:6%">S.No</th>
-                                <th class="text-left" style="width:30%;text-align:left">Pecko Part No</th>
-                                <th class="text-left" style="width:30%;text-align:left">Part No</th>
-                                <th class="text-left" style="width:28%;text-align:left">Description</th>
-                                <th t-if="o.company_id.country_id.code == 'SG'" class="text-left" style="width:20%;">
+                                <th class="text-left" style="width:6%; font-weight: bold;">S.No</th>
+                                <th class="text-left" style="width:30%; text-align:left; font-weight: bold;">Pecko Part
+                                    No
+                                </th>
+                                <th class="text-left" style="width:30%; text-align:left; font-weight: bold;">Part No
+                                </th>
+                                <th class="text-left" style="width:28%; text-align:left; font-weight: bold;">Description
+                                </th>
+                                <th t-if="o.company_id.country_id.code == 'SG'" class="text-left"
+                                    style="width:20%; font-weight: bold;">
                                     Country of Origin
                                 </th>
-                                <th class="text-center" style="width:18%">Quantity</th>
-                                <th class="text-center" style="width:13%">Unit</th>
-                                <th class="text-right" style="width:20%">
+                                <th class="text-center" style="width:18%; font-weight: bold;">Quantity</th>
+                                <th class="text-center" style="width:13%; font-weight: bold;">Unit</th>
+                                <th class="text-right" style="width:20%; font-weight: bold;">
                                     Price(<span t-field="o.currency_id"/>)
                                 </th>
-                                <th class="text-right" style="width:10%">Tax</th>
-                                <th class="text-right" style="width:23%;padding-right:2px">
+                                <th class="text-right" style="width:10%; font-weight: bold;">Tax</th>
+                                <th class="text-right" style="width:23%; padding-right:2px; font-weight: bold;">
                                     Amount(<span t-field="o.currency_id"/>)
                                 </th>
                             </tr>
@@ -240,11 +288,11 @@
                             <style>tbody tr:nth-child(odd){ background-color: #f4f4f5; }</style>
                             <t t-set="i" t-value="1"/>
                             <tr t-foreach="o.invoice_line_ids" t-as="l">
-                                    <t t-if="l.display_type=='product'" name="account_invoice_line_accountable">
-                                                                 <td style=" text-align: left;">
-                                                                     <span t-field="l.position_no"/>
-                                                                 </td>
-                                <!--                                 <t> -->
+                                <t t-if="l.display_type=='product'" name="account_invoice_line_accountable">
+                                    <td style=" text-align: left;">
+                                        <span t-field="l.position_no"/>
+                                    </td>
+                                    <!--                                 <t> -->
 
                                     <!--                                <td style=" text-align: left;">-->
                                     <!--                                    <span t-esc="i"/>-->
@@ -305,68 +353,6 @@
                             </td>
                         </tr>
                     </table>
-                    <t t-if="o.company_id.country_id.code != 'SG'">
-                        <table width="100%"
-                               style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;height:15px"
-                               class="table table-borderless">
-                            <tr style="height:5px;">
-                                <td width="25%">For Tax Purpose in MYR Only</td>
-                                <td width=""></td>
-                                <td width="10%"></td>
-                                <td width="15%" style="text-align:right;">Net Total (MYR)</td>
-                                <td width="" style="text-align:right;">:</td>
-                                <td width="15%">
-                                    <span t-esc="'%.2f'%(o.get_net_amount_report())"/>
-                                </td>
-                                <td width="15%" style="text-align:right;">Net Total (
-                                    <span t-field="o.currency_id"/>
-                                    )
-                                </td>
-                               <td width="1%" style="text-align:left;">:</td>
-                                <td width="15%" style="text-align:right;">
-                                    <span t-esc="'%.2f'%(o.amount_untaxed)"/>
-                                </td>
-                            </tr>
-                            <tr style="height:5px;">
-                                <td width="15%">1 MYR =
-                                    <span t-field="o.exchange_rate"/>
-                                    USD
-                                </td>
-                                <td width="3.3%"></td>
-                                <td width="15%"></td>
-                                <td width="15%" style="text-align:right;">Tax Amount</td>
-                                <td width="3" style="text-align:right;">:</td>
-                                <td width="15%">
-                                    <span style="padding-left:3px" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/>
-                                </td>
-                                <td width="16%" style="text-align:right;">Tax Amount</td>
-                                <td width="1%" style="text-align:left;">:</td>
-                                <td width="15%" style="text-align:right;">
-                                    <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/>
-                                </td>
-                            </tr>
-                            <tr style="height:5px">
-                                <td width="15%">Conversation Rate =
-                                    <span t-field="o.exchange_rate"/>
-                                </td>
-                                <td width="3.3%"></td>
-                                <td width="15%"></td>
-                                <td width="15%" style="text-align:right;">Grand Total (MYR)</td>
-                                <td width="3%" style="text-align:right;">:</td>
-                                <td width="15%">
-                                    <span  style="padding-left:3px" t-esc="'%.2f'%((o.amount_tax / o.exchange_rate) + o.get_net_amount_report())" />
-                                </td>
-                                <td width="16%" style="text-align:right;">Grand Total (
-                                    <span t-field="o.currency_id"/>
-                                    )
-                                </td>
-                                <td width="1%" style="text-align:left;">:</td>
-                                <td width="15%" style="text-align:right;">
-                                    <span t-esc="'%.2f'%(o.amount_total)"/>
-                                </td>
-                            </tr>
-                        </table>
-                    </t>
 
                     <p style="page-break-after:always"></p>
                 </div>
@@ -380,386 +366,5 @@
                 </t>
             </t>
         </template>
-
-        <!-- Pro-forma invoice design -->
-        <template id="report_proforma_invoice_document_ppts">
-            <t t-call="invoice_report.custom_invoice_external_layout">
-                <style>
-                    .table1{
-                    border: 1px solid black;
-                    }
-                    td {
-                    padding-left: 4px;
-                    }
-
-                    .table2{
-                    border-top: 1px solid black;
-                    border-left: 1px solid black;
-                    border-right: 1px solid black;
-                    }
-
-                    .table3{
-                    border-bottom: 1px solid
-                    black;
-                    border-left: 1px solid black;
-                    border-right: 1px solid black;
-                    }
-                    .table4{
-                    border-bottom: 1px solid black;
-                    }
-                    .table5{
-                    border-top: 1px
-                    solid black;
-                    }
-                    .pagebreak { page-break-before: always; } /*
-                    page-break-after works, as well */
-
-                    html *
-                    {
-                    font-family: Calibri;
-                    }
-
-                    thead { display: table-header-group }
-                    tr { page-break-inside: avoid }
-                </style>
-                <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
- <br/>
-                <div class="page">
-                    <div style="font-size:20px;text-align:center;">
-                        <!-- <span ><strong> <t t-if="o.type == 'out_invoice'"> Tax Invoice </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span> -->
-                        <span>
-                            <strong>
-                                <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">Proforma Invoice</t>
-                                <t t-if="o.journal_id.name == 'Debit Note'">DEBIT NOTE</t>
-                                <t t-if="o.move_type == 'out_refund'">CREDIT NOTE</t>
-                            </strong>
-                        </span>
-                        <!-- <span>
-                            <strong> Tax Invoice </strong>
-                        </span> -->
-                    </div>
-                    <div class="row">
-                        <div class="col-7" style="font-size:13px;">
-                            <tr>
-                                <td style="width:55%;background-color:white;font-size:5px;"
-                                    class="table table-borderless">
-                                    <strong>
-                                        <t t-if="o.journal_id.name != 'Debit Note'">
-                                            <span style="color:#875A7B">Invoice-To</span>
-                                        </t>
-                                        <t t-if="o.journal_id.name == 'Debit Note'">
-                                            <span style="color:#875A7B">Debit Note-To</span>
-                                        </t>
-                                        <!-- <span style="color:#875A7B">Invoice-To</span> -->
-                                    </strong>
-                                    <br/>
-                                    <strong>
-                                        <span t-field="o.partner_id.name"/>
-                                    </strong>
-                                    <br/>
-                                    <span t-field="o.partner_id.street"/>
-                                    <span t-field="o.partner_id.street2"/>
-                                    <br/>
-                                    <t t-if="o.company_id.country_id.code != 'SG'">
-                                        <span t-field="o.partner_id.city"/>
-                                    </t>
-                                    <span t-field="o.partner_id.state_id"/>
-                                    <br/>
-                                    <span t-field="o.partner_id.country_id"/>
-                                    <span t-field="o.partner_id.zip"/>
-                                    <br/>
-                                    Phone:
-                                    <span t-field="o.partner_id.phone"/>
-                                    <br/>
-                                    <t t-if="o.company_id.country_id.code != 'SG'">
-                                        Email:
-                                        <span t-field="o.partner_id.email"/>
-                                    </t>
-                                    <br/>
-                                    <br/>
-
-                                </td>
-                            </tr>
-                        </div>
-                        <div class="col-5" style="font-size:13px;">
-                            <td style="width:45%;background-color:white;font-size:5px;">
-                                <tr class="table table-borderless">
-                                    <span class="table table-borderless;" style="background-color: #f4f4f5;">
-                                        <strong>Delivery Address</strong>
-                                    </span>
-                                </tr>
-                                <br/>
-                                <tr>
-                                    <td class="table table-borderless" style="font-size:5px;">
-                                        <span t-field="o.partner_shipping_id"/>
-                                        <br/>
-                                        <span t-field="o.partner_shipping_id.street"/>
-                                        <span t-field="o.partner_shipping_id.street2"/>
-                                        <br/>
-                                        <span t-field="o.partner_shipping_id.city"/>
-                                        <br/>
-                                        <span t-field="o.partner_shipping_id.state_id"/>
-                                        <br/>
-                                        <span t-field="o.partner_shipping_id.zip"/>
-                                        <br/>
-                                        <span t-field="o.partner_shipping_id.country_id"/>
-                                    </td>
-                                </tr>
-                            </td>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-7">
-                        </div>
-                        <div class="col-5" style="font-size:12px">
-                            <span style="background-color: #f4f4f5;">
-
-                                <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">
-                                        <strong> Invoice No.</strong>
-                                        <span style="padding-left:55px;">PM/INV/<t t-esc="str(o.id)"/>
-                                        </span>
-                                    </t>
-                                <t t-if="o.journal_id.name == 'Debit Note'"><strong>DN No.</strong>
-                                         <span style="padding-left:78px;" t-field="o.name"/>
-                                     </t>
-                                    <t t-if="o.move_type == 'out_invoice'"></t>
-                                <t t-if="o.move_type == 'out_refund'"> <strong>CN No.</strong>
-                                         <span style="padding-left:78px;" t-field="o.name"/>
-                                    </t>
-
-
-                            </span>
-
-
-                            <!-- <strong> <t t-if="o.type == 'out_invoice'"> Invoice No. </t><t t-if="o.type == 'out_refund'"> CN No.
-                            </t></strong> -->
-                            <!-- <strong>Invoice No.</strong> -->
-                            <br/>
-                            <tr>
-                                <td>
-                                    <strong>Date</strong>
-                                    <span style="padding-left:93px;" t-field="o.invoice_date"
-                                          t-options='{"format": "dd/MM/yyyy"}'/>
-                                </td>
-                            </tr>
-                            <br/>
-                            <tr>
-                                <td>
-                                    <strong>SO No.</strong>
-                                    <span style="padding-left:80px;"
-                                          t-field="o.invoice_origin"/>
-                                </td>
-                            </tr>
-                            <br/>
-                            <tr>
-                                <span style="background-color: #f4f4f5;">
-                                    <strong>Cust P.O</strong>
-                                    <span style="padding-left:67px;" t-field="o.customer_po_no"/>
-                                </span>
-                            </tr>
-                            <br/>
-                            <tr>
-                                <td>
-                                    <span>
-                                        <strong>Do No.</strong>
-                                        <span style="padding-left:80px;" t-field="o.do_name"/>
-                                    </span>
-                                </td>
-                            </tr>
-                            <br/>
-                            <tr>
-                                <span style="background-color: #f4f4f5;">
-                                    <t t-if="o.move_type == 'out_refund'">
-                                        <strong>Payment Reference</strong>
-                                        <span style="padding-left:7px;" t-field="o.payment_reference"/>
-                                    </t>
-                                    <t t-else=""/>
-                                </span>
-                            </tr>
-
-                            <!--                                                    <td style="height:5px;">-->
-                            <!--                                                    <t t-if="isinstance(o.do_name, str)">-->
-                            <!--                                                        <t t-set="string_to_output"-->
-                            <!--                                                            t-value="o.do_name.split(',')" />-->
-                            <!--                                                        <t t-foreach="string_to_output" t-as="string_line">-->
-                            <!--                                                            <span t-esc="string_line" />-->
-                            <!--                                                            <br />-->
-                            <!--                                                        </t>-->
-                            <!--                                                    </t>-->
-
-
-                            <!-- <span t-field="o.do_name" /> -->
-                            <!--                                                    </td>-->
-                        </div>
-                    </div>
-                    <br/>
-                    <t t-set="product_stock_uom_qty" t-value="0"/>
-                    <table class="table table-borderless"
-                           name="invoice_line_table" style="line-height:12pt;font-size:10px;">
-                        <thead>
-                            <tr>
-                                <th class="text-left" style="width:6%">S.No</th>
-                                <th class="text-left" style="width:30%;text-align:left">Pecko Part No</th>
-                                <th class="text-left" style="width:30%;text-align:left">Part No</th>
-                                <th class="text-left" style="width:28%;text-align:left">Description</th>
-                                <th t-if="o.company_id.country_id.code == 'SG'" class="text-left" style="width:20%;">
-                                    Country of Origin
-                                </th>
-                                <th class="text-center" style="width:18%">Quantity</th>
-                                <th class="text-center" style="width:13%">Unit</th>
-                                <th class="text-right" style="width:20%">
-                                    Price(<span t-field="o.currency_id"/>)
-                                </th>
-                                <th class="text-right" style="width:10%">Tax</th>
-                                <th class="text-right" style="width:23%;padding-right:2px">
-                                    Amount(<span t-field="o.currency_id"/>)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="invoice_tbody;table table-borderless">
-                            <style>tbody tr:nth-child(odd){ background-color: #f4f4f5; }</style>
-                            <t t-set="i" t-value="1"/>
-                            <tr t-foreach="o.invoice_line_ids" t-as="l">
-                                    <t t-if="l.display_type=='product'" name="account_invoice_line_accountable">
-                                                                 <td style=" text-align: left;">
-                                                                     <span t-field="l.position_no"/>
-                                                                 </td>
-                                <!--                                 <t> -->
-
-                                    <!--                                <td style=" text-align: left;">-->
-                                    <!--                                    <span t-esc="i"/>-->
-                                    <!--                                    <span t-set="i" t-value="i+1"/>-->
-                                    <!--                                </td>-->
-
-                                    <td style=" text-align: left;">
-                                        <span t-field="l.product_id.default_code"/>
-                                    </td>
-                                    <td style=" text-align: left;">
-                                        <span t-field="l.product_id.name"/>
-                                    </td>
-
-                                    <td style=" text-align: left;">
-                                        <span t-field="l.name"/>
-                                    </td>
-                                    <td t-if="o.company_id.country_id.code == 'SG'" style=" text-align: left;">
-                                        <span t-field="l.product_id.country_origin"/>
-                                    </td>
-                                    <td style=" text-align: left;">
-                                        <span t-field="l.quantity"/>
-                                    </td>
-                                    <td style=" text-align: left;">
-                                        <span t-field="l.product_uom_id.name"/>
-                                    </td>
-                                    <td style=" text-align: right;">
-                                        <span t-field="l.price_unit"/>
-                                    </td>
-                                    <td style=" text-align: right;">
-                                        <span t-field="l.tax_ids.code"/>
-                                    </td>
-                                    <td style=" text-align: right;padding-right:2px">
-                                        <!-- <span t-esc="'%.2f'%(l.price_subtotal)" /> -->
-                                        <!-- <t t-set="get_price_subtotal_report"
-                            t-value="l.get_price_subtotal_report(l.price_subtotal)" />
-                                        <span t-esc="'%.2f'% get_price_subtotal_report" /> -->
-                                        <span t-field="l.price_subtotal"/>
-                                    </td>
-                                </t>
-                                <t t-if="l.display_type == 'line_section'">
-                                    <td colspan="99" style="font-style: Italic;">
-                                        <span t-field="l.name"/>
-                                    </td>
-                                </t>
-                                <t t-if="l.display_type == 'line_note'">
-                                    <td colspan="99" style="font-style: Italic;">
-                                        <span t-field="l.name"/>
-                                    </td>
-                                </t>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table style='width:100%;background:transparent;'>
-                        <tr
-                                style='background-color: white;background:transparent !important;'>
-                            <td>
-                            </td>
-                        </tr>
-                    </table>
-                    <t t-if="o.company_id.country_id.code != 'SG'">
-                        <table width="100%"
-                               style="border-top: 1px solid black;border-bottom: 1px solid black;font-size:10px;height:15px"
-                               class="table table-borderless">
-                            <tr style="height:5px;">
-                                <td width="25%">For Tax Purpose in MYR Only</td>
-                                <td width=""></td>
-                                <td width="10%"></td>
-                                <td width="15%" style="text-align:right;">Net Total (MYR)</td>
-                                <td width="" style="text-align:right;">:</td>
-                                <td width="15%">
-                                    <span t-esc="'%.2f'%(o.get_net_amount_report())"/>
-                                </td>
-                                <td width="15%" style="text-align:right;">Net Total (
-                                    <span t-field="o.currency_id"/>
-                                    )
-                                </td>
-                               <td width="1%" style="text-align:left;">:</td>
-                                <td width="15%" style="text-align:right;">
-                                    <span t-esc="'%.2f'%(o.amount_untaxed)"/>
-                                </td>
-                            </tr>
-                            <tr style="height:5px;">
-                                <td width="15%">1 MYR =
-                                    <span t-field="o.exchange_rate"/>
-                                    USD
-                                </td>
-                                <td width="3.3%"></td>
-                                <td width="15%"></td>
-                                <td width="15%" style="text-align:right;">Tax Amount</td>
-                                <td width="3" style="text-align:right;">:</td>
-                                <td width="15%">
-                                    <span style="padding-left:3px" t-esc="'%.2f'%(o.amount_tax / o.exchange_rate)"/>
-                                </td>
-                                <td width="16%" style="text-align:right;">Tax Amount</td>
-                                <td width="1%" style="text-align:left;">:</td>
-                                <td width="15%" style="text-align:right;">
-                                    <span style="text-align:right;" t-esc="'%.2f'%(o.amount_tax)"/>
-                                </td>
-                            </tr>
-                            <tr style="height:5px">
-                                <td width="15%">Conversation Rate =
-                                    <span t-field="o.exchange_rate"/>
-                                </td>
-                                <td width="3.3%"></td>
-                                <td width="15%"></td>
-                                <td width="15%" style="text-align:right;">Grand Total (MYR)</td>
-                                <td width="3%" style="text-align:right;">:</td>
-                                <td width="15%">
-                                    <span  style="padding-left:3px" t-esc="'%.2f'%((o.amount_tax / o.exchange_rate) + o.get_net_amount_report())" />
-                                </td>
-                                <td width="16%" style="text-align:right;">Grand Total (
-                                    <span t-field="o.currency_id"/>
-                                    )
-                                </td>
-                                <td width="1%" style="text-align:left;">:</td>
-                                <td width="15%" style="text-align:right;">
-                                    <span t-esc="'%.2f'%(o.amount_total)"/>
-                                </td>
-                            </tr>
-                        </table>
-                    </t>
-
-                    <p style="page-break-after:always"></p>
-                </div>
-            </t>
-        </template>
-        <template id="report_ppts_proforma_invoice_custom">
-            <t t-call="web.html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="invoice_report.report_proforma_invoice_document_ppts"
-                       t-lang="o.partner_id.lang"/>
-                </t>
-            </t>
-        </template>
-
     </data>
 </odoo>

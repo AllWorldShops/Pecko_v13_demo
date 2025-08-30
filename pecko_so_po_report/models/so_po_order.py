@@ -8,14 +8,24 @@ from odoo import api, fields, models, SUPERUSER_ID, _
 from odoo.exceptions import AccessError, UserError
 import math
 
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    @api.depends('name', 'default_code')
+    def _compute_display_name(self):
+        for template in self:
+            template.display_name = template.default_code or ''
+
 class Product(models.Model):   
     _inherit = "product.product"
      
-#     @api.multi
-    def name_get(self):
-        return [(template.id, '%s' % (template.default_code))
-                for template in self]
-        
+    @api.depends('default_code')
+    @api.depends_context('display_default_code', 'seller_id', 'company_id', 'partner_id')
+    def _compute_display_name(self):
+        for product in self:
+            product.display_name = product.default_code or ''
+
+
     def get_product_multiline_description_sale(self):
         """ Compute a multiline description of this product, in the context of sales
                 (do not use for purchases or other display reasons that don't intend to use "description_sale").
@@ -28,6 +38,11 @@ class Product(models.Model):
         if self.product_tmpl_id.x_studio_field_mHzKJ:
             name = self.product_tmpl_id.x_studio_field_mHzKJ
         return name
+
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
+
+    old_po_no = fields.Char(string='Old PO Number')
 
 class SaleOrder(models.Model):   
     _inherit = "sale.order"
@@ -59,56 +74,51 @@ class SaleOrder(models.Model):
                 len(res),
             ) for l in res]
 
+# currency conversion for sale order xls report
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
+    sale_exchange_rate = fields.Float(string="Rate",digits=(12,4),defaults=0.00)
 
-#  
-#     @api.multi
-#     def _prepare_invoice(self):
-#         invoice_vals = super(SaleOrder, self)._prepare_invoice()
-#         invoice_vals['attn'] = self.attn.id
-#         invoice_vals['customer_po_no'] = self.customer_po_no
-#         return invoice_vals
-#      
-#     @api.multi
-#     def action_confirm(self):
-#         res = super(SaleOrder, self).action_confirm()
-#         for rec in self:
-#             for picking in rec.picking_ids:
-#                 picking.write({'attn': self.attn.id,
-#                                       'customer_po_no' :self.customer_po_no})
-#         for loop in rec.picking_ids:
-#             for move in loop.move_ids_without_package:
-#                 move.customer_part_no = move.product_id.name
-#         return res
+    # def _compute_currency_rate(self):
+    #     for mov in self:
+    #         mov.sale_exchange_rate = 0.00
+    #         if mov.currency_id:
+    #             if mov.company_id.country_id.code != 'SG':
+    #                 currency_id_rates = self.env['res.currency.rate'].search(
+    #                     [('currency_id', '=', mov.currency_id.id), ('company_id', '=', mov.company_id.id)])
+    #                 for currency_id_rate in currency_id_rates:
+    #                     if currency_id_rate.name == mov.create_date:
+    #                         mov.sale_exchange_rate = currency_id_rate.rate
+    #                         break
+    #                     else:
+    #                         if mov.create_date and currency_id_rate.name:
+    #                             if currency_id_rate.name.month == mov.create_date.month and currency_id_rate.name.year == mov.create_date.year:
+    #                                 mov.sale_exchange_rate = currency_id_rate.rate
+    #                                 break
+    #                             else:
+    #                                 mov.sale_exchange_rate = currency_id_rate.rate
+    #                         else:
+    #                             mov.sale_exchange_rate = currency_id_rate.rate
+    #                             break
+    #             else:
+    #                 currency_id_rates = self.env['res.currency.rate'].search(
+    #                     [('currency_id', '=', mov.currency_id.id), ('company_id', '=', mov.company_id.id)])
+    #                 for currency_id_rate in currency_id_rates:
+    #                     if currency_id_rate.name == mov.create_date:
+    #                         mov.sale_exchange_rate = 1 / currency_id_rate.rate
+    #                         break
+    #                     else:
+    #                         if mov.create_date and currency_id_rate.name:
+    #                             if currency_id_rate.name.month == mov.create_date.month and currency_id_rate.name.year == mov.create_date.year:
+    #                                 mov.sale_exchange_rate = 1 / currency_id_rate.rate
+    #                                 break
+    #                             else:
+    #                                 mov.sale_exchange_rate = 1 / currency_id_rate.rate
+    #                         else:
+    #                             mov.sale_exchange_rate   = 1 / currency_id_rate.rate
+    #                             break
 
-# class SaleOrderLine(models.Model):   
-#     _inherit = "sale.order.line"
-#     
-#     customer_part_no = fields.Text(string='Customer Part No')
-#     need_date = fields.Date(string="Need Date")
-#     
-#     @api.onchange('product_id')
-#     def _onchange_product_id(self):
-#         if self.product_id:
-#             self.update({'customer_part_no':self.product_id.name,
-#                          'name':self.product_id.name})
-            
-# class StockPicking(models.Model):   
-#     _inherit = "stock.picking"
-#     
-#     attn = fields.Many2one('res.partner',string="ATTN")
-#     customer_po_no = fields.Char(string="Customer PO No")   
-#     
-#     @api.model
-#     def create(self, vals):
-#         if vals.get('origin'):
-#             sale_id = self.env['sale.order'].search([('name','=',vals['origin'])])
-#             vals['customer_po_no'] = sale_id.customer_po_no
-#         return super(StockPicking, self).create(vals)
-    
-# class StockMove(models.Model):   
-#     _inherit = "stock.move"
-#     
-#     customer_part_no = fields.Text(string='Part Number')
+
          
 class AccountMove(models.Model):   
     _inherit = "account.move"
@@ -117,9 +127,13 @@ class AccountMove(models.Model):
     customer_po_no = fields.Char(string="Customer PO No.")
     do_name = fields.Char(string="DO No.")
     exchange_rate = fields.Float(string="Rate",digits=(12,4),compute="_compute_currency_rate")
-    
+    # custom_form_reference_number = fields.Char(string="Customs Form Reference Number")
+
+
+
     def _compute_currency_rate(self):
         for mov in self:
+            mov.exchange_rate = 0.00
             if mov.currency_id:
                 if mov.company_id.country_id.code != 'SG':
                     currency_id_rates = self.env['res.currency.rate'].search([('currency_id','=',mov.currency_id.id),('company_id','=',mov.company_id.id)])
@@ -153,34 +167,7 @@ class AccountMove(models.Model):
                             else:
                                 mov.exchange_rate = 1 / currency_id_rate.rate
                                 break
-                                
-    # def _compute_currency_rate(self):
-    #     for mov in self:
-    #         if mov.currency_id:
-    #             currency_id_rates = self.env['res.currency.rate'].search([('currency_id','=',mov.currency_id.id)])
-    #             for currency_id_rate in currency_id_rates:
-    #                 if currency_id_rate.name == mov.invoice_date and mov.company_id.country_id.code != 'SG':
-    #                     mov.exchange_rate = currency_id_rate.rate
-    #                 if currency_id_rate.name == mov.invoice_date and mov.company_id.country_id.code == 'SG':
-    #                     mov.exchange_rate = 1 / currency_id_rate.rate
-    #                     break
-    #                 else:
-    #                     if mov.invoice_date and currency_id_rate.name:
-    #                         if currency_id_rate.name.month == mov.invoice_date.month and currency_id_rate.name.year == mov.invoice_date.year and mov.company_id.country_id.code != 'SG':
-    #                             mov.exchange_rate = currency_id_rate.rate
-    #                         if currency_id_rate.name.month == mov.invoice_date.month and currency_id_rate.name.year == mov.invoice_date.year and mov.company_id.country_id.code == 'SG':
-    #                             mov.exchange_rate = 1 / currency_id_rate.rate
-    #                             break
-    #                         else:
-    #                            if mov.company_id.country_id.code == 'SG':
-    #                               mov.exchange_rate = 1 / currency_id_rate.rate
-    #                            else:
-    #                               mov.exchange_rate = currency_id_rate.rate   
-    #                     if mov.company_id.country_id.code == 'SG':
-    #                         mov.exchange_rate = 1 / currency_id_rate.rate
-    #                     else:
-    #                         mov.exchange_rate = currency_id_rate.rate
-    #                         break
+
 
     def get_net_amount_report(self):
         net_total = 0
@@ -205,6 +192,7 @@ class AccountMoveLine(models.Model):
                 pro.customer_part_no =''
             if pro.product_id.product_tmpl_id.manufacturer_id:
                 pro.manufacturer_id = pro.product_id.product_tmpl_id.manufacturer_id.id
+
             
 #     @api.model
 #     def create(self, vals):
@@ -278,8 +266,6 @@ class PurchaseOrderLine(models.Model):
             self.taxes_id = fpos.map_tax(self.product_id.supplier_taxes_id)
 
         self._suggest_quantity()
-        # self._onchange_quantity()
-
         return result
 
     @api.model
@@ -299,4 +285,8 @@ class AccountTax(models.Model):
         ('code_company_uniq', 'unique (code,company_id)',
          'The code of the Tax must be unique per company !')
     ]
+
+
+
+
     

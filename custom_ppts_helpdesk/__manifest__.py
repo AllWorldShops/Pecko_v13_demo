@@ -6,7 +6,7 @@
 {
     'name': 'Custom PPTS HelpDesk',
     'summary': """""",
-    'version': '13.0.1.0.0',
+    'version': '18.0.1.0.0',
     'author': '',
     'website': "",
     'company': '',
@@ -16,7 +16,7 @@
         'helpdesk',
     ],
     'data': [
-        'views/stage_views.xml'
+        # 'views/stage_views.xml'
              ],
     'license': 'AGPL-3',
     'installable': True,

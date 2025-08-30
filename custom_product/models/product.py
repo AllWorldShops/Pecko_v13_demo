@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from collections import defaultdict
 from odoo import models, fields, api
+
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer/Customer Name')
+    manufacturer_id = fields.Many2one('product.manufacturer', string='Manufacturer/Customer Name')
     storage_location_id = fields.Char(string='Storage Location', company_dependent=True)
     new_storage_loc = fields.Char(string="Storage Location New")
-    # new_storage_loc = fields.Char(string="Storage Location", company_dependent=True)
     project = fields.Char(string='Project')
     production_cell = fields.Char(string="Production Cell")
     customer_goods = fields.Char(string="Customer Goods Description")
@@ -19,43 +18,13 @@ class ProductTemplate(models.Model):
     eksport_duty_rate = fields.Char(string="Eksport Duty Rate")
     sst = fields.Char(string="SST")
     order_seq = fields.Char(string="Order Sequence")
-    production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured")
+    production_type = fields.Selection([('purchase', 'Purchased'), ('manufacture', 'Manufactured')],
+                                       string="Purchased / Manufactured")
     country_origin = fields.Char("Country of Origin")
     item_text = fields.Char("Item Text")
     customer_part_number = fields.Char('Customer Part Number')
     classification_code_name = fields.Char('Code Name')
-    classification_code_id = fields.Many2one('classification.code',string='Code Name')
-
-    def reverse_jounrnal(self):
-        account_move = self.env['account.move']
-        ac_id = account_move.search([('id','in',('1142638','1142633'))])
-        
-        jr_id = self.env['ir.config_parameter'].search([('key','=','dataimport')])
-        
-        id_list = [int(x.strip()) for x in jr_id.value.split(',') if x.strip().isdigit()]
-        journal_entries = self.env['account.move'].search([('id','in',id_list)])
-        
-        # Loop and reverse each entry
-        for move in journal_entries:
-            # move._reverse_moves(default_values={'date': fields.Date.today()})
-            # reversed_move = move._reverse_moves(cancel=False)
-            # reversed_move.action_post()
-
-            reverse_wizard = self.env['account.move.reversal'].create({
-                'move_ids': [(6, 0, [move.id])],
-                'journal_id': move.journal_id.id,
-                'date': fields.Date.today(),  # or use move.date
-                'reason': 'Auto reversal',
-                # 'auto_post': True,
-            })
-            action_result = reverse_wizard.reverse_moves()
-            reversed_move_id = action_result.get('res_id')
-
-            if reversed_move_id:
-                reversed_move = self.env['account.move'].browse(reversed_move_id)
-                reversed_move.action_post()
-
-
+    classification_code_id = fields.Many2one('classification.code', string='Code Name')
     standard_price = fields.Float(
         'Cost', compute='_compute_standard_price',
         inverse='_set_standard_price', search='_search_standard_price',
@@ -69,13 +38,15 @@ class ProductTemplate(models.Model):
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
- 
-    manufacturer_id = fields.Many2one('product.manufacturer',string='Manufacturer/Customer Name',related='product_tmpl_id.manufacturer_id',store=True)
-    storage_location_id = fields.Char(string='Storage Location',related='product_tmpl_id.storage_location_id')
-    project = fields.Char(string='Project',related='product_tmpl_id.project')
+
+    manufacturer_id = fields.Many2one('product.manufacturer', string='Manufacturer/Customer Name',
+                                      related='product_tmpl_id.manufacturer_id', store=True)
+    storage_location_id = fields.Char(string='Storage Location', related='product_tmpl_id.storage_location_id')
+    project = fields.Char(string='Project', related='product_tmpl_id.project')
     production_cell = fields.Char(string="Production Cell", related='product_tmpl_id.production_cell')
     order_seq = fields.Char(string="Order Sequence", related='product_tmpl_id.order_seq')
-    production_type = fields.Selection([('purchase','Purchased'),('manufacture', 'Manufactured')], string="Purchased / Manufactured", related='product_tmpl_id.production_type')
+    production_type = fields.Selection([('purchase', 'Purchased'), ('manufacture', 'Manufactured')],
+                                       string="Purchased / Manufactured", related='product_tmpl_id.production_type')
     country_origin = fields.Char("Country of Origin", related='product_tmpl_id.country_origin', readonly=False)
     item_text = fields.Char("Item Text", related='product_tmpl_id.item_text')
     customer_part_number = fields.Char('Customer Part Number')
@@ -88,11 +59,10 @@ class ProductProduct(models.Model):
         Used to value the product when the purchase cost is not known (e.g. inventory adjustment).
         Used to compute margins on sale orders.""")
 
-#     @api.multi
     def write(self, vals):
         rec = super(ProductProduct, self).write(vals)
         if vals.get('manufacturer_id'):
-            product_id = self.env['product.product'].search([('id','=',self.id)])
+            product_id = self.env['product.product'].search([('id', '=', self.id)])
             product_id.product_tmpl_id.manufacturer_id = vals.get('manufacturer_id')
         return rec
 
@@ -110,26 +80,53 @@ class ProductProduct(models.Model):
             quantity_uom_seller = quantity
             if quantity_uom_seller and uom_id and uom_id != seller.product_uom:
                 quantity_uom_seller = uom_id._compute_quantity(quantity_uom_seller, seller.product_uom)
-
-            # if seller.date_start and seller.date_start > date:
-            #     continue
-            # if seller.date_end and seller.date_end < date:
-            #     continue
-            # if partner_id and seller.partner_id not in [partner_id, partner_id.parent_id]:
-            #     continue
-            # if quantity is not None and float_compare(quantity_uom_seller, seller.min_qty, precision_digits=precision) == -1:
-            #     continue
-            # if seller.product_id and seller.product_id != self:
-            #     continue
-
             if not res or res.partner_id == seller.partner_id:
                 res |= seller
 
         return res.sorted('sequence')[:1]
 
+
+class ApprovalRequest(models.Model):
+    _inherit = 'approval.request'
+
+    total_amount = fields.Monetary(
+        string='Total',
+        compute='_compute_total_amount',
+        currency_field='currency_id',
+        store=True
+    )
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Currency',
+        default=lambda self: self.env.company.currency_id
+    )
+
+    @api.depends('product_line_ids.subtotal')
+    def _compute_total_amount(self):
+        for request in self:
+            request.total_amount = sum(request.product_line_ids.mapped('subtotal'))
+
+
+class ApprovalProductLine(models.Model):
+    _inherit = 'approval.product.line'
+
+    part_number = fields.Char(string='Part Number', related='product_id.name')
+    # manufacturer = fields.Many2one('res.partner', string='Manufacturer', related='product_id.manufacturer_id',
+    #                                store=True)
+    currency_id = fields.Many2one('res.currency', string='Currency', related='product_id.currency_id', store=True)
+    unit_price = fields.Float(string='Unit Price', related='product_id.list_price', store=True)
+    subtotal = fields.Monetary(string='Sub Total', compute='_compute_subtotal', currency_field='currency_id',
+                               store=True)
+
+    @api.depends('unit_price', 'quantity')
+    def _compute_subtotal(self):
+        for line in self:
+            line.subtotal = line.unit_price * line.quantity
+
+
 class ResCompanyInh(models.Model):
     _inherit = 'res.company'
-    
+
     logo_one = fields.Binary("DO Report Logo")
     logo_two = fields.Binary("PO Report Logo")
     logo_three = fields.Binary("Invoice Report Logo")
@@ -150,6 +147,7 @@ class IdType(models.Model):
     id_name = fields.Char(string='Name')
     name = fields.Char(string='Name')
 
+
 class ClassificationCode(models.Model):
     _name = 'classification.code'
     _description = 'ClassificationCode'
@@ -157,14 +155,3 @@ class ClassificationCode(models.Model):
 
     name = fields.Char(string='Name')
     code = fields.Char(string='Code')
-
-
-class ResPartner(models.Model):
-    _inherit = 'res.partner'
-
-    reg_no = fields.Char(string='Registration/Identification/Passport')
-    tin_no = fields.Char(string='Tax Identification Number(TIN)')
-    sst_no = fields.Char(string='SST Registration Number')
-    type_id = fields.Many2one('id.type',string='ID Type')
-
-            

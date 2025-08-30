@@ -6,26 +6,17 @@
             <div class="header o_background_header">
                 <div class="row">
                     <div class="col-8">
-                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"
+                             class="company-logo"/>
                         <div class="company_address"
-                             style="line-height:0.2px;font-family: Calibri;text-color:black;font-size:13px">
+                             style="line-height:1.5; font-family: Calibri; color: black; font-size: 13px; margin-top: 10px;">
                             <div>
-
                                 <strong>
-                                    <span style="font-size: 22px;"
-                                          t-field="company.partner_id.name"/>
+                                    <span style="font-size: 20px;" t-field="company.partner_id.name"/>
                                 </strong>
                                 <br/>
-                                <span t-field="o.company_id.street"/>
-
                                 <t t-if="o.company_id.street">
-                                    <span t-field="o.company_id.street"/>
-                                    ,
-                                    <br/>
-                                    <span t-field="o.company_id.street2"/>
-                                </t>
-                                <t t-else="">
-                                    <span t-field="o.company_id.street2"/>
+                                    <span t-esc="o.company_id.street + (', ' + o.company_id.street2 if o.company_id.street2 else '')"/>
                                 </t>
                                 <br/>
                                 <span t-field="o.company_id.city"/>
@@ -52,6 +43,9 @@
                     </div>
                     <div class="col-4">
                         <div style="text-align:right">
+                            <strong>
+                                <span t-field="o.name"/>
+                            </strong>
                             Page:
                             <span class="page"/>
                             of
@@ -61,8 +55,8 @@
                     </div>
                 </div>
             </div>
-            <div class="article o_report_layout_background"
-                 t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+            <div class="article o_report_layout_background" t-att-data-oe-model="o and o._name"
+                 t-att-data-oe-id="o and o.id">
                 <t t-raw="0"/>
             </div>
         </template>
@@ -92,7 +86,7 @@
             <field name="format">A4</field>
             <field name="orientation">Portrait</field>
             <field name="margin_top">48</field>
-            <field name="margin_bottom">50</field>
+            <field name="margin_bottom">15</field>
             <field name="margin_left">6</field>
             <field name="margin_right">6</field>
             <field name="header_line" eval="False"/>
@@ -100,10 +94,23 @@
             <field name="dpi">90</field>
         </record>
 
-        <!-- QWeb Reports -->
-        <report id="mo_ppts" model="mrp.production" string="Mo Report"
-                report_type="qweb-pdf" name="mo_report.report_custom_mo"
-                file="mo_report.report_custom_mo" paperformat="paperformat_mo"/>
+        <!-- QWeb Reports
+        <report id="mo_ppts" model="mrp.production" string="Mo Report" report_type="qweb-pdf" name="mo_report.report_custom_mo" file="mo_report.report_custom_mo" paperformat="paperformat_mo"/> -->
+
+
+        <record id="mo_ppts" model="ir.actions.report">
+            <field name="name">Mo Report</field>
+            <field name="model">mrp.production</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">mo_report.report_custom_mo</field>
+            <field name="report_file">mo_report.report_custom_mo</field>
+            <field name="print_report_name">'Mo Report - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="mrp.model_mrp_production"/>
+            <field name="paperformat_id" ref="mo_report.paperformat_mo"/>
+
+            <field name="binding_type">report</field>
+        </record>
+
 
         <!-- Manufacturing Order Details -->
 
@@ -120,14 +127,21 @@
             <field name="header_spacing">40</field>
             <field name="dpi">90</field>
         </record>
+        <!-- 
+        <report id="action_report_mo_order_details" model="mrp.production" string="Production Overview" report_type="qweb-pdf" name="mo_report.report_mo_order_details" file="mo_report.report_mo_order_details" paperformat="paperformat_mo_order_details" print_report_name="'Production Overview - %s' % object.display_name"/> -->
 
-        <report id="action_report_mo_order_details" model="mrp.production"
-                string="Production Overview"
-                report_type="qweb-pdf"
-                name="mo_report.report_mo_order_details"
-                file="mo_report.report_mo_order_details"
-                paperformat="paperformat_mo_order_details"
-                print_report_name="'Production Overview - %s' % object.display_name"/>
+
+        <record id="action_report_mo_order_details" model="ir.actions.report">
+            <field name="name">Production Overview</field>
+            <field name="model">mrp.production</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">mo_report.report_mo_order_details</field>
+            <field name="report_file">mo_report.report_mo_order_details</field>
+            <field name="print_report_name">'Production Overview - %s' % (object.display_name)</field>
+            <field name="binding_model_id" ref="mrp.model_mrp_production"/>
+            <field name="paperformat_id" ref="mo_report.paperformat_mo_order_details"/>
+            <field name="binding_type">report</field>
+        </record>
 
     </data>
 </odoo>

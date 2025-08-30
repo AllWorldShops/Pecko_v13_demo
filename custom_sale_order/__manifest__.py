@@ -2,7 +2,7 @@
 
 {
     'name': 'Custom Sale Order',
-    'version': '13.0',
+    'version': '18.0',
     'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
     'category': 'sale',
@@ -14,4 +14,5 @@
     'installable': True,
     'application': True,
     'auto_install': False,
+    'license': 'LGPL-3',
 }

@@ -26,16 +26,20 @@
         </field>
     </record>
 
-    <act_window id="action_sale_excel"
-                name="Sale Order Excel Report "
-                res_model="wizard.reports"
-                binding_model="sale.order"
-                view_mode="form" target="new"/>
+
+    <record model="ir.actions.act_window" id="action_sale_excel">
+        <field name="name">Sale Order Excel Report</field>
+        <field name="res_model">wizard.reports</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
 
     <menuitem id="menu_sales_service_summary"
-              name="Sale Order Report"
+              action="action_sale_excel"
               parent="sale.menu_sale_report"
-              action="sale_report_xlsx.action_sale_excel"
-              sequence="112"/>
+              name="Sale Order Report"
+              sequence="110"/>
+
 
 </odoo>

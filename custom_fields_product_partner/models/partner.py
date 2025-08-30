@@ -1,9 +1,6 @@
-from odoo import models, fields, api
-import datetime
+from odoo import models, fields
 from odoo.tools.misc import formatLang, format_date, get_lang
 from odoo.tools.translate import _
-from odoo.tools import append_content_to_html, DEFAULT_SERVER_DATE_FORMAT, html2plaintext
-from odoo.exceptions import UserError
 
 
 class Partner(models.Model):
@@ -29,7 +26,6 @@ class AccountMoveLine(models.Model):
     customer_po_no = fields.Char(
         related='move_id.customer_po_no', store=True, copy=False,
     )
-
 
 class AccountFollowupReport(models.AbstractModel):
     _inherit = "account.followup.report"

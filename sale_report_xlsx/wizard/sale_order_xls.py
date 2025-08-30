@@ -70,7 +70,7 @@ class WizardWizards(models.TransientModel):
                     # record['months_turnover'] += invoice.amount_untaxed
                     # record['months_name'] = int(date_from.strftime('%m') or '')
         invoice_ids = self.env['account.move'].search([
-            ('partner_id', '=', partnerid), 
+            ('partner_id', '=', partnerid),
             ('invoice_date', '<=', str(end_date)),
             ('invoice_date', '>=', str(start_date)),
             ('move_type', '=', 'out_invoice'),

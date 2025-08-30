@@ -8,24 +8,20 @@
             <field name="inherit_id" ref="product.product_template_only_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='default_code']" position="after">
-                	<field name="quote_description" invisible="1"/>
-                	<field name="activity_date_deadline" invisible="1"/>
+                    <field name="quote_description" invisible="1"/>
+                    <field name="activity_date_deadline" invisible="1"/>
                     <field name="x_studio_field_pFxVK" invisible="1"/>
-                    <field name="x_studio_field_mHzKJ" />
+                    <field name="x_studio_field_mHzKJ"/>
                     <field name="x_studio_field_CPhNY" invisible="1"/>
-                    <!-- <field name="x_studio_field_CLVhW"/> -->
                     <field name="x_studio_field_qr3ai" string="MPN/Customer/Supplier Part No"/>
-<!--                     <field name="x_studio_field_ZhMOw" string="Description" help="Description" placeholder="Description" invisible="1"/>
- -->                </xpath>
+                </xpath>
                 <xpath expr="//field[@name='uom_po_id']" position="after">
                     <field name="x_studio_field_jXS3W" string="Sale Unit of Measure - Reference ONLY" invisible="1"/>
-                    <!-- <field name="x_studio_field_CCkqP" string="Storage Location (text)"/> -->
                 </xpath>
             </field>
         </record>
 
         <!-- Studio fields for res.partner -->
-
         <record id="res_partner_inherit_form_custom" model="ir.ui.view">
             <field name="name">res.partner.form.inherit</field>
             <field name="model">res.partner</field>
@@ -39,30 +35,16 @@
                 </xpath>
                 <xpath expr="//field[@name='category_id']" position="after">
                     <field name="x_studio_field_MTmaF" string="For Company"/>
-                    <field name="incoterms" />
+                    <field name="incoterms"/>
                 </xpath>
                 <xpath expr="//field[@name='user_id']" position="after">
                     <field name="opt_out" string="Mailing Opt-Out" groups="base.group_no_one"/>
                 </xpath>
             </field>
         </record>
-        
-        <!-- Studio fields for account.account -->
-
-      <!-- <record id="account_account_inherit_form" model="ir.ui.view">
-            <field name="name">account.account.inherit</field>
-            <field name="model">account.account</field>
-            <field name="inherit_id" ref="account.view_account_form"/>
-            <field name="arch" type="xml">
-                <field name="deprecated" position="after">
-                    <field name="x_studio_field_Knf9y" invisible="1"/>
-                </field>
-            </field>
-        </record> -->
 
         <!-- Studio fields for x_manufacturer -->
-
-       <record id="x_manufacturer_tree" model="ir.ui.view">
+        <record id="x_manufacturer_tree" model="ir.ui.view">
             <field name="name">x.manufacturer.tree</field>
             <field name="model">x_manufacturer</field>
             <field name="arch" type="xml">
@@ -70,9 +52,9 @@
                     <field name="x_name"/>
                 </tree>
             </field>
-        </record> 
-        
-       <record id="x_manufacturer_form" model="ir.ui.view">
+        </record>
+
+        <record id="x_manufacturer_form" model="ir.ui.view">
             <field name="name">x.manufacturer.form</field>
             <field name="model">x_manufacturer</field>
             <field name="arch" type="xml">
@@ -84,38 +66,26 @@
                     </sheet>
                 </form>
             </field>
-        </record> 
-               
-         <record id="x_manufacturer_action" model="ir.actions.act_window">
+        </record>
+
+        <record id="x_manufacturer_action" model="ir.actions.act_window">
             <field name="name">Manufacturer (old)</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">x_manufacturer</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                   Create a record 
+                    Create a record
                 </p>
             </field>
         </record>
 
-        <menuitem id="menu_action_x_manufacturer_tree" action="x_manufacturer_action" parent="stock.menu_stock_config_settings" groups="stock.group_stock_user" sequence="4"/>
-
-        <!-- Studio fields for uom.uom -->
-
-        <!-- <record id="uom_form_inherit" model="ir.ui.view">
-            <field name="name">uom.uom.form.inherit</field>
-            <field name="model">uom.uom</field>
-            <field name="inherit_id" ref="uom.product_uom_form_view"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='factor_inv']" position="after">
-                    <field name="x_studio_field_CBfr8" string="Description"/>
-                </xpath>
-            </field>
-        </record> -->
+        <menuitem id="menu_action_x_manufacturer_tree" action="x_manufacturer_action"
+                  parent="stock.menu_stock_config_settings" groups="stock.group_stock_user" sequence="4"/>
 
         <!-- Studio fields for x_itemgroup -->
- 
-         <record id="x_itemgroup_tree" model="ir.ui.view">
+
+        <record id="x_itemgroup_tree" model="ir.ui.view">
             <field name="name">x.itemgroup.tree</field>
             <field name="model">x_itemgroup</field>
             <field name="arch" type="xml">
@@ -124,7 +94,7 @@
                 </tree>
             </field>
         </record>
-        
+
         <record id="x_itemgroup_form" model="ir.ui.view">
             <field name="name">x.itemgroup.form</field>
             <field name="model">x_itemgroup</field>
@@ -138,7 +108,7 @@
                 </form>
             </field>
         </record>
-               
+
         <record id="x_itemgroup_action" model="ir.actions.act_window">
             <field name="name">Itemgroup (old)</field>
             <field name="type">ir.actions.act_window</field>
@@ -146,13 +116,13 @@
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                   Create a record 
+                    Create a record
                 </p>
             </field>
         </record>
+<!--groups="stock.group_stock_user"-->
+        <menuitem id="menu_action_x_itemgroup_tree" action="x_itemgroup_action" parent="stock.menu_stock_inventory_control"  sequence="4"/>
 
-<!--         <menuitem id="menu_action_x_itemgroup_tree" action="x_itemgroup_action" parent="stock.menu_stock_inventory_control" groups="stock.group_stock_user" sequence="4"/>
- --> 
         <!-- Studio fields for BOM -->
 
         <record id="mrp_bom_inherit_form" model="ir.ui.view">
@@ -160,12 +130,9 @@
             <field name="model">mrp.bom</field>
             <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
             <field name="arch" type="xml">
-               <!--  <xpath expr="//field[@name='attribute_value_ids']" position="replace">
-                    <field name="x_studio_field_R7iUY" string="Effective Date"/>
-                    <field name="x_studio_field_bzUKS" string="Expiry Date"/>
-                </xpath> -->
                 <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='product_id']" position="after">
-                    <field name="x_studio_field_CY3Z4" string="Customer Part Number" help="Customer Part Number" placeholder="Description" invisible="1"/>
+                    <field name="x_studio_field_CY3Z4" string="Customer Part Number" help="Customer Part Number"
+                           placeholder="Description" invisible="1"/>
                 </xpath>
                 <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='type']" position="attributes">
                     <attribute name="default_value">normal</attribute>
@@ -175,14 +142,16 @@
                     <field name="x_studio_field_E1iTU" string="Verification Status"/>
                     <field name="project"/>
                 </xpath>
-                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='sequence']" position="before">
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='sequence']"
+                       position="before">
                     <field name="x_studio_field_c9hp1" string="Position"/>
                 </xpath>
-                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='product_id']" position="after">
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='product_id']"
+                       position="after">
                     <field name="x_studio_field_gVfQK" string="Description"/>
                 </xpath>
             </field>
-        </record>      
+        </record>
 
         <!-- workcenter field addition -->
         <record id="mrp_workcenter_view_form_inherit" model="ir.ui.view">
@@ -191,7 +160,7 @@
             <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='code']" position="after">
-                    <field name="baan4_task_code" />
+                    <field name="baan4_task_code"/>
                 </xpath>
             </field>
         </record>
@@ -203,22 +172,10 @@
             <field name="inherit_id" ref="stock.view_warehouse"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='code']" position="after">
-                    <field name="x_studio_field_0zbIN" />
+                    <field name="x_studio_field_0zbIN"/>
                 </xpath>
             </field>
         </record>
-
-               <!-- routing field addition -->
-       <!--  <record id="mrp_routing_view_form_inherit" model="ir.ui.view">
-            <field name="name">mrp.routing.form.inherit</field>
-            <field name="model">mrp.routing</field>
-            <field name="inherit_id" ref="mrp.mrp_routing_form_view"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='name']" position="after">
-                    <field name="x_code" />
-                </xpath>
-            </field>
-        </record> -->
 
         <!-- routing workcenter field addition -->
         <record id="mrp_routing_workcenter_view_form_inherit" model="ir.ui.view">
@@ -227,12 +184,9 @@
             <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="after">
-                    <field name="x_code" />
+                    <field name="x_code"/>
                 </xpath>
             </field>
         </record>
-
-
-
     </data>
 </odoo>

@@ -3,8 +3,9 @@
 # this module contains the full copyright notices and license terms.
 {
     'name' : 'Sale Order Excel Report',
-    'version': '13.0',
+    'version': '18.0',
     'category': 'Stock',
+    'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
     'license': 'LGPL-3',
     'depends': [

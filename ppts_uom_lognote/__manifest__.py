@@ -1,20 +1,25 @@
 {
     'name': 'UOM Log Note',
-    'summary': """This module display the log note in uom master""",
-    'version': '13.1',
+    'summary': 'Displays log notes in the UOM (Unit of Measure) master',
+    'version': '18.0.1.0.0',
     'author': 'PPTS [India] Pvt.Ltd.',
-    'website': "https://www.pptssolutions.com",
+    'website': 'https://www.pptssolutions.com',
     'company': 'PPTS [India] Pvt.Ltd.',
-    "category": "",
+    'category': 'Inventory/Configuration',
+    'description': """This module enables the display of log notes in the UOM (Unit of Measure) master for better tracking and documentation.""",
     'depends': [
-        'base','sale_management', 'stock', 'uom'
+        'base',
+        'sale_management',
+        'stock',
+        'uom',
     ],
     'data': [
         'views/uom_log_note.xml',
-             ],
-    'license': 'AGPL-3',
+    ],
+    'license': 'LGPL-3',
     'installable': True,
     'application': True,
+    'auto_install': False,
 }
 
 

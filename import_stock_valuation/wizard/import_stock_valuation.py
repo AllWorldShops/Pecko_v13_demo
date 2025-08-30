@@ -11,7 +11,6 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-# Manually update the valuation and stock journal using xl sheet
 class ImportStockValuation(models.TransientModel):
     _name = "import.stock.valuation"
 
@@ -65,86 +64,54 @@ class ImportStockValuation(models.TransientModel):
                 continue  # Skip further processing
             new_valuation = None  # Initialize to avoid UnboundLocalError
 
-            new_valuation = self.env['stock.valuation.layer'].create({
-                'create_date': create_date,
-                'product_id': product.id,
-                'company_id': self.env.company.id,
-                'quantity': adjustment_qty,  # No stock quantity change
-                'unit_cost': unit_cost,  # Maintain correct unit cost
-                'value': adjustment_value,  # Correct valuation difference
-            })
+            if current_on_hand_qty == total_valuation_qty and round(total_stock_value, 2) != round(correct_value, 2):
+                _logger.info("Stock valuation reset needed for %s", product.name)
+                adjustment_value = correct_value - total_stock_value  # Ensure correct valuation
+                new_valuation = self.env['stock.valuation.layer'].create({
+                    'create_date': create_date,
+                    'product_id': product.id,
+                    'company_id': self.env.company.id,
+                    'quantity': 0,  # No stock quantity change
+                    'unit_cost': unit_cost,  # Maintain correct unit cost
+                    'value': adjustment_value,  # Correct valuation difference
+                })
+                _logger.info("Stock valuation reset for %s: Adjusted Value %s", product.name, -total_stock_value)
 
-            # if current_on_hand_qty == total_valuation_qty and round(total_stock_value, 2) != round(correct_value, 2):
-            #     _logger.info("Stock valuation reset needed for %s", product.name)
-            #     adjustment_value = correct_value - total_stock_value  # Ensure correct valuation
-            #     new_valuation = self.env['stock.valuation.layer'].create({
-            #         'create_date': create_date,
-            #         'product_id': product.id,
-            #         'company_id': self.env.company.id,
-            #         'quantity': 0,  # No stock quantity change
-            #         'unit_cost': unit_cost,  # Maintain correct unit cost
-            #         'value': adjustment_value,  # Correct valuation difference
-            #     })
-            #     _logger.info("Stock valuation reset for %s: Adjusted Value %s", product.name, -total_stock_value)
-            #
-            # elif total_valuation_qty > current_on_hand_qty:
-            #     ssssssssssssssss
-            #
-            #     new_valuation = self.env['stock.valuation.layer'].create({
-            #         'create_date': create_date,
-            #         'product_id': product.id,
-            #         'company_id': self.env.company.id,
-            #         'quantity': adjustment_qty,  # Adjust quantity to match on-hand
-            #         'unit_cost': unit_cost,  # Correct unit cost
-            #         'value': adjustment_value,  # Adjust value accordingly
-            #     })
-            #
-            #     _logger.info("Adjusted stock valuation for %s: Adjustment Qty %s, New Value %s",
-            #                  product.name, adjustment_qty, adjustment_value)
-            #
-            #
-            # # elif adjustment_qty == current_on_hand_qty:
-            # #     drfghjqqqqqqqqqqqqqqqqqq
-            # #
-            # #     new_value = adjustment_qty * unit_cost  # Value of new stock
-            # #     print(adjustment_qty, new_value,'sssssqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqssssssssssssq')
-            # #
-            # #     new_valuation = self.env['stock.valuation.layer'].create({
-            # #         'create_date': create_date,
-            # #         'product_id': product.id,
-            # #         'company_id': self.env.company.id,
-            # #         'quantity': adjustment_qty,
-            # #         'unit_cost': unit_cost,
-            # #         'value': new_value,
-            # #     })
-            #
-            #
-            #
-            # elif adjustment_qty != 0:
-            #     new_value = adjustment_qty * unit_cost  # Value of new stock
-            #     print(adjustment_qty,'sssssss', unit_cost,new_value,'sssssssssssssssssq')
-            #
-            #     new_valuation = self.env['stock.valuation.layer'].create({
-            #         'create_date': create_date,
-            #         'product_id': product.id,
-            #         'company_id': self.env.company.id,
-            #         'quantity': adjustment_qty,
-            #         'unit_cost': unit_cost,
-            #         'value': adjustment_value,
-            #     })
-            #
-            #     _logger.info("Created stock valuation for %s: Adjustment Qty %s, Unit Cost %s, Total Value %s",
-            #                  product.name, adjustment_qty, unit_cost, new_value)
-            #
-            #     self.env.cr.execute('UPDATE stock_valuation_layer SET create_date = %s WHERE id=%s',
-            #                         (create_date, new_valuation.id))
-            #     _logger.info(
-            #         "Created stock valuation for %s: Adjustment Qty %s, Unit Cost %s, Total Value %s, Create Date %s",
-            #         product.name, adjustment_qty, unit_cost, new_value, create_date
-            #     )
-            #
-            # else:
-            #     _logger.info("No stock adjustment needed for %s", product.name)
+            elif total_valuation_qty > current_on_hand_qty:
+                new_valuation = self.env['stock.valuation.layer'].create({
+                    'create_date': create_date,
+                    'product_id': product.id,
+                    'company_id': self.env.company.id,
+                    'quantity': adjustment_qty,  # Adjust quantity to match on-hand
+                    'unit_cost': unit_cost,  # Correct unit cost
+                    'value': adjustment_value,  # Adjust value accordingly
+                })
+
+                _logger.info("Adjusted stock valuation for %s: Adjustment Qty %s, New Value %s",
+                             product.name, adjustment_qty, adjustment_value)
+            elif adjustment_qty != 0:
+                new_value = adjustment_qty * unit_cost  # Value of new stock
+                new_valuation = self.env['stock.valuation.layer'].create({
+                    'create_date': create_date,
+                    'product_id': product.id,
+                    'company_id': self.env.company.id,
+                    'quantity': adjustment_qty,
+                    'unit_cost': unit_cost,
+                    'value': adjustment_value,
+                })
+
+                _logger.info("Created stock valuation for %s: Adjustment Qty %s, Unit Cost %s, Total Value %s",
+                             product.name, adjustment_qty, unit_cost, new_value)
+
+                self.env.cr.execute('UPDATE stock_valuation_layer SET create_date = %s WHERE id=%s',
+                                    (create_date, new_valuation.id))
+                _logger.info(
+                    "Created stock valuation for %s: Adjustment Qty %s, Unit Cost %s, Total Value %s, Create Date %s",
+                    product.name, adjustment_qty, unit_cost, new_value, create_date
+                )
+
+            else:
+                _logger.info("No stock adjustment needed for %s", product.name)
 
             category = product.categ_id
             if not (category.property_stock_valuation_account_id and

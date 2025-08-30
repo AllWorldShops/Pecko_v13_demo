@@ -14,6 +14,12 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     def _run_fifo_vacuum(self, company=None):
+        """Compensate layer valued at an estimated price with the price of future receipts
+        if any. If the estimated price is equals to the real price, no layer is created but
+        the original layer is marked as compensated.
+
+        :param company: recordset of `res.company` to limit the execution of the vacuum
+        """
         if company is None:
             company = self.env.company
 
@@ -30,17 +36,15 @@ class ProductProduct(models.Model):
         if cutoff_date:
             domain_negative.append(('create_date', '>=', cutoff_date))
 
-        res = ValuationLayer.read_group(
-            domain_negative,
-            ['ids:array_agg(id)', 'create_date:min'],
-            ['product_id'],
-            orderby='create_date, id'
-        )
 
+        res = ValuationLayer._read_group(domain_negative,
+               ['product_id'], ['id:recordset', 'create_date:min'], order='create_date:min')
         min_create_date = datetime.max
+        if not res:
+            return
         for group in res:
-            svls_to_vacuum_by_product[group['product_id'][0]] = ValuationLayer.browse(group['ids'])
-            min_create_date = min(min_create_date, group['create_date'])
+            svls_to_vacuum_by_product[group[0].id] = group[1].sorted(key=lambda r: (r.create_date, r.id))
+            min_create_date = min(min_create_date, group[2])
 
         all_candidates_by_product = defaultdict(lambda: ValuationLayer)
 
@@ -53,12 +57,8 @@ class ProductProduct(models.Model):
         if cutoff_date:
             domain_positive.append(('create_date', '>=', cutoff_date))
 
-        res = ValuationLayer.read_group(
-            domain_positive,
-            ['ids:array_agg(id)'],
-            ['product_id'],
-            orderby='id'
-        )
+        res = ValuationLayer._read_group(domain_positive,
+              ['product_id'], ['id:recordset'])
 
         for group in res:
-            all_candidates_by_product[group['product_id'][0]] = ValuationLayer.browse(group['ids'])
+            all_candidates_by_product[group[0].id] = group[1]

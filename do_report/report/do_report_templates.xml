@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
         <template id="report_do_document">
             <t t-call="do_report.custom_do_external_layout">
                 <style>
@@ -59,7 +58,8 @@
                         <div class="col-8">
                             <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
                             <div class="company_address"
-                                 style="line-height:10px;font-family: Calibri;text-color:black;">
+                                 style="line-height:1.35; font-family: Calibri; color: black;">
+
                                 <div>
                                     <strong>
                                         <span style="font-size: 22px;"
@@ -99,6 +99,8 @@
                                         <span style="font-size: 14px;" t-field="o.company_id.email"/>
                                         ,
                                     </t>
+
+                                    <br/>
                                     <span style="font-size: 14px;">URL:</span>
                                     <span style="font-size: 14px;" t-field="o.company_id.website"/>
                                     <br/>
@@ -118,7 +120,7 @@
                         </div>
 
 
-                        <table style="width: 100%;height:120px;background-color: white;line-height:12pt;"
+                        <table style="width: 100%;height:120px;background-color: white;line-height:13pt;"
                                class="table-borderless">
                             <tbody>
                                 <tr>
@@ -216,7 +218,7 @@
                                                     </td>
                                                     <td>
                                                         <span style="text-align:left" t-field="o.date_done"
-                                                              t-options='{"format": "dd/MM/yyyy"}'/>
+                                                              t-options='{"format": "dd-MMM-yyyy"}'/>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -277,7 +279,7 @@
                                 <t t-set="i" t-value="1"/>
                                 <t t-if="o.partner_id" class="td2">
                                     <tr t-foreach="o.move_ids_without_package" t-as="l">
-                                        <t t-if="l.quantity_done > 0">
+                                        <t t-if="l.quantity > 0">
                                             <td style=" text-align: left;">
                                                 <span t-field="l.position_no"/>
                                                 <!-- <span t-esc="i" />
@@ -302,24 +304,24 @@
 
                                             <t t-if="l.sale_line_id and l.product_id.uom_id.name != l.sale_line_id.product_uom.name">
                                                 <td style=" text-align: left;">
-                                                    <span t-esc="('%.4f' % (l.quantity_done / l.sale_line_id.product_uom.factor_inv))"/>
+                                                    <span t-esc="round(l.quantity / l.sale_line_id.product_uom.factor_inv,2)"/>
                                                     <span t-field="l.sale_line_id.product_uom"/>
                                                 </td>
                                                 <td style=" text-align: left;">
-                                                    <t t-set="qty" t-value="l.sale_line_id.qty_delivered or 0.0"/>
-                                                    <span t-esc="('%.4f' % (l.sale_line_id.product_uom_qty - qty))"/>
+                                                    <t t-set="qty" t-value="l.sale_line_id.qty_delivered"/>
+                                                    <span t-esc="round(l.sale_line_id.product_uom_qty - qty,2)"/>
                                                     <span t-field="l.sale_line_id.product_uom"/>
                                                 </td>
                                             </t>
                                             <t t-else="">
                                                 <td style=" text-align: left;">
-                                                    <span t-esc="('%.4f' % l.quantity_done)"/>
-                                                    <span t-field="l.product_uom"/>
+                                                    <span t-field="l.quantity"/>
+                                                    <!--                                                    <span t-field="l.product_uom_qty"/>-->
                                                 </td>
 
                                                 <td style=" text-align: left;">
-                                                    <t t-set="qty" t-value="l.sale_line_id.qty_delivered or 0.0"/>
-                                                    <span t-esc="('%.4f' % (l.sale_line_id.product_uom_qty - qty))"/>
+                                                    <t t-set="qty" t-value="l.sale_line_id.qty_delivered"/>
+                                                    <span t-esc="round(l.sale_line_id.product_uom_qty - qty,2)"/>
                                                     <span t-field="l.sale_line_id.product_uom"/>
                                                 </td>
                                             </t>
@@ -393,8 +395,8 @@
                             <tr>
                                 <td style="border: 1px solid black; padding: 8px;">Customer P/N :</td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="2">
-                                    <t t-if="o.move_line_nosuggest_ids">
-                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
+                                    <t t-if="o.move_ids_without_package">
+                                        <t t-foreach="o.move_ids_without_package" t-as="prod">
                                             <span t-esc="prod.product_id.name"/>
                                         </t>
                                     </t>
@@ -402,8 +404,8 @@
                                 </td>
                                 <td style="border: 1px solid black; padding: 8px;">Pecko P/N :</td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="4">
-                                    <t t-if="o.move_line_nosuggest_ids">
-                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
+                                    <t t-if="o.move_ids_without_package">
+                                        <t t-foreach="o.move_ids_without_package" t-as="prod">
                                             <span t-esc="prod.product_id.default_code"/>
                                         </t>
                                     </t>
@@ -420,7 +422,6 @@
                                 <td style="border: 1px solid black; padding: 8px;">Date Packed :</td>
                                 <td style="border: 1px solid black; padding: 8px;">
                                     <span t-field="o.date_done" t-options='{"widget": "date"}'/>
-
                                 </td>
                                 <td style="border: 1px solid black; padding: 8px;border-left-style:hidden;"></td>
                             </tr>
@@ -429,12 +430,11 @@
                                 <td style="border: 1px solid black; padding: 8px;">Customer P/O No:</td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="2">
                                     <span t-field="o.customer_po_no"/>
-
                                 </td>
                                 <td style="border: 1px solid black; padding: 8px;">Qty Packed :</td>
                                 <td style="border: 1px solid black; padding: 8px;">
-                                    <t t-if="o.move_line_nosuggest_ids">
-                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
+                                    <t t-if="o.move_ids_without_package">
+                                        <t t-foreach="o.move_ids_without_package" t-as="prod">
                                             <span t-esc="int(prod.product_uom_qty)"/>
                                         </t>
                                     </t>
@@ -446,10 +446,10 @@
                             <tr>
                                 <td style="border: 1px solid black; padding: 8px;">Description :</td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="3">
-                                    <t t-if="o.move_line_nosuggest_ids">
-                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
+                                    <t t-if="o.move_ids_without_package">
+                                        <t t-foreach="o.move_ids_without_package" t-as="prod">
                                             <span t-esc="prod.product_id.x_studio_field_mHzKJ"/>
-                                            <t t-if="prod != o.move_line_nosuggest_ids[-1]">
+                                            <t t-if="prod != o.move_ids_without_package[-1]">
                                                 <span>,</span> <!-- Add a comma if not the last item -->
                                             </t>
                                         </t>
@@ -472,8 +472,8 @@
                             <tr>
                                 <td style="border: 1px solid black; padding: 8px;">Lot Quantity :</td>
                                 <td style="border: 1px solid black; padding: 8px;" colspan="2">
-                                    <t t-if="o.move_line_nosuggest_ids">
-                                        <t t-foreach="o.move_line_nosuggest_ids" t-as="prod">
+                                    <t t-if="o.move_ids_without_package">
+                                        <t t-foreach="o.move_ids_without_package" t-as="prod">
                                             <span t-esc="int(prod.product_uom_qty)"/>
                                         </t>
                                     </t>
@@ -489,7 +489,7 @@
 
                             <!-- Sampling Plan -->
                             <tr>
-                                <td style="border: 1px solid black; text-align: center; vertical-align: middle; padding: 8px;"
+                                <td style="border: 1px solid black; text-align: center; vertical-align: middle; padding: 7px;"
                                     colspan="6">
                                     Sampling Plan AQL=0.25%, C=0 in accordance with Quality Control Inspection
                                     Instructions
@@ -499,168 +499,168 @@
 
                             <!-- Data Columns -->
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px; text-align: center;width: 20.00%;"></td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: center;width: 15.00%;">1
+                                <td style="border: 1px solid black; padding: 7px; text-align: center;width: 20.00%;"></td>
+                                <td style="border: 1px solid black; padding: 7px; text-align: center;width: 15.00%;">1
                                 </td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: center;width: 15.00%;">2
+                                <td style="border: 1px solid black; padding: 7px; text-align: center;width: 15.00%;">2
                                 </td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: center;width: 15.00%;">3
+                                <td style="border: 1px solid black; padding: 7px; text-align: center;width: 15.00%;">3
                                 </td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: center;width: 15.00%;">4
+                                <td style="border: 1px solid black; padding: 7px; text-align: center;width: 15.00%;">4
                                 </td>
-                                <td style="border: 1px solid black; padding: 8px; text-align: center;width: 15.00%;">5
+                                <td style="border: 1px solid black; padding: 7px; text-align: center;width: 15.00%;">5
                                 </td>
                             </tr>
 
                             <!-- Orientation -->
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px; text-align: left;">ORIENTATION :</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px; text-align: left;">ORIENTATION :</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px; text-align: center;">As per drawing
+                                <td style="border: 1px solid black; padding: 7px; text-align: center;">As per drawing
                                 </td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                             </tr>
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
 
                             <!-- Assembly Length -->
 
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px; text-align: left;">ASSEMBLY LENGTH :
+                                <td style="border: 1px solid black; padding: 7px; text-align: left;">ASSEMBLY LENGTH :
                                 </td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
 
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;text-align: center;">As per drawing
+                                <td style="border: 1px solid black; padding: 7px;text-align: center;">As per drawing
                                 </td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
 
 
                             <!-- Labeling -->
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px; text-align: left;">Labeling :</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px; text-align: left;">Labeling :</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
 
                             <tr>
                                 <td style="border: 1px solid black; padding: 6px;text-align: center;">As per drawing
                                 </td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">OK</td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
 
 
                             <!-- Add Silicon -->
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Add Silicon (Yes/No)</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;">Add Silicon (Yes/No)</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
                             <!-- Add Silicon -->
                             <tr>
@@ -668,25 +668,25 @@
                                     Test:(If
                                     Applicable)
                                 </td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS</td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;border-top-style:hidden"></td>
-                                <td style="border: 1px solid black; text-align: center;border-right-style:hidden; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: right; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: right; padding: 8px;" colspan="2">
+                                <td style="border: 1px solid black; padding: 7px;border-top-style:hidden"></td>
+                                <td style="border: 1px solid black; text-align: center;border-right-style:hidden; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: right; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: right; padding: 7px;" colspan="2">
                                     Inspection Result :
                                 </td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">PASS / FAIL</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">PASS / FAIL</td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Inspected By :</td>
+                                <td style="border: 1px solid black; padding: 7px;">Inspected By :</td>
 
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"
                                     colspan="2">
                                     <t t-if="o.company_id">
                                         <span t-esc="o.company_id.inspected_by"
@@ -694,11 +694,11 @@
                                     </t>
                                     <t t-else="">N/A</t>
                                 </td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
-                                <td style="border: 1px solid black; text-align: right; padding: 8px;8px;border-left-style:hidden;">
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: right; padding: 7px;border-left-style:hidden;">
                                     Approved By :
                                 </td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">
                                     <t t-if="o.company_id">
                                         <span t-esc="o.company_id.approved_by"
                                               style="display: block; text-align: center;"/>
@@ -707,29 +707,29 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;">Remarks : ( If any )</td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;"></td>
+                                <td style="border: 1px solid black; padding: 7px;">Remarks : ( If any )</td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
                             </tr>
 
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6">COUNTRY
+                                <td style="border: 1px solid black; padding: 7px;text-align:center;" colspan="6">COUNTRY
                                     OF
                                     ORIGIN : MADE IN SINGAPORE
                                 </td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; font-weight: bold; padding: 8px;text-align:center;text-decoration: underline;"
+                                <td style="border: 1px solid black; font-weight: bold; padding: 7px;text-align:center;text-decoration: underline;"
                                     colspan="6">CERTIFICATE
                                     OF COMPLIANCE
                                 </td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6">This is
+                                <td style="border: 1px solid black; padding: 7px;text-align:center;" colspan="6">This is
                                     to
                                     certify that all the parts supplied confirm to the specifications, drawings and
                                     requirements.
@@ -737,28 +737,28 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;text-align:center;" colspan="6"></td>
+                                <td style="border: 1px solid black; padding: 7px;text-align:center;" colspan="6"></td>
                             </tr>
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px; border-right-style: hidden; border-bottom-style: hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px; border-right-style: hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px; border-right-style: hidden; border-bottom-style: hidden;"
+                                <td style="border: 1px solid black; padding: 7px; border-right-style: hidden; border-bottom-style: hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px; border-right-style: hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px; border-right-style: hidden; border-bottom-style: hidden;"
                                     colspan="2">PC-F87 Rev- 0
                                 </td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px; border-bottom-style: hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px; border-bottom-style: hidden;">
+                                <td style="border: 1px solid black; text-align: center; padding: 7px; border-bottom-style: hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px; border-bottom-style: hidden;">
                                     Refer to
                                 </td>
                             </tr>
 
                             <tr>
-                                <td style="border: 1px solid black; padding: 8px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;8px;border-right-style:hidden;border-top-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;border-right-style:hidden;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;8px;"></td>
-                                <td style="border: 1px solid black; text-align: center; padding: 8px;">PC-WI-SYS06/
+                                <td style="border: 1px solid black; padding: 7px;border-right-style:hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;border-top-style:hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;border-right-style:hidden;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;"></td>
+                                <td style="border: 1px solid black; text-align: center; padding: 7px;">PC-WI-SYS06/
                                     <br/>
                                     PC-WI-SYS63
                                 </td>

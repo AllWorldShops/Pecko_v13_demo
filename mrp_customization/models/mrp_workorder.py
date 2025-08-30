@@ -17,42 +17,42 @@ class MrpWorkorder(models.Model):
     critical_task = fields.Boolean("Critical Task",readonly=True, related='operation_id.critical_task', store=True)
 
 
-    # @api.model
-    # def create(self,vals):
+    @api.model
+    def create(self,vals):
         
-    #     res = super(MrpWorkorder,self).create(vals)
-    #     url = self.env['url.config'].search([('code', '=','WO')])
-    #     if url.name:
-    #         if res.product_id.x_studio_field_qr3ai:
-    #             code = quote(res.product_id.x_studio_field_qr3ai,safe='')
-    #         else:
-    #             code = ''
-    #         if res.critical_task:
-    #             critical_task = "1"
-    #         else:
-    #             critical_task = "0"
-    #         # if not res.production_id.date_start:
-    #         #     raise UserError(_('Kindly enter the WorkOrder Start date'))
-    #         # date_start = res.production_id.date_start.strftime("%Y-%m-%d")
-    #         # task_code = quote(critical_task,safe='')
-    #         # company = quote("PM",safe='')
-    #         # date_code = quote(date_start,safe='')
-    #         # product = quote(res.product_id.default_code,safe='')   
-    #         # qty = quote(str(res.qty_producing),safe='')
-    #         # routing_single_encode = quote(res.name,safe='')
-    #         # routing = quote(routing_single_encode,safe='')
-    #         # production = quote(res.production_id.name,safe='')
-    #         # production_double_code = quote(production,safe='')
-    #         # data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production_double_code + "/" + date_code + "/" + task_code + "/" + company 
-    #         # img = qrcode.make(data)
-    #         # result = io.BytesIO()
-    #         # img.save(result, format='PNG')
-    #         # result.seek(0)
-    #         # img_bytes = result.read()
-    #         # base64_encoded_result_bytes = base64.b64encode(img_bytes)
-    #         # base64_encoded_result_str = base64_encoded_result_bytes.decode('ascii')
-    #         # res.image = base64_encoded_result_str
-    #     return res
+        res = super(MrpWorkorder,self).create(vals)
+        url = self.env['url.config'].search([('code', '=','WO')])
+        if url.name:
+            if res.product_id.x_studio_field_qr3ai:
+                code = quote(res.product_id.x_studio_field_qr3ai,safe='')
+            else:
+                code = ''
+            if res.critical_task:
+                critical_task = "1"
+            else:
+                critical_task = "0"
+            # if not res.production_id.date_start:
+            #     raise UserError(_('Kindly enter the WorkOrder Start date'))
+            # date_start = res.production_id.date_start.strftime("%Y-%m-%d")
+            # task_code = quote(critical_task,safe='')
+            # company = quote("PM",safe='')
+            # date_code = quote(date_start,safe='')
+            # product = quote(res.product_id.default_code,safe='')   
+            # qty = quote(str(res.qty_producing),safe='')
+            # routing_single_encode = quote(res.name,safe='')
+            # routing = quote(routing_single_encode,safe='')
+            # production = quote(res.production_id.name,safe='')
+            # production_double_code = quote(production,safe='')
+            # data= url.name + code + '/' + product + '/'+ qty + '/' + routing + '/' + production_double_code + "/" + date_code + "/" + task_code + "/" + company 
+            # img = qrcode.make(data)
+            # result = io.BytesIO()
+            # img.save(result, format='PNG')
+            # result.seek(0)
+            # img_bytes = result.read()
+            # base64_encoded_result_bytes = base64.b64encode(img_bytes)
+            # base64_encoded_result_str = base64_encoded_result_bytes.decode('ascii')
+            # res.image = base64_encoded_result_str
+        return res
 
     def qrcode_image(self):
         wo_id = self.env['mrp.workorder'].search([('state','in',('pending','ready')),('image','=',False)],limit=2000)

@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
+
         <template id="mrp.report_mrp_bom">
+            <style>
+                .custom-table {
+                border-collapse: collapse;
+                }
+
+                .custom-table th {
+                border-bottom: 2px solid #000;
+                background-color: #f9f9f9;
+                }
+
+                .custom-table td {
+                border-bottom: 1px solid #ccc;
+                }
+
+                .custom-table tr {
+                border-bottom: 1px solid #ccc; U
+                }
+            </style>
             <t t-set="company" t-value="res_company"/>
             <div class="header o_background_header">
                 <div class="row" style="padding-left:1.5px">
                     <div class="col-8">
-                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
-                             alt="Logo"/>
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
                     </div>
                 </div>
                 <div class="row" name="company_address"
                      style="text-start;padding-left:3px;font-family: Calibri;text-color:black;">
                     <div class="col-8">
                         <strong>
-                            <span style="font-size: 25px;papadding-left:3.6px"
-                                  t-field="company.partner_id.name"/>
+                            <span style="font-size: 25px;papadding-left:3.6px" t-field="company.partner_id.name"/>
                         </strong>
                     </div>
                 </div>
@@ -26,22 +43,28 @@
                 </div>
                 <div class="row" style="font-size:16px;padding-left:3px">
                     <div class="col-4">
-                     <strong><span t-esc="data['name']"/></strong>
+                        <strong>
+                            <span t-esc="data['name']"/>
+                        </strong>
                     </div>
                     <div class="col-4">
-                        <strong> <span style=" font-size:20px;">Customer Part No:</span></strong>
-                            <span style=" font-size:16px;" t-esc="data['product_part_no']"/>
+                        <strong>
+                            <span style=" font-size:20px;">Customer Part No:</span>
+                        </strong>
+                        <span style=" font-size:16px;" t-esc="data['product_part_no']"/>
                     </div>
                     <div class="col-5">
-                         <strong><span style=" font-size:20px; ">Description:</span></strong>
-                            <span style=" font-size:16px; " t-esc="data['product_discription']"/>
+                        <strong>
+                            <span style=" font-size:20px; ">Description:</span>
+                        </strong>
+                        <span style=" font-size:16px; " t-esc="data['product_discription']"/>
                     </div>
                 </div>
             </div>
             <div class="table_bom_structure">
                 <div t-if="data.get('lines')">
                     <t t-set="currency" t-value="data['currency']"/>
-                    <table class="o_mrp_bom_expandable table">
+                    <table class="o_mrp_bom_expandable table custom-table" border='1px'>
                         <thead>
                             <tr>
                                 <th class="text-center">Position</th>
@@ -86,23 +109,23 @@
                             </t>
                         </tbody>
                     </table>
-                    <table class="o_mrp_bom_expandable table" >
+                    <table class="o_mrp_bom_expandable table custom-table">
                         <thead>
-                            <tr >
-                                <th class="text-center" width="20%">Operation</th>
-                                <th class="text-center" width="20%">Work Center</th>
-                                <th class="text-center" width="60%">Operation Text</th>
+                            <tr>
+                                <th class="text-center">Operation</th>
+                                <th class="text-center">Work Center</th>
+                                <th class="text-center">Operation Text</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr t-foreach="data['workorder_ids']" t-as="line" >
-                                <td>
+                            <tr t-foreach="data['workorder_ids']" t-as="line">
+                                <td class="text-center">
                                     <span t-esc="line['name']"></span>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <span t-esc="line['workcenter']"></span>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <span t-esc="line['note']"></span>
                                 </td>
                             </tr>
@@ -158,7 +181,7 @@
                 <div class="row">
                     <div class="col-4">
                     </div>
-                    <div class="col-4" style="font-size:22px">
+                    <div class="col-4" style="font-size:18">
                         <div class="text-center">
                             Page:
                             <span class="page"/>
@@ -166,10 +189,11 @@
                             <span class="topage"/>
                         </div>
                     </div>
-                    <div class="col" >
-                        <div class="text-right" style="padding-left:340px ">
-                            <strong style=" font-size:22px;">Printed on:</strong>
-                      <span style=" font-size:22px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+                    <div class="col">
+                        <div class="text-right">
+                            <strong style=" font-size:18px;">Printed on:</strong>
+                            <span style=" font-size:18px;"
+                                  t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
                         </div>
                     </div>
                 </div>
@@ -190,13 +214,20 @@
             <field name="dpi">90</field>
         </record>
 
-        <report id="action_report_bom_structure_overview" model="mrp.bom"
-                string="BoM Structure"
-                report_type="qweb-pdf"
-                name="mrp.report_bom_structure"
-                file="mrp.report_bom_structure"
-                paperformat="paperformat_mrp_bom"
-                print_report_name="'Bom Overview - %s' % object.display_name"/>
+
+        <record id="action_report_bom_structure_overview" model="ir.actions.report">
+            <field name="name">BoM Structure</field>
+            <field name="model">mrp.bom</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">mrp.report_bom_structure</field>
+            <field name="report_file">mrp.report_bom_structure</field>
+            <field name="print_report_name">'Bom Structure - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="mrp.model_mrp_bom"/>
+            <field name="paperformat_id" ref="custom_mrp.paperformat_mrp_bom"/>
+
+            <field name="binding_type">report</field>
+        </record>
+
 
     </data>
 </odoo>

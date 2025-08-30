@@ -1,26 +1,31 @@
-odoo.define('picking_create_lines.add_groups_one2many_add_line', function (require) {
-"use strict";
+/** @odoo-module **/
+import { patch } from "@web/core/utils/patch";
+import { ListRenderer } from "@web/views/list/list_renderer";
+import { user } from "@web/core/user";
+import { onWillStart } from "@odoo/owl";
 
-var ListRenderer = require('web.ListRenderer');
-    
-            ListRenderer.include({
+patch(ListRenderer.prototype, {
+    setup() {
+        super.setup();
+        console.log("Add a Line");
+        console.log("resModel:", this.props.list._config.resModel);
+        // Check the user's group permissions asynchronously
+        onWillStart(async () => {
+            this.isAddLineGroup = await user.hasGroup("picking_create_lines.add_line_access_group");
+        });
 
-            init: function (parent, state, params) {
-                var self = this;
-                this._super.apply(this, arguments);
-                this.getSession().user_has_group('picking_create_lines.add_line_access_group'
-                ).then(function(has_group) {
-                if (!has_group) {
-            
-                
-                    if ((state.model === "stock.move" && parent.name === "move_ids_without_package"
-                    ) || (state.model === "stock.move.line" && parent.name === "move_line_ids_without_package") ) {
-                        self.addCreateLine = false;
-                    }
-                    
-                   }
-                });
-                    
-                }, 
-                });
-            });
+        // Store the model name
+        this.modelName = this.props.list._config.resModel;
+    },
+
+    get displayRowCreates() {
+        // If the model is 'stock.move' or 'stock.move.line', check the group
+        if (this.modelName === "stock.move" || this.modelName === "stock.move.line") {
+            return this.isAddLineGroup && this.isX2Many && this.canCreate; // Show 'Add a Line' only if group check passes
+        }
+        // For other models, no group check is needed, just check if X2Many and create permissions are valid
+        return this.isX2Many && this.canCreate;
+    },
+});
+
+

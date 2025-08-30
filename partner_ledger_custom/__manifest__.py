@@ -3,12 +3,12 @@
 
 {
     'name': 'Partner Ledger Custom',
-    'version': '16.0',
+    'version': '18.0',
     'summary': 'Partner Ledger',
-    # 'description': 'This module is to round the invoice (decimal amount) to the nearest value for Customer Invoice and Vendor Bills',
+    'description': 'This module is to round the invoice (decimal amount) to the nearest value for Customer Invoice and Vendor Bills',
     'category': 'Accounting',
     'author': 'PPTS [India] Pvt.Ltd.',
-    'website': "www.pptssolutions.com",
+    'website': 'https://www.pptssolutions.com',
     'company': 'PPTS INDIA PVT LTD',
     'depends': ['base', 'account','sale', 'account_reports'],
     'data': [

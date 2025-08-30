@@ -2,7 +2,7 @@
 
 {
     'name': 'MO Report',
-    'version': '16.0',
+    'version': '18.0',
     'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
     'category': 'MRP',
@@ -16,4 +16,5 @@
     'installable': True,
     'application': True,
     'auto_install': False,
+    'license': 'LGPL-3'
 }

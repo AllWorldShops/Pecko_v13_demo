@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
-from odoo.exceptions import Warning
+from odoo.exceptions import  ValidationError
 # from odoo.enterprise_13.models.sale_order import sale_order
 
 
@@ -29,10 +29,10 @@ class SaleOrder(models.Model):
                 # find user for creating and validating SO/PO from company
                 intercompany_uid = company.intercompany_user_id and company.intercompany_user_id.id or False
                 if not intercompany_uid:
-                    raise Warning(_('Provide one user for intercompany relation for % ') % company.name)
+                    raise ValidationError(_('Provide one user for intercompany relation for % ') % company.name)
                 # check intercompany user access rights
                 if not PurchaseOrder.with_user(intercompany_uid).check_access_rights('create', raise_exception=False):
-                    raise Warning(_("Inter company user of company %s doesn't have enough access rights") % company.name)
+                    raise ValidationError(_("Inter company user of company %s doesn't have enough access rights") % company.name)
 
                 # create the PO and generate its lines from the SO
                 # read it as sudo, because inter-compagny user can not have the access right on PO

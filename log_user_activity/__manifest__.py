@@ -2,7 +2,7 @@
 
 {
     'name': 'Log activity in Stock',
-    'version': '16.0',
+    'version': '18.0',
     'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
     'category': 'Inventory',
@@ -10,7 +10,7 @@
     'depends': ['stock', 'base'],
     'data': [
         'security/ir.model.access.csv',
-        'views/log_activity_view.xml'
+        # 'views/log_activity_view.xml'
     ],
     'installable': True,
     'application': True,

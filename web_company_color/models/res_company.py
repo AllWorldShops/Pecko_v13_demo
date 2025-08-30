@@ -16,15 +16,9 @@ class ResCompany(models.Model):
 
     SCSS_TEMPLATE = """
         .o_main_navbar {
+          background: %(color_navbar_bg)s !important;
           background-color: %(color_navbar_bg)s !important;
           color: %(color_navbar_text)s !important;
-
-          > .o_menu_brand {
-            color: %(color_navbar_text)s !important;
-            &:hover, &:focus, &:active, &:focus:active {
-              background-color: %(color_navbar_bg_hover)s !important;
-            }
-          }
 
           .show {
             .dropdown-toggle {
@@ -44,6 +38,92 @@ class ResCompany(models.Model):
             }
           }
         }
+        .o_menu_brand {
+            color: %(color_navbar_text)s !important;
+            &:hover, &:focus, &:active, &:focus:active {
+              background-color: %(color_navbar_bg_hover)s !important;
+            }
+          }
+
+          a[href],
+          a[tabindex],
+          .btn-link,
+          .o_external_button {
+            color: %(color_link_text)s;
+            .o_main_navbar {
+            color: none;
+            }
+          }
+        a:hover,
+        .btn-link:hover {
+          color: %(color_link_text_hover)s;
+          .o_main_navbar {
+            color: none;
+          }
+        }
+        .btn-primary:not(.disabled),
+        .ui-autocomplete .ui-menu-item > a.ui-state-active {
+          color: %(color_button_text)s !important;
+          background-color: %(color_button_bg)s !important;
+          border-color: %(color_button_bg)s !important;
+        }
+        .btn-primary:hover:not(.disabled),
+        .ui-autocomplete .ui-menu-item > a.ui-state-active:hover {
+          color: %(color_button_text)s !important;
+          background-color: %(color_button_bg_hover)s !important;
+          border-color: %(color_button_bg_hover)s !important;
+        }
+        .o_searchview .o_searchview_facet .o_searchview_facet_label {
+          color: %(color_button_text)s !important;
+          background-color: %(color_button_bg)s !important;
+        }
+        .o_form_view .o_horizontal_separator {
+          color: %(color_link_text)s !important;
+        }
+        .o_form_view .oe_button_box .oe_stat_button .o_button_icon,
+        .o_form_view .oe_button_box .oe_stat_button .o_stat_info .o_stat_value,
+        .o_form_view .oe_button_box .oe_stat_button > span .o_stat_value {
+          color: %(color_link_text)s !important;
+        }
+        .o_form_view .o_form_statusbar > .o_statusbar_status >
+        .o_arrow_button.btn-primary.disabled {
+          color: %(color_link_text)s !important;
+        }
+        .o_required_modifier{
+          :focus-within {
+            --o-input-border-color: %(color_button_bg)s !important;
+            --o-caret-color: %(color_button_bg)s !important;
+          }
+          input:hover, .o_field_many2one_selection:hover {
+            --o-input-border-color: %(color_button_bg)s !important;
+            --o-caret-color: %(color_button_bg)s !important;
+          }
+        }
+        .o_menu_sections .o_nav_entry {
+          background: %(color_navbar_bg)s !important;
+          background-color: %(color_navbar_bg)s !important;
+          color: %(color_navbar_text)s !important;
+          &:hover, &:focus, &:active, &:focus:active {
+            background-color: %(color_navbar_bg_hover)s !important;
+          }
+        }
+        .o_menu_sections .dropdown-toggle {
+          background: %(color_navbar_bg)s !important;
+          background-color: %(color_navbar_bg)s !important;
+          color: %(color_navbar_text)s !important;
+          &:hover, &:focus, &:active, &:focus:active {
+            background-color: %(color_navbar_bg_hover)s !important;
+          }
+        }
+        .o_menu_systray .o-dropdown .dropdown-toggle {
+            color: %(color_navbar_text)s !important;
+            &:hover, &:focus, &:active, &:focus:active {
+                background-color: %(color_navbar_bg_hover)s !important;
+            }
+        }
+        .dropdown-item{
+            color: %(color_submenu_text)s !important;
+        }
     """
 
     company_colors = fields.Serialized()
@@ -52,6 +132,17 @@ class ResCompany(models.Model):
         "Navbar Background Color Hover", sparse="company_colors"
     )
     color_navbar_text = fields.Char("Navbar Text Color", sparse="company_colors")
+    color_button_text = fields.Char("Button Text Color", sparse="company_colors")
+    color_button_bg = fields.Char("Button Background Color", sparse="company_colors")
+    color_button_bg_hover = fields.Char(
+        "Button Background Color Hover", sparse="company_colors"
+    )
+    color_link_text = fields.Char("Link Text Color", sparse="company_colors")
+    color_link_text_hover = fields.Char(
+        "Link Text Color Hover", sparse="company_colors"
+    )
+    color_submenu_text = fields.Char("Submenu Text Color", sparse="company_colors")
+    scss_modif_timestamp = fields.Char("SCSS Modif. Timestamp")
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -73,6 +164,11 @@ class ResCompany(models.Model):
                 "color_navbar_bg",
                 "color_navbar_bg_hover",
                 "color_navbar_text",
+                "color_button_bg",
+                "color_button_bg_hover",
+                "color_button_text",
+                "color_link_text",
+                "color_link_text_hover",
             )
             result = super().write(values)
             if any([field in values for field in fields_to_check]):
@@ -113,11 +209,16 @@ class ResCompany(models.Model):
         values.update(
             {
                 "color_navbar_bg": (values.get("color_navbar_bg") or "$o-brand-odoo"),
-                "color_navbar_bg_hover": (
-                    values.get("color_navbar_bg_hover")
-                    or "$o-navbar-inverse-link-hover-bg"
-                ),
+                "color_navbar_bg_hover": (values.get("color_navbar_bg_hover")),
                 "color_navbar_text": (values.get("color_navbar_text") or "#FFF"),
+                "color_button_bg": values.get("color_button_bg") or "#71639e",
+                "color_button_bg_hover": values.get("color_button_bg_hover")
+                or "darken(#71639e, 10%)",
+                "color_button_text": values.get("color_button_text") or "#FFF",
+                "color_link_text": values.get("color_link_text") or "#71639e",
+                "color_link_text_hover": values.get("color_link_text_hover")
+                or "darken(#71639e, 10%)",
+                "color_submenu_text": values.get("color_link_text") or "#374151",
             }
         )
         return values
@@ -143,14 +244,14 @@ class ResCompany(models.Model):
             )
             values = {
                 "datas": datas,
-                "db_datas": datas,
                 "url": custom_url,
                 "name": custom_url,
                 "company_id": record.id,
+                "type": "binary",
+                "mimetype": "text/css",
             }
             if custom_attachment:
                 custom_attachment.sudo().write(values)
             else:
-                values.update({"type": "binary", "mimetype": "text/scss"})
                 IrAttachmentObj.sudo().create(values)
-        self.env["ir.qweb"].sudo().clear_caches()
+        self.env.registry.clear_cache()

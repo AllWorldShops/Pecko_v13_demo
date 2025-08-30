@@ -14,15 +14,13 @@ class StockOrderpoint(models.Model):
     def _get_orderpoint_procurement_date(self):
         Move = self.env['stock.move'].with_context(active_test=False)
         domain_move_out_todo = [('product_id', '=', self.product_id.id), ('sale_line_id', '!=', None),('state', 'in', ('waiting', 'confirmed', 'assigned', 'partially_available'))]
-        # print(moves_in_res, "moves_in_resmoves_in_res--------------")
-        # print([s.id for s in Move.search(domain_move_out_todo)], "domain_move_out_todo============")
         out_moves = Move.search(domain_move_out_todo)
         _logger.info("out_movesout_moves-------%s " % str(out_moves))
         deadline_date = False
         if out_moves:
             deadline_date = min(out_moves.mapped('date'), default=fields.Datetime.now())
-        # sale = self.env['sale.order.line'].search([('')])
         _logger.info("-----------Order Point-------%s " % self.id)
+
         _logger.info("Deadline date time: %s------------Lead date time : %s" % (deadline_date, self.lead_days_date))
         # return datetime.combine(self.lead_days_date, time.min)
         lead_date = date_now = fields.Datetime.now()
@@ -80,7 +78,6 @@ class StockOrderpoint(models.Model):
                 location=loc.id,
 ############# "to_date" is commented out by PPTS to avoid Forcasted quantity based on lead time.#################
                 # to_date=today + relativedelta.relativedelta(days=days)
-
 
             ).read(['virtual_available'])
             for qty in qties:
@@ -156,59 +153,3 @@ class StockOrderpoint(models.Model):
             'location': self.location_id.id,
             # 'to_date': datetime.combine(self.lead_days_date + relativedelta.relativedelta(days=visibility_days), time.max)
         }
-    
-    # @api.depends('product_id', 'location_id', 'product_id.stock_move_ids', 'product_id.stock_move_ids.state',
-    #              'product_id.stock_move_ids.date', 'product_id.stock_move_ids.product_uom_qty')
-    # def _compute_qty(self):
-    #     orderpoints_contexts = defaultdict(lambda: self.env['stock.warehouse.orderpoint'])
-    #     for orderpoint in self:
-    #         if not orderpoint.product_id or not orderpoint.location_id:
-    #             orderpoint.qty_on_hand = False
-    #             orderpoint.qty_forecast = False
-    #             continue
-    #         orderpoint_context = orderpoint._get_product_context()
-            
-    #         # PPTS Customisation : Checking if there is stock quant record available already for the orderpoint product
-    #         existing_quants = orderpoint.product_id.stock_quant_ids.filtered(lambda x: x.location_id.id == orderpoint.location_id.id)
-    #         if not existing_quants:
-    #             orderpoint_context['location'] = False
-    #         ## removed the 'location' from the context if there are no existing quants.
-            
-    #         product_context = frozendict({**orderpoint_context})
-    #         orderpoints_contexts[product_context] |= orderpoint
-    #     for orderpoint_context, orderpoints_by_context in orderpoints_contexts.items():
-    #         # for rec in orderpoints_by_context:
-    #         #     print(rec.product_id.with_context(orderpoint_context).read(['qty_available', 'virtual_available']), "llplplplpl/////////////")
-    #         products_qty = {
-    #             p['id']: p for p in orderpoints_by_context.product_id.with_context(orderpoint_context).read(['qty_available', 'virtual_available'])
-    #         }
-    #         products_qty_in_progress = orderpoints_by_context._quantity_in_progress()
-    #         for orderpoint in orderpoints_by_context:
-    #             orderpoint.qty_on_hand = products_qty[orderpoint.product_id.id]['qty_available']
-    #             orderpoint.qty_forecast = products_qty[orderpoint.product_id.id]['virtual_available'] + products_qty_in_progress[orderpoint.id]
-
-    # @api.depends('qty_multiple', 'qty_forecast', 'product_min_qty', 'product_max_qty', 'visibility_days', 'test_updated')
-    # def _compute_qty_to_order(self):
-    #     for orderpoint in self:
-    #         if not orderpoint.product_id or not orderpoint.location_id:
-    #             orderpoint.qty_to_order = False
-    #             continue
-    #         qty_to_order = 0.0
-    #         rounding = orderpoint.product_uom.rounding
-    #         if float_compare(orderpoint.qty_forecast, orderpoint.product_min_qty, precision_rounding=rounding) < 0:
-    #             # We want to know how much we should order to also satisfy the needs that gonna appear in the next (visibility) days
-    #             product_context = orderpoint._get_product_context(visibility_days=orderpoint.visibility_days)
-                
-    #             # PPTS Customisation : Checking if there is stock quant record available already for the orderpoint product
-    #             existing_quants = orderpoint.product_id.stock_quant_ids.filtered(lambda x: x.location_id.id == orderpoint.location_id.id)
-    #             if not existing_quants:
-    #                 product_context['location'] = False
-    #             # removed the 'location' from the context if there are no existing quants.
-    #             qty_forecast_with_visibility = orderpoint.product_id.with_context(product_context).read(['virtual_available'])[0]['virtual_available'] + orderpoint._quantity_in_progress()[orderpoint.id]
-    #             qty_to_order = max(orderpoint.product_min_qty, orderpoint.product_max_qty) - qty_forecast_with_visibility
-    #             remainder = orderpoint.qty_multiple > 0 and qty_to_order % orderpoint.qty_multiple or 0.0
-    #             if float_compare(remainder, 0.0, precision_rounding=rounding) > 0:
-    #                 qty_to_order += orderpoint.qty_multiple - remainder
-    #         orderpoint.qty_to_order = qty_to_order
-
-

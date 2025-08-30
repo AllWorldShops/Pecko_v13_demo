@@ -1,271 +1,235 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	<record id="mrp_line_split_inherit" model="ir.ui.view">
-		<field name="name">mrp.production.form.inherit</field>
-		<field name="model">mrp.production</field>
-		<field name="inherit_id" ref="mrp.mrp_production_form_view"/>
-		<field name="arch" type="xml">
-			<xpath expr="//field[@name='user_id']" position="after">
-				<field name="manufacturer_id"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-				<field name="customer_part_no"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-				<field name="description"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-				<field name="origin" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-				<field name="transfer_done_flag"/>
-			</xpath>
-			<xpath expr="//field[@name='user_id']" position="after">
-				<field name="store_start_date" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-				<field name="start_date_one" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-				<field name="start_date" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-				<!-- <field name="reserved" invisible="1"/> -->
-				<field name="reserved_check" invisible="1"/>
-			</xpath>
-			<xpath expr="//form/sheet/notebook/page[2]" position="replace">
-			<page string="Work Orders" name="operations" groups="mrp.group_mrp_routings" attrs="{'invisible': [('transfer_done_flag','!=',True)]}">
-				<field name="workorder_ids" attrs="{'readonly': ['|', ('state', '=', 'cancel'), '&amp;', ('state', '=', 'done'), ('is_locked', '=', True)]}" context="{'tree_view_ref': 'mrp.mrp_production_workorder_tree_editable_view', 'default_product_uom_id': product_uom_id, 'from_manufacturing_order': True}"/>
-			</page>
-		</xpath>
-
-			<!--			i commented below 3 (t)-->
-
-<!--			<xpath expr="//sheet/div[@name='button_box']/button[2]" position="attributes">-->
-<!--				<attribute name="attrs">{'invisible':('flag','!=',True) ['|',('delivery_count', '=', 0),('reserved_check', '=', True)]}</attribute>-->
-<!--			</xpath>-->
-
-			<xpath expr="//form/header/button[3]" position="replace">
-				<button name="button_mark_done"
-                        attrs="{'invisible': [ '|', ('transfer_done_flag','!=',True), '|',  ('state', '!=', 'to_close') ,   '|', ('move_raw_ids', '=', []), '&amp;', '|',   ('state', 'not in', ('confirmed', 'progress')),      ('qty_producing', '!=', 0), ('state', '!=', 'to_close')]}"
-						string="Mark as Done" type="object" class="oe_highlight" data-hotkey="g"/>
-			</xpath>
-<!--            <xpath expr="//form/header/button[6]" position="attributes">-->
-<!--                <button name="button_mark_done"-->
-<!--                        attrs="{'invisible': [   '|',  ('state', '!=', 'to_close') ,   '|', ('move_raw_ids', '=', []), '&amp;', '|',   ('state', 'not in', ('confirmed', 'progress')),      ('qty_producing', '!=', 0), ('state', '!=', 'to_close')]}"-->
-<!--                        string="Mark as Done" type="object" class="oe_highlight" data-hotkey="g"/>-->
-<!--            </xpath>-->
-            <xpath expr="//form/header/button[2]" position="replace">
-				<button name="button_mark_done" attrs="{'invisible': ['|', ('transfer_done_flag','!=',True), '|',  ('state', '!=', 'to_close') ,'|', '|', ('state', 'in', ('draft', 'cancel', 'done', 'to_close')), ('qty_producing', '=', 0), ('move_raw_ids', '=', [])]}"
-						string="Validate" type="object" class="oe_highlight" data-hotkey="g"/>
+    <record id="mrp_line_split_inherit" model="ir.ui.view">
+        <field name="name">mrp.production.form.inherit</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="customer_part_no" readonly="state in ['cancel', 'done']"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="manufacturer_id" readonly="state in ['cancel', 'done']"/>
+                <field name="description" readonly="state in ['cancel', 'done']"/>
+                <field name="origin" readonly="state in ['cancel', 'done']"/>
+                <field name="transfer_done_flag"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="store_start_date" readonly="state in ['cancel', 'done']"/>
+                <field name="start_date_one" readonly="state in ['cancel', 'done']"/>
+                <field name="start_date" readonly="state in ['cancel', 'done']"/>
+                <!-- <field name="reserved" invisible="1"/> -->
+                <field name="reserved_check" invisible="1"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[2]" position="replace">
+                <page string="Work Orders" name="operations" groups="mrp.group_mrp_routings"
+                      invisible="transfer_done_flag != True">
+                    <field name="workorder_ids" readonly="state in ['cancel', 'done'] and is_locked"
+                           context="{'tree_view_ref': 'mrp.mrp_production_workorder_tree_editable_view', 'default_product_uom_id': product_uom_id, 'from_manufacturing_order': True}"/>
+                </page>
+            </xpath>
+            <xpath expr="//form/header/button[3]" position="replace">
+                <button name="button_mark_done"
+                        invisible="transfer_done_flag != True or state != 'to_close' or move_raw_ids or (state not in ('confirmed', 'progress') and qty_producing != 0 and state != 'to_close')"
+                        string="Mark as Done" type="object" class="oe_highlight" data-hotkey="g"/>
             </xpath>
 
-			<xpath expr="//field[@name='user_id']" position="after">
-				<field name="customer_po_no"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-			</xpath>
-			<xpath expr="//field[@name='company_id']" position="after">
-				<field name="project" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-				<field name="production_cell"  attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-				<field name="order_seq" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
-			</xpath>
-			<xpath expr="//button[@name='action_cancel']" position="attributes">
-				<attribute name="groups">custom_mrp.group_mrp_show_cancel_button</attribute>
-			</xpath>
+            <xpath expr="//form/header/button[2]" position="replace">
+                <button name="button_mark_done"
+                        invisible="transfer_done_flag != True or state != 'to_close' or (state in ('draft', 'cancel', 'done', 'to_close') and qty_producing == 0 and move_raw_ids == [])"
+                        string="Validate" type="object" class="oe_highlight" data-hotkey="g"/>
+            </xpath>
 
-<!--	mo line item views	-->
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="customer_po_no" readonly="state in ['done', 'cancel']"/>
+            </xpath>
+<!--            <xpath expr="//field[@name='product_id']" position="after">-->
+<!--                <field name="customer_part_number" string="Customer Part Number"/>-->
+<!--            </xpath>-->
 
-			<xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/tree/field[@name='product_id']" position="before">
-				<field name="position_no" />
-				<field name="storage_location_id"/>
-				<field name="customer_part_no"/>
-				<field name="name"/>
-				<field name="item_text"/>
-				<field name="manufacturer_id"/>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="project" readonly="state in ['done', 'cancel']"/>
+                <field name="production_cell" readonly="state in ['done', 'cancel']"/>
+                <field name="order_seq" readonly="state in ['done', 'cancel']"/>
+            </xpath>
 
-			</xpath>
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="groups">custom_mrp.group_mrp_show_cancel_button</attribute>
+            </xpath>
+            <!--	mo line item views	-->
 
-			<xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/tree/field[@name='product_id']" position="replace">
-				<field name="product_id" required="1" string="Pecko Part Number"/>
-			</xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='product_id']"
+                   position="after">
+                <field name="customer_part_no"/>
+                <field name="name"/>
+                <field name="item_text"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='item_text']"
+                   position="before">
+                <field name="manufacturer_id"/>
 
-	</field>
-	</record>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='quantity']"
+                   position="replace">
+                <field name="quantity" string="Consumed"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='product_id']"
+                   position="attributes">
+                <attribute name="string">Pecko Part Number</attribute>
+            </xpath>
 
-			<!-- <xpath expr="//field[@name='move_raw_ids']" position="replace">
-					<field name="move_raw_ids" context="{'final_lots': show_final_lots, 'tree_view_ref': 'mrp.view_stock_move_raw_tree', 'form_view_ref': 'mrp.view_stock_move_lots', 'default_location_id': location_src_id, 'default_location_dest_id': production_location_id, 'default_state': 'draft', 'default_raw_material_production_id': id, 'default_picking_type_id': picking_type_id}" attrs="{'readonly': ['&amp;', ('state', '!=', 'draft'), ('is_locked', '=', True)]}">
-	                	<tree delete="0" default_order="is_done,sequence" decoration-muted="is_done" decoration-warning="quantity_done&gt;product_uom_qty" decoration-success="not is_done and quantity_done==product_uom_qty" decoration-danger="not is_done and reserved_availability &lt; product_uom_qty">
-	                		<field name="storage_location_id" />
-	                		<field name="product_id" required="1" string="Pecko Part Number"/>
-	                		<field name="customer_part_no" />
-                            <field name="name" />
-							<field name="item_text" />
-                            <field name="manufacturer_id" />
-                            <field name="unit_factor" invisible="1"/>
-                            <field name="product_uom" />
-                            <field name="has_tracking" invisible="1"/>
-                            <field name="needs_lots" invisible="1" readonly="1" groups="stock.group_production_lot"/>
-                            <field name="is_done" invisible="1"/>
-                            <field name="sequence" invisible="1"/>
-                            <field name="location_id" invisible="1"/>
-                            <field name="location_dest_id" domain="[('id', 'child_of', parent.location_dest_id)]" invisible="1"/>
-                            <field name="state" invisible="1" force_save="1"/>
-                            <field name="product_uom_qty" string="To Consume"/>
-                            <field name="reserved_availability" attrs="{'invisible': [('is_done', '=', True)], 'column_invisible': [('parent.state', '=', 'done')]}" string="Reserved" />
-                            <field name="quantity_done" string="Consumed" readonly="1"/>
-                            <field name="to_consume_qty" string="To Consume" invisible="1" readonly="1"/>
-	                	</tree>
-	                </field>
-			</xpath> -->
+            <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='product_id']"
+                   position="before">
+                <field name="position_no"/>
+                <field name="storage_location_id"/>
+            </xpath>
 
+        </field>
+    </record>
 
+    <record id="mrp_workorder_tree_inherit_position_no" model="ir.ui.view">
+        <field name="name">mrp.workorder.tree.inherit.position_no</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_editable_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='name']" position="before">
+                <field name="position_no"/>
+            </xpath>
+        </field>
+    </record>
 
-<!--	<record id="mrp_view_stock_move_raw_inherited_tree" model="ir.ui.view">-->
-<!--		<field name="name">ppts.stock.move.inherited.tree</field>-->
-<!--		<field name="model">stock.move</field>-->
-<!--		<field name="inherit_id" ref="stock.view_move_tree"/>-->
-<!--		<field name="arch" type="xml">-->
+    <record id="mrp_bom_tree_inherit_position_no" model="ir.ui.view">
+        <field name="name">mrp.workorder.tree.inherit.bom</field>
+        <field name="model">mrp.routing.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_workcenter_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='name']" position="before">
+                <field name="position_no"/>
+            </xpath>
+        </field>
+    </record>
 
-
-<!--			<tree delete="0" default_order="is_done,sequence"-->
-<!--				  decoration-muted="is_done"-->
-<!--				  decoration-warning="quantity_done - product_uom_qty &gt; 0.0001"-->
-<!--				  decoration-success="not is_done and quantity_done - product_uom_qty &lt; 0.0001"-->
-<!--				  decoration-danger="not is_done and reserved_availability &lt; product_uom_qty and product_uom_qty - reserved_availability &gt; 0.0001">-->
-<!--				<field name="position_no" />-->
-<!--				<field name="storage_location_id" />-->
-<!--				<field name="product_id" required="1" string="Pecko Part Number"/>-->
-<!--				<field name="company_id" invisible="1"/>-->
-<!--				<field name="product_uom_category_id" invisible="1"/>-->
-<!--				<field name="customer_part_no" />-->
-<!--				<field name="name"/>-->
-<!--				<field name="item_text" />-->
-<!--				<field name="manufacturer_id" />-->
-<!--				<field name="unit_factor" invisible="1"/>-->
-<!--				<field name="product_uom" groups="uom.group_uom"/>-->
-<!--				<field name="date" invisible="1"/>-->
-<!--&lt;!&ndash;				<field name="date_expected" invisible="1"/>&ndash;&gt;-->
-<!--				<field name="picking_type_id" invisible="1"/>-->
-<!--				<field name="has_tracking" invisible="1"/>-->
-<!--				<field name="operation_id" invisible="1"/>-->
-<!--&lt;!&ndash;				<field name="needs_lots" invisible="1" readonly="1" groups="stock.group_production_lot"/>&ndash;&gt;-->
-<!--				<field name="is_done" invisible="1"/>-->
-<!--				<field name="bom_line_id" invisible="1"/>-->
-<!--				<field name="sequence" invisible="1"/>-->
-<!--				<field name="location_id" invisible="1"/>-->
-<!--				<field name="warehouse_id" invisible="1"/>-->
-<!--				<field name="location_dest_id" domain="[('id', 'child_of', parent.location_dest_id)]" invisible="1"/>-->
-<!--				<field name="state" invisible="1" force_save="1"/>-->
-<!--				<field name="product_uom_qty" string="To Consume"/>-->
-<!--				<field name="reserved_availability" attrs="{'invisible': [('is_done', '=', True)], 'column_invisible': [('parent.state', 'in', ('draft', 'done'))]}" string="Reserved"/>-->
-<!--				<field name="quantity_done" string="Consumed" attrs="{'column_invisible': [('parent.state', '=', 'draft')]}" readonly="1"/>-->
-<!--				<field name="group_id" invisible="1"/>-->
-<!--			</tree>-->
-<!--		</field>-->
-<!--	</record>-->
+    <record id="mrp_bom_form_inherit_position_no" model="ir.ui.view">
+        <field name="name">mrp.routing.workcenter.form.inherit.position_no</field>
+        <field name="model">mrp.routing.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="position_no"/>
+            </xpath>
+        </field>
+    </record>
 
 
-<!--	bom view-->
+    <!--	bom view-->
+    <record id="mrp_bom_form_inherit" model="ir.ui.view">
+        <field name="name">mrp.bom.form.inherit</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="customer_part_number"/>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_id']"
+                   position="after">
+                <field name="customer_part_no"/>
+                <field name="manufacturer_id"/>
+            </xpath>
+<!--            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='customer_part_no']"-->
+<!--                   position="before">-->
+<!--                <field name="manufacturer_id"/>-->
+
+<!--            </xpath>-->
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_id']"
+                   position="attributes">
+                <attribute name="string">Pecko Part No</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_qty']"
+                   position="before">
+                <field name="item_text"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="mrp_create_button_inherit_tree" model="ir.ui.view">
+        <field name="name">mrp.create.inherit.tree</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="store_start_date" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_mrp_production_tree_inherit_customer_po" model="ir.ui.view">
+        <field name="name">mrp.production.tree.inherit</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='product_id']" position="after">
+                <field name="customer_part_number" string="Customer Part Number"/>
+            </xpath>
+            <xpath expr="//list/field[@name='origin']" position="after">
+                <field name="customer_po_no" string="Customer Po No"/>
+            </xpath>
+        </field>
+    </record>
 
 
-	<record id="mrp_bom_form_inherit" model="ir.ui.view">
-		<field name="name">mrp.bom.form.inherit</field>
-		<field name="model">mrp.bom</field>
-		<field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
-		<field name="arch" type="xml">
-			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='product_id']" position="after">
-				<field name="customer_part_no"/>
-			</xpath>
-			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='product_id']" position="attributes">
-				<attribute name="string">Pecko Part No</attribute>
-			</xpath>
-			<xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/tree[1]/field[@name='product_qty']" position="before">
-				<field name="item_text" />
-				<field name="manufacturer_id"/>
-			</xpath>
-			<!--
-	        <xpath expr="//field[@name='mobile']" position="attributes">
-				<attribute name="required">True</attribute>
-			</xpath> -->
+    <record id="view_mrp_production_filter_inherit" model="ir.ui.view">
+        <field name="name">mrp.create.inherit.filter</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='origin']" position="after">
+                <field name="customer_po_no"/>
+            </xpath>
+            <xpath expr="//search/group" position="inside">
+                <filter string="Store Start Date" name="store_start_date_filter" domain="[]"
+                        context="{'group_by': 'store_start_date'}"/>
+            </xpath>
+        </field>
+    </record>
 
-		</field>
-	</record>
+    <!-- MRP 3 Step Location Auto Change -->
+    <record model="ir.cron" id="mrp_3step_location_crons" forcecreate="True">
+        <field name="name">MRP 3 Step Location Cron</field>
+        <field name="model_id" ref="custom_mrp.model_mrp_production"/>
+        <field name="state">code</field>
+        <field name="code">model.step_location_sync()</field>
+        <field name="active" eval="False"/>
+        <field name="user_id" ref="base.user_root"/>
 
-	<record id="mrp_create_button_inherit_tree" model="ir.ui.view">
-		<field name="name">mrp.create.inherit.tree</field>
-		<field name="model">mrp.production</field>
-		<field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
-		<field name="arch" type="xml">
-			<xpath expr="//field[@name='user_id']" position="after">
-				<field name="store_start_date" optional="hide"/>
-			</xpath>
-		</field>
-	</record>
-
-	<record id="view_mrp_production_filter_inherit" model="ir.ui.view">
-		<field name="name">mrp.create.inherit.filter</field>
-		<field name="model">mrp.production</field>
-		<field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
-		<field name="arch" type="xml">
-			<xpath expr="//search/field[@name='origin']" position="after">
-				<field name="customer_po_no" />
-			</xpath>
-			<xpath expr="//search/group" position="inside">
-				 <filter string="Store Start Date" name="store_start_date_filter" domain="[]" context="{'group_by': 'store_start_date'}" />
-			</xpath>
-		</field>
-	</record>
-
-	<!-- MRP 3 Step Location Auto Change -->
-	<record model="ir.cron" id="mrp_3step_location_crons">
-		<field name="name">MRP 3 Step Location Cron</field>
-		<field name="model_id" ref="custom_mrp.model_mrp_production" />
-		<field name="state">code</field>
-		<field name="code">model.step_location_sync()</field>
-		<field name="interval_number">30</field>
-		<field name="interval_type">minutes</field>
-		<field name="numbercall">-1</field>
-		<field name="doall" eval="True"/>
-	</record>
+        <field name="interval_number">30</field>
+        <field name="interval_type">minutes</field>
+    </record>
 
 
+    <record id="stock_picking_return_button_form" model="ir.ui.view">
+        <field name="name">stock.picking.return.button.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(stock.act_stock_return_picking)d']" position="attributes">
+                <attribute name="groups">custom_mrp.group_stock_picking_return_button_hide</attribute>
+            </xpath>
+        </field>
+    </record>
 
-
-
-<!--	<record id="mrp_create_button_access_tree" model="ir.ui.view">-->
-<!--		<field name="name">mrp.create.button.access.tree</field>-->
-<!--		<field name="model">mrp.production</field>-->
-<!--		<field name="inherit_id" ref="mrp.mrp_production_tree_view"/>-->
-<!--&lt;!&ndash;		<field name="groups_id" eval="[(6, 0, [ref('custom_mrp.group_mrp_create_button_hide')])]"/>&ndash;&gt;-->
-<!--		<field name="arch" type="xml">-->
-<!--			<xpath expr="//tree" position="attributes">-->
-<!--				<attribute name="create">0</attribute>-->
-<!--			</xpath>-->
-<!--		</field>-->
-<!--	</record>-->
-
-<!--	<record id="mrp_create_button_access_form" model="ir.ui.view">-->
-<!--		<field name="name">mrp.create.button.access.form</field>-->
-<!--		<field name="model">mrp.production</field>-->
-<!--		<field name="inherit_id" ref="mrp.mrp_production_form_view"/>-->
-<!--&lt;!&ndash;		<field name="groups_id" eval="[(6, 0, [ref('custom_mrp.group_mrp_create_button_hide')])]"/>&ndash;&gt;-->
-<!--		<field name="arch" type="xml">-->
-<!--			<xpath expr="//form" position="attributes">-->
-<!--				<attribute name="create">0</attribute>-->
-<!--			</xpath>-->
-<!--		</field>-->
-<!--	</record>-->
-
-
-
-	<record id="stock_picking_return_button_form" model="ir.ui.view">
-		<field name="name">stock.picking.return.button.form</field>
-		<field name="model">stock.picking</field>
-		<field name="inherit_id" ref="stock.view_picking_form"/>
-		<field name="arch" type="xml">
-			<xpath expr="//button[@name='%(stock.act_stock_return_picking)d']" position="attributes">
-				<attribute name="groups">custom_mrp.group_stock_picking_return_button_hide</attribute>
-			</xpath>
-		</field>
-	</record>
-
-	<record id="mrp_action_assign_button_show_view" model="ir.ui.view">
-		<field name="name">mrp.action.assign.button.show.view</field>
-		<field name="model">mrp.production</field>
-		<field name="inherit_id" ref="mrp.mrp_production_form_view"/>
-		<field name="arch" type="xml">
-			<xpath expr="//button[@name='action_assign']" position="attributes">
-				<attribute name="groups">custom_mrp.group_mrp_action_assign_button_show</attribute>
-			</xpath>
-			<xpath expr="//button[@name='do_unreserve']" position="attributes">
-				<attribute name="groups">custom_mrp.group_mrp_show_unreserve_button</attribute>
-			</xpath>
-		</field>
-	</record>
+    <record id="mrp_action_assign_button_show_view" model="ir.ui.view">
+        <field name="name">mrp.action.assign.button.show.view</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_assign']" position="attributes">
+                <attribute name="groups">custom_mrp.group_mrp_action_assign_button_show</attribute>
+            </xpath>
+            <xpath expr="//button[@name='do_unreserve']" position="attributes">
+                <attribute name="groups">custom_mrp.group_mrp_show_unreserve_button</attribute>
+            </xpath>
+        </field>
+    </record>
 
 </odoo>

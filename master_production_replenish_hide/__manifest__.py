@@ -1,6 +1,6 @@
 {
     'name': 'Master Production Replenish Hide',
-    'version': '1.0',
+    'version': '18.0',
     'category': 'Manufacturing/Manufacturing',
     'sequence': 50,
     'summary': 'Master Production Replenish Hide',
@@ -9,7 +9,6 @@
 Master Production Replenish Hide
 """,
     'data': [
-
         'views/res_company_views.xml',
     ],
     'assets': {

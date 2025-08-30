@@ -2,17 +2,18 @@
 
 {
     'name' : 'SO,PO Report',
-    'version': '12.0',
+    'version': '18.0',
     'author': 'PPTS [India] Pvt.Ltd.',
     'website': 'https://www.pptssolutions.com',
     'category': 'Sale',
     'description': """Sale Order,Purchase Order PDF Report""",
-    'depends' : ['base','sale','purchase','stock','account'],
+    'depends' : ['base','sale','purchase','stock','account','mrp_workorder'],
     'data': [
         'views/so_po_order_view.xml',
         'views/report.xml',
     ],
     'installable': True,
     'auto_install': False,
-    'application':True
+    'application':True,
+    'license': 'LGPL-3',
 }

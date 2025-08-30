@@ -10,7 +10,6 @@ class PartnerCategoryProductViewReport(models.Model):
     partner_code = fields.Char(string='Vendor Code')
     name = fields.Char(string='Product Name')
     product_id = fields.Many2one(comodel_name='product.product', string='Product Internal Reference')
-    
 
 
     def get_view_product_report_values(self, category_code, partner_code):
@@ -44,7 +43,7 @@ class PartnerCategoryProductViewReport(models.Model):
                 'name': _('Partner Category Product View Report'),
                 'res_model': 'partner.category.product.view.report',
                 'type': 'ir.actions.act_window',
-                'view_mode': 'tree',
+                'view_mode': 'list',
                 'target': 'current',
             }
         else:

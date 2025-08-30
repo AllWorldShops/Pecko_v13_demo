@@ -10,18 +10,16 @@
                             <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
                         </div>
                     </div>
-                    <div class="row" name="company_address"
-                         style="text-start;padding-left:3px;font-family: Arial;text-color:black;">
+                    <div class="row" name="company_address" style="text-start;padding-left:3px;font-family: Arial;text-color:black;">
                         <div class="col-8">
                             <strong>
-                                <span style="font-size: 25px;papadding-left:3.6px"
-                                      t-field="o.company_id.partner_id.name"/>
+                                <span style="font-size: 25px;papadding-left:3.6px" t-field="o.company_id.partner_id.name"/>
                             </strong>
                         </div>
                     </div>
                     <div class="row" style="padding-left:2.9px;font-family: Arial">
                         <div class="col-8">
-                            <strong style="font-size: 35px;">Production Overview</strong>
+                            <strong style="font-size: 25px;">Production Overview</strong>
                         </div>
                     </div>
                     <div class="row" style="font-size:20px;padding-left:3px;font-family: Arial">
@@ -32,16 +30,16 @@
                         </div>
                         <div class="col-4">
                             <strong>
-                                <span style="font-size:20px;">MO Quantity:</span>
+                                <span style="font-size:17px;">MO Quantity:</span>
                             </strong>
-                            <span style="font-size:20px;" t-esc="o.product_qty"/>
-                            <span style="font-size:20px;text-transform: uppercase;" t-esc="o.product_uom_id.name"/>
+                            <span style="font-size:17px;" t-esc="o.product_qty"/>
+                            <span style="font-size:17px;text-transform: uppercase;" t-esc="o.product_uom_id.name"/>
                         </div>
                         <div class="col-5">
                             <strong>
-                                <span style=" font-size:20px;">Customer Part No:</span>
+                                <span style=" font-size:15px;">Customer Part No:</span>
                             </strong>
-                            <span style="font-size:20px;" t-esc="o.customer_part_no"/>
+                            <span style="font-size:15px;" t-esc="o.customer_part_no"/>
                         </div>
                     </div>
                 </div>
@@ -51,22 +49,19 @@
                         padding: 6px;
                         }
                     </style>
-                    <table class="table table-bordered" name="invoice_line_table"
-                           style="width:100%;color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
-                        <thead style="font-size:20px; border: 1px solid black;font-family: Arial" class="thead-light">
+                    <table class="table table-bordered" name="invoice_line_table" style="width:100%;color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
+                        <thead style="font-size:15px; border: 1px solid black;font-family: Arial" class="thead-light">
                             <tr>
                                 <th class="text-center" style="border: 1px solid black;">Position</th>
                                 <th name="th_mrp_bom_h" style="border: 1px solid black;">Product</th>
                                 <th class="text-center" width="20%" style="border: 1px solid black;">Part No</th>
-                                <!--                                <th class="text-center" style="border: 1px solid black;">Description</th>-->
+                                <th class="text-center" style="border: 1px solid black;">Description</th>
                                 <th class="text-center" style="border: 1px solid black;">Manufacturer</th>
                                 <th class="text-center" style="border: 1px solid black;">Quantity</th>
-                                <th class="text-center" groups="uom.group_uom" style="border: 1px solid black;">Unit of
-                                    Measure
-                                </th>
+                                <th class="text-center" style="border: 1px solid black;">Unit of Measure</th>
                             </tr>
                         </thead>
-                        <tbody class="invoice_tbody" style="font-size:20px;font-family: Arial">
+                        <tbody class="invoice_tbody" style="font-size:15px;font-family: Arial">
                             <tr>
                                 <td style="border: 1px solid black;"/>
                                 <td style="border: 1px solid black;">
@@ -74,7 +69,7 @@
                                 </td>
                                 <td style="border: 1px solid black;"/>
                                 <td style="border: 1px solid black;"/>
-                                <!--                                <td style="border: 1px solid black;"/>-->
+                                <td style="border: 1px solid black;"/>
                                 <td style="text-align: right; border: 1px solid black;">
                                     <span t-field="o.product_qty"/>
                                 </td>
@@ -93,14 +88,14 @@
                                     <td style="text-align: left; border: 1px solid black;">
                                         <span t-field="l.customer_part_no"/>
                                     </td>
-                                    <!--                                    <td style="text-align: left; border: 1px solid black;">-->
-                                    <!--                                        <span t-field="l.name"/>-->
-                                    <!--                                    </td>-->
                                     <td style="text-align: left; border: 1px solid black;">
+                                        <span t-field="l.name"/>
+                                    </td>
+                                    <td style="text-align: left; border: 1px solid black; white-space: nowrap; ">
                                         <span t-field="l.manufacturer_id.name"/>
                                     </td>
                                     <td style="text-align: right; border: 1px solid black;">
-                                        <span t-field="l.quantity_done"/>
+                                        <span t-field="l.quantity"/>
                                     </td>
                                     <td style="text-align: left; border: 1px solid black;text-transform: uppercase;">
                                         <span t-field="l.product_uom.name"/>
@@ -112,16 +107,15 @@
                 </div>
                 <br/>
                 <div style="page-break-inside: avoid;">
-                    <table class="table table-bordered" name="work_line_table"
-                           style="width:100%;text-color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
-                        <thead style="font-size:20px; border: 1px solid black;font-family: Arial" class="thead-light">
+                    <table class="table table-bordered" name="work_line_table" style="width:100%;text-color:black;font-size:20px;table-layout:auto; border-collapse: collapse; border: 1px solid black;">
+                        <thead style="font-size:17px; border: 1px solid black;font-family: Arial" class="thead-light">
                             <tr>
                                 <th class="text-center" width="20%" style="border: 1px solid black;">Operation</th>
                                 <th class="text-center" width="20%" style="border: 1px solid black;">Work Center</th>
                                 <th class="text-center" width="60%" style="border: 1px solid black;">Operation Text</th>
                             </tr>
                         </thead>
-                        <tbody class="invoice_tbody" style="font-size:20px;font-family: Arial">
+                        <tbody class="invoice_tbody" style="font-size:17px;font-family: Arial">
                             <tr t-foreach="o.workorder_ids" t-as="l">
                                 <t t-if="l.name">
                                     <td class="text-center" style="border: 1px solid black;">
@@ -143,7 +137,7 @@
                 <div class="row">
                     <div class="col-4">
                     </div>
-                    <div class="col-4" style="font-size:22px">
+                    <div class="col-4" style="font-size:18px">
                         <div class="text-center">
                             Page:
                             <span class="page"/>
@@ -151,10 +145,10 @@
                             <span class="topage"/>
                         </div>
                     </div>
-                    <div class="col" >
-                        <div class="text-right" style="padding-left:340px ">
-                            <strong style=" font-size:22px;">Printed on:</strong>
-                      <span style=" font-size:22px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+                    <div class="col">
+                        <div class="text-right" >
+                            <strong style=" font-size:17px;">Printed on:</strong>
+                            <span style=" font-size:17px;" t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
                         </div>
                     </div>
                 </div>
@@ -164,8 +158,7 @@
         <template id="report_mo_order_details">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
-                    <t t-call="mo_report.mo_order_details_template"
-                       t-lang="o.company_id.partner_id.lang"/>
+                    <t t-call="mo_report.mo_order_details_template" t-lang="o.company_id.partner_id.lang"/>
                 </t>
             </t>
         </template>
