@@ -36,6 +36,7 @@ class ProductTemplate(models.Model):
         Used to compute margins on sale orders.""")
 
 
+
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
