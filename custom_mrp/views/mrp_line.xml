@@ -5,10 +5,11 @@
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
-
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="customer_part_no" readonly="state in ['cancel', 'done']"/>
+            </xpath>
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="manufacturer_id" readonly="state in ['cancel', 'done']"/>
-                <field name="customer_part_no" readonly="state in ['cancel', 'done']"/>
                 <field name="description" readonly="state in ['cancel', 'done']"/>
                 <field name="origin" readonly="state in ['cancel', 'done']"/>
                 <field name="transfer_done_flag"/>
@@ -42,9 +43,9 @@
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="customer_po_no" readonly="state in ['done', 'cancel']"/>
             </xpath>
-            <xpath expr="//field[@name='product_id']" position="after">
-                <field name="customer_part_number" string="Customer Part Number"/>
-            </xpath>
+<!--            <xpath expr="//field[@name='product_id']" position="after">-->
+<!--                <field name="customer_part_number" string="Customer Part Number"/>-->
+<!--            </xpath>-->
 
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="project" readonly="state in ['done', 'cancel']"/>
@@ -132,12 +133,13 @@
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_id']"
                    position="after">
                 <field name="customer_part_no"/>
-            </xpath>
-            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='customer_part_no']"
-                   position="before">
                 <field name="manufacturer_id"/>
-
             </xpath>
+<!--            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='customer_part_no']"-->
+<!--                   position="before">-->
+<!--                <field name="manufacturer_id"/>-->
+
+<!--            </xpath>-->
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_id']"
                    position="attributes">
                 <attribute name="string">Pecko Part No</attribute>
@@ -145,7 +147,7 @@
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_qty']"
                    position="before">
                 <field name="item_text"/>
-                <field name="manufacturer_id"/>
+
             </xpath>
 
         </field>

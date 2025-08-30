@@ -50,8 +50,23 @@ class StockMove(models.Model):
     additional_notes = fields.Char(string='Additional Notes')
     customer_part_no = fields.Text(string='Part Number')
     position_no = fields.Integer(string="Position", compute="_compute_position_no")
-    manufacturer_name = fields.Char(string='Manufacturer', store=True, readonly=True)
+    manufacturer_name = fields.Char(string='Manufacturer',related="product_id.product_tmpl_id.manufacturer_id.name", store=True, readonly=True)
     # related = 'product_id.manufacturer_id.name'
+
+    @api.onchange('product_id')
+    def _onchange_product_id_set_manufacturer(self):
+        for move in self:
+            if move.product_id and move.product_id.product_tmpl_id.manufacturer_id:
+                move.manufacturer_name = move.product_id.product_tmpl_id.manufacturer_id.name
+            else:
+                move.manufacturer_name = ""
+
+    @api.model
+    def create(self, vals):
+        if vals.get("product_id"):
+            product = self.env["product.product"].browse(vals["product_id"])
+            vals["manufacturer_name"] = product.product_tmpl_id.manufacturer_id.name or ""
+        return super().create(vals)
 
     def _compute_position_no(self):
         for move in self:

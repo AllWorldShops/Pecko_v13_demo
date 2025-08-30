@@ -672,10 +672,10 @@
                                     <th class="text-left" style="width:12%">
                                         <b>QUANTITY</b>
                                     </th>
-                                    <th class="text-center" style="width:16%">
-                                        <b>ETA DATE</b>
+                                    <th class="text-center" style="width:18%">
+                                        <b>REQUESTED DATE</b>
                                     </th>
-                                    <th class="text-right" style="width:10%">
+                                    <th class="text-right" style="width:14%">
                                         <b>UNIT PRICE</b>
                                     </th>
                                     <t t-if="o.amount_tax>0">
@@ -683,7 +683,7 @@
                                             <b>TAXES</b>
                                         </th>
                                     </t>
-                                    <th class="text-right" style="width:18%">
+                                    <th class="text-right" style="width:10%">
                                         <b>AMOUNT</b>
                                     </th>
 

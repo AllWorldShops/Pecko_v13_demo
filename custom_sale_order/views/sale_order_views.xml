@@ -41,7 +41,9 @@
                 <field name="need_date" optional="hide"/>
                 <field name="promised_date" optional="hide"/>
             </xpath>
-
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_uom_qty']" position="before">
+                <field name="description"/>
+            </xpath>
             <xpath expr="//field[@name='effective_date']" position="replace">
             </xpath>
             <xpath expr="//field[@name='origin']" position="after">

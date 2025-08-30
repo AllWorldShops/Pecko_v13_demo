@@ -127,6 +127,8 @@ class AccountMove(models.Model):
     customer_po_no = fields.Char(string="Customer PO No.")
     do_name = fields.Char(string="DO No.")
     exchange_rate = fields.Float(string="Rate",digits=(12,4),compute="_compute_currency_rate")
+    # custom_form_reference_number = fields.Char(string="Customs Form Reference Number")
+
 
 
     def _compute_currency_rate(self):
