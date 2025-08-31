@@ -36,6 +36,7 @@ class ProductTemplate(models.Model):
         Used to compute margins on sale orders.""")
 
 
+
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
@@ -66,7 +67,7 @@ class ProductProduct(models.Model):
             product_id.product_tmpl_id.manufacturer_id = vals.get('manufacturer_id')
         return rec
 
-    def _select_seller(self, partner_id=False, quantity=0.0, date=None, uom_id=False, params=False):
+    def _select_seller(self, partner_id=False, quantity=0.0, date=None, uom_id=False, ordered_by='price_discounted', params=False):
         self.ensure_one()
         if date is None:
             date = fields.Date.context_today(self)
