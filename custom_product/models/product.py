@@ -156,3 +156,29 @@ class ClassificationCode(models.Model):
 
     name = fields.Char(string='Name')
     code = fields.Char(string='Code')
+
+
+class ApprovalProductLine(models.Model):
+    _inherit = 'approval.product.line'
+
+    description = fields.Char(string="Description")
+
+    @api.onchange('product_id')
+    def _onchange_product_description(self):
+        """When product changes, auto-fill description from product template."""
+        for line in self:
+            if line.product_id:
+                line.description = line.product_id.product_tmpl_id.x_studio_field_mHzKJ or ""
+
+    @api.model
+    def create(self, vals):
+        if vals.get("product_id"):
+            product = self.env["product.product"].browse(vals["product_id"])
+            vals["description"] = product.product_tmpl_id.x_studio_field_mHzKJ or ""
+        return super().create(vals)
+
+    def write(self, vals):
+        if vals.get("product_id"):
+            product = self.env["product.product"].browse(vals["product_id"])
+            vals["description"] = product.product_tmpl_id.x_studio_field_mHzKJ or ""
+        return super().write(vals)

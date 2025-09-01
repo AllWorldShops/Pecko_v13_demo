@@ -133,13 +133,7 @@
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_id']"
                    position="after">
                 <field name="customer_part_no"/>
-                <field name="manufacturer_id"/>
             </xpath>
-<!--            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='customer_part_no']"-->
-<!--                   position="before">-->
-<!--                <field name="manufacturer_id"/>-->
-
-<!--            </xpath>-->
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_id']"
                    position="attributes">
                 <attribute name="string">Pecko Part No</attribute>
@@ -147,9 +141,17 @@
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_qty']"
                    position="before">
                 <field name="item_text"/>
-
             </xpath>
-
+        </field>
+    </record>
+    <record id="mrp_bom_inherit_form" model="ir.ui.view">
+        <field name="name">mrp.bom.form.inherit</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='x_studio_field_gVfQK']" position="after">
+                <field name="manufacturer_id" string="Manufacturer"/>
+            </xpath>
         </field>
     </record>
 
