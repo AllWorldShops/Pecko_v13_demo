@@ -38,9 +38,14 @@ class StockPicking(models.Model):
         for picking_id in self:
             if picking_id.state == 'done' and picking_id.picking_type_id.code == 'outgoing' and picking_id.sale_id:
                 picking_id.create_invoice()
+            print('picking_id.state',picking_id.state)
+            print('picking_id.picking_type_id.code',picking_id.picking_type_id.code)
+            print('picking_id.sale_id',picking_id.sale_id)
+
             if picking_id.state == 'done' and picking_id.picking_type_id.code == 'incoming' and picking_id.sale_id:
                 picking_id.create_customer_credit()
             # Detrack API starts
+            
             if picking_id.state == 'done' and picking_id.picking_type_id.code == 'outgoing' and picking_id.sale_id and picking_id.company_id.country_id.code in ['SG', 'MY']:
                 url = self.env['url.config'].search([('code', '=', 'DO'),('active', '=', True)], limit=1)
                 if url:
@@ -88,12 +93,16 @@ class StockPicking(models.Model):
                 self.invoice_count = 0
 
     def create_invoice(self):
+        
         """This is the function for creating customer invoice
         from the picking"""
         for picking_id in self:
+            print('picking_id.invoice_status',picking_id.invoice_status)
+            
             if picking_id.invoice_status not in ['invoiced', 'no']:
                 journal_id = False
-                journal_id = self.env['account.journal'].search([('type','=','sale'),('company_id','=',picking_id.company_id.id)],limit=1).id
+                journal_id = self.env['account.journal'].search([('type','=','sale'),('company_id','=',picking_id.company_id.id),('name','=', 'Sales')],limit=1).id
+                print('journal_id',journal_id)
                 invoice_line_list = []
                 if picking_id.move_line_ids_without_package:
                     for move_line in picking_id.move_line_ids_without_package:
@@ -124,13 +133,17 @@ class StockPicking(models.Model):
                     invoices = self.env['account.move'].create(invoice)
                     picking_id.invoice_created = True
                     picking_id.invoice_id = invoices.id
+                    print('--------------',invoice['journal_id'])
+                    
                     return invoices
 
     def create_customer_credit(self):
+
         """This is the function for creating customer credit note
                 from the picking"""
         for picking_id in self:
-            if picking_id.invoice_status in ['invoiced']:
+            print('picking_id.invoice_status',picking_id.invoice_status)
+            if picking_id.invoice_status in ['to invoice','invoiced']:
                 invoice_line_list = []
                 if picking_id.move_line_ids_without_package:
                     for move_line in picking_id.move_line_ids_without_package:
@@ -139,7 +152,7 @@ class StockPicking(models.Model):
                                 vals = move.sale_line_id._prepare_invoice_line()
                                 vals['position_no'] = move.position_no
                                 if move.sale_line_id.qty_to_invoice != move_line.quantity:
-                                    vals['quantity'] =  -abs(move_line.quantity) if move_line.product_id.uom_id.id == move_line.product_id.uom_po_id.id else  -abs(move_line.qty_done / move.sale_line_id.product_uom.factor_inv)
+                                    vals['quantity'] = abs(move_line.quantity) if move_line.product_id.uom_id.id == move_line.product_id.uom_po_id.id else abs(move_line.qty_done / move.sale_line_id.product_uom.factor_inv)
                                 invoice_line_list.append((0, 0, vals))
                 else:
                     for move in picking_id.move_ids_without_package:
@@ -147,7 +160,7 @@ class StockPicking(models.Model):
                             vals = move.sale_line_id._prepare_invoice_line()
                             vals['position_no'] = move.position_no
                             if move.sale_line_id.qty_to_invoice != move.quantity_done:
-                                vals['quantity'] =  -abs(move.quantity_done) if move.product_id.uom_id.id == move.product_id.uom_po_id.id else  -abs(move.quantity_done / move.sale_line_id.product_uom.factor_inv)
+                                vals['quantity'] = abs(move.quantity_done) if move.product_id.uom_id.id == move.product_id.uom_po_id.id else abs(move.quantity_done / move.sale_line_id.product_uom.factor_inv)
                             invoice_line_list.append((0, 0, vals))
                 
                 invoice = picking_id.sale_id._prepare_invoice()
@@ -180,6 +193,16 @@ class StockPicking(models.Model):
 class StockReturnInvoicePicking(models.TransientModel):
     _inherit = 'stock.return.picking'
 
+    @api.model
+    def _prepare_stock_return_picking_line_vals_from_move(self, stock_move):
+        
+        return {
+            'product_id': stock_move.product_id.id,
+            'quantity': stock_move.quantity,
+            'move_id': stock_move.id,
+            'uom_id': stock_move.product_id.uom_id.id,
+        }
+    
     def _create_returns(self):
         """in this function the picking is marked as return"""
         new_picking, pick_type_id = super(StockReturnInvoicePicking, self)._create_returns()
