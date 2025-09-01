@@ -90,9 +90,6 @@
                             </t>
                         </div>
                     </div>
-<!--                    <br/>-->
-                    <br/>
-                    <br/>
                     <div class="row" style="text-align:center">
                         <div class="col-6">
                             <t t-if="o.company_id.country_id.code != 'SG'">
@@ -105,7 +102,6 @@
                             </t>
                         </div>
                     </div>
-                    <br/>
                     <div class="row">
                         <div class="col-9">
                             <t t-if="o.company_id.country_id.code == 'SG'">
