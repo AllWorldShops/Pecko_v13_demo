@@ -19,7 +19,8 @@ from dateutil.relativedelta import relativedelta
 import threading
 import re
 from odoo.addons.stock.models.stock_rule import ProcurementException
-
+from odoo import _, api, fields, models, modules, SUPERUSER_ID, tools
+from odoo.modules.registry import Registry
 
 _logger = logging.getLogger(__name__)
 
