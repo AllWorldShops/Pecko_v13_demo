@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='pod_date']" position="after">
                     <field name="custom_form_reference_number"/>
+                    <field name="custom_form_date"/>
                 </xpath>
                 <xpath expr="//field[@name='picking_type_id']" position="after">
                     <field name="operation_code" invisible="1"/>

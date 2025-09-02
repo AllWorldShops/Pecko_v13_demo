@@ -24,11 +24,7 @@ class MrpProduction(models.Model):
     manufacturer_id = fields.Many2one('product.manufacturer', string='Manufacturer Name')
     customer_part_no = fields.Char(string='Part Number')
     description = fields.Char(string='Description')
-    customer_part_number = fields.Char(
-        string='Customer Part Number',
-        related='product_id.customer_part_number',
-        store=True
-    )
+    customer_part_number = fields.Char(string='Customer Part Number', related='product_id.product_tmpl_id.customer_part_number', store=True, readonly=True)
     transfer_done_flag = fields.Boolean(string='Transfer Done Flag', compute='_compute_boolean_txt')
     project = fields.Char(string='Project', related='product_tmpl_id.project', store=True)
     start_date = fields.Date('Start Date P2')
@@ -111,11 +107,8 @@ class MrpProduction(models.Model):
 class MrpBom(models.Model):
     _inherit = 'mrp.bom'
 
-    customer_part_number = fields.Char(
-        string='Customer Part Number',
-        related='product_tmpl_id.customer_part_number',
-        store=True
-    )
+    customer_part_number = fields.Char(string='Customer Part Number',related='product_tmpl_id.customer_part_number',store=True)
+    mpn_customer_supplier_partno = fields.Char(string="MPN/Customer/Supplier Part No", related="product_tmpl_id.x_studio_field_qr3ai",store=False)
 
 
 class MrpBomLine(models.Model):

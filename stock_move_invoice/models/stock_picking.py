@@ -14,23 +14,29 @@ class StockPicking(models.Model):
     invoice_id = fields.Many2one('account.move', string='Invoice')
     invoice_status = fields.Selection(related='sale_id.invoice_status', string='Invoice Status', store=True, readonly=True)
     custom_form_reference_number = fields.Char(string='Customs Form Reference Number')
+    custom_form_date = fields.Datetime(string='Customs Form Date')
 
-    @api.onchange('custom_form_reference_number')
-    def _onchange_custom_form_reference_number(self):
+    @api.onchange('custom_form_reference_number', 'custom_form_date')
+    def _onchange_custom_form_fields(self):
         for picking in self:
-            if picking.custom_form_reference_number and picking.picking_type_id.code in ['incoming', 'outgoing']:
+            if picking.picking_type_id.code in ['incoming', 'outgoing']:
                 if picking.invoice_id:
-                    picking.invoice_id.l10n_my_edi_custom_form_reference = picking.custom_form_reference_number
+                    if picking.custom_form_reference_number:
+                        picking.invoice_id.l10n_my_edi_custom_form_reference = picking.custom_form_reference_number
+                    if picking.custom_form_date:
+                        picking.invoice_id.custom_form_date = picking.custom_form_date
 
-    # @api.model
-    # def write(self, vals):
-    #     res = super().write(vals)
-    #     if 'custom_form_reference_number' in vals:
-    #         for picking in self:
-    #             invoices = self.env['account.move'].search([('picking_id', '=', picking.id)])
-    #             for invoice in invoices:
-    #                 invoice.l10n_my_edi_custom_form_reference = vals['custom_form_reference_number']
-    #     return res
+    def write(self, vals):
+        res = super().write(vals)
+        if 'custom_form_reference_number' in vals or 'custom_form_date' in vals:
+            for picking in self:
+                invoices = self.env['account.move'].search([('picking_id', '=', picking.id)])
+                for invoice in invoices:
+                    if 'custom_form_reference_number' in vals:
+                        invoice.l10n_my_edi_custom_form_reference = vals['custom_form_reference_number']
+                    if 'custom_form_date' in vals:
+                        invoice.custom_form_date = vals['custom_form_date']
+        return res
 
 
     def _action_done(self):
