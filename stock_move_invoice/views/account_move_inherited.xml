@@ -9,9 +9,24 @@
                 <xpath expr="//field[@name='ref']" position="after">
                     <field name="picking_id" invisible="1"/>
                 </xpath>
-                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/list/field[@name='product_id']" position="before">
+                <xpath expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/list/field[@name='product_id']"
+                       position="before">
                     <field name="position_no"/>
                 </xpath>
+            </field>
+        </record>
+
+        <record id="view_move_form_inherit_add_custom_date" model="ir.ui.view">
+            <field name="name">account.move.form.inherit.add.custom.date</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="l10n_my_edi.view_move_form_inherit_l10n_my_myinvois"/>
+            <field name="arch" type="xml">
+
+                <!-- Insert new field below l10n_my_edi_custom_form_reference -->
+                <xpath expr="//field[@name='l10n_my_edi_custom_form_reference']" position="after">
+                    <field name="custom_form_date"/>
+                </xpath>
+
             </field>
         </record>
     </data>

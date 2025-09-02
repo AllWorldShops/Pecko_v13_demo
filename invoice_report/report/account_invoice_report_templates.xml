@@ -105,7 +105,6 @@
                                         <span t-field="o.partner_id.sst_registration_number"/>
                                         <br/>
                                         Co.Reg.No:
-                                        <br/>
                                     </t>
                                     <div id="myinvois_qrcode" class="d-flex mb-3 avoid-page-break-inside"
                                          t-if="o.l10n_my_edi_external_uuid">
@@ -125,12 +124,7 @@
                                             </p>
                                         </div>
                                     </div>
-
-
                                     <!--                                    <span t-field="o.partner_id.SST_registration_number"/>-->
-                                    <br/>
-                                    <br/>
-
                                 </td>
                             </tr>
                         </div>
@@ -141,20 +135,15 @@
                                         <strong>Delivery Address</strong>
                                     </span>
                                 </tr>
-                                <br/>
                                 <tr>
                                     <td class="table table-borderless" style="font-size:5px;">
                                         <span t-field="o.partner_shipping_id"/>
                                         <br/>
                                         <span t-field="o.partner_shipping_id.street"/>
                                         <span t-field="o.partner_shipping_id.street2"/>
-                                        <br/>
                                         <span t-field="o.partner_shipping_id.city"/>
-                                        <br/>
                                         <span t-field="o.partner_shipping_id.state_id"/>
-                                        <br/>
                                         <span t-field="o.partner_shipping_id.zip"/>
-                                        <br/>
                                         <span t-field="o.partner_shipping_id.country_id"/>
                                     </td>
                                 </tr>
@@ -180,11 +169,7 @@
                                     <strong>CN No:</strong>
                                     <span style="padding-left:78px;" t-field="o.name"/>
                                 </t>
-
-
                             </span>
-
-
                             <!-- <strong> <t t-if="o.type == 'out_invoice'"> Invoice No. </t><t t-if="o.type == 'out_refund'"> CN No.
                             </t></strong> -->
                             <!-- <strong>Invoice No.</strong> -->
