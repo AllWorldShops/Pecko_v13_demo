@@ -107,7 +107,7 @@ class MrpProduction(models.Model):
 class MrpBom(models.Model):
     _inherit = 'mrp.bom'
 
-    customer_part_number = fields.Char(string='Customer Part Number',related='product_tmpl_id.customer_part_number',store=True)
+    customer_part_number = fields.Char(string='Part Number',related='product_tmpl_id.x_studio_field_qr3ai',store=True)
     mpn_customer_supplier_partno = fields.Char(string="MPN/Customer/Supplier Part No", related="product_tmpl_id.x_studio_field_qr3ai",store=False)
 
 
