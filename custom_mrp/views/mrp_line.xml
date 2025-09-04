@@ -189,6 +189,9 @@
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="store_start_date" optional="hide"/>
             </xpath>
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="create_date" optional="hide"/>
+            </xpath>
         </field>
     </record>
     <record id="view_mrp_production_tree_inherit_customer_po" model="ir.ui.view">

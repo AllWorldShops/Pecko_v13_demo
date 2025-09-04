@@ -200,7 +200,7 @@ class StockMove(models.Model):
     @api.depends('product_uom_qty')
     def _get_consumed_data(self):
         for rec in self:
-            rec.to_consume_qty = rec.product_uom_qty - rec.quantity_done
+            rec.to_consume_qty = rec.product_uom_qty - rec.quantity
 
 
 class StockMoveLine(models.Model):
