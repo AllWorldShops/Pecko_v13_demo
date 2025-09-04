@@ -128,6 +128,7 @@
         <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='product_id']" position="after">
+                <!-- <field name="customer_part_number"/> -->
                 <field name="customer_part_number"/>
             </xpath>
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='bom_line_ids']/list[1]/field[@name='product_id']"
@@ -170,8 +171,13 @@
             <!-- Remove Reference column -->
             <xpath expr="//field[@name='code']" position="replace">
                 <!-- Add custom field from product template -->
-                <field name="mpn_customer_supplier_partno" string="MPN/Customer/Supplier Part No"/>
+                <field name="mpn_customer_supplier_partno" string="MPN/Customer/Supplier Part No" optional="hide"/>
             </xpath>
+            <xpath expr="//list/field[@name='product_tmpl_id']" position="after">
+                <!-- <field name="customer_part_number" string="Part Number"/> -->
+                <field name="customer_part_number" string="Part Number"/>
+            </xpath>
+
         </field>
     </record>
 
@@ -183,6 +189,9 @@
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="store_start_date" optional="hide"/>
             </xpath>
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="create_date" optional="hide"/>
+            </xpath>
         </field>
     </record>
     <record id="view_mrp_production_tree_inherit_customer_po" model="ir.ui.view">
@@ -191,7 +200,7 @@
         <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
         <field name="arch" type="xml">
             <xpath expr="//list/field[@name='product_id']" position="after">
-                <field name="customer_part_number" string="Customer Part Number"/>
+                <field name="customer_part_no" string="Part Number"/>
             </xpath>
             <xpath expr="//list/field[@name='origin']" position="after">
                 <field name="customer_po_no" string="Customer Po No"/>
