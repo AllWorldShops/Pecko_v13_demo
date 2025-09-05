@@ -104,7 +104,9 @@
                                         SST ID:
                                         <span t-field="o.partner_id.sst_registration_number"/>
                                         <br/>
-                                        Co.Reg.No:
+                                        Company.Reg.No:
+                                        <span t-field="o.partner_id.l10n_my_identification_number"/>
+                                        <br/>
                                     </t>
                                     <div id="myinvois_qrcode" class="d-flex mb-3 avoid-page-break-inside"
                                          t-if="o.l10n_my_edi_external_uuid">
@@ -338,7 +340,18 @@
                             </td>
                         </tr>
                     </table>
-
+                    <!-- <t t-if="o.company_id.country_id.code != 'SG'">
+                        <div style="margin-top:15px; font-family: Calibri; font-size:12px; color:black;">
+                            <p>
+                                <strong>MSIC Code:</strong>
+                                <span t-field="o.company_id.misc_code"/>
+                            </p>
+                            <p>
+                                <strong>Business Activity:</strong>
+                                <span t-field="o.company_id.business_des"/>
+                            </p>
+                        </div>
+                    </t> -->
                     <p style="page-break-after:always"></p>
                 </div>
             </t>
@@ -391,7 +404,9 @@
                         <!-- <span ><strong> <t t-if="o.type == 'out_invoice'"> Tax Invoice </t><t t-if="o.type == 'out_refund'"> CREDIT NOTE </t></strong></span> -->
                         <span>
                             <strong>
-                                <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">Proforma Invoice</t>
+                                <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">Proforma
+                                    Invoice
+                                </t>
                                 <t t-if="o.journal_id.name == 'Debit Note'">DEBIT NOTE</t>
                                 <t t-if="o.move_type == 'out_refund'">CREDIT NOTE</t>
                             </strong>
@@ -445,7 +460,9 @@
                                         SST ID:
                                         <span t-field="o.partner_id.sst_registration_number"/>
                                         <br/>
-                                        Co.Reg.No:
+                                        Company.Reg.No:
+                                        <span t-field="o.partner_id.l10n_my_identification_number"/>
+                                        <br/>
                                     </t>
                                     <div id="myinvois_qrcode" class="d-flex mb-3 avoid-page-break-inside"
                                          t-if="o.l10n_my_edi_external_uuid">
@@ -499,8 +516,9 @@
 
                                 <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">
                                     <strong>Invoice No:</strong>
-                                    <span style="padding-left:55px;">PM/INV/<t t-esc="str(o.id)"/>
-                                        </span>
+                                    <span style="padding-left:55px;">PM/INV/
+                                        <t t-esc="str(o.id)"/>
+                                    </span>
                                 </t>
                                 <t t-if="o.journal_id.name == 'Debit Note'">
                                     <strong>DN No:</strong>
@@ -680,7 +698,18 @@
                             </td>
                         </tr>
                     </table>
-
+                    <!-- <t t-if="o.company_id.country_id.code != 'SG'">
+                        <div style="margin-top:15px; font-family: Calibri; font-size:12px; color:black;">
+                            <p>
+                                <strong>MSIC Code:</strong>
+                                <span t-field="o.company_id.misc_code"/>
+                            </p>
+                            <p>
+                                <strong>Business Activity:</strong>
+                                <span t-field="o.company_id.business_des"/>
+                            </p>
+                        </div>
+                    </t> -->
                     <p style="page-break-after:always"></p>
                 </div>
             </t>

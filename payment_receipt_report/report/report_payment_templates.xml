@@ -5,11 +5,16 @@
             <t t-set="o" t-value="o.with_context(lang=lang)"/>
             <t t-set="values" t-value="o._get_payment_receipt_report_values()"/>
             <div class="page">
-                <h3><strong><span t-field="o.payment_receipt_title">Payment Receipt</span>: <span t-field="o.name">INV0001</span></strong></h3>
+                <h3>
+                    <strong><span t-field="o.payment_receipt_title">Payment Receipt</span>:
+                        <span t-field="o.name">INV0001</span>
+                    </strong>
+                </h3>
                 <div class="mb-4 mt-3">
                     <div name="date" class="row">
                         <div class="col-6" t-if="o.date">
-                            Payment Date: <span t-field="o.date">2023-01-01</span>
+                            Payment Date:
+                            <span t-field="o.date">2023-01-01</span>
                         </div>
                     </div>
                     <div class="oe_structure"></div>
@@ -20,22 +25,28 @@
                             </t>
                             <t t-else="o.partner_type == 'supplier'">
                                 Vendor:
-                            </t><span t-field="o.partner_id" data-oe-demo="Marc Demo"/>
+                            </t>
+                            <span t-field="o.partner_id" data-oe-demo="Marc Demo"/>
                         </div>
                         <div name="payment_method"
                              t-if="values['display_payment_method'] and o.payment_method_id"
                              class="col-6">
-                            Payment Method: <span t-field="o.payment_method_id.name">Credit card</span>
+                            Payment Method:
+                            <span t-field="o.payment_method_id.name">Credit card</span>
                         </div>
                     </div>
                     <div class="oe_structure"></div>
                     <div class="row">
                         <div class="col-6" t-if="o.amount">
-                            Payment Amount: <span t-field="o.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}">50 USD</span>
-                         </div>
+                            Payment Amount:
+                            <span t-field="o.amount"
+                                  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}">50 USD
+                            </span>
+                        </div>
                         <div class="col-6" t-if="o.memo">
-                            Memo: <span t-field="o.memo">Sample Memo</span>
-                         </div>
+                            Memo:
+                            <span t-field="o.memo">Sample Memo</span>
+                        </div>
                     </div>
                 </div>
                 <div class="oe_structure"></div>
@@ -46,17 +57,32 @@
                     <t t-set="invoices" t-value="o.reconciled_invoice_ids or o.reconciled_bill_ids"/>
                     <!-- Check if invoices include different currencies -->
                     <t t-foreach="invoices" t-as="inv">
-                        <t t-if="any(inv.currency_id != par[2].currency_id for par in inv._get_reconciled_invoices_partials()[0])" t-set="otherCurrency" t-value="True"/>
+                        <t t-if="any(inv.currency_id != par[2].currency_id for par in inv._get_reconciled_invoices_partials()[0])"
+                           t-set="otherCurrency" t-value="True"/>
                     </t>
                     <thead>
                         <tr style="background-color: #F8F8F8; border: 1px solid black;border-bottom:2px solid #7B8186;">
-                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;"><span>INVOICE DATE</span></th>
-                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;"><span>INVOICE NUMBER</span></th>
-                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;"><span>REFERENCE</span></th>
-                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;"><span>ORIGINAL AMOUNT</span></th>
-                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;"><span>CREDIT NOTE/REFUND</span></th>
-                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;"><span>AMOUNT</span></th>
-                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;"><span>BALANCE</span></th>
+                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;">
+                                <span>INVOICE DATE</span>
+                            </th>
+                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;">
+                                <span>INVOICE NUMBER</span>
+                            </th>
+                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;">
+                                <span>REFERENCE</span>
+                            </th>
+                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;">
+                                <span>ORIGINAL AMOUNT</span>
+                            </th>
+                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;">
+                                <span>CREDIT NOTE/REFUND</span>
+                            </th>
+                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;">
+                                <span>AMOUNT</span>
+                            </th>
+                            <th style="text-align: center; font-weight: bold; padding: 8px; border: 1px solid black;">
+                                <span>BALANCE</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,13 +102,20 @@
                             <!-- MOVE -->
                             <t t-if="inv.move_type != 'entry'">
                                 <tr style="border: 1px solid black;">
-                                    <td style="padding: 8px; border: 1px solid black;"><span t-field="inv.invoice_date">2023-01-01</span></td>
-                                    <td style="padding: 8px; border: 1px solid black;"><span t-field="inv.name">INV001</span></td>
-                                    <td style="padding: 8px; border: 1px solid black;"><span t-field="inv.ref" data-oe-demo="Sample Ref"/></td>
+                                    <td style="padding: 8px; border: 1px solid black;">
+                                        <span t-field="inv.invoice_date">2023-01-01</span>
+                                    </td>
+                                    <td style="padding: 8px; border: 1px solid black;">
+                                        <span t-field="inv.name">INV001</span>
+                                    </td>
+                                    <td style="padding: 8px; border: 1px solid black;">
+                                        <span t-field="inv.ref" data-oe-demo="Sample Ref"/>
+                                    </td>
                                     <!--Original Amount-->
                                     <td style="padding: 8px; text-align: right; border: 1px solid black;">
                                         <span t-field="inv.amount_total"/>
-                                        <span t-set="i" t-value="i+inv.amount_total"/><span>
+                                        <span t-set="i" t-value="i+inv.amount_total"/>
+                                        <span>
                                         </span>
                                     </td>
                                     <!--Credit note-->
@@ -94,8 +127,10 @@
 
                                     <!--Amount-->
                                     <td style="padding: 8px; text-align: right; border: 1px solid black;">
-                                        <span t-esc="(inv.amount_total-inv.amount_residual) - credit_refund" t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
-                                        <span t-set="j" t-value="j+(inv.amount_total-inv.amount_residual) - credit_refund"/>
+                                        <span t-esc="(inv.amount_total-inv.amount_residual) - credit_refund"
+                                              t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
+                                        <span t-set="j"
+                                              t-value="j+(inv.amount_total-inv.amount_residual) - credit_refund"/>
                                     </td>
                                     <!--Balance-->
                                     <td style="padding: 8px; text-align: right; border: 1px solid black;">
@@ -110,58 +145,81 @@
                         <td colspan="3" style="text-align: right; padding: 8px; border: 1px solid black;">
                             <strong>Total:</strong>
                         </td>
-                        <td t-if="o.currency_id.position == 'after'" style="text-align: right; padding: 8px; border: 1px solid black;">
+                        <td t-if="o.currency_id.position == 'after'"
+                            style="text-align: right; padding: 8px; border: 1px solid black;">
                             <strong>
                                 <span t-esc="i" t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                             <span t-esc="o.currency_id.symbol"/>
                         </td>
-                        <td t-if="o.currency_id.position == 'after'" style="text-align: right; padding: 8px; border: 1px solid black;">
+                        <td t-if="o.currency_id.position == 'after'"
+                            style="text-align: right; padding: 8px; border: 1px solid black;">
                             <strong>
                                 <span t-esc="r" t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                             <span t-esc="o.currency_id.symbol"/>
                         </td>
-                        <td t-if="o.currency_id.position == 'after'" style="text-align: right; padding: 8px; border: 1px solid black;">
+                        <td t-if="o.currency_id.position == 'after'"
+                            style="text-align: right; padding: 8px; border: 1px solid black;">
                             <strong>
                                 <span t-esc="j" t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                             <span t-esc="o.currency_id.symbol"/>
                         </td>
-                        <td t-if="o.currency_id.position == 'after'" style="text-align: right; padding: 8px; border: 1px solid black;">
+                        <td t-if="o.currency_id.position == 'after'"
+                            style="text-align: right; padding: 8px; border: 1px solid black;">
                             <strong>
                                 <span t-esc="k" t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                             <span t-esc="o.currency_id.symbol"/>
                         </td>
 
-                        <td t-if="o.currency_id.position == 'before'" style="text-align: right; padding: 8px; border: 1px solid black;">
+                        <td t-if="o.currency_id.position == 'before'"
+                            style="text-align: right; padding: 8px; border: 1px solid black;">
                             <span t-esc="o.currency_id.symbol"/>
                             <strong>
                                 <span t-esc="i" t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                         </td>
-                        <td t-if="o.currency_id.position == 'before'" style="text-align: right; padding: 8px; border: 1px solid black;">
+                        <td t-if="o.currency_id.position == 'before'"
+                            style="text-align: right; padding: 8px; border: 1px solid black;">
                             <span t-esc="o.currency_id.symbol"/>
                             <strong>
                                 <span t-esc="r" t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                         </td>
-                        <td t-if="o.currency_id.position == 'before'" style="text-align: right; padding: 8px; border: 1px solid black;">
+                        <td t-if="o.currency_id.position == 'before'"
+                            style="text-align: right; padding: 8px; border: 1px solid black;">
                             <span t-esc="o.currency_id.symbol"/>
                             <strong>
                                 <span t-esc="j" t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                         </td>
-                        <td t-if="o.currency_id.position == 'before'" style="text-align: right; padding: 8px; border: 1px solid black;">
+                        <td t-if="o.currency_id.position == 'before'"
+                            style="text-align: right; padding: 8px; border: 1px solid black;">
                             <span t-esc="o.currency_id.symbol"/>
                             <strong>
                                 <span t-esc="k" t-options='{"widget": "float", "precision": 2}'/>
                             </strong>
                         </td>
-
                     </tr>
                 </table>
+                <t t-if="o.company_id.country_id.code != 'SG'">
+                    <t t-if="o.partner_type != 'customer' and o.partner_id.comment">
+                        <div class="comment-black">
+                            <span t-field="o.partner_id.comment"
+                                  t-field-options="{'widget': 'text'}"/>
+                        </div>
+                    </t>
+                </t>
+
+                <!-- Put this <style> block inside the same report template -->
+                <style type="text/css">
+                    .comment-black, .comment-black * {
+                    color: #000000 !important;
+                    font-family: Calibri;
+                    }
+                </style>
             </div>
             <div class="oe_structure"></div>
         </t>
