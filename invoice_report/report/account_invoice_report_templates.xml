@@ -516,8 +516,7 @@
 
                                 <t t-if="o.move_type == 'out_invoice' and o.journal_id.name != 'Debit Note'">
                                     <strong>Invoice No:</strong>
-                                    <span style="padding-left:55px;">PM/INV/
-                                        <t t-esc="str(o.id)"/>
+                                    <span style="padding-left:55px;">PM/INV/<t t-esc="str(o.id)"/>
                                     </span>
                                 </t>
                                 <t t-if="o.journal_id.name == 'Debit Note'">
