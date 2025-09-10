@@ -115,7 +115,7 @@ class ApprovalProductLine(models.Model):
     # manufacturer = fields.Many2one('res.partner', string='Manufacturer', related='product_id.manufacturer_id',
     #                                store=True)
     currency_id = fields.Many2one('res.currency', string='Currency', related='product_id.currency_id', store=True)
-    unit_price = fields.Float(string='Unit Price', related='product_id.list_price', store=True)
+    unit_price = fields.Float(string='Unit Price', related='product_id.standard_price', store=True)
     subtotal = fields.Monetary(string='Sub Total', compute='_compute_subtotal', currency_field='currency_id',
                                store=True)
 
