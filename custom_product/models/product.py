@@ -182,3 +182,19 @@ class ApprovalProductLine(models.Model):
             product = self.env["product.product"].browse(vals["product_id"])
             vals["description"] = product.product_tmpl_id.x_studio_field_mHzKJ or ""
         return super().write(vals)
+
+
+class AccountEdiCommon(models.AbstractModel):
+    _inherit = "account.edi.common"
+
+    def _get_uom_unece_code(self, uom):
+        """
+        list of codes: https://docs.peppol.eu/poacc/billing/3.0/codelist/UNECERec20/
+        or https://unece.org/fileadmin/DAM/cefact/recommendations/bkup_htm/add2c.htm (sorted by letter)
+        """
+        # As per client request, we have modified Einvoice uom to H21 code for 'one'
+        # xmlid = uom.get_external_id()
+        # if xmlid and uom.id in xmlid:
+        #     return UOM_TO_UNECE_CODE.get(xmlid[uom.id], 'C62')
+        # return 'C62'
+        return 'H21'
