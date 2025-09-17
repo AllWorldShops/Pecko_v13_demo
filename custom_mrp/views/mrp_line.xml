@@ -56,6 +56,11 @@
             <xpath expr="//button[@name='action_cancel']" position="attributes">
                 <attribute name="groups">custom_mrp.group_mrp_show_cancel_button</attribute>
             </xpath>
+
+            <xpath expr="//button[@name='action_update_bom']" position="attributes">
+                <attribute name="groups">mrp.group_mrp_manager</attribute>
+            </xpath>
+
             <!--	mo line item views	-->
 
             <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='product_id']"
