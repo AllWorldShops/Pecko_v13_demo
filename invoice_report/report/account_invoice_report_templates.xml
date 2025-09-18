@@ -108,7 +108,7 @@
                                         <span t-field="o.partner_id.l10n_my_identification_number"/>
                                         <br/>
                                     </t>
-                                    <div id="myinvois_qrcode" class="d-flex mb-3 avoid-page-break-inside"
+                                    <!-- <div id="myinvois_qrcode" class="d-flex mb-3 avoid-page-break-inside"
                                          t-if="o.l10n_my_edi_external_uuid">
                                         <div class="qrcode me-3" id="myinvois_qrcode_image">
                                             <t t-set="qr_code_url" t-value="o._generate_myinvois_qr_code()"/>
@@ -125,7 +125,7 @@
                                             <p>Scan this QR Code to<br/>access your invoice
                                             </p>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <!--                                    <span t-field="o.partner_id.SST_registration_number"/>-->
                                 </td>
                             </tr>
