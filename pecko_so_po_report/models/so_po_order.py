@@ -174,6 +174,12 @@ class AccountMove(models.Model):
         net_total = round(sum([(line.debit - (line.move_id.amount_tax / line.move_id.exchange_rate)) for line in self.line_ids if line.debit > 0]),2)
         return net_total
 
+    @api.onchange('l10n_my_edi_display_tax_exemption_reason')
+    def onchange_l10n_my_edi_tax_exemption_reason(self):
+        if self.l10n_my_edi_display_tax_exemption_reason and self.l10n_my_edi_display_tax_exemption_reason == True:
+            self.l10n_my_edi_exemption_reason = 'Licensed Manufacturing Warehouse (LMW)'
+
+
 class AccountMoveLine(models.Model):   
     _inherit = "account.move.line"
      
