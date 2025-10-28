@@ -28,6 +28,10 @@ class AcmoveInherit(models.Model):
         date = self.date or fields.Date.context_today(self)
         id_list = []
         if self.receipts_id:
+
+            self.l10n_my_edi_custom_form_reference = self.receipts_id.custom_form_reference_number
+            self.custom_form_date = self.receipts_id.custom_form_date
+            
             receipt_lines = []
             for line in self.receipts_id.move_ids_without_package:
                 product_price_unit = line.purchase_line_id.price_unit

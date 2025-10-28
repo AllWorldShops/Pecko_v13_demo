@@ -58,7 +58,7 @@
                 <!--                <field name="x_studio_field_mHzKJ"/>-->
                 <field name="manufacturer_id" string="Manufacturer"/>
                 <field name="customer_part_number"/>
-                <field name="storage_location_id" string="storage_location"/>
+                <field name="storage_location_id" string="Storage Location"/>
             </xpath>
 
         </field>
@@ -320,5 +320,39 @@
         </field>
     </record>
 
+    <record id="product_pricelist_view_fieldaddition" model="ir.ui.view">
+        <field name="name">Product pricelist inherited</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='item_ids']/list/field[@name='name']" position="after">
+                <field name="customer_part_number"/>
+            </xpath>
+            <!-- <xpath expr="//field[@name='item_ids']/form/field[@name='product_tmpl_id']" position="after">
+                <field name="customer_part_number"/>
+            </xpath> -->
+
+
+        </field>
+    </record>
+
+    <record id="product_pricelist_item_form_view_fieldaddition" model="ir.ui.view">
+        <field name="name">product.pricelist.item.form.fieldaddition</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='product_tmpl_id']" position="after">
+                <field name="customer_part_number"/>
+                
+            </xpath>
+            <!-- <xpath expr="//field[@name='item_ids']/form/field[@name='product_tmpl_id']" position="after">
+                <field name="customer_part_number"/>
+            </xpath> -->
+
+
+        </field>
+    </record>
 
 </odoo>

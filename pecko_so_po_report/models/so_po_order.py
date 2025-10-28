@@ -192,7 +192,8 @@ class AccountMoveLine(models.Model):
                 pro.customer_part_no =''
             if pro.product_id.product_tmpl_id.manufacturer_id:
                 pro.manufacturer_id = pro.product_id.product_tmpl_id.manufacturer_id.id
-
+            if pro.product_id.name:
+                pro.name = pro.product_id.x_studio_field_mHzKJ
             
 #     @api.model
 #     def create(self, vals):

@@ -115,7 +115,7 @@ class ApprovalProductLine(models.Model):
     # manufacturer = fields.Many2one('res.partner', string='Manufacturer', related='product_id.manufacturer_id',
     #                                store=True)
     currency_id = fields.Many2one('res.currency', string='Currency', related='product_id.currency_id', store=True)
-    unit_price = fields.Float(string='Unit Price', related='product_id.list_price', store=True)
+    unit_price = fields.Float(string='Unit Price', related='product_id.standard_price', store=True)
     subtotal = fields.Monetary(string='Sub Total', compute='_compute_subtotal', currency_field='currency_id',
                                store=True)
 
@@ -182,3 +182,26 @@ class ApprovalProductLine(models.Model):
             product = self.env["product.product"].browse(vals["product_id"])
             vals["description"] = product.product_tmpl_id.x_studio_field_mHzKJ or ""
         return super().write(vals)
+
+
+class AccountEdiCommon(models.AbstractModel):
+    _inherit = "account.edi.common"
+
+    def _get_uom_unece_code(self, uom):
+        """
+        list of codes: https://docs.peppol.eu/poacc/billing/3.0/codelist/UNECERec20/
+        or https://unece.org/fileadmin/DAM/cefact/recommendations/bkup_htm/add2c.htm (sorted by letter)
+        """
+        # As per client request, we have modified Einvoice uom to H21 code for 'one'
+        # xmlid = uom.get_external_id()
+        # if xmlid and uom.id in xmlid:
+        #     return UOM_TO_UNECE_CODE.get(xmlid[uom.id], 'C62')
+        # return 'C62'
+        return 'H21'
+
+class PricelistItem(models.Model):
+    _inherit = "product.pricelist.item"
+
+    customer_part_number = fields.Char(string='Customer Part Number', related='product_tmpl_id.x_studio_field_qr3ai')
+
+

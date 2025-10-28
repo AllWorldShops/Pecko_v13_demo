@@ -25,12 +25,18 @@ class StockPicking(models.Model):
                         picking.invoice_id.l10n_my_edi_custom_form_reference = picking.custom_form_reference_number
                     if picking.custom_form_date:
                         picking.invoice_id.custom_form_date = picking.custom_form_date
+            if picking.picking_type_id.code == 'incoming':
+                invoices = self.env['account.move'].search([('receipts_id', '=', picking.id)])
+                for invoice in invoices:
+                    invoice_id.l10n_my_edi_custom_form_reference = picking.custom_form_reference_number
+                    invoice_id.custom_form_date = picking.custom_form_date
+
 
     def write(self, vals):
         res = super().write(vals)
         if 'custom_form_reference_number' in vals or 'custom_form_date' in vals:
             for picking in self:
-                invoices = self.env['account.move'].search([('picking_id', '=', picking.id)])
+                invoices = self.env['account.move'].search(['|',('picking_id', '=', picking.id),('receipts_id','=',picking.id)])
                 for invoice in invoices:
                     if 'custom_form_reference_number' in vals:
                         invoice.l10n_my_edi_custom_form_reference = vals['custom_form_reference_number']
