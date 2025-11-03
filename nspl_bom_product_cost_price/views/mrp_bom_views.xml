@@ -8,6 +8,7 @@
             <xpath expr="//field[@name='company_id']" position="after">
                 <field name="product_cost_price" readonly="1"/>
                 <field name="total_bom_cost" readonly="1"/>
+                <field name="total_cost_price" readonly="1"/>
             </xpath>
         </field>
     </record>
