@@ -121,6 +121,41 @@ class WizardWizards(models.TransientModel):
                    and int(invoice_date.strftime('%Y')) == record.get('year_name'):
                     record['months_turnover'] += turnover_amount or 0.00
 
+        # ====== CREDIT NOTE (OUT_REFUND) SECTION ======
+        credit_notes = self.env['account.move'].search([
+            ('partner_id', '=', partnerid),
+            ('invoice_date', '<=', str(end_date)),
+            ('invoice_date', '>=', str(start_date)),
+            ('move_type', '=', 'out_refund'),
+            ('state', '!=', 'cancel')
+        ])
+        for credit in credit_notes:
+            credit_date = credit.invoice_date
+            credit_currency = credit.currency_id
+            company_currency = credit.company_id.currency_id
+            company = credit.company_id
+            credit_amount = credit.amount_untaxed
+
+            # Currency conversion based on res.currency.rate
+            if credit_currency and credit_currency != company_currency:
+                rate_date = credit_date
+                rate = self.env['res.currency.rate'].search([
+                    ('currency_id', '=', credit_currency.id),
+                    ('name', '<=', rate_date)
+                ], order='name desc', limit=1)
+                if rate:
+                    credit_amount = credit.amount_untaxed / rate.rate
+                else:
+                    credit_amount = credit_currency._convert(
+                        credit.amount_untaxed, company_currency, company, rate_date
+                    )
+
+            # Subtract refund amount from that month's turnover
+            for record in res:
+                if int(credit_date.strftime('%m')) == record.get('months_name') \
+                   and int(credit_date.strftime('%Y')) == record.get('year_name'):
+                    record['months_turnover'] -= credit_amount or 0.00
+
         return res
     
     def _get_data_subtotal_amount(self, data):
