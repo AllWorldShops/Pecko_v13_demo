@@ -41,3 +41,8 @@ class UoM(models.Model):
     _inherit = 'uom.uom'
 
     x_studio_field_CBfr8 = fields.Char('Description')
+
+class PricelistItem(models.Model):
+    _inherit = "product.pricelist.item"
+
+    customer_part_number = fields.Char(string='Customer Part Number', related='product_tmpl_id.x_studio_field_qr3ai')

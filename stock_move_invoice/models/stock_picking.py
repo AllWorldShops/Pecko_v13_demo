@@ -164,7 +164,7 @@ class StockPicking(models.Model):
                                 vals = move.sale_line_id._prepare_invoice_line()
                                 vals['position_no'] = move.position_no
                                 if move.sale_line_id.qty_to_invoice != move_line.quantity:
-                                    vals['quantity'] = abs(move_line.quantity) if move_line.product_id.uom_id.id == move_line.product_id.uom_po_id.id else abs(move_line.qty_done / move.sale_line_id.product_uom.factor_inv)
+                                    vals['quantity'] = abs(move_line.quantity) if move_line.product_id.uom_id.id == move_line.product_id.uom_po_id.id else abs(move_line.quantity / move.sale_line_id.product_uom.factor_inv)
                                 invoice_line_list.append((0, 0, vals))
                 else:
                     for move in picking_id.move_ids_without_package:

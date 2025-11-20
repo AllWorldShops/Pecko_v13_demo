@@ -38,62 +38,124 @@ class WizardWizards(models.TransientModel):
     
     def _get_sale_analysis_summary(self, data, start_date, end_date, partnerid):
         res = []
-        amount_sub_total = 0
         start_date = fields.Date.from_string(start_date)
-        month_date = date(start_date.year, int(start_date.month), 1)
         end_date = fields.Date.from_string(end_date)
-        diffrence = relativedelta(end_date,start_date).years * 12 + \
-                    ((relativedelta(end_date,start_date).months) + 1) 
-        for x in range(0, diffrence):
-            res.append({'months_amount': 0.00,
-                        'months_turnover': 0.00,
-                        'months_name': int(month_date.strftime('%m')),
-                        'year_name': int(month_date.strftime('%Y'))})
+        month_date = date(start_date.year, int(start_date.month), 1)
+        difference = relativedelta(end_date, start_date).years * 12 + (relativedelta(end_date, start_date).months + 1)
+
+        # Initialize monthly structure
+        for _ in range(difference):
+            res.append({
+                'months_amount': 0.00,
+                'months_turnover': 0.00,
+                'months_name': int(month_date.strftime('%m')),
+                'year_name': int(month_date.strftime('%Y')),
+            })
             month_date += relativedelta(months=+1)
-        sale_order_ids = self.env['sale.order'].search([
-            ('partner_id', '=', partnerid), 
+
+        # ====== SALE ORDER AMOUNT SECTION ======
+        sale_orders = self.env['sale.order'].search([
+            ('partner_id', '=', partnerid),
             ('date_order', '<=', str(end_date)),
             ('date_order', '>=', str(start_date)),
             ('state', '!=', 'cancel')
         ])
-        for order in sale_order_ids:
-            # invoice_ids = order.invoice_ids.filtered(lambda invoice:invoice.state != 'cancel')
-            # for invoice in invoice_ids:
-            date_from = fields.Datetime.from_string(order.date_order)
-            date_from = fields.Datetime.context_timestamp(order, date_from).date()
-            date_to = date_from + relativedelta(months=+1, day=1, days=-1)
-            date_diffrence = relativedelta(date_to, date_from)
+
+        for order in sale_orders:
+            date_from = fields.Datetime.context_timestamp(order, order.date_order).date()
+            order_currency = order.currency_id
+            company_currency = order.company_id.currency_id
+            company = order.company_id
+            turnover_amount = order.amount_untaxed
+
+            # Currency conversion based on res.currency.rate
+            if order_currency and order_currency != company_currency:
+                rate_date = date_from
+                rate = self.env['res.currency.rate'].search([
+                    ('currency_id', '=', order_currency.id),
+                    ('name', '<=', rate_date)
+                ], order='name desc', limit=1)
+                if rate:
+                    turnover_amount = order.amount_untaxed / rate.rate
+                else:
+                    turnover_amount = order_currency._convert(
+                        order.amount_untaxed, company_currency, company, rate_date
+                    )
+
             for record in res:
                 if int(date_from.strftime('%m')) == record.get('months_name') \
-                and int(date_from.strftime('%Y')) == record.get('year_name'):
-                    record['months_amount'] += order.amount_untaxed or 0.00
-                    # record['months_turnover'] += invoice.amount_untaxed
-                    # record['months_name'] = int(date_from.strftime('%m') or '')
-        invoice_ids = self.env['account.move'].search([
+                   and int(date_from.strftime('%Y')) == record.get('year_name'):
+                    record['months_amount'] += turnover_amount or 0.00
+
+        # ====== INVOICE TURNOVER SECTION ======
+        invoices = self.env['account.move'].search([
             ('partner_id', '=', partnerid),
             ('invoice_date', '<=', str(end_date)),
             ('invoice_date', '>=', str(start_date)),
             ('move_type', '=', 'out_invoice'),
             ('state', '!=', 'cancel')
-             ])
-        for invoice in invoice_ids:
-            date_from = fields.Datetime.from_string(invoice.invoice_date)
-            date_from = fields.Datetime.context_timestamp(invoice, date_from)
-            date_to = date_from + relativedelta(months=+1, day=1, days=-1)
-            turnover_amount = invoice.amount_untaxed
+        ])
+        for invoice in invoices:
+            invoice_date = invoice.invoice_date
+            invoice_currency = invoice.currency_id
+            company_currency = invoice.company_id.currency_id
             company = invoice.company_id
-            currency = invoice.currency_id
-            company_currency = company.currency_id
-            invoice_date = invoice.date or fields.Date.context_today(self)
-            if currency and currency != company_currency:
-                if company_currency.name == 'SGD':
-                    turnover_amount = invoice.amount_untaxed * invoice.exchange_rate
-                if company_currency.name == 'MYR':
-                    turnover_amount = invoice.amount_untaxed / invoice.exchange_rate
+            turnover_amount = invoice.amount_untaxed
+
+            # Currency conversion based on res.currency.rate
+            if invoice_currency and invoice_currency != company_currency:
+                rate_date = invoice_date
+                rate = self.env['res.currency.rate'].search([
+                    ('currency_id', '=', invoice_currency.id),
+                    ('name', '<=', rate_date)
+                ], order='name desc', limit=1)
+                if rate:
+                    turnover_amount = invoice.amount_untaxed / rate.rate
+                else:
+                    turnover_amount = invoice_currency._convert(
+                        invoice.amount_untaxed, company_currency, company, rate_date
+                    )
+
             for record in res:
                 if int(invoice_date.strftime('%m')) == record.get('months_name') \
-            and int(invoice_date.strftime('%Y')) == record.get('year_name'):
-                    record['months_turnover'] += turnover_amount
+                   and int(invoice_date.strftime('%Y')) == record.get('year_name'):
+                    record['months_turnover'] += turnover_amount or 0.00
+
+        # ====== CREDIT NOTE (OUT_REFUND) SECTION ======
+        credit_notes = self.env['account.move'].search([
+            ('partner_id', '=', partnerid),
+            ('invoice_date', '<=', str(end_date)),
+            ('invoice_date', '>=', str(start_date)),
+            ('move_type', '=', 'out_refund'),
+            ('state', '!=', 'cancel')
+        ])
+        for credit in credit_notes:
+            credit_date = credit.invoice_date
+            credit_currency = credit.currency_id
+            company_currency = credit.company_id.currency_id
+            company = credit.company_id
+            credit_amount = credit.amount_untaxed
+
+            # Currency conversion based on res.currency.rate
+            if credit_currency and credit_currency != company_currency:
+                rate_date = credit_date
+                rate = self.env['res.currency.rate'].search([
+                    ('currency_id', '=', credit_currency.id),
+                    ('name', '<=', rate_date)
+                ], order='name desc', limit=1)
+                if rate:
+                    credit_amount = credit.amount_untaxed / rate.rate
+                else:
+                    credit_amount = credit_currency._convert(
+                        credit.amount_untaxed, company_currency, company, rate_date
+                    )
+
+            # Subtract refund amount from that month's turnover
+            for record in res:
+                if int(credit_date.strftime('%m')) == record.get('months_name') \
+                   and int(credit_date.strftime('%Y')) == record.get('year_name'):
+                    record['months_turnover'] -= credit_amount or 0.00
+
         return res
     
     def _get_data_subtotal_amount(self, data):
@@ -181,6 +243,10 @@ class WizardWizards(models.TransientModel):
             sheet.write(t, 0, partners.name, format2)
             sheet.write(t, 1, "T" , format1)
             sheet.col(0).width = int(40*260)
+            sheet.col(1).width = int(40*180)
+            sheet.col(2).width = int(40*100)
+            sheet.col(3).width = int(40*100)
+            sheet.col(4).width = int(40*100)
             for obj in self.get_data_from_report(data):
                 for emp in obj['data']:
                     col = 2

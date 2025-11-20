@@ -21,6 +21,55 @@ class MrpBom(models.Model):
                 total += line.product_id.standard_price * line.product_qty
             bom.total_bom_cost = total
 
+    total_cost_price = fields.Float(
+        string="Total Cost Price",
+        compute='_compute_total_cost_price',
+        store=True,
+        readonly=False,
+        help="Total cost of all BOM components based on their standard price"
+    )
+    bom_line_count = fields.Integer(
+        string="Components Count",
+        compute="_compute_bom_line_count",
+        store=True,
+        help="Count of BoM lines where quantity is greater than zero."
+    )
+
+    @api.depends('bom_line_ids.product_id', 'bom_line_ids.product_qty', 'bom_line_ids.product_id.standard_price', 'company_id')
+    def _compute_total_cost_price(self):
+        """Compute total cost of BOM components (multi-company safe)."""
+        for bom in self:
+            total = 0.0
+            company = bom.company_id or self.env.company
+            for line in bom.bom_line_ids:
+                product = line.product_id.with_company(company)
+                total += (product.standard_price or 0.0) * line.product_qty
+            bom.total_cost_price = total
+
+    @api.depends("bom_line_ids.product_qty")
+    def _compute_bom_line_count(self):
+        for bom in self:
+            # Count only lines with product_qty > 0
+            bom.bom_line_count = len(
+                [line for line in bom.bom_line_ids if line.product_qty > 0]
+            )
+
+    def action_recompute_total_cost_price(self):
+        """Recalculate total cost for existing BOM records."""
+        all_boms = self.search([])
+        if not all_boms:
+            raise UserError(_("No BOM records found to recompute."))
+        
+        for bom in all_boms:
+            bom._compute_total_cost_price()
+
+        return {
+            'effect': {
+                'fadeout': 'slow',
+                'message': _("BOM total cost price recomputed successfully for all records!"),
+                'type': 'rainbow_man',
+            }
+        }
 
 class MrpBomLine(models.Model):
     _inherit = "mrp.bom.line"

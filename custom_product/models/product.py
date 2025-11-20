@@ -199,9 +199,6 @@ class AccountEdiCommon(models.AbstractModel):
         # return 'C62'
         return 'H21'
 
-class PricelistItem(models.Model):
-    _inherit = "product.pricelist.item"
 
-    customer_part_number = fields.Char(string='Customer Part Number', related='product_tmpl_id.x_studio_field_qr3ai')
 
 
