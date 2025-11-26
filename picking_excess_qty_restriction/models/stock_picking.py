@@ -9,6 +9,7 @@ class ResConfigSettings(models.TransientModel):
 
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
+    
     def button_validate(self):
         delivery_qty = self.env['ir.config_parameter'].sudo().get_param('delivery_quantity.excess_quantity_allow')
         if delivery_qty:
