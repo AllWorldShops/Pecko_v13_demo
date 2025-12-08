@@ -4,6 +4,8 @@ import json
 import logging
 _logger = logging.getLogger(__name__)
 
+import ast
+
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
@@ -15,6 +17,77 @@ class StockPicking(models.Model):
     invoice_status = fields.Selection(related='sale_id.invoice_status', string='Invoice Status', store=True, readonly=True)
     custom_form_reference_number = fields.Char(string='Customs Form Reference Number')
     custom_form_date = fields.Datetime(string='Customs Form Date')
+
+    def action_update_dates(self):
+        # Read move name from system parameters
+        param_name = self.env['ir.config_parameter'].sudo().get_param('update_move_name')
+        print('param_name',param_name)
+
+        actual_list = ast.literal_eval(param_name)
+
+        if not param_name:
+            raise UserError("System parameter 'update_move_name' is not set.")
+        # print('------------------',list(str(param_name)))
+        # stop
+        moves = self.env["account.move"].search([("name", "in", actual_list)])
+        print('moves',moves)
+        
+        for move in moves:
+            payment = self.env["account.payment"].search([("name", "=", move.name)], limit=1)
+            print('payment',payment)
+            if not payment:
+                continue
+
+            # Update move date
+            query = """ UPDATE account_move SET date = %s WHERE id = %s """
+            self.env.cr.execute(query, (payment.date, move.id))
+
+            # move.date = payment.date
+
+            # Update move lines
+            for line in move.line_ids:
+                move_li_query = """ UPDATE account_move_line SET date = %s WHERE id = %s """
+                self.env.cr.execute(move_li_query, (payment.date, line.id))
+                # line.date = payment.date
+
+                # Fetch partial reconciles
+                partials = self.env["account.partial.reconcile"].search([("credit_move_id", "=", line.id)])
+                print('partials',partials)
+                for partial in partials:
+                    if partial.debit_move_id:
+                        # Update debit line
+                        move_query = """ UPDATE account_move_line SET date = %s WHERE id = %s """
+                        self.env.cr.execute(move_query, (payment.date, partial.debit_move_id.id))
+                        # partial.debit_move_id.date = payment.date
+
+                        # Update parent move
+                        if partial.debit_move_id.move_id:
+                            move_line_query = """ UPDATE account_move SET date = %s WHERE id = %s """
+                            self.env.cr.execute(move_line_query, (payment.date, partial.debit_move_id.move_id.id))
+                            # partial.debit_move_id.move_id.date = payment.date
+                if partials:
+                    print('partial.full_reconcile_id',partials[0].full_reconcile_id)
+                    if partials[0].full_reconcile_id:
+                        full_move_query = """ UPDATE account_move_line SET date = %s WHERE full_reconcile_id = %s """
+                        self.env.cr.execute(full_move_query, (payment.date, partials[0].full_reconcile_id.id))
+
+                        full_partials = self.env["account.move.line"].search([("full_reconcile_id", "=", partials[0].full_reconcile_id.id)])
+                        print('full_partials',full_partials)
+                        for rec in full_partials:
+                            fulls_move_query = """ UPDATE account_move_line SET date = %s WHERE move_id = %s """
+                            self.env.cr.execute(fulls_move_query, (payment.date, rec.move_id.id))
+                            fullss_move_query = """ UPDATE account_move SET date = %s WHERE id = %s """
+                            self.env.cr.execute(fullss_move_query, (payment.date, rec.move_id.id))
+
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': "Success",
+                'message': "Move Dates Updated Successfully",
+                'sticky': False,
+            }
+        }
 
     @api.onchange('custom_form_reference_number', 'custom_form_date')
     def _onchange_custom_form_fields(self):
