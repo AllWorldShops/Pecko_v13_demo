@@ -28,8 +28,8 @@
                             string="Create Invoice" type="object" invisible="1"/>
                     <button name="create_customer_credit" class="oe_highlight"
                             string="Create Credit Note" type="object" invisible="1"/>
-                    <button name="action_update_dates" class="oe_highlight"
-                            string="Update Move" type="object" groups="base.group_user"/>
+                    <!-- <button name="action_update_dates" class="oe_highlight"
+                            string="Update Move" type="object" groups="base.group_user"/> -->
 
                 </xpath>
             </field>
