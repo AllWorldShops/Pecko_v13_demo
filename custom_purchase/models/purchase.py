@@ -276,6 +276,39 @@ class ResConfigSettings(models.TransientModel):
 
     split_so = fields.Boolean(related='company_id.split_so', readonly=False)
 
+class MailThread(models.AbstractModel):
+    _inherit = 'mail.thread' 
+    
+    # PO single email send to all Email To - PPTS Override base
+    def _notify_get_recipients_classify(self, message, recipients_data, model_description, msg_vals=None):
+        # get groups made by Odoo
+        local_msg_vals = dict(msg_vals) if msg_vals else {}
+        groups = self._notify_get_recipients_groups_fillup(
+            self._notify_get_recipients_groups(message, model_description, msg_vals=local_msg_vals),
+            model_description,
+            msg_vals=local_msg_vals
+        )
+        # -------------------------------------------
+        # COLLECT ALL RECIPIENT IDs INTO ONE GROUP
+        # -------------------------------------------
+        all_ids = []
+        for recipient in recipients_data:
+            all_ids.append(recipient['id'])
+     
+        # Now modify the FIRST group only
+        # This ensures Odoo sends ONE EMAIL
+        if groups:
+            groups[0][2]['recipients'] = all_ids
+            # empty all other groups
+            for idx in range(1, len(groups)):
+                groups[idx][2]['recipients'] = []
+        # return only 1 group with all recipients
+        return [
+            group_data
+            for _group_name, _group_func, group_data in groups
+            if group_data['recipients']
+        ]
+
 class MailMail(models.Model):
     _inherit = 'mail.mail'
 
