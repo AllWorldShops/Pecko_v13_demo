@@ -54,30 +54,33 @@ class StockPicking(models.Model):
                 partials = self.env["account.partial.reconcile"].search([("credit_move_id", "=", line.id)])
                 print('partials',partials)
                 for partial in partials:
-                    if partial.debit_move_id:
+                    if partial.exchange_move_id:
                         # Update debit line
-                        move_query = """ UPDATE account_move_line SET date = %s WHERE id = %s """
-                        self.env.cr.execute(move_query, (payment.date, partial.debit_move_id.id))
+                        move_query = """ UPDATE account_move SET date = %s WHERE id = %s and journal_id = 119 """
+                        self.env.cr.execute(move_query, (payment.date, partial.exchange_move_id.id))
+
+                        move_ss_query = """ UPDATE account_move_line SET date = %s WHERE move_id = %s and journal_id = 119 """
+                        self.env.cr.execute(move_ss_query, (payment.date, partial.exchange_move_id.id))
                         # partial.debit_move_id.date = payment.date
 
                         # Update parent move
-                        if partial.debit_move_id.move_id:
-                            move_line_query = """ UPDATE account_move SET date = %s WHERE id = %s """
-                            self.env.cr.execute(move_line_query, (payment.date, partial.debit_move_id.move_id.id))
+                        # if partial.debit_move_id.move_id:
+                        #     move_line_query = """ UPDATE account_move SET date = %s WHERE id = %s """
+                        #     self.env.cr.execute(move_line_query, (payment.date, partial.debit_move_id.move_id.id))
                             # partial.debit_move_id.move_id.date = payment.date
-                if partials:
-                    print('partial.full_reconcile_id',partials[0].full_reconcile_id)
-                    if partials[0].full_reconcile_id:
-                        full_move_query = """ UPDATE account_move_line SET date = %s WHERE full_reconcile_id = %s """
-                        self.env.cr.execute(full_move_query, (payment.date, partials[0].full_reconcile_id.id))
+                # if partials:
+                #     print('partial.full_reconcile_id',partials[0].full_reconcile_id)
+                #     if partials[0].full_reconcile_id:
+                #         full_move_query = """ UPDATE account_move_line SET date = %s WHERE full_reconcile_id = %s """
+                #         self.env.cr.execute(full_move_query, (payment.date, partials[0].full_reconcile_id.id))
 
-                        full_partials = self.env["account.move.line"].search([("full_reconcile_id", "=", partials[0].full_reconcile_id.id)])
-                        print('full_partials',full_partials)
-                        for rec in full_partials:
-                            fulls_move_query = """ UPDATE account_move_line SET date = %s WHERE move_id = %s """
-                            self.env.cr.execute(fulls_move_query, (payment.date, rec.move_id.id))
-                            fullss_move_query = """ UPDATE account_move SET date = %s WHERE id = %s """
-                            self.env.cr.execute(fullss_move_query, (payment.date, rec.move_id.id))
+                #         full_partials = self.env["account.move.line"].search([("full_reconcile_id", "=", partials[0].full_reconcile_id.id)])
+                #         print('full_partials',full_partials)
+                #         for rec in full_partials:
+                #             fulls_move_query = """ UPDATE account_move_line SET date = %s WHERE move_id = %s """
+                #             self.env.cr.execute(fulls_move_query, (payment.date, rec.move_id.id))
+                #             fullss_move_query = """ UPDATE account_move SET date = %s WHERE id = %s """
+                #             self.env.cr.execute(fullss_move_query, (payment.date, rec.move_id.id))
 
         return {
             'type': 'ir.actions.client',
