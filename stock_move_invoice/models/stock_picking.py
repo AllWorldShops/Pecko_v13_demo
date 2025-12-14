@@ -56,10 +56,10 @@ class StockPicking(models.Model):
                 for partial in partials:
                     if partial.exchange_move_id:
                         # Update debit line
-                        move_query = """ UPDATE account_move SET date = %s WHERE id = %s and journal_id = 119 """
+                        move_query = """ UPDATE account_move SET date = %s WHERE id = %s and journal_id = 165 """
                         self.env.cr.execute(move_query, (payment.date, partial.exchange_move_id.id))
 
-                        move_ss_query = """ UPDATE account_move_line SET date = %s WHERE move_id = %s and journal_id = 119 """
+                        move_ss_query = """ UPDATE account_move_line SET date = %s WHERE move_id = %s and journal_id = 165 """
                         self.env.cr.execute(move_ss_query, (payment.date, partial.exchange_move_id.id))
                         # partial.debit_move_id.date = payment.date
 
