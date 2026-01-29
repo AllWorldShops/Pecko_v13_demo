@@ -78,6 +78,10 @@
                    position="replace">
                 <field name="quantity" string="Consumed" readonly="1"/>
             </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='picked']"
+                   position="attributes">
+                <attribute name="column_invisible">parent.state in ('draft','confirmed','progress','to_close')</attribute>
+            </xpath>
             <xpath expr="//form/sheet/notebook/page[@name='components']/field[@name='move_raw_ids']/list/field[@name='product_id']"
                    position="attributes">
                 <attribute name="string">Pecko Part Number</attribute>
