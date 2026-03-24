@@ -63,7 +63,7 @@
 
             <xpath expr="//field[@name='move_ids_without_package']//list//field[@name='description_picking']"
                    position="after">
-                <field name="additional_notes" readonly="1"/>
+                <field name="additional_notes" readonly="0"/>
             </xpath>
 
             <xpath expr="//field[@name='partner_id']" position="after">
