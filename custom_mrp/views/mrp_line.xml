@@ -185,7 +185,6 @@
             <xpath expr="//list/field[@name='product_tmpl_id']" position="after">
                 <!-- <field name="customer_part_number" string="Part Number"/> -->
                 <field name="customer_part_number" string="Part Number"/>
-                <field name="components_availability" optional="hide"/>
             </xpath>
 
         </field>
@@ -214,6 +213,7 @@
             </xpath>
             <xpath expr="//list/field[@name='origin']" position="after">
                 <field name="customer_po_no" string="Customer Po No"/>
+                <field name="components_availability" optional="hide"/>
             </xpath>
         </field>
     </record>
