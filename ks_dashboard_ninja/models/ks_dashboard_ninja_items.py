@@ -33,6 +33,7 @@ from odoo.tools.safe_eval import safe_eval
 from odoo.addons.ks_dashboard_ninja.common_lib.dn_utils import replace_company_domain
 
 
+
 from .ks_country_bounds import get_country_code
 
 _logger = logging.getLogger("DS_NINJA")
