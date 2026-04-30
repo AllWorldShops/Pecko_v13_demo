@@ -14,7 +14,7 @@ from datetime import timedelta
 from dateutil.parser import parse
 from dateutil import parser
 from datetime import date, datetime, time as dt_time
-
+from odoo.tools.misc import formatLang
 
 import babel
 import dateutil
@@ -3115,6 +3115,8 @@ class KsDashboardNinjaItems(models.Model):
             list_view_data = rec._ksGetListViewData(domain=[])
             rec.ks_list_view_data = json.dumps(list_view_data) if list_view_data else False
 
+    
+    # Add the comma separation
     def _ksGetListViewData(self, domain=[]):
         rec = self
         if rec.ks_chart_relation_groupby and not rec.ks_list_view_group_fields:
@@ -3127,6 +3129,7 @@ class KsDashboardNinjaItems(models.Model):
             ], limit=1)
             if default_measure:
                 rec.ks_list_view_group_fields = default_measure
+
         if rec.ks_list_view_type and rec.ks_dashboard_item_type and rec.ks_dashboard_item_type == 'ks_list_view' \
                 and rec.ks_model_id:
             orderby = rec.ks_sort_by_field.id
@@ -3140,9 +3143,23 @@ class KsDashboardNinjaItems(models.Model):
                 }
         else:
             ks_list_view_data = {
-                    'label': [], 'fields': [], 'fields_type': [], 'store': [], 'fields_technical_name': [],
-                    'records': [], 'columns': {},
-                }
+                'label': [], 'fields': [], 'fields_type': [], 'store': [], 'fields_technical_name': [],
+                'records': [], 'columns': {},
+            }
+
+        # Generic comma separation formatting for all numeric fields
+        for record in ks_list_view_data.get('records', []):
+            for field_name, field_info in ks_list_view_data.get('columns', {}).items():
+                if field_info.get('ttype') in ['integer', 'float', 'monetary']:
+                    if field_name in record.get('data', {}):
+                        value = record['data'][field_name].get('value')
+                        if value is not None:
+                            record['data'][field_name]['value'] = formatLang(
+                                self.env,
+                                value,
+                                monetary=(field_info.get('ttype') == 'monetary'),
+                                currency_obj=self.env.company.currency_id if field_info.get('ttype') == 'monetary' else None
+                            )
         return ks_list_view_data
 
 
