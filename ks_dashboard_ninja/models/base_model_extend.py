@@ -3,6 +3,7 @@
 from odoo import models, api
 
 
+
 class BaseExtend(models.AbstractModel):
     _inherit = 'base'
 
