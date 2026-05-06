@@ -103,6 +103,54 @@ class MrpProduction(models.Model):
         res['name'] = bom_line.product_id.product_tmpl_id.x_studio_field_mHzKJ if bom_line.product_id.product_tmpl_id.x_studio_field_mHzKJ else self.name
         return res
 
+    def button_mark_done(self):
+        for production in self:
+
+            # 1️⃣ Check full component consumption
+            not_consumed = production.move_raw_ids.filtered(
+                lambda m: m.quantity < m.product_uom_qty
+            )
+            print('not_consumed',not_consumed)
+            
+            if not_consumed:
+                products = ', '.join(not_consumed.mapped('product_id.display_name'))
+                raise UserError(_(
+                    "Cannot validate MO.\n\n"
+                    "The following components are not fully consumed:\n%s"
+                ) % products)
+
+            # 2️⃣ Check related pickings are done
+            pending_pickings = production.picking_ids.filtered(
+                lambda p: p.state != 'done' and p.picking_type_id.name != 'Store Finished Product'
+            )
+
+            if pending_pickings:
+                raise UserError(_(
+                    "Cannot validate MO.\n\n"
+                    "Some related stock transfers are not completed."
+                ))
+        
+        return super().button_mark_done()
+
+    # def button_mark_done(self):
+    #     res = super(MrpProduction, self).button_mark_done()
+    #     stop
+    #     for rec in self:
+    #         for picking in rec.picking_ids:
+    #             picking.write({'attn': self.attn.id,
+    #                            'customer_po_no': self.customer_po_no})
+    #     for loop in rec.picking_ids:
+    #         for move in loop.move_ids_without_package:
+    #             move.customer_part_no = move.product_id.name
+    #     for line in self.order_line:
+    #         do_moves = self.env['stock.move'].search(
+    #             [('sale_line_id', '=', line.id), ('product_id', '=', line.product_id.id)], limit=1)
+    #         if do_moves:
+    #             for obj in do_moves.move_orig_ids:
+    #                 if obj.group_id.name != do_moves.origin:
+    #                     line.mo_reference = obj.group_id.name
+    #     return res
+
 
 class MrpBom(models.Model):
     _inherit = 'mrp.bom'
