@@ -119,7 +119,7 @@ class PartnerInvoiceStatement(models.TransientModel):
             source = base64.b64decode(self.company_id.logo)
 
             image_data = BytesIO(
-                image_process(source, size=(100, 90))
+                image_process(source, size=(130, 90))
             )
 
             # Proper row height for logo
