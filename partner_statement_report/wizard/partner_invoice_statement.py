@@ -97,7 +97,7 @@ class PartnerInvoiceStatement(models.TransientModel):
         })
 
         amount_format = workbook.add_format({
-            'num_format': '#,##0.000'
+            'num_format': '#,##0.00'
         })
 
         # COLUMN WIDTH
@@ -115,16 +115,38 @@ class PartnerInvoiceStatement(models.TransientModel):
 
         # LOGO
         if self.company_id.logo:
+
             source = base64.b64decode(self.company_id.logo)
-            image_data = BytesIO(image_process(source, size=(100, 100)))
 
-            sheet.set_row(0, 40)
+            image_data = BytesIO(
+                image_process(source, size=(100, 90))
+            )
 
-            sheet.insert_image(0, 0, "company.png", {
-                "image_data": image_data,
-                "x_scale": 1.6,
-                "y_scale": 1,
-            })
+            # Proper row height for logo
+            sheet.set_row(0, 35)
+
+            # Prevent overlap
+            sheet.merge_range(0, 0, 0, 1, '', workbook.add_format())
+
+            sheet.insert_image(
+                0,
+                0,
+                "company.png",
+                {
+                    "image_data": image_data,
+
+                    # Stable scaling for live server
+                    "x_scale": 1,
+                    "y_scale": 1,
+
+                    # Better alignment
+                    "x_offset": 5,
+                    "y_offset": 2,
+
+                    # Prevent auto movement/stretch
+                    "object_position": 1,
+                }
+            )
 
         # COMPANY ADDRESS
         company_text = (
