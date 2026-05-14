@@ -214,11 +214,11 @@ class PartnerInvoiceStatement(models.TransientModel):
         account_move = self.env['account.move'].search([
             ('partner_id', '=', self.partner_id.id),
             ('state', '=', 'posted'),
-            ('move_type', '=', 'out_invoice'),
+            ('move_type', 'in', ['out_invoice','out_refund']),
             ('invoice_date', '<=', self.date),
             ('company_id', '=', self.company_id.id),
             ('amount_residual', '>', 0)
-        ], order="id asc")
+        ],order="move_type asc, id asc")
 
         if len(account_move) == 0:
             raise ValidationError(_("No Record Found for - %s") % (self.partner_id.name))
@@ -249,26 +249,47 @@ class PartnerInvoiceStatement(models.TransientModel):
         row = 12
         sno = 0
         running_total = 0
-        for rec in account_move:
+
+        # First refunds then invoices
+        refunds = account_move.filtered(lambda x: x.move_type == 'out_refund')
+        invoices = account_move.filtered(lambda x: x.move_type == 'out_invoice')
+
+        sorted_moves = refunds + invoices
+
+        for rec in sorted_moves:
             sno += 1
+            if rec.move_type == 'out_refund':
+                original_amount = -abs(rec.amount_total_in_currency_signed)
+                total_paid = -abs(rec.amount_total_in_currency_signed - rec.amount_residual)
+                balance_due = -abs(rec.amount_residual)
+            else:
+                original_amount = rec.amount_total_in_currency_signed
+                total_paid = rec.amount_total_in_currency_signed - rec.amount_residual
+                balance_due = rec.amount_residual
+
             sheet.write(row, 0, sno, format_c)
             sheet.write(row, 1, rec.name)
             sheet.write(row, 2, rec.invoice_date.strftime('%d-%m-%Y'))
-            sheet.write(row, 3, rec.invoice_date_due.strftime('%d-%m-%Y'))
-            sheet.write(row, 4, rec.customer_po_no)
+
+            if rec.invoice_date_due:
+                sheet.write(row, 3, rec.invoice_date_due.strftime('%d-%m-%Y'))
+            else:
+                sheet.write(row, 3, '')
+
+            sheet.write(row, 4, rec.customer_po_no or '')
             sheet.write(row, 5, rec.currency_id.name if rec.currency_id else '')
-            sheet.write(row, 6, rec.amount_total_in_currency_signed, amount_format)
 
-            total_paid = rec.amount_total_in_currency_signed - rec.amount_residual
-
+            # NEGATIVE FOR REFUND
+            sheet.write(row, 6, original_amount, amount_format)
             sheet.write(row, 7, total_paid, amount_format)
-            sheet.write(row, 8, rec.amount_residual, amount_format)
+            sheet.write(row, 8, balance_due, amount_format)
 
-            running_total += rec.amount_residual
+            # RUNNING TOTAL
+            running_total += balance_due
 
             sheet.write(row, 9, running_total, amount_format)
 
-            if rec.invoice_date_due < self.date:
+            if rec.invoice_date_due and rec.invoice_date_due < self.date:
                 sheet.write(row, 10, 'DUE', due)
 
             row += 1
