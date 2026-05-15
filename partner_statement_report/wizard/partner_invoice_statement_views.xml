@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<odoo>
+	<record id="partner_invoice_statement_wizard" model="ir.ui.view" >
+     <field name="name">partner.invoice.statement.wizard</field>
+     <field name="model">partner.invoice.statement</field>
+     <field name="arch" type="xml">
+     	<form string="Partner Invoice Statement">
+     		<group>
+                <field name="date" required="1"/>
+                <field name="partner_id" invisible="1"/>
+                <field name="company_id" readonly="1"/>
+            </group>
+     		<footer>
+     			<button name="action_partner_statement_report_xlsx"  string="Download XLSX" type="object" class="oe_highlight"/>
+     			<button string = "Cancel" class="btn-secondary" special="cancel"/>
+     		</footer>
+     	</form>
+     </field>
+ </record>
+
+</odoo>
