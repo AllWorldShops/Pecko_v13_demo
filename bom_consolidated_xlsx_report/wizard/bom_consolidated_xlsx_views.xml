@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+	<record id="bom_consolidated_report_wizard" model="ir.ui.view" >
+     <field name="name">bom.consolidated.report.wizard</field>
+     <field name="model">bom.consolidated.report</field>
+     <field name="arch" type="xml">
+     	<form string="BOM Consolidated Report">
+     		<group>
+                <field name="bom_id" readonly="1" invisible="1"/>
+                <field name="company_id" readonly="1" invisible="1"/>
+                <div >
+                    <span style="color:red;font-size:14px;font-weight:bold">Note :</span> Quantity must be greater than or equal to 1.
+                </div>
+                <field name="quantity" required="1"/>
+                
+            </group>
+     		<footer>
+     			<button name="action_bom_consolidated_xlsx_report"  string="Download XLSX" type="object" class="oe_highlight"/>
+     			<button string = "Cancel" class="btn-secondary" special="cancel"/>
+     		</footer>
+     	</form>
+     </field>
+ </record>
+
+</odoo>
