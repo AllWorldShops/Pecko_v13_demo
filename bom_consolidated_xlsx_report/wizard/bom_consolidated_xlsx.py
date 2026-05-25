@@ -67,6 +67,7 @@ class BomConsolidatedReReport(models.Model):
             'bg_color': '#b4e5a2',
             'border':1,
             'text_wrap': True,
+            'num_format': '#,##0.0000'
         })
 
         format_r_bg_red = workbook.add_format({
@@ -75,6 +76,7 @@ class BomConsolidatedReReport(models.Model):
             'bg_color':'#FF7F7F',
             'border':1,
             'text_wrap': True,
+            'num_format': '#,##0.0000'
         })
 
         format_c = workbook.add_format({
@@ -97,6 +99,18 @@ class BomConsolidatedReReport(models.Model):
             'border': 1,
             'text_wrap': True,
         })
+
+        format_r_digits = workbook.add_format({
+            'align': 'right',
+            'valign': 'vright',
+            'border': 1,
+            'text_wrap': True,
+            'num_format': '#,##0.0000'
+        })
+
+        # amount_format = workbook.add_format({
+        #     'num_format': '#,##0.00'
+        # })
 
 
         # COLUMN WIDTH
@@ -133,80 +147,104 @@ class BomConsolidatedReReport(models.Model):
         sheet.write(2,0,self.bom_id.product_tmpl_id.default_code,format_l)
         sheet.write(2,1,self.bom_id.product_tmpl_id.x_studio_field_qr3ai,format_c)
         sheet.write(2,2,self.bom_id.product_tmpl_id.x_studio_field_mHzKJ,format_l)
-        sheet.write(2,3,self.quantity,format_r)
-
+        sheet.write(2,3,self.quantity,format_r_digits)
         row = 7
         product_qty_dict = {}
         product_data_dict = {}
+
         for rec in self.bom_id.bom_line_ids:
 
             mrp_bom = self.env['mrp.bom'].search([
-                ('product_tmpl_id', '=', rec.product_id.product_tmpl_id.id),('company_id','=',self.company_id.id)
+                ('product_tmpl_id', '=', rec.product_id.product_tmpl_id.id),
+                ('company_id', '=', self.company_id.id)
             ], limit=1, order="id asc")
 
-            for rm_rec in mrp_bom.bom_line_ids:
-                product_id = rm_rec.product_id.id
-                # FIRST SUM NORMAL QTY
-                if product_id not in product_qty_dict:
-                    product_qty_dict[product_id] = rm_rec.product_qty
-                else:
-                    product_qty_dict[product_id] += rm_rec.product_qty
+            # IF CHILD BOM EXISTS
+            if mrp_bom and mrp_bom.bom_line_ids:
 
-                # STORE PRODUCT DETAILS
-                product_data_dict[product_id] = rm_rec
+                for rm_rec in mrp_bom.bom_line_ids:
+
+                    product_id = rm_rec.product_id.id
+
+                    # REQUIRED QTY
+                    required_qty = (
+                        rm_rec.product_qty *
+                        self.quantity
+                    )
+
+                    # SUM TOTAL
+                    if product_id not in product_qty_dict:
+                        product_qty_dict[product_id] = required_qty
+                    else:
+                        product_qty_dict[product_id] += required_qty
+
+                    # STORE PRODUCT DETAILS
+                    product_data_dict[product_id] = rm_rec
+
+            # IF NO CHILD BOM EXISTS -> ADD CURRENT PRODUCT
+            else:
+                product_id = rec.product_id.id
+                required_qty = rec.product_qty * self.quantity
+                if product_id not in product_qty_dict:
+                    product_qty_dict[product_id] = required_qty
+                else:
+                    product_qty_dict[product_id] += required_qty
+
+                product_data_dict[product_id] = rec
 
         sno = 0
-        for product_id, total_qty in product_qty_dict.items():
-            sno += 1
-            rm_rec = product_data_dict[product_id]
 
+        for product_id, total_qty in product_qty_dict.items():
+
+            sno += 1
+
+            rm_rec = product_data_dict[product_id]
             sheet.write(row,0,sno,format_c)
             sheet.write(row,1,rm_rec.product_id.default_code,format_l)
             sheet.write(row,2,rm_rec.product_id.name,format_c)
             sheet.write(row,3,rm_rec.product_id.x_studio_field_mHzKJ,format_l)
             sheet.write(row,4,rm_rec.product_id.manufacturer_id.name if rm_rec.product_id.manufacturer_id else '',format_l)
 
-            # MULTIPLY AFTER TOTAL
-            rm_qty = total_qty * self.quantity
-
-            sheet.write(row,5,rm_qty,format_r)
-            sheet.write(row,6,rm_rec.product_uom_id.name if rm_rec.product_uom_id else '',format_l)
-            sheet.write(row,7,round(rm_rec.product_id.qty_available,2),format_r_bg)
-            sheet.write(row,8,round(rm_rec.product_id.incoming_qty,2),format_r_bg)
-            sheet.write(row,9,round(rm_rec.product_id.outgoing_qty,2),format_r_bg)
-            qty_total = round((rm_rec.product_id.qty_available + rm_rec.product_id.incoming_qty - rm_rec.product_id.outgoing_qty),2)
-            # to set the negative value background color as red
-            if qty_total >=0:
+            # FINAL REQUIRED QTY
+            rm_qty = total_qty
+            sheet.write(row,5,round(rm_qty,4),format_r_digits)
+            sheet.write(row,6,rm_rec.product_uom_id.name if rm_rec.product_uom_id else '',format_c)
+            sheet.write(row,7,round(rm_rec.product_id.qty_available,4),format_r_bg)
+            sheet.write(row,8,round(rm_rec.product_id.incoming_qty,4),format_r_bg)
+            sheet.write(row,9,round(rm_rec.product_id.outgoing_qty,4),format_r_bg)
+            qty_total = round((rm_rec.product_id.qty_available + rm_rec.product_id.incoming_qty - rm_rec.product_id.outgoing_qty),4)
+            # NEGATIVE STOCK HIGHLIGHT
+            if qty_total >= 0:
                 sheet.write(row,10,qty_total,format_r_bg)
             else:
                 sheet.write(row,10,qty_total,format_r_bg_red)
-            row +=1
 
-        row = row+4
+            row += 1
+        row = row + 4
         sheet.write(row,0,'Child BOM Details',bom_head_child)
-        row = row+1
+        row = row + 1
         sheet.write(row,0,'S.No',bom_head)
         sheet.write(row,1,'Pecko Part Number',bom_head)
         sheet.write(row,2,'Customer Part Number',bom_head)
         sheet.write(row,3,'Description',bom_head)
         sheet.write(row,4,'Quantity',bom_head)
-
-        row = row+1
+        row = row + 1
         child_sno = 0
-
         for rec in self.bom_id.bom_line_ids:
-            child_sno +=1
-
-            sheet.write(row,0,child_sno,format_c)
-            sheet.write(row,1,rec.product_id.default_code,format_l)
-            sheet.write(row,2,rec.product_id.x_studio_field_qr3ai,format_c)
-            sheet.write(row,3,rec.product_id.x_studio_field_mHzKJ,format_l)
-
-            child_qty = self.quantity * rec.product_qty
-
-            sheet.write(row,4,child_qty,format_r)
-
-            row += 1
+            mrp_bom = self.env['mrp.bom'].search([
+                ('product_tmpl_id', '=', rec.product_id.product_tmpl_id.id),
+                ('company_id', '=', self.company_id.id)
+            ], limit=1, order="id asc")
+            # PRINT ONLY PRODUCTS HAVING BOM
+            if mrp_bom and mrp_bom.bom_line_ids:
+                child_sno += 1
+                sheet.write(row,0,child_sno,format_c)
+                sheet.write(row,1,rec.product_id.default_code,format_l)
+                sheet.write(row,2,rec.product_id.x_studio_field_qr3ai,format_c)
+                sheet.write(row,3,rec.product_id.x_studio_field_mHzKJ,format_l)
+                child_qty = self.quantity * rec.product_qty
+                sheet.write(row,4,child_qty,format_r_digits)
+                row += 1
 
         # CREATE FILE
         workbook.close()
