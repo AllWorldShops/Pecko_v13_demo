@@ -69,6 +69,14 @@ class BomConsolidatedReReport(models.Model):
             'text_wrap': True,
         })
 
+        format_r_bg_red = workbook.add_format({
+            'align': 'right',
+            'valign': 'vright',
+            'bg_color':'#FF7F7F',
+            'border':1,
+            'text_wrap': True,
+        })
+
         format_c = workbook.add_format({
             'align': 'center',
             'valign': 'vcenter',
@@ -110,7 +118,6 @@ class BomConsolidatedReReport(models.Model):
         sheet.write(1,1,'Customer Part Number',bom_head)
         sheet.write(1,2,'Description',bom_head)
         sheet.write(1,3,'Quantity',bom_head)
-
         sheet.merge_range(5, 0, 6, 0, 'S.No', bom_head)
         sheet.merge_range(5, 1, 6, 1, 'Product', bom_head)
         sheet.merge_range(5, 2, 6, 2, 'Part No', bom_head)
@@ -128,13 +135,9 @@ class BomConsolidatedReReport(models.Model):
         sheet.write(2,2,self.bom_id.product_tmpl_id.x_studio_field_mHzKJ,format_l)
         sheet.write(2,3,self.quantity,format_r)
 
-        
-
-        
         row = 7
         product_qty_dict = {}
         product_data_dict = {}
-
         for rec in self.bom_id.bom_line_ids:
 
             mrp_bom = self.env['mrp.bom'].search([
@@ -142,9 +145,7 @@ class BomConsolidatedReReport(models.Model):
             ], limit=1, order="id asc")
 
             for rm_rec in mrp_bom.bom_line_ids:
-
                 product_id = rm_rec.product_id.id
-
                 # FIRST SUM NORMAL QTY
                 if product_id not in product_qty_dict:
                     product_qty_dict[product_id] = rm_rec.product_qty
@@ -155,9 +156,7 @@ class BomConsolidatedReReport(models.Model):
                 product_data_dict[product_id] = rm_rec
 
         sno = 0
-
         for product_id, total_qty in product_qty_dict.items():
-
             sno += 1
             rm_rec = product_data_dict[product_id]
 
@@ -172,20 +171,23 @@ class BomConsolidatedReReport(models.Model):
 
             sheet.write(row,5,rm_qty,format_r)
             sheet.write(row,6,rm_rec.product_uom_id.name if rm_rec.product_uom_id else '',format_l)
-            sheet.write(row,7,rm_rec.product_id.qty_available,format_r_bg)
-            sheet.write(row,8,rm_rec.product_id.incoming_qty,format_r_bg)
-            sheet.write(row,9,rm_rec.product_id.outgoing_qty,format_r_bg)
-            qty_total = (rm_rec.product_id.qty_available + rm_rec.product_id.incoming_qty - rm_rec.product_id.outgoing_qty)
-            sheet.write(row,10,qty_total,format_r_bg)
+            sheet.write(row,7,round(rm_rec.product_id.qty_available,2),format_r_bg)
+            sheet.write(row,8,round(rm_rec.product_id.incoming_qty,2),format_r_bg)
+            sheet.write(row,9,round(rm_rec.product_id.outgoing_qty,2),format_r_bg)
+            qty_total = round((rm_rec.product_id.qty_available + rm_rec.product_id.incoming_qty - rm_rec.product_id.outgoing_qty),2)
+            # to set the negative value background color as red
+            if qty_total >=0:
+                sheet.write(row,10,qty_total,format_r_bg)
+            else:
+                sheet.write(row,10,qty_total,format_r_bg_red)
             row +=1
-
 
         row = row+4
         sheet.write(row,0,'Child BOM Details',bom_head_child)
         row = row+1
         sheet.write(row,0,'S.No',bom_head)
         sheet.write(row,1,'Pecko Part Number',bom_head)
-        sheet.write(row,2,'Customer Part number',bom_head)
+        sheet.write(row,2,'Customer Part Number',bom_head)
         sheet.write(row,3,'Description',bom_head)
         sheet.write(row,4,'Quantity',bom_head)
 
@@ -226,11 +228,6 @@ class BomConsolidatedReReport(models.Model):
             'url': url,
             'target': 'new',
         }
-
-
-class ProductTemplate(models.Model):
-    _inherit = "product.template"
-    _order = "id desc"
 
     
    
