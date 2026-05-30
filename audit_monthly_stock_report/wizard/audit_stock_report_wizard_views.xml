@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_audit_stock_report_wizard_form" model="ir.ui.view">
+        <field name="name">audit.stock.report.wizard.form</field>
+        <field name="model">audit.stock.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Audit Monthly Stock Report">
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        <strong>📊 Month-End Stock Inventory Report</strong><br/>
+                        Generates an Excel report for all internal stock locations.
+                        Products with internal references starting with
+                        <strong>2200, 2100, 5100, CR00</strong>
+                        are highlighted as Finished Goods (blue);
+                        all others as Raw Materials (green).
+                    </div>
+
+                    <group invisible="not excel_file">
+                        <field name="excel_file"
+                               filename="excel_filename"
+                               widget="binary"
+                               string="Download Report"/>
+                        <field name="excel_filename" invisible="1"/>
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button name="action_generate_report"
+                            string="Generate Report"
+                            type="object"
+                            class="btn-primary"
+                            icon="fa-file-excel-o"/>
+                    <button string="Close"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_audit_stock_report_wizard" model="ir.actions.act_window">
+        <field name="name">Inventory Stock Report (Excel)</field>
+        <field name="res_model">audit.stock.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_audit_stock_report_wizard_form"/>
+    </record>
+
+    <menuitem id="menu_stock_inventory_excel_report"
+              name="Inventory Stock Report (Excel)"
+              parent="stock.menu_stock_reporting"
+              action="action_audit_stock_report_wizard"
+              sequence="90"
+              groups="stock.group_stock_user"/>
+
+</odoo>

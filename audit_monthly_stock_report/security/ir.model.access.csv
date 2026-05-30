@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_audit_stock_report_wizard_user,audit.stock.report.wizard.user,model_audit_stock_report_wizard,stock.group_stock_user,1,1,1,1
+access_audit_monthly_report_user,audit.monthly.report.user,model_audit_monthly_report,stock.group_stock_user,1,0,0,0
+access_audit_monthly_report_manager,audit.monthly.report.manager,model_audit_monthly_report,stock.group_stock_manager,1,1,1,1
