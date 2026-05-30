@@ -84,7 +84,7 @@
               name="Monthly Audit Reports"
               parent="stock.menu_warehouse_report"
               action="action_audit_monthly_report"
-              sequence="91"
+              sequence="90"
               groups="stock.group_stock_manager"/>
 
 </odoo>
