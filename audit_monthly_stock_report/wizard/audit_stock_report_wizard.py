@@ -118,7 +118,7 @@ def _get_locations(env, company):
         return None
 
     locs = {
-        'main': find(['Stock', 'Main Warehouse', 'WH/Stock'],         usage='internal'),
+        'main': find(['Stock', 'Main Warehouse', 'Main RAW Material Warehouse', 'WH/Stock'],         usage='internal'),
         'prod': find(['Production', 'Production Floor', 'WIP'],       usage='internal'),
         'fg':   find(['Finished Goods', 'FG', 'Finished Product'],    usage='internal'),
     }
