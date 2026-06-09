@@ -260,7 +260,13 @@ class PartnerInvoiceStatement(models.TransientModel):
             sno += 1
             if rec.move_type == 'out_refund':
                 original_amount = -abs(rec.amount_total_in_currency_signed)
-                total_paid = -abs(rec.amount_total_in_currency_signed - rec.amount_residual)
+                # total_paid = -abs(rec.amount_total_in_currency_signed - rec.amount_residual)
+                if abs(rec.amount_total_in_currency_signed) == abs(rec.amount_residual):
+                    total_paid = 0
+                elif rec.amount_residual == 0:
+                    total_paid = abs(rec.amount_total_in_currency_signed)
+                else:
+                    total_paid = abs(rec.amount_total_in_currency_signed + rec.amount_residual)
                 balance_due = -abs(rec.amount_residual)
             else:
                 original_amount = rec.amount_total_in_currency_signed
