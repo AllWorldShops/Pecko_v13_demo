@@ -146,7 +146,7 @@ def _get_products_for_company(env, company):
     ])
     quants = env['stock.quant'].search([
         ('location_id', 'in', locations.ids),
-        ('quantity', '!=', 0),
+        ('quantity', '>', 0),
     ])
     seen = {}
     for q in quants:
@@ -206,7 +206,25 @@ def _build_company_sheet(env, wb, company, sheet_name):
         qty_main = _qty_at(env, product.id, locs.get('main'))
         qty_prod = _qty_at(env, product.id, locs.get('prod'))
         qty_fg   = _qty_at(env, product.id, locs.get('fg'))
-        qty_tot  = qty_main + qty_prod + qty_fg
+
+        # Use sum of all internal quants for this company as qty_tot
+        # so products with stock outside the 3 mapped locations are
+        # still counted correctly, and zero-qty rows are skipped.
+        all_locs = env['stock.location'].search([
+            ('usage', '=', 'internal'),
+            ('active', '=', True),
+            ('company_id', 'in', [company.id, False]),
+        ])
+        all_quants = env['stock.quant'].search([
+            ('product_id', '=', product.id),
+            ('location_id', 'in', all_locs.ids),
+            ('quantity', '>', 0),
+        ])
+        qty_tot = sum(all_quants.mapped('quantity'))
+        if qty_tot <= 0:
+            return   # skip — no actual stock in any internal location
+
+        # qty_tot  = qty_main + qty_prod + qty_fg
         cost      = product.standard_price or 0.0
         valuation = cost * qty_tot
 

@@ -33,7 +33,8 @@
                             string="Regenerate Report"
                             type="object"
                             class="btn-primary"
-                            icon="fa-refresh"/>
+                            icon="fa-refresh"
+                            invisible="1"/>
                     <button name="action_download"
                             string="Download Excel"
                             type="object"

@@ -49,9 +49,9 @@
 
     <menuitem id="menu_stock_inventory_excel_report"
               name="Inventory Stock Report (Excel)"
-              parent="stock.menu_stock_reporting"
+              parent="stock.menu_warehouse_report"
               action="action_audit_stock_report_wizard"
-              sequence="90"
+              sequence="89"
               groups="stock.group_stock_user"/>
 
 </odoo>
