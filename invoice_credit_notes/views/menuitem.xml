@@ -5,4 +5,9 @@
               action="credit_invoice_notes_state"
               parent="account.menu_finance_receivables"
               sequence="40"/>
+    <menuitem id="bill_refund_sub_menu_account"
+              name="Bills/Refunds"
+              action="bill_refund_notes_state"
+              parent="account.menu_finance_payables"
+              sequence="50"/>
 </odoo>
