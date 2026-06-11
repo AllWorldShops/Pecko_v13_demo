@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Cron record created via post_init_hook (hooks.py) to avoid
+         ir.model ref resolution issues during XML data loading. -->
+
+    <record id="cron_audit_monthly_stock_report" model="ir.cron">
+        <field name="name">Generate Monthly Stock Inventory Report</field>
+        <field name="model_id" ref="model_audit_monthly_report"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_generate_monthly_report()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>

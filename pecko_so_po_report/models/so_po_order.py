@@ -129,7 +129,13 @@ class AccountMove(models.Model):
     exchange_rate = fields.Float(string="Rate",digits=(12,4),compute="_compute_currency_rate")
     # custom_form_reference_number = fields.Char(string="Customs Form Reference Number")
 
-
+    def write(self, vals):
+        res = super().write(vals)
+        # if 'name' in vals:
+        for move in self:
+            if move.name:
+                move.line_ids.write({'move_name': move.name})
+        return res
 
     def _compute_currency_rate(self):
         for mov in self:

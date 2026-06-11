@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_audit_monthly_report" model="ir.sequence">
+        <field name="name">Monthly Stock Audit Report</field>
+        <field name="code">audit.monthly.report</field>
+        <field name="prefix">AUDIT/%(year)s/%(month)s/</field>
+        <field name="padding">3</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>
