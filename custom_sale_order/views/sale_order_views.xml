@@ -72,6 +72,7 @@
                 <field name="order_ref" string="Order Reference"/>
                 <field name="customer_id" string="Customer"/>
                 <field name="customer_po_no" string="Customer Po No" invisible="0"/>
+                <field name="customer_po_date" string="Customer Po Date" invisible="0" optional="show"/>
                 <field name="line_no" string="Position"/>
                 <field name="product_id" string="Pecko Part Number"/>
                 <field name="customer_part_no" string="Customer Part Number" invisible="0"/>
