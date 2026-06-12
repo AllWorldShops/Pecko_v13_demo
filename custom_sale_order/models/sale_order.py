@@ -75,7 +75,6 @@ class SaleOrderLine(models.Model):
     promise_date = fields.Datetime('Promised Date', related='order_id.commitment_date')
     promised_date = fields.Date(string="Promised Date")
     customer_po_no = fields.Char('Customer Po No', related='order_id.customer_po_no')
-    customer_po_date = fields.date('Customer Po Date', related='order_id.customer_po_date')
     internal_ref_no = fields.Char('Internal Ref No', related='product_id.default_code')
     back_order_qty = fields.Float(string='Pending Qty', compute='_compute_back_order_qty', store=True)
     production_type = fields.Selection([('purchase', 'Purchased'), ('manufacture', 'Manufactured')],
