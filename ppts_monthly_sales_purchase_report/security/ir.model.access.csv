@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_financial_year,access_financial_year,model_financial_year,,1,1,1,1
+access_monthly_sales_report,access_monthly_sales_report,model_monthly_sales_report,,1,1,1,1
+

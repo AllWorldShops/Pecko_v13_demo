@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="from_view_monthly_sales_report" model="ir.ui.view">
+        <field name="name">from.view.monthly.sales.report</field>
+        <field name="model">monthly.sales.report</field>
+        <field name="arch" type="xml">
+            <form string="Monthly Sales Report">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="company_id" required="1"/>
+                            <field name="year_id" required="1"/>
+                        </group>
+                        <group>
+                            <field name="form_month" required="1"/>
+                            <field name="to_month" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button
+                            name="download_report"
+                            string="Download"
+                            type="object"
+                            class="oe_highlight"
+                    />
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_monthly_sales_report" model="ir.actions.act_window">
+        <field name="name">Monthly Sales Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">monthly.sales.report</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_parent_montly_report" name="Monthly Reports"
+              parent="account.menu_finance_reports" sequence="6">
+        <menuitem action="action_monthly_sales_report" id="menu_monthly_sales_report"
+                  sequence="1"/>
+    </menuitem>
+</odoo>
