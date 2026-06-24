@@ -152,6 +152,36 @@ class BomConsolidatedReReport(models.Model):
         product_qty_dict = {}
         product_data_dict = {}
 
+        def _explode_bom(product, qty):
+
+            mrp_bom = self.env['mrp.bom'].search([
+                ('product_tmpl_id', '=', product.product_tmpl_id.id),
+                ('company_id', '=', self.company_id.id)
+            ], limit=1, order="id asc")
+
+            if mrp_bom and mrp_bom.bom_line_ids:
+
+                for bom_line in mrp_bom.bom_line_ids:
+
+                    product_id = bom_line.product_id.id
+                    required_qty = qty * bom_line.product_qty
+
+                    if product_id not in product_qty_dict:
+                        product_qty_dict[product_id] = required_qty
+                    else:
+                        product_qty_dict[product_id] += required_qty
+
+                    product_data_dict[product_id] = bom_line
+
+                    # RECURSIVE CHECK FOR NEXT LEVEL
+                    _explode_bom(
+                        bom_line.product_id,
+                        required_qty
+                    )
+
+            else:
+                return
+
         for rec in self.bom_id.bom_line_ids:
 
             mrp_bom = self.env['mrp.bom'].search([
@@ -159,32 +189,18 @@ class BomConsolidatedReReport(models.Model):
                 ('company_id', '=', self.company_id.id)
             ], limit=1, order="id asc")
 
-            # IF CHILD BOM EXISTS
             if mrp_bom and mrp_bom.bom_line_ids:
 
-                for rm_rec in mrp_bom.bom_line_ids:
+                _explode_bom(
+                    rec.product_id,
+                    self.quantity * rec.product_qty
+                )
 
-                    product_id = rm_rec.product_id.id
-
-                    # REQUIRED QTY
-                    required_qty = (
-                        rm_rec.product_qty *
-                        self.quantity
-                    )
-
-                    # SUM TOTAL
-                    if product_id not in product_qty_dict:
-                        product_qty_dict[product_id] = required_qty
-                    else:
-                        product_qty_dict[product_id] += required_qty
-
-                    # STORE PRODUCT DETAILS
-                    product_data_dict[product_id] = rm_rec
-
-            # IF NO CHILD BOM EXISTS -> ADD CURRENT PRODUCT
             else:
+
                 product_id = rec.product_id.id
                 required_qty = rec.product_qty * self.quantity
+
                 if product_id not in product_qty_dict:
                     product_qty_dict[product_id] = required_qty
                 else:
@@ -202,10 +218,11 @@ class BomConsolidatedReReport(models.Model):
             sheet.write(row,0,sno,format_c)
             sheet.write(row,1,rm_rec.product_id.default_code,format_l)
             sheet.write(row,2,rm_rec.product_id.name,format_c)
-            sheet.write(row,3,rm_rec.product_id.x_studio_field_mHzKJ,format_l)
+            sheet.write(row,3,rm_rec.product_id.x_studio_field_mHzKJ if rm_rec.product_id.x_studio_field_mHzKJ else '',format_l)
             sheet.write(row,4,rm_rec.product_id.manufacturer_id.name if rm_rec.product_id.manufacturer_id else '',format_l)
 
             # FINAL REQUIRED QTY
+            print(rm_rec.product_id.name,'nnnnnnnnnnnnnnnnnnnnnnn',rm_rec.product_id.incoming_qty)
             rm_qty = total_qty
             sheet.write(row,5,round(rm_qty,4),format_r_digits)
             sheet.write(row,6,rm_rec.product_uom_id.name if rm_rec.product_uom_id else '',format_c)
