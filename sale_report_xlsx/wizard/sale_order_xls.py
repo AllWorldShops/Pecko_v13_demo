@@ -56,13 +56,13 @@ class WizardWizards(models.TransientModel):
         # ====== SALE ORDER AMOUNT SECTION ======
         sale_orders = self.env['sale.order'].search([
             ('partner_id', '=', partnerid),
-            ('date_order', '<=', str(end_date)),
-            ('date_order', '>=', str(start_date)),
+            ('create_date', '<=', str(end_date)),
+            ('create_date', '>=', str(start_date)),
             ('state', '!=', 'cancel')
         ])
 
         for order in sale_orders:
-            date_from = fields.Datetime.context_timestamp(order, order.date_order).date()
+            date_from = fields.Datetime.context_timestamp(order, order.create_date).date()
             order_currency = order.currency_id
             company_currency = order.company_id.currency_id
             company = order.company_id
@@ -195,11 +195,12 @@ class WizardWizards(models.TransientModel):
         date_from = str(self.date_from) + ' 00:00:00'
         date_to = str(self.date_to) + ' 00:00:00'
         partners_list = []
-        sale_ord_line = self.env['sale.order.line'].search([('order_id.date_order', '>=', date_from),('order_id.date_order', '<=', date_to)])
+        sale_ord_line = self.env['sale.order.line'].search([('order_id.create_date', '>=', date_from),('order_id.create_date', '<=', date_to)])
         partner = sale_ord_line.mapped('order_id.partner_id')
         for part in partner:
             partners_list.append(part.id)
-        ac_move_line = self.env['account.move.line'].search([('move_id.invoice_date', '>=', self.date_from),('move_id.invoice_date', '<=', self.date_to)])
+        ac_move_line = self.env['account.move.line'].search([('move_id.invoice_date', '>=', self.date_from),('move_id.invoice_date', '<=', self.date_to), ('move_id.move_type', '=', 'out_invoice')])
+        # ac_move_line = self.env['account.move.line'].search([('move_id.invoice_date', '>=', self.date_from),('move_id.invoice_date', '<=', self.date_to)])
         ac_partner = ac_move_line.mapped('move_id.partner_id')
         for acs in ac_partner:
             if acs.id not in partners_list:
