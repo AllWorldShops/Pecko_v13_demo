@@ -147,6 +147,7 @@ def _get_products_for_company(env, company):
     quants = env['stock.quant'].search([
         ('location_id', 'in', locations.ids),
         ('quantity', '>', 0),
+        ('product_id.active', '=', True),
     ])
     seen = {}
     for q in quants:
@@ -225,7 +226,8 @@ def _build_company_sheet(env, wb, company, sheet_name):
             return   # skip — no actual stock in any internal location
 
         # qty_tot  = qty_main + qty_prod + qty_fg
-        cost      = product.standard_price or 0.0
+        # cost      = product.standard_price or 0.0
+        cost      = product.with_company(company).standard_price or 0.0
         valuation = cost * qty_tot
 
         # Build data list matching column order
