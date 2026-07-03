@@ -3,6 +3,7 @@ import io
 from odoo import models, fields, _
 from odoo.exceptions import UserError
 
+
 try:
     import openpyxl
     from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
