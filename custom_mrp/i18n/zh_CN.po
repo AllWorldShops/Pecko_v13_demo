@@ -1,0 +1,17 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* custom_mrp
+# 
+# Translators:
+# Sundar, 2025
+
+
+#. module: custom_mrp
+#: model:ir.actions.report,print_report_name:custom_mrp.action_report_bom_structure_overview
+msgid "'Bom Overview - %s (%s)' % (object.display_name, object.customer_part_number)"
+msgstr "'物料清单（BOM）概述 - %s (%s)' % (object.display_name, object.customer_part_number)"
+
+#. module: mrp
+#: model:ir.actions.report,print_report_name:mrp.action_report_bom_structure
+msgid "'Bom Overview - %s (%s)' % (object.display_name, object.customer_part_number)"
+msgstr "'物料清单（BOM）概述 - %s (%s)' % (object.display_name, object.customer_part_number)"
