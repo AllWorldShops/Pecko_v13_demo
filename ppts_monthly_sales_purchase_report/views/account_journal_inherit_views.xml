@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='bank_account']/group/group/field[@name='code']" position="after">
                 <field name="is_credit_journal"/>
+<!--                <field name="is_debit_journal"/>-->
             </xpath>
         </field>
     </record>
