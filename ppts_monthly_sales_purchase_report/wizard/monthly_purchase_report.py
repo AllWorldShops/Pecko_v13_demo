@@ -306,9 +306,9 @@ class MonthlyPurchaseReport(models.TransientModel):
                 ).get(singapore_move.status_in_payment)
                 sheet.write(row, 11, status_label)
                 sheet.write(row, 12, singapore_move.invoice_date.month if singapore_move.invoice_date else '')
-                if abs(move.amount_tax_signed) > 0 and abs(move.amount_untaxed_signed) > 0:
+                if abs(singapore_move.amount_tax_signed) > 0 and abs(singapore_move.amount_untaxed_signed) > 0:
                     sheet.write(row, 13,
-                                str(round((abs(move.amount_tax_signed) / abs(move.amount_untaxed_signed)) * 100,
+                                str(round((abs(singapore_move.amount_tax_signed) / abs(singapore_move.amount_untaxed_signed)) * 100,
                                           1)) + '%', right_style)
                 row += 1
         if singapore_company and singapore_records != []:
