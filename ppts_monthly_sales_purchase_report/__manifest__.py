@@ -12,8 +12,10 @@
         'security/ir.model.access.csv',
         'views/financial_year_views.xml',
         'wizard/monthly_sales_report_views.xml',
+        'wizard/monthly_purchase_report_views.xml',
         'views/account_journal_inherit_views.xml',
-        'views/res_partner_inherit.xml'
+        'views/res_partner_inherit.xml',
+
     ],
     'installable': True,
     'application': True,
