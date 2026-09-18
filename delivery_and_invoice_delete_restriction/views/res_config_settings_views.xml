@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        IMPORTANT: this file assumes your existing "Other" section (the one with
+        "Bypass HTML Field Sanitize", "Export Button Enabled", etc.) is defined by
+        inheriting the standard res.config.settings form view in your own custom
+        module. Replace YOUR_MODULE.YOUR_VIEW_ID below with that view's xml id,
+        and adjust the xpath expression below to point at the same <block> those
+        other checkboxes live in, so this new setting appears alongside them.
+
+        If you don't have that xml id handy, activate Developer Mode, open
+        Settings, right-click (or use the bug icon) on the "Other" section, and
+        choose "Edit View" to see its id and structure.
+    -->
+    <record id="res_config_settings_view_form_delete_restrict" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.delete.restrict</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//app[@name='general_settings']//block[@name='performance']" position="after">
+                <block title="Allow DO &amp; Invoice Delete" name="delete_restriction">
+                    <setting id="do_and_invoice_restrict_delete_setting" string="Allow DO &amp; Invoice Delete" help="Only the users listed below can delete Delivery Orders and Invoices for this company">
+                        <field name="restrict_do_invoice_delete"/>
+                        <div class="content-group" invisible="not restrict_do_invoice_delete">
+                            <field name="delete_allowed_user_ids" widget="many2many_tags" placeholder="Users allowed to delete"/>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>
