@@ -1,6 +1,7 @@
 from odoo import models, fields, api, _
 from datetime import date
 from odoo.exceptions import ValidationError
+from odoo.tools import float_compare, float_is_zero
 
 
 class AcmoveInherit(models.Model):
@@ -66,3 +67,29 @@ class AcmoveInherit(models.Model):
                 for i_line in rec.invoice_line_ids:
                     i_line.name = i_line.product_id.default_code or ''
                 
+    def _add_purchase_order_lines(self, purchase_order_lines):
+        self.ensure_one()
+        new_line_ids = self.env['account.move.line']
+
+        for po_line in purchase_order_lines:
+
+            rounding = po_line.product_uom.rounding or 0.01
+
+            # 1. Received qty == Order qty Excluded
+            if float_compare(po_line.qty_received, po_line.product_qty,
+                             precision_rounding=rounding) >= 0:
+                continue
+
+            # 2. Received - Billed
+            qty_to_bill = po_line.qty_received - po_line.qty_invoiced
+
+            # 3. Billed Qty Execluded
+            if float_is_zero(qty_to_bill, precision_rounding=rounding) or qty_to_bill <= 0:
+                continue
+
+            new_line_values = po_line._prepare_account_move_line(self)
+            new_line_values['quantity'] = qty_to_bill
+            print(qty_to_bill, 'Qty to bil')
+            new_line_ids += self.env['account.move.line'].new(new_line_values)
+
+        self.invoice_line_ids += new_line_ids
