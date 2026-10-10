@@ -77,7 +77,7 @@ class AcmoveInherit(models.Model):
 
             # 1. Received qty == Order qty Excluded
             if float_compare(po_line.qty_received, po_line.product_qty,
-                             precision_rounding=rounding) >= 0:
+                             precision_rounding=rounding) > 0:
                 continue
 
             # 2. Received - Billed
