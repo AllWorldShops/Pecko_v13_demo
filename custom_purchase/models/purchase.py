@@ -252,6 +252,12 @@ class PurchaseOrderLine(models.Model):
             vals['manufacturer_id'] = product_id.product_tmpl_id.manufacturer_id.id
         return super(PurchaseOrderLine, self).create(vals)
 
+    #Purchase Invoice line no in po no
+    def _prepare_account_move_line(self, move=False):
+        vals = super()._prepare_account_move_line(move)
+        vals['position_no'] = self.line_no
+        return vals
+
 #
 class PurchaseOrdLine(models.Model):
     _inherit = 'purchase.order.line'
