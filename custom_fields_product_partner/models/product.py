@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, _, api
 
 
 class ProductProduct(models.Model):
@@ -46,3 +46,46 @@ class PricelistItem(models.Model):
     _inherit = "product.pricelist.item"
 
     customer_part_number = fields.Char(string='Customer Part Number', related='product_tmpl_id.x_studio_field_qr3ai')
+
+class StockWarehouseOrderpoint(models.Model):
+    """ Defines Minimum stock rules. """
+    _inherit = "stock.warehouse.orderpoint"
+    
+    qty_to_order = fields.Float('To Order', compute='_compute_qty_to_order', inverse='_inverse_qty_to_order', search='_search_qty_to_order', digits='Product Unit of Measure')
+    
+    @api.depends('qty_to_order_manual', 'qty_to_order_computed')
+    def _compute_qty_to_order(self):
+        for orderpoint in self:
+            orderpoint.qty_to_order = orderpoint.qty_to_order_manual if orderpoint.qty_to_order_manual else orderpoint.qty_to_order_computed
+
+    def _inverse_qty_to_order(self):
+        for orderpoint in self:
+            if orderpoint.trigger == 'auto':
+                orderpoint.qty_to_order_manual = 0
+            elif not orderpoint.qty_to_order_manual and not orderpoint.qty_to_order:
+                orderpoint.qty_to_order = orderpoint.qty_to_order_computed
+            elif orderpoint.qty_to_order != orderpoint.qty_to_order_computed:
+                orderpoint.qty_to_order_manual = orderpoint.qty_to_order
+
+    @api.depends('product_id','product_min_qty','product_max_qty','qty_to_order_manual','qty_to_order_computed')
+    def _compute_qty_to_order(self):
+
+        for op in self:
+            if op.qty_to_order_manual:
+                op.qty_to_order = op.qty_to_order_manual
+            else:
+                forecast = op.product_id.virtual_available
+
+                in_progress = op._quantity_in_progress().get(op.id, 0.0)
+
+                available_qty = forecast + in_progress
+
+                if forecast < op.product_min_qty:
+                    op.qty_to_order = max(
+                        0.0,
+                        op.product_max_qty - forecast
+                    )
+                else:
+                    op.qty_to_order = 0.0
+            print('qty_to_order-----------',op.qty_to_order)
+        # stop
