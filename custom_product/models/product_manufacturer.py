@@ -6,5 +6,5 @@ class ProductManufacturer(models.Model):
     _name = 'product.manufacturer'
     _description = 'Product Manufacturer'
     
-    name = fields.Char(string='Manufacturer/Customer Name',required=True)
+    name = fields.Char(string='Manufacturer/Customer Name', required=True)
     code = fields.Char(string='Manufacturer/Customer Code')

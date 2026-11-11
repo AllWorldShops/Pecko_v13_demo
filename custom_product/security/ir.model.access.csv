@@ -4,3 +4,4 @@ access_product_manufacturer_manager,product.manufacturer.manager,custom_product.
 access_product_manufacturer_routing,product.manufacturer.routing,custom_product.model_product_manufacturer,mrp.group_mrp_routings,1,1,1,1
 access_id_type,id.type,custom_product.model_id_type,base.group_user,1,1,1,1
 access_classification_code,classification.code,custom_product.model_classification_code,base.group_user,1,1,1,1
+access_change_storage_location_wizard,access.change.storage.location.wizard,model_change_storage_location_wizard,base.group_user,1,1,1,1

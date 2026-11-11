@@ -12,8 +12,10 @@
         'product',
         'mrp',
         'stock',
+        'purchase',
     ],
     'data': [
+        'wizards/change_storage_location_views.xml',
         'security/ir.model.access.csv',
         # As there is Procurement Group Cron available by default.
         'data/stock_sequence_data.xml',

@@ -15,9 +15,21 @@
                 <field name="item_text"/>
                 <field name="customer_part_number"/>
             </group>
-            <xpath expr="//field[@name='uom_po_id']" position="after">
-                <field name="storage_location_id" invisible="0"/>
-            </xpath>
+                <xpath expr="//field[@name='uom_po_id']" position="after">
+                    <div class="o_row">
+                        <label for="storage_location_id"
+                               string="Storage Location"
+                               class="o_form_label fw-bold"/>
+                        <field name="storage_location_id"
+                               nolabel="1"/>
+                        <button name="%(action_change_storage_location_wizard)d"
+                                string="Change Storage Location"
+                                type="action"
+                                groups="stock.group_stock_user,!purchase.group_purchase_manager"
+                                class="btn-secondary"
+                                icon="fa-edit"/>
+                    </div>
+                </xpath>
             <page name="invoicing" position="after">
                 <page string="Malaysia">
                     <group>
