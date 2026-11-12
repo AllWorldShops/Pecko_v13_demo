@@ -153,6 +153,11 @@
         <xpath expr="//group[@name='bill']/field[1]" position="before">
             <field name="uom_po_id" string="Purchase Unit" options="{'no_create': True}"/>
         </xpath>
+
+        <group name="bill" position="attributes">
+            <attribute name="groups">purchase.group_purchase_manager,stock.group_stock_user</attribute>
+        </group>
+
     </field>
     </record>
 
