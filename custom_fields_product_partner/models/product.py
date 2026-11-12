@@ -67,25 +67,40 @@ class StockWarehouseOrderpoint(models.Model):
             elif orderpoint.qty_to_order != orderpoint.qty_to_order_computed:
                 orderpoint.qty_to_order_manual = orderpoint.qty_to_order
 
-    @api.depends('product_id','product_min_qty','product_max_qty','qty_to_order_manual','qty_to_order_computed')
-    def _compute_qty_to_order(self):
+    # @api.depends('product_id','product_min_qty','product_max_qty','qty_to_order_manual','qty_to_order_computed')
+    # def _compute_qty_to_order(self):
 
+    #     for op in self:
+    #         if op.qty_to_order_manual:
+    #             op.qty_to_order = op.qty_to_order_manual
+    #         else:
+    #             forecast = op.product_id.virtual_available
+
+    #             in_progress = op._quantity_in_progress().get(op.id, 0.0)
+
+    #             available_qty = forecast + in_progress
+
+    #             if forecast < op.product_min_qty:
+    #                 op.qty_to_order = max(
+    #                     0.0,
+    #                     op.product_max_qty - forecast
+    #                 )
+    #             else:
+    #                 op.qty_to_order = 0.0
+    #         print('qty_to_order-----------',op.qty_to_order)
+    #     # stop
+
+
+    @api.depends('product_id','product_min_qty','product_max_qty','qty_to_order_manual', 'qty_to_order_computed')
+    def _compute_qty_to_order(self):
         for op in self:
             if op.qty_to_order_manual:
                 op.qty_to_order = op.qty_to_order_manual
             else:
                 forecast = op.product_id.virtual_available
-
                 in_progress = op._quantity_in_progress().get(op.id, 0.0)
-
-                available_qty = forecast + in_progress
-
-                if forecast < op.product_min_qty:
-                    op.qty_to_order = max(
-                        0.0,
-                        op.product_max_qty - forecast
-                    )
+                if forecast + in_progress < op.product_min_qty:
+                    op.qty_to_order = op.product_max_qty - forecast - in_progress
                 else:
                     op.qty_to_order = 0.0
             print('qty_to_order-----------',op.qty_to_order)
-        # stop
