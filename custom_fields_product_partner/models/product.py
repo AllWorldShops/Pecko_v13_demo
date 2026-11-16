@@ -53,10 +53,10 @@ class StockWarehouseOrderpoint(models.Model):
     
     qty_to_order = fields.Float('To Order', compute='_compute_qty_to_order', inverse='_inverse_qty_to_order', search='_search_qty_to_order', digits='Product Unit of Measure')
     
-    @api.depends('qty_to_order_manual', 'qty_to_order_computed')
-    def _compute_qty_to_order(self):
-        for orderpoint in self:
-            orderpoint.qty_to_order = orderpoint.qty_to_order_manual if orderpoint.qty_to_order_manual else orderpoint.qty_to_order_computed
+    # @api.depends('qty_to_order_manual', 'qty_to_order_computed')
+    # def _compute_qty_to_order(self):
+    #     for orderpoint in self:
+    #         orderpoint.qty_to_order = orderpoint.qty_to_order_manual if orderpoint.qty_to_order_manual else orderpoint.qty_to_order_computed
 
     def _inverse_qty_to_order(self):
         for orderpoint in self:
@@ -69,17 +69,13 @@ class StockWarehouseOrderpoint(models.Model):
 
     # @api.depends('product_id','product_min_qty','product_max_qty','qty_to_order_manual','qty_to_order_computed')
     # def _compute_qty_to_order(self):
-
     #     for op in self:
     #         if op.qty_to_order_manual:
     #             op.qty_to_order = op.qty_to_order_manual
     #         else:
     #             forecast = op.product_id.virtual_available
-
     #             in_progress = op._quantity_in_progress().get(op.id, 0.0)
-
     #             available_qty = forecast + in_progress
-
     #             if forecast < op.product_min_qty:
     #                 op.qty_to_order = max(
     #                     0.0,
@@ -88,19 +84,30 @@ class StockWarehouseOrderpoint(models.Model):
     #             else:
     #                 op.qty_to_order = 0.0
     #         print('qty_to_order-----------',op.qty_to_order)
-    #     # stop
 
+    # @api.depends('product_id','product_min_qty','product_max_qty','qty_to_order_manual', 'qty_to_order_computed')
+    # def _compute_qty_to_order(self):
+    #     for op in self:
+    #         if op.qty_to_order_manual:
+    #             op.qty_to_order = op.qty_to_order_manual
+    #         else:
+    #             forecast = op.product_id.virtual_available
+    #             in_progress = op._quantity_in_progress().get(op.id, 0.0)
+    #             if forecast + in_progress < op.product_min_qty:
+    #                 op.qty_to_order = op.product_max_qty - forecast - in_progress
+    #             else:
+    #                 op.qty_to_order = 0.0
+    #         print('qty_to_order-----------',op.qty_to_order)
 
-    @api.depends('product_id','product_min_qty','product_max_qty','qty_to_order_manual', 'qty_to_order_computed')
+    @api.depends('product_id', 'product_min_qty', 'product_max_qty', 'qty_to_order_manual', 'qty_to_order_computed', 'qty_forecast', 'company_id')
     def _compute_qty_to_order(self):
         for op in self:
+            op = op.with_company(op.company_id)
             if op.qty_to_order_manual:
                 op.qty_to_order = op.qty_to_order_manual
+                continue
+            # qty_forecast is already computed per location/warehouse and company
+            if op.qty_forecast < op.product_min_qty:
+                op.qty_to_order = op.product_max_qty - op.qty_forecast
             else:
-                forecast = op.product_id.virtual_available
-                in_progress = op._quantity_in_progress().get(op.id, 0.0)
-                if forecast + in_progress < op.product_min_qty:
-                    op.qty_to_order = op.product_max_qty - forecast - in_progress
-                else:
-                    op.qty_to_order = 0.0
-            print('qty_to_order-----------',op.qty_to_order)
+                op.qty_to_order = 0.0
